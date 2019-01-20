@@ -11,18 +11,20 @@ public class Pripojenie {
     private static EntityManager em;
     public Pripojenie(){
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("bodovySystem");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
     em = emf.createEntityManager();
     VaadinSession.getCurrent().setAttribute("createEntityManager",em);
-//    createDog(1, "Spot", "Welsh Corgi");
+    if (UzivatelNastroje.prazdnyUzivatelia())
+         Pripojenie.vytvorUzivatela(1,"martin","martin");
 //    createDog(2, "Fluffy", "Poodle");
 //    createDog(3, "Clifford", "Golden Retriever");
 //
     }
 
-    private static void VytvorUzivatela(int id, String meno, String heslo) {
+    public static void vytvorUzivatela(int id, String meno, String heslo) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
-        Uzivatel emp = new Uzivatel(id, "aaa", "bb");
+        Uzivatel emp = new Uzivatel(id, meno, heslo);
         em.persist(emp);
         em.getTransaction().commit();
     }

@@ -1,18 +1,10 @@
 package sk.zpn.domena;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
-
-
-
-    @Entity
-    @Table(name = "uzivatelia")
+@Entity
+    @Table(name = "uzivatelia") // netreba
     public class Uzivatel {
 
         @Id
@@ -20,7 +12,7 @@ import javax.persistence.Table;
         @Column(name = "id")
         private int id;
 
-        @Column(name = "meno")
+        @Column(name = "meno") //netreba
         private String meno;
 
 
