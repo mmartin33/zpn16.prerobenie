@@ -11,10 +11,12 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
+import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.model.Pripojenie;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.LoginView;
 import sk.zpn.zaklad.view.MainView;
+import sk.zpn.zaklad.view.VitajteView;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -27,15 +29,20 @@ import sk.zpn.zaklad.view.MainView;
 public class MyUI extends UI {
 
     public Navigator navigator;
+
+    public boolean jeSpravca;
     LoginView login;
     MainView  mainView;
+    VitajteView  vitajteView;
     Pripojenie p;
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         p =new Pripojenie();
 
         login = new LoginView();
+        vitajteView = new VitajteView();
         mainView=new MainView(navigator);
+
 
         login.addLoginListener(e-> {
             String name = e.getLoginParameter("username");
@@ -43,8 +50,11 @@ public class MyUI extends UI {
 
             if (UzivatelNastroje.overUzivatela(name,pass)) {
                 System.out.println("uzivatel overeny");
+
                 VaadinSession.getCurrent().setAttribute("uzivatel","name");
-                navigator.navigateTo(MainView.NAME);
+
+
+                navigator.navigateTo(VitajteView.NAME);
             }
             else
                 Notification.show("Nepodarilo sa !");
@@ -53,32 +63,43 @@ public class MyUI extends UI {
 
         navigator = new Navigator(this, this);
         VaadinSession.getCurrent().setAttribute("navigator","navigator");
+        navigator.addView(VitajteView.NAME, vitajteView);
         navigator.addView(MainView.NAME, mainView);
         navigator.addView(LoginView.NAME, login);
         //navigator.navigateTo(LoginView.NAME);
-        navigator.navigateTo(MainView.NAME);
+        navigator.navigateTo(VitajteView.NAME);
 
         navigator.addViewChangeListener(new ViewChangeListener() {
             @Override
             public boolean beforeViewChange(ViewChangeEvent event) {
+                if (navigator.getCurrentView() instanceof LoginView) {
+                    {
+                        System.out.println(navigator.getCurrentView().toString());
+                        return true;
+                    }
 
+                }
                 if (jeUzivatelPrihlaseny()) {
-                    System.out.println("je prihlaseny");
-                    navigator.navigateTo(MainView.NAME);
-                    return false;
+                    System.out.println("ano");
+                    navigator.navigateTo(vitajteView.NAME);
+
                 }
                 else{
+                    System.out.println("Nie ");
                     navigator.navigateTo(LoginView.NAME);
-                    return false;
-                   }
 
+                   }
+                return true;
             }
         });
 
 
         //navigator.navigateTo(LoginView.NAME);
     }
-
+    public final static boolean jeUzivatelAdmin() {
+        Uzivatel u =UzivatelNastroje.dajUzivatela((String) VaadinSession.getCurrent().getAttribute("uzivatel"));
+        return u.jeAdmin();
+    }
     public final static boolean jeUzivatelPrihlaseny() {
         if (VaadinSession.getCurrent().getAttribute("uzivatel")==null)
             System.out.println("Nie je prihlaseny ziadny uzivatel");

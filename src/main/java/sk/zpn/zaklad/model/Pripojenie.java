@@ -15,7 +15,7 @@ public class Pripojenie {
     em = emf.createEntityManager();
     VaadinSession.getCurrent().setAttribute("createEntityManager",em);
     if (UzivatelNastroje.prazdnyUzivatelia())
-         Pripojenie.vytvorUzivatela(1,"martin","martin");
+         Pripojenie.vytvorUzivatela(1,"m","m");
 //    createDog(2, "Fluffy", "Poodle");
 //    createDog(3, "Clifford", "Golden Retriever");
 //
@@ -24,7 +24,7 @@ public class Pripojenie {
     public static void vytvorUzivatela(int id, String meno, String heslo) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
-        Uzivatel emp = new Uzivatel(id, meno, heslo);
+        Uzivatel emp = new Uzivatel(meno, heslo);
         em.persist(emp);
         em.getTransaction().commit();
     }

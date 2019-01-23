@@ -9,7 +9,8 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import sk.zpn.MyUI;
 
-public class MainView extends VerticalLayout implements MojView {
+
+public class MainView extends VerticalLayout implements View{
     public final static String NAME = "";
     private Navigator navigator;
     public MainView(Navigator navigator) {
