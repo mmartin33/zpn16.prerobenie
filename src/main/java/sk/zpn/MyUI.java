@@ -35,9 +35,9 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         p =new Pripojenie();
-
+        navigator = new Navigator(this, this);
         login = new LoginView();
-        vitajteView = new VitajteView();
+        vitajteView = new VitajteView(navigator);
 
 
 
@@ -54,7 +54,7 @@ public class MyUI extends UI {
         });
 
 
-        navigator = new Navigator(this, this);
+
         VaadinSession.getCurrent().setAttribute("navigator","navigator");
         navigator.addView(VitajteView.NAME, vitajteView);
 
