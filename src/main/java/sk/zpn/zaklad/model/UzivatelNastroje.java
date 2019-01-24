@@ -10,25 +10,33 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class UzivatelNastroje {
-    public static Boolean overUzivatela(String meno, String heslo){
-        boolean existuje=false;
+    public static Uzivatel overUzivatela(String meno, String heslo){
+
 
 
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        Query query = em.createNativeQuery("SELECT count(*) FROM  uzivatelia  WHERE meno = ?1 and heslo = ?2");
+        //Query query = em.createNativeQuery("SELECT id FROM  uzivatelia  WHERE meno = ?1 and heslo = ?2");
+        //TypedQuery<Uzivatel> q = em.createQuery("SELECT u from Uzivatel u WHERE u.meno =:meno and u.heslo =:heslo",Uzivatel.class);
+        TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.getPodlaMenaHesla", Uzivatel.class);
        // TypedQuery<Long> q = em.createQuery("SELECT COUNT(u) FROM  Uzivatelia as u WHERE u.meno =:meno and u.heslo =:heslo", Long.class);
 
-        query.setParameter(1, meno);
-        query.setParameter(2, heslo);
-//        q.setParameter("meno", meno);
-//        q.setParameter("heslo", heslo);
+//        query.setParameter(1, meno);
+//        query.setParameter(2, heslo);
+        q.setParameter("meno", meno);
+        q.setParameter("heslo", heslo);
 
 
-        Long lu = (Long) query.getSingleResult();
+//        long lu = (long) q.getSingleResult();
+        Uzivatel lu = q.getSingleResult();
+        if  (lu==null)
+            return null;
 
-        if (lu>0)
-            existuje=true;
-        return existuje;
+
+        VaadinSession.getCurrent().setAttribute("id_uzivatela",lu.getId());
+        VaadinSession.getCurrent().setAttribute("meno",lu.getMeno());
+        System.out.println("uzivatel overeny"+VaadinSession.getCurrent().getAttribute("meno")+VaadinSession.getCurrent().getAttribute("id_uzivatela"));
+
+        return lu;
     }
     public static Boolean prazdnyUzivatelia(){
         boolean prazdny=true;
@@ -45,9 +53,20 @@ public class UzivatelNastroje {
         return prazdny;
     }
 
-    public static Uzivatel getUzivatela(Long uzivatelId){
+    public static Uzivatel getUzivatela(Long id){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        Uzivatel u=(Uzivatel)em.getReference(Uzivatel.class, uzivatelId);
-        return u;
+        TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.get", Uzivatel.class);
+        q.setParameter("id", id);
+        Uzivatel lu = q.getSingleResult();
+        if  (lu==null)
+            return null;
+        return lu;
     }
+    public static int TypUzivatela() {
+        if (VaadinSession.getCurrent().getAttribute("id_uzivatela")==null)
+            return 99;
+        Uzivatel u =getUzivatela((Long) VaadinSession.getCurrent().getAttribute("id_uzivatela"));
+        return u.getTypKonta();
+    }
+
 }
