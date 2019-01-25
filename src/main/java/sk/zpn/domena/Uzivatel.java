@@ -33,7 +33,7 @@ public class Uzivatel extends Vseobecne {
 
 
     public Uzivatel(String meno, String heslo) {
-        //super(id);
+
         this.setMeno(meno);
         this.setHeslo(heslo);
     }
@@ -69,6 +69,16 @@ public class Uzivatel extends Vseobecne {
 
     public int getTypKonta() {
         return typKonta;
+    }
+    public String getTypKontaTextom() {
+        if (this.typKonta==ADMIN)
+            return "Administrátor";
+        else if(this.typKonta==SPRAVCA_ZPN)
+            return "Správca ZPN";
+        else if(this.typKonta==PREDAJCA)
+            return "Predajca";
+        else
+            return "";
     }
 
     public void setTypKonta(int typKonta) {
