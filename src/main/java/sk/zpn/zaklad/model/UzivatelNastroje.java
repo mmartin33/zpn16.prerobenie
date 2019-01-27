@@ -11,6 +11,7 @@ import java.util.List;
 
 public class UzivatelNastroje {
     public static Uzivatel overUzivatela(String meno, String heslo){
+        System.out.println("Overenie uzivatela:" +meno+" heslo "+heslo);
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.getPodlaMenaHesla", Uzivatel.class);
         q.setParameter("meno", meno);

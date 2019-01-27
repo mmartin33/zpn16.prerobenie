@@ -85,7 +85,7 @@ public class MyUI extends UI {
                 }
                 if (jeUzivatelPrihlaseny()) {
                     System.out.println("ano");
-                    navigator.navigateTo(vitajteView.NAME);
+//                    navigator.navigateTo(vitajteView.NAME);
 
                 }
                 else{

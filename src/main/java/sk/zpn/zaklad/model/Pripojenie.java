@@ -16,9 +16,6 @@ public class Pripojenie {
     VaadinSession.getCurrent().setAttribute("createEntityManager",em);
     if (UzivatelNastroje.prazdnyUzivatelia())
          Pripojenie.vytvorUzivatela(1,"m","m");
-//    createDog(2, "Fluffy", "Poodle");
-//    createDog(3, "Clifford", "Golden Retriever");
-//
     }
 
     public static void vytvorUzivatela(int id, String meno, String heslo) {

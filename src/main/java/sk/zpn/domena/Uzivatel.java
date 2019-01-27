@@ -1,8 +1,6 @@
 package sk.zpn.domena;
 
 import javax.persistence.*;
-import java.math.BigInteger;
-
 
 @Entity(name = "uzivatelia")
 @NamedQueries(value = {
@@ -11,17 +9,20 @@ import java.math.BigInteger;
         @NamedQuery(name = "Uzivatel.get", query = "SELECT u FROM uzivatelia u WHERE u.id =:id") })
 
 public class Uzivatel extends Vseobecne {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_firmy",nullable=true)
+
+
+
     public static final int PREDAJCA = 1;
     public static final int SPRAVCA_ZPN = 2;
     public static final int ADMIN = 0;
     public static final int ZIADNY = 99;
 
     private String meno;
-
     private int typKonta;
-
     private String heslo;
-
+    private Firma firma;
 
     private Uzivatel uzivatel;
 
@@ -83,6 +84,20 @@ public class Uzivatel extends Vseobecne {
 
     public void setTypKonta(int typKonta) {
         this.typKonta = typKonta;
+    }
+
+    public Firma getFirma() {
+        return firma;
+    }
+    public String getFirmaNazov() {
+        if (firma==null)
+            return "";
+        else
+            return firma.getNazov();
+    }
+
+    public void setFirma(Firma firma) {
+        this.firma = firma;
     }
 }
 
