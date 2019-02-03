@@ -49,6 +49,15 @@ public class UzivatelNastroje {
             return null;
         return lu;
     }
+    public static void ulozUzivatela(Uzivatel u){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        System.out.println("Ulozeny uzivate:"+u.getMeno());
+        em.getTransaction().begin();
+        em.persist(u);
+        em.getTransaction().commit();
+
+
+    }
     public static int TypUzivatela() {
         if (VaadinSession.getCurrent().getAttribute("id_uzivatela")==null)
             return 99;

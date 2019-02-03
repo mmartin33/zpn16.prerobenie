@@ -1,17 +1,18 @@
 package sk.zpn.domena;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity(name = "uzivatelia")
 @NamedQueries(value = {
         @NamedQuery(name = "Uzivatel.getPodlaMenaHesla", query = "SELECT u FROM uzivatelia u WHERE u.meno =:meno and u.heslo =:heslo"),
         @NamedQuery(name = "Uzivatel.getAll", query = "SELECT u FROM uzivatelia u"),
-        @NamedQuery(name = "Uzivatel.get", query = "SELECT u FROM uzivatelia u WHERE u.id =:id") })
+        @NamedQuery(name = "Uzivatel.get", query = "SELECT u FROM uzivatelia u WHERE u.id =:id")})
 
 public class Uzivatel extends Vseobecne {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_firmy",nullable=true)
-
+    @JoinColumn(name = "id_firmy", nullable = true)
 
 
     public static final int PREDAJCA = 1;
@@ -19,6 +20,9 @@ public class Uzivatel extends Vseobecne {
     public static final int ADMIN = 0;
     public static final int ZIADNY = 99;
 
+    @NotNull
+    @Pattern(regexp = "[a-z0-9._%+-]$", message = "Zle meno")
+    @Column(name = "meno", nullable = false, unique = true)
     private String meno;
     private int typKonta;
     private String heslo;
@@ -32,12 +36,12 @@ public class Uzivatel extends Vseobecne {
     }
 
 
-
     public Uzivatel(String meno, String heslo) {
 
         this.setMeno(meno);
         this.setHeslo(heslo);
     }
+
     public Uzivatel getUzivatel() {
         return this.uzivatel;
     }
@@ -71,12 +75,13 @@ public class Uzivatel extends Vseobecne {
     public int getTypKonta() {
         return typKonta;
     }
+
     public String getTypKontaTextom() {
-        if (this.typKonta==ADMIN)
+        if (this.typKonta == ADMIN)
             return "Administrátor";
-        else if(this.typKonta==SPRAVCA_ZPN)
+        else if (this.typKonta == SPRAVCA_ZPN)
             return "Správca ZPN";
-        else if(this.typKonta==PREDAJCA)
+        else if (this.typKonta == PREDAJCA)
             return "Predajca";
         else
             return "";
@@ -89,8 +94,9 @@ public class Uzivatel extends Vseobecne {
     public Firma getFirma() {
         return firma;
     }
+
     public String getFirmaNazov() {
-        if (firma==null)
+        if (firma == null)
             return "";
         else
             return firma.getNazov();

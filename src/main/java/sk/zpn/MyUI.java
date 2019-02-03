@@ -12,8 +12,9 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 import sk.zpn.zaklad.model.Pripojenie;
 import sk.zpn.zaklad.model.UzivatelNastroje;
+import sk.zpn.zaklad.view.FirmyView;
 import sk.zpn.zaklad.view.LoginView;
-import sk.zpn.zaklad.view.UzivateliaView;
+import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
 import sk.zpn.zaklad.view.VitajteView;
 
 /**
@@ -32,6 +33,7 @@ public class MyUI extends UI {
     LoginView login;
     VitajteView  vitajteView;
     UzivateliaView uzivateliaView;
+    FirmyView firmyView;
     Pripojenie p;
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -41,9 +43,11 @@ public class MyUI extends UI {
         login = new LoginView();
         vitajteView = new VitajteView(navigator);
         uzivateliaView=new UzivateliaView();
+        firmyView=new FirmyView();
 
         navigator.addView(VitajteView.NAME, vitajteView);
         navigator.addView(UzivateliaView.NAME, uzivateliaView);
+        navigator.addView(FirmyView.NAME, firmyView);
         navigator.addView(LoginView.NAME, login);
 
         boolean testRezim=true;
