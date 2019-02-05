@@ -51,6 +51,8 @@ public class UzivatelNastroje {
     }
     public static void ulozUzivatela(Uzivatel u){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        if (u.getId() == null)
+            u.setId((long)0);
         System.out.println("Ulozeny uzivate:"+u.getMeno());
         em.getTransaction().begin();
         em.persist(u);

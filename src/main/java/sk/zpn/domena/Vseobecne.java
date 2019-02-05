@@ -6,7 +6,7 @@ import java.math.BigInteger;
 @MappedSuperclass
 public abstract class Vseobecne {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 

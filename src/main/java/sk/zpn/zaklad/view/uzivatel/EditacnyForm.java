@@ -75,10 +75,13 @@ public class EditacnyForm extends VerticalLayout {
     void edit(Uzivatel uzivatel) {
         uzivateEditovany = uzivatel;
         if (uzivatel != null) {
+            System.out.println("Zvoleny "+uzivateEditovany.getMeno());
             binder.readBean(uzivatel);
-
         }
-        setVisible(uzivatel != null);
+        else{
+            System.out.println("Zvoleny novy");
+            binder.readBean(uzivatel);}
+        //setVisible(uzivatel != null);
     }
 
     public void save(Button.ClickEvent event) {
@@ -87,10 +90,10 @@ public class EditacnyForm extends VerticalLayout {
 
             String msg = String.format("Ulozeny .",
                     uzivateEditovany.getMeno());
+
             Notification.show(msg, Notification.Type.TRAY_NOTIFICATION);
-            //todo
-            //UzivateliaView.refreshUzivatelov();
             uzivatelView.refreshUzivatelov();
+
         }
 
     }

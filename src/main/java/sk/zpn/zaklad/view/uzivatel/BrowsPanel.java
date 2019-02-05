@@ -19,7 +19,7 @@ public class BrowsPanel extends VerticalLayout {
 
     private Grid<Uzivatel> grid;
     private TextField filter;
-    private Button btnNovy;
+    public Button btnNovy;
 
 
         public BrowsPanel() {
@@ -61,10 +61,13 @@ public class BrowsPanel extends VerticalLayout {
 
         void refresh(String filter) {
             grid.getDataProvider().refreshAll();
+            System.out.println("Refresh browsu all");
             //todo grid.setItems(ContactService.getDemoService().findAll(filter));
         }
 
         void refresh() {
+            grid.getDataProvider().refreshAll();
+            System.out.println("Refresh browsu all");
             refresh(getFilterValue());
         }
 
