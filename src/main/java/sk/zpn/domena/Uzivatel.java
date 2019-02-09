@@ -105,6 +105,10 @@ public class Uzivatel extends Vseobecne {
     public void setFirma(Firma firma) {
         this.firma = firma;
     }
+
+    public boolean isNew() {
+        return this.getId() == null;
+    }
 }
 
 

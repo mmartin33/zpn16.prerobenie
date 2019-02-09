@@ -49,14 +49,15 @@ public class UzivatelNastroje {
             return null;
         return lu;
     }
-    public static void ulozUzivatela(Uzivatel u){
+    public static Uzivatel ulozUzivatela(Uzivatel u){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        if (u.getId() == null)
+        if (u.isNew())
             u.setId((long)0);
         System.out.println("Ulozeny uzivate:"+u.getMeno());
         em.getTransaction().begin();
         em.persist(u);
         em.getTransaction().commit();
+        return u;
 
 
     }

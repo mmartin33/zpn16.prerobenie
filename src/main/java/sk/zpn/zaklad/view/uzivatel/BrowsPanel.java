@@ -1,16 +1,9 @@
 package sk.zpn.zaklad.view.uzivatel;
 
-import com.vaadin.annotations.DesignRoot;
 import com.vaadin.ui.*;
-import com.vaadin.ui.declarative.Design;
-import com.vaadin.ui.renderers.DateRenderer;
 import sk.zpn.domena.Uzivatel;
-import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -18,15 +11,16 @@ public class BrowsPanel extends VerticalLayout {
 
 
     private Grid<Uzivatel> grid;
+    private List<Uzivatel> uzivatelList;
+
     private TextField filter;
     public Button btnNovy;
 
 
-        public BrowsPanel() {
-
+        public BrowsPanel(List<Uzivatel> uzivatelList) {
+            this.uzivatelList = uzivatelList;
             grid = new Grid<>();
-            List<Uzivatel> u = UzivatelNastroje.zoznamUzivatelov();
-            grid.setItems(u);
+            grid.setItems(this.uzivatelList);
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
             grid.addColumn(Uzivatel::getMeno).setCaption("Meno").setId("meno");

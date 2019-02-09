@@ -1,10 +1,11 @@
 package sk.zpn.zaklad.view.uzivatel;
 
 import com.vaadin.navigator.View;
-import com.vaadin.ui.*;
+import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Uzivatel;
-import sk.zpn.zaklad.view.uzivatel.BrowsPanel;
-import sk.zpn.zaklad.view.uzivatel.EditacnyForm;
+import sk.zpn.zaklad.model.UzivatelNastroje;
+
+import java.util.List;
 
 public class UzivateliaView extends HorizontalLayout implements View {
     // ContactForm is an example of a custom component class
@@ -14,9 +15,11 @@ public class UzivateliaView extends HorizontalLayout implements View {
 
     private BrowsPanel browsPanel;
 
-    public UzivateliaView() {
+    private List<Uzivatel> uzivatelList;
 
-        browsPanel=new BrowsPanel();
+    public UzivateliaView() {
+        uzivatelList = UzivatelNastroje.zoznamUzivatelov();
+        browsPanel=new BrowsPanel(uzivatelList);
         editacnyForm=new EditacnyForm();
         editacnyForm.setUzivatelView(this);
         configureComponents();
@@ -51,6 +54,15 @@ public class UzivateliaView extends HorizontalLayout implements View {
             browsPanel.refresh(stringFilter);
         }
 //        contactForm.setVisible(false);
+    }
+
+    void pridajNovehoUzivatela(Uzivatel novyUzivatel) {
+        uzivatelList.add(novyUzivatel);
+
+    }
+    void odstranUzivatela(Uzivatel novyUzivatel) {
+        uzivatelList.remove(novyUzivatel);
+
     }
 
 }

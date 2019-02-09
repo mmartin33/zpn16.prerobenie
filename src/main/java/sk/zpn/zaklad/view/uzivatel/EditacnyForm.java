@@ -86,12 +86,15 @@ public class EditacnyForm extends VerticalLayout {
 
     public void save(Button.ClickEvent event) {
         if (binder.writeBeanIfValid(uzivateEditovany)) {
-            UzivatelNastroje.ulozUzivatela(uzivateEditovany);
-
+            boolean jeUzivatelNovy = uzivateEditovany.isNew();
+            Uzivatel ulozenyUzivatel = UzivatelNastroje.ulozUzivatela(uzivateEditovany);
             String msg = String.format("Ulozeny .",
                     uzivateEditovany.getMeno());
 
             Notification.show(msg, Notification.Type.TRAY_NOTIFICATION);
+            if (jeUzivatelNovy){
+                uzivatelView.pridajNovehoUzivatela(ulozenyUzivatel);
+            }
             uzivatelView.refreshUzivatelov();
 
         }
