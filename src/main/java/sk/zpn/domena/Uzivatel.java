@@ -11,48 +11,31 @@ import javax.validation.constraints.Pattern;
         @NamedQuery(name = "Uzivatel.get", query = "SELECT u FROM uzivatelia u WHERE u.id =:id")})
 
 public class Uzivatel extends Vseobecne {
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_firmy", nullable = true)
+//    TODO pridat vztah s firmou, doteraz tu bola lena notacia a ziaden atribut
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "id_firmy", nullable = true)
+    private Firma firma;
 
-
-    public static final int PREDAJCA = 1;
-    public static final int SPRAVCA_ZPN = 2;
-    public static final int ADMIN = 0;
-    public static final int ZIADNY = 99;
 
     @NotNull
     @Pattern(regexp = "[a-z0-9._%+-]$", message = "Zle meno")
     @Column(name = "meno", nullable = false, unique = true)
     private String meno;
-    private int typKonta;
     private String heslo;
-    private Firma firma;
 
-    private Uzivatel uzivatel;
+    @Enumerated(EnumType.STRING)
+    private TypUzivatela typUzivatela;
+
 
     public Uzivatel() {
-
-
+        this.typUzivatela = TypUzivatela.PREDAJCA;
     }
 
 
-    public Uzivatel(String meno, String heslo) {
-
+    public Uzivatel(String meno, String heslo, TypUzivatela typUzivatela) {
+        this.setTypUzivatela(typUzivatela);
         this.setMeno(meno);
         this.setHeslo(heslo);
-    }
-
-    public Uzivatel getUzivatel() {
-        return this.uzivatel;
-    }
-
-    public void setUzivatel(Uzivatel uzivatel) {
-        this.uzivatel = uzivatel;
-    }
-
-
-    public boolean jeAdmin() {
-        return getUzivatel() != null && getUzivatel().getTypKonta() == Uzivatel.ADMIN;
     }
 
 
@@ -72,25 +55,6 @@ public class Uzivatel extends Vseobecne {
         this.heslo = heslo;
     }
 
-    public int getTypKonta() {
-        return typKonta;
-    }
-
-    public String getTypKontaTextom() {
-        if (this.typKonta == ADMIN)
-            return "Administrátor";
-        else if (this.typKonta == SPRAVCA_ZPN)
-            return "Správca ZPN";
-        else if (this.typKonta == PREDAJCA)
-            return "Predajca";
-        else
-            return "";
-    }
-
-    public void setTypKonta(int typKonta) {
-        this.typKonta = typKonta;
-    }
-
     public Firma getFirma() {
         return firma;
     }
@@ -108,6 +72,14 @@ public class Uzivatel extends Vseobecne {
 
     public boolean isNew() {
         return this.getId() == null;
+    }
+
+    public TypUzivatela getTypUzivatela() {
+        return typUzivatela;
+    }
+
+    public void setTypUzivatela(TypUzivatela typUzivatela) {
+        this.typUzivatela = typUzivatela;
     }
 }
 

@@ -24,7 +24,7 @@ public class BrowsPanel extends VerticalLayout {
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
             grid.addColumn(Uzivatel::getMeno).setCaption("Meno").setId("meno");
-            grid.addColumn(Uzivatel::getTypKontaTextom).setCaption("Typ konta").setId("typ");
+            grid.addColumn(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue()).setCaption("Typ konta").setId("typ");
             grid.addColumn(Uzivatel::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
 
             grid.setColumnOrder(grid.getColumn("meno"),grid.getColumn("typ"),grid.getColumn("nazovFirmy"));

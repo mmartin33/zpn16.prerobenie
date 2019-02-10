@@ -5,6 +5,7 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.UI;
+import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
@@ -90,14 +91,17 @@ public class VitajteView extends MojView {
         protected void init() {
             addStyleName("welcome");
             setTitle("Vitajte", "Ste prihlásený ako " +VaadinSession.getCurrent().getAttribute("meno"));
-            if  (UzivatelNastroje.TypUzivatela()== Uzivatel.PREDAJCA) {
-                menuAdmin.setVisible(false);
-                menuSpravcu.setVisible(false);
-            }
-            if  (UzivatelNastroje.TypUzivatela()== Uzivatel.ZIADNY) {
+            if  (!UzivatelNastroje.TypUzivatela().isPresent()) {
                 menuAdmin.setVisible(false);
                 menuSpravcu.setVisible(false);
                 menuPredajcu.setVisible(false);
+                return;
+            }
+
+            if  (TypUzivatela.PREDAJCA.equals(UzivatelNastroje.TypUzivatela().get())) {
+                menuAdmin.setVisible(false);
+                menuSpravcu.setVisible(false);
+                return;
             }
 
         }

@@ -2,18 +2,20 @@ package sk.zpn.zaklad.view.uzivatel;
 
 import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.model.UzivatelNastroje;
+
+import java.util.Arrays;
 
 public class EditacnyForm extends VerticalLayout {
 
 
     private TextField tMeno;
     private TextField tFirma;
-    private ComboBox cTyp;
+    private ComboBox<String> typUzivatelaComboBox;
     protected Button btnUloz;
     protected Button btnCancel;
     private final Binder<Uzivatel> binder = new Binder<>();
@@ -22,22 +24,24 @@ public class EditacnyForm extends VerticalLayout {
 
 
     public EditacnyForm(){
-         tMeno=new TextField("Meno");
-         tFirma=new TextField("Firma");
-         cTyp=new ComboBox("Typ konta");
-         btnUloz=new Button("Ulož");
-         btnCancel=new Button("Storno");
-         nastavComponnenty();
-         FormLayout lEdit=new FormLayout();
-         lEdit.addComponent(tMeno);
+        tMeno=new TextField("Meno");
+        tFirma=new TextField("Firma");
+        typUzivatelaComboBox =new ComboBox<>("Typ konta");
+        btnUloz=new Button("Ulož");
+        btnCancel=new Button("Storno");
+        nastavComponnenty();
+        FormLayout lEdit=new FormLayout();
+        lEdit.addComponent(tMeno);
         lEdit.addComponent(tFirma);
-        lEdit.addComponent(cTyp);
+        lEdit.addComponent(typUzivatelaComboBox);
 
         HorizontalLayout lBtn=new HorizontalLayout();
         lBtn.addComponent(btnUloz);
         lBtn.addComponent(btnCancel);
 
-
+        typUzivatelaComboBox.setItems(Arrays
+                .stream(TypUzivatela.values())
+                .map(TypUzivatela::getDisplayValue));
 
 
          this.addComponent(lEdit);
@@ -49,16 +53,15 @@ public class EditacnyForm extends VerticalLayout {
     private void nastavComponnenty(){
 
 
-    final SerializablePredicate<String> menoPredicate = v -> !tMeno
-            .getValue().trim().isEmpty();
-
-
     Binder.Binding<Uzivatel, String> menoBinding = binder.forField(tMeno)
-                .withValidator(menoPredicate,
+                .withValidator(v -> !tMeno.getValue().trim().isEmpty(),
                         "Meno je povinne")
                 .bind(Uzivatel::getMeno, Uzivatel::setMeno);
 
-
+    Binder.Binding<Uzivatel, String> typUzivatelaBinding = binder.forField(typUzivatelaComboBox)
+            .bind(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue(),
+                    (uzivatel, value) -> uzivatel.setTypUzivatela(
+                          TypUzivatela.fromDisplayName(value)));
 
     tMeno.addValueChangeListener(event -> menoBinding.validate());
 

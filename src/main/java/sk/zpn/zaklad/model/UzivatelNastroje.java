@@ -1,13 +1,14 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
+import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public class UzivatelNastroje {
     public static Uzivatel overUzivatela(String meno, String heslo){
@@ -39,15 +40,11 @@ public class UzivatelNastroje {
         return prazdny;
     }
 
-    public static Uzivatel getUzivatela(Long id){
+    public static Optional<Uzivatel> getUzivatela(Long id){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.get", Uzivatel.class);
         q.setParameter("id", id);
-        Uzivatel lu = q.getSingleResult();
-
-        if  (lu==null)
-            return null;
-        return lu;
+        return Optional.ofNullable(q.getSingleResult());
     }
     public static Uzivatel ulozUzivatela(Uzivatel u){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
@@ -61,19 +58,13 @@ public class UzivatelNastroje {
 
 
     }
-    public static int TypUzivatela() {
-        if (VaadinSession.getCurrent().getAttribute("id_uzivatela")==null)
-            return 99;
-        Uzivatel u =getUzivatela((Long) VaadinSession.getCurrent().getAttribute("id_uzivatela"));
-        return u.getTypKonta();
+    public static Optional<TypUzivatela> TypUzivatela() {
+        Optional<Uzivatel> uzivatel = getUzivatela((Long) VaadinSession.getCurrent().getAttribute("id_uzivatela"));
+        return uzivatel.map(Uzivatel::getTypUzivatela);
     }
     public static List<Uzivatel> zoznamUzivatelov(){
-        List<Uzivatel> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.getAll", Uzivatel.class);
-
-        u =  q.getResultList();
-
-        return u;
+        return q.getResultList();
     }
 }
