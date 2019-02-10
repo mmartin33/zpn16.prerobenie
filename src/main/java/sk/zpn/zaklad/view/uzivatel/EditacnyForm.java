@@ -4,6 +4,7 @@ import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.model.UzivatelNastroje;
@@ -17,18 +18,18 @@ public class EditacnyForm extends VerticalLayout {
     private TextField tFirma;
     private ComboBox<String> typUzivatelaComboBox;
     protected Button btnUloz;
-    protected Button btnCancel;
+    protected Button btnZmaz;
     private final Binder<Uzivatel> binder = new Binder<>();
     private Uzivatel uzivateEditovany;
     private UzivateliaView uzivatelView;
-
+//    private PopupView odstranUzivatelaPopUp;
 
     public EditacnyForm(){
         tMeno=new TextField("Meno");
         tFirma=new TextField("Firma");
         typUzivatelaComboBox =new ComboBox<>("Typ konta");
         btnUloz=new Button("Ulož");
-        btnCancel=new Button("Storno");
+        btnZmaz =new Button("Zmaž");
         nastavComponnenty();
         FormLayout lEdit=new FormLayout();
         lEdit.addComponent(tMeno);
@@ -37,7 +38,7 @@ public class EditacnyForm extends VerticalLayout {
 
         HorizontalLayout lBtn=new HorizontalLayout();
         lBtn.addComponent(btnUloz);
-        lBtn.addComponent(btnCancel);
+        lBtn.addComponent(btnZmaz);
 
         typUzivatelaComboBox.setItems(Arrays
                 .stream(TypUzivatela.values())
@@ -47,8 +48,8 @@ public class EditacnyForm extends VerticalLayout {
          this.addComponent(lEdit);
          this.addComponent(lBtn);
 
-
-
+//        odstranUzivatelaPopUp = new PopupView(new RemoveUzivatelPopUpView());
+//        this.addComponent(odstranUzivatelaPopUp);
     }
     private void nastavComponnenty(){
 
@@ -69,7 +70,7 @@ public class EditacnyForm extends VerticalLayout {
     btnUloz.setClickShortcut(ShortcutAction.KeyCode.ENTER);
     btnUloz.addClickListener(this::save);
 
-    btnCancel.addClickListener(this::cancel);
+    btnZmaz.addClickListener(this::delete);
 
     //setVisible(false);
 
@@ -104,8 +105,19 @@ public class EditacnyForm extends VerticalLayout {
 
     }
 
-    public void cancel(Button.ClickEvent event) {
-        Notification.show("Cancelled", Notification.Type.TRAY_NOTIFICATION);
+    public void delete(Button.ClickEvent event) {
+    // TODO dokoncit odstranovanie uzivatela
+        ConfirmDialog.show(UI.getCurrent(), "Odstránenie uživateľa", "Naozaj si prajete odstrániť uživatela xxx?",
+                "Áno", "Nie", new ConfirmDialog.Listener() {
+
+                    public void onClose(ConfirmDialog dialog) {
+                        if (dialog.isConfirmed()) {
+                            // Confirmed to continue
+                            uzivatelView.odstranUzivatela(uzivateEditovany);
+                            Notification.show("Užívateľ odstránený", Notification.Type.TRAY_NOTIFICATION);
+                        }
+                    }
+                });
         //todo getUI().getContent().deselect();
     }
 

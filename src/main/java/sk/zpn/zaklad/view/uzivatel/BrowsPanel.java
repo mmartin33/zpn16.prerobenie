@@ -1,6 +1,9 @@
 package sk.zpn.zaklad.view.uzivatel;
 
 import com.vaadin.ui.*;
+import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
+import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.view.VitajteView;
 
@@ -10,7 +13,7 @@ import java.util.function.Consumer;
 public class BrowsPanel extends VerticalLayout {
 
 
-    private Grid<Uzivatel> grid;
+    private FilterGrid<Uzivatel> grid;
     private List<Uzivatel> uzivatelList;
 
     private TextField filter;
@@ -19,15 +22,23 @@ public class BrowsPanel extends VerticalLayout {
 
         public BrowsPanel(List<Uzivatel> uzivatelList) {
             this.uzivatelList = uzivatelList;
-            grid = new Grid<>();
+            grid = new FilterGrid<>();
             grid.setItems(this.uzivatelList);
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+            grid.setWidth(700, Unit.PIXELS);
 
-            grid.addColumn(Uzivatel::getMeno).setCaption("Meno").setId("meno");
-            grid.addColumn(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue()).setCaption("Typ konta").setId("typ");
-            grid.addColumn(Uzivatel::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
+            // definitionn of columns
+            FilterGrid.Column<Uzivatel, String> colMeno = grid.addColumn(Uzivatel::getMeno).setCaption("Meno").setId("meno");
+            FilterGrid.Column<Uzivatel, String> colTypUzivatela = grid.addColumn(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue()).setCaption("Typ konta").setId("typ");
+            FilterGrid.Column<Uzivatel, String> colFirmaNazov = grid.addColumn(Uzivatel::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
 
-            grid.setColumnOrder(grid.getColumn("meno"),grid.getColumn("typ"),grid.getColumn("nazovFirmy"));
+            // filters
+            colMeno.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+            colTypUzivatela.setFilter(new ComboBox<>("", TypUzivatela.getListOfDisplayValues()),
+                    (cValue, fValue) -> fValue == null || fValue.equals(cValue));
+            colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+
+            grid.setColumnOrder(colMeno, colTypUzivatela,colFirmaNazov);
             this.addComponent(new Label("Prehľad užívateľov"));
             filter=new TextField();
             this.addComponent(filter);

@@ -1,5 +1,9 @@
 package sk.zpn.domena;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public enum TypUzivatela {
     ADMIN("Administrátor"),
     SPRAVCA_ZPN("Správca ZPN"),
@@ -23,6 +27,12 @@ public enum TypUzivatela {
             default: throw new IllegalArgumentException(
                     String.format("Typ pouzivatela je nepodporovany: %s", displayName));
         }
+    }
+
+    public static List<String> getListOfDisplayValues() {
+        return Arrays.stream(TypUzivatela.values())
+                .map(TypUzivatela::getDisplayValue)
+                .collect(Collectors.toList());
     }
 
 }
