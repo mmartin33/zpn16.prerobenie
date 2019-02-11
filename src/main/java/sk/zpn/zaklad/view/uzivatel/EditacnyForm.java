@@ -107,12 +107,13 @@ public class EditacnyForm extends VerticalLayout {
 
     public void delete(Button.ClickEvent event) {
     // TODO dokoncit odstranovanie uzivatela
-        ConfirmDialog.show(UI.getCurrent(), "Odstránenie uživateľa", "Naozaj si prajete odstrániť uživatela xxx?",
+        ConfirmDialog.show(UI.getCurrent(), "Odstránenie uživateľa", "Naozaj si prajete odstrániť uživatela "+uzivateEditovany.getMeno()+"?",
                 "Áno", "Nie", new ConfirmDialog.Listener() {
 
                     public void onClose(ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             // Confirmed to continue
+                            UzivatelNastroje.zmazUzivatela(uzivateEditovany);
                             uzivatelView.odstranUzivatela(uzivateEditovany);
                             Notification.show("Užívateľ odstránený", Notification.Type.TRAY_NOTIFICATION);
                         }

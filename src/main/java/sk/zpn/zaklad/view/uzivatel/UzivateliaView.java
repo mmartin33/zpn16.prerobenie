@@ -29,9 +29,7 @@ public class UzivateliaView extends HorizontalLayout implements View {
 
     }
 
-    public  void refreshUzivatelov() {
-        refreshUzivatelov(null);
-    }
+
 
     void deselect() {
         browsPanel.deselect();
@@ -44,24 +42,22 @@ public class UzivateliaView extends HorizontalLayout implements View {
         //todo browsPanel.addFilterListener(this::refreshUzivatelov);
         browsPanel.addSelectionListener(editacnyForm::edit);
         //editacnyForm.setVisible(true);
-        refreshUzivatelov(null);
+        refreshUzivatelov();
     }
 
-    private void refreshUzivatelov(String stringFilter) {
-        if (stringFilter == null) {
+    public void refreshUzivatelov() {
             browsPanel.refresh();
-        } else {
-            browsPanel.refresh(stringFilter);
-        }
-//        contactForm.setVisible(false);
     }
 
     void pridajNovehoUzivatela(Uzivatel novyUzivatel) {
         uzivatelList.add(novyUzivatel);
+        this.refreshUzivatelov();
 
     }
-    void odstranUzivatela(Uzivatel novyUzivatel) {
-        uzivatelList.remove(novyUzivatel);
+    void odstranUzivatela(Uzivatel uzivatel) {
+
+        uzivatelList.remove(uzivatel);
+        this.refreshUzivatelov();
 
     }
 

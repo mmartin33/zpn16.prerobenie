@@ -58,6 +58,16 @@ public class UzivatelNastroje {
 
 
     }
+    public static void zmazUzivatela(Uzivatel u){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        System.out.println("Vymazany uzivate:"+u.getMeno());
+        em.getTransaction().begin();
+        em.remove(u);
+        em.getTransaction().commit();
+
+
+
+    }
     public static Optional<TypUzivatela> TypUzivatela() {
         Optional<Uzivatel> uzivatel = getUzivatela((Long) VaadinSession.getCurrent().getAttribute("id_uzivatela"));
         return uzivatel.map(Uzivatel::getTypUzivatela);

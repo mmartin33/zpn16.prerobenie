@@ -16,7 +16,7 @@ public class BrowsPanel extends VerticalLayout {
     private FilterGrid<Uzivatel> grid;
     private List<Uzivatel> uzivatelList;
 
-    private TextField filter;
+
     public Button btnNovy;
 
 
@@ -40,8 +40,6 @@ public class BrowsPanel extends VerticalLayout {
 
             grid.setColumnOrder(colMeno, colTypUzivatela,colFirmaNazov);
             this.addComponent(new Label("Prehľad užívateľov"));
-            filter=new TextField();
-            this.addComponent(filter);
             HorizontalLayout prvy=new HorizontalLayout();
 
             Button btnSpat=new Button("Späť");
@@ -64,17 +62,17 @@ public class BrowsPanel extends VerticalLayout {
 
         }
 
-        void refresh(String filter) {
-            grid.getDataProvider().refreshAll();
-            System.out.println("Refresh browsu all");
-            //todo grid.setItems(ContactService.getDemoService().findAll(filter));
-        }
 
         void refresh() {
             grid.getDataProvider().refreshAll();
             System.out.println("Refresh browsu all");
-            refresh(getFilterValue());
+
         }
+
+    void addEditListener(Runnable editListener) {
+        btnNovy.addClickListener(e -> editListener.run());
+
+    }
 
         void addSelectionListener(Consumer<Uzivatel> listener) {
             grid.asSingleSelect()
@@ -87,19 +85,6 @@ public class BrowsPanel extends VerticalLayout {
                 grid.getSelectionModel().deselect(value);
             }
         }
-
-        String getFilterValue() {
-            return filter.getValue();
-        }
-
-    void addEditListener(Runnable editListener) {
-        btnNovy.addClickListener(e -> editListener.run());
-
-    }
-
-    void addFilterListener(Consumer<String> listener) {
-        filter.addValueChangeListener(e -> listener.accept(e.getValue()));
-    }
 
     }
 
