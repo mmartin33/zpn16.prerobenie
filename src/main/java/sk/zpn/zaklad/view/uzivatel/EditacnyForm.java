@@ -22,7 +22,6 @@ public class EditacnyForm extends VerticalLayout {
     private final Binder<Uzivatel> binder = new Binder<>();
     private Uzivatel uzivateEditovany;
     private UzivateliaView uzivatelView;
-//    private PopupView odstranUzivatelaPopUp;
 
     public EditacnyForm(){
         tMeno=new TextField("Meno");
@@ -48,8 +47,6 @@ public class EditacnyForm extends VerticalLayout {
          this.addComponent(lEdit);
          this.addComponent(lBtn);
 
-//        odstranUzivatelaPopUp = new PopupView(new RemoveUzivatelPopUpView());
-//        this.addComponent(odstranUzivatelaPopUp);
     }
     private void nastavComponnenty(){
 
@@ -72,9 +69,6 @@ public class EditacnyForm extends VerticalLayout {
 
     btnZmaz.addClickListener(this::delete);
 
-    //setVisible(false);
-
-
 }
     void edit(Uzivatel uzivatel) {
         uzivateEditovany = uzivatel;
@@ -85,7 +79,6 @@ public class EditacnyForm extends VerticalLayout {
         else{
             System.out.println("Zvoleny novy");
             binder.readBean(uzivatel);}
-        //setVisible(uzivatel != null);
     }
 
     public void save(Button.ClickEvent event) {
@@ -106,20 +99,17 @@ public class EditacnyForm extends VerticalLayout {
     }
 
     public void delete(Button.ClickEvent event) {
-    // TODO dokoncit odstranovanie uzivatela
-        ConfirmDialog.show(UI.getCurrent(), "Odstránenie uživateľa", "Naozaj si prajete odstrániť uživatela "+uzivateEditovany.getMeno()+"?",
+        ConfirmDialog.show(UI.getCurrent(), "Odstránenie uživateľa", String.format("Naozaj si prajete odstrániť uživatela %s?", uzivateEditovany.getMeno()),
                 "Áno", "Nie", new ConfirmDialog.Listener() {
 
                     public void onClose(ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
-                            // Confirmed to continue
                             UzivatelNastroje.zmazUzivatela(uzivateEditovany);
                             uzivatelView.odstranUzivatela(uzivateEditovany);
-                            Notification.show("Užívateľ odstránený", Notification.Type.TRAY_NOTIFICATION);
+                            Notification.show(String.format("Užívateľ %s odstránený", uzivateEditovany.getMeno()), Notification.Type.TRAY_NOTIFICATION);
                         }
                     }
                 });
-        //todo getUI().getContent().deselect();
     }
 
     public void setUzivatelView(UzivateliaView uzivatelView) {
