@@ -17,4 +17,30 @@ public class FirmaNastroje {
 
         return u;
     }
+
+    public static Firma ulozFirmu(Firma f){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        if (f.isNew())
+            f.setId((long)0);
+        System.out.println("Ulozena firma:"+f.getNazov());
+        em.getTransaction().begin();
+        em.persist(f);
+        em.getTransaction().commit();
+        return f;
+
+
+    }
+    public static void zmazFirmu(Firma f){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        System.out.println("Vymazana firma:"+f.getNazov());
+        em.getTransaction().begin();
+        em.remove(f);
+        em.getTransaction().commit();
+
+
+
+    }
+
+
+
 }

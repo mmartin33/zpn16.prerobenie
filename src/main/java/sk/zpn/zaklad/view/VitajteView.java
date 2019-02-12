@@ -6,8 +6,9 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.UI;
 import sk.zpn.domena.TypUzivatela;
-import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.model.UzivatelNastroje;
+import sk.zpn.zaklad.view.firmy.FirmyView;
+
 import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
 
@@ -52,7 +53,7 @@ public class VitajteView extends MojView {
                 public void menuSelected(MenuItem selectedItem) {
 
                     if (selectedItem.getDescription().equals("uzivatelia")){
-                        //UI.getCurrent().getNavigator().navigateTo(UzivateliaView.NAME);
+                        //UI.getCurrent().getNavigator().navigateTo(FirmyView.NAME);
                         System.out.println("Vybrate:"+selectedItem.getDescription());
                         n.navigateTo(UzivateliaView.NAME);
                     }

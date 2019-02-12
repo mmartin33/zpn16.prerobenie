@@ -13,6 +13,12 @@ public class Firma extends Vseobecne {
     private String ico;
     private String dic;
     private String ic_dph;
+    private String ulica;
+    private String mesto;
+    private String psc;
+    private String telefon;
+
+
     private Firma firma;
 
     public Firma() {
@@ -54,6 +60,27 @@ public class Firma extends Vseobecne {
     public void setIco(String ico) {
         this.ico = ico;
     }
+
+    public String getUlica() {return ulica; }
+
+    public void setUlica(String ulica) {this.ulica = ulica;}
+
+    public String getMesto() {return mesto;}
+
+    public void setMesto(String mesto) {this.mesto = mesto;}
+
+    public String getPsc() {return psc;}
+
+    public void setPsc(String psc) {this.psc = psc;}
+
+    public String getTelefon() {return telefon; }
+
+    public void setTelefon(String telefon) {this.telefon = telefon;}
+
+    public void setFirma(Firma firma) {this.firma = firma;}
+
+    public boolean isNew() {return this.getId() == null;}
+
 }
 
 
