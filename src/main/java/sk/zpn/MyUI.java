@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
@@ -14,6 +15,7 @@ import sk.zpn.zaklad.model.Pripojenie;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.FirmyView;
 import sk.zpn.zaklad.view.LoginView;
+import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
 import sk.zpn.zaklad.view.VitajteView;
 
@@ -35,6 +37,8 @@ public class MyUI extends UI {
     UzivateliaView uzivateliaView;
     FirmyView firmyView;
     Pripojenie p;
+    ParametreView parametre;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         p =new Pripojenie();
@@ -44,11 +48,13 @@ public class MyUI extends UI {
         vitajteView = new VitajteView(navigator);
         uzivateliaView=new UzivateliaView();
         firmyView=new FirmyView();
+        parametre=new ParametreView();
 
         navigator.addView(VitajteView.NAME, vitajteView);
         navigator.addView(UzivateliaView.NAME, uzivateliaView);
         navigator.addView(FirmyView.NAME, firmyView);
         navigator.addView(LoginView.NAME, login);
+        navigator.addView(ParametreView.NAME, parametre);
 
         boolean testRezim=true;
 

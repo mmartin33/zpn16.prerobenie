@@ -39,9 +39,7 @@ public class UzivateliaView extends HorizontalLayout implements View {
 
         editacnyForm.setUzivatelView(this);
         browsPanel.btnNovy.addClickListener(clickEvent -> editacnyForm.edit(new Uzivatel()));
-        //todo browsPanel.addFilterListener(this::refreshUzivatelov);
         browsPanel.addSelectionListener(editacnyForm::edit);
-        //editacnyForm.setVisible(true);
         refreshUzivatelov();
     }
 

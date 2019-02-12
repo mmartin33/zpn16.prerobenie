@@ -8,6 +8,7 @@ import com.vaadin.ui.UI;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.model.UzivatelNastroje;
+import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
 
 
@@ -33,9 +34,10 @@ public class VitajteView extends MojView {
                 public void menuSelected(MenuItem selectedItem) {
                     System.out.println(selectedItem.getText());// + MyUI.getUser().getPopis());
                     if (selectedItem.getDescription().equals("firmy")) {
-                        //UI.getCurrent().getNavigator().navigateTo(UzivateliaView.NAME);
-                        System.out.println("Vybrate:" + selectedItem.getDescription());
                         n.navigateTo(FirmyView.NAME);
+                    }
+                    else if (selectedItem.getDescription().equals("parametre")) {
+                        n.navigateTo(ParametreView.NAME);
                     }
                 }
             };
@@ -73,6 +75,8 @@ public class VitajteView extends MojView {
             menuNezhrateDavky.setDescription("davka");
             MenuItem menuProdukty = menuSpravcu.addItem("Stav bodov", null, mycommand);
             menuProdukty.setDescription("body");
+            MenuItem menuParametre = menuSpravcu.addItem("Parametre", null, mycommand);
+            menuParametre.setDescription("parametre");
 
             menuAdmin = barmenu.addItem("Spravca", null, null);
             MenuItem menuUzivatelia = menuAdmin.addItem("Užívatelia", null, sp_admin);
