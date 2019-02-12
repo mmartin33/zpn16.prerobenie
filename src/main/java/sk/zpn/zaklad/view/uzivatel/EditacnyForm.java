@@ -106,7 +106,7 @@ public class EditacnyForm extends VerticalLayout {
     }
 
     public void delete(Button.ClickEvent event) {
-
+    // TODO dokoncit odstranovanie uzivatela
         ConfirmDialog.show(UI.getCurrent(), "Odstránenie uživateľa", "Naozaj si prajete odstrániť uživatela "+uzivateEditovany.getMeno()+"?",
                 "Áno", "Nie", new ConfirmDialog.Listener() {
 
@@ -119,7 +119,7 @@ public class EditacnyForm extends VerticalLayout {
                         }
                     }
                 });
-
+        //todo getUI().getContent().deselect();
     }
 
     public void setUzivatelView(UzivateliaView uzivatelView) {
