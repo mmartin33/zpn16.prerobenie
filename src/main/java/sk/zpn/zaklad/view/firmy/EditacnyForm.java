@@ -2,16 +2,17 @@ package sk.zpn.zaklad.view.firmy;
 
 import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.shared.Registration;
 import com.vaadin.ui.*;
+import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.dialogs.ConfirmDialog;
-import sk.zpn.domena.Firma;
-import sk.zpn.domena.TypUzivatela;
-import sk.zpn.domena.Uzivatel;
+import sk.zpn.domena.*;
 import sk.zpn.zaklad.model.FirmaNastroje;
-import sk.zpn.zaklad.model.UzivatelNastroje;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class EditacnyForm extends VerticalLayout {
 
@@ -28,36 +29,36 @@ public class EditacnyForm extends VerticalLayout {
 
     protected Button btnUloz;
     protected Button btnZmaz;
+    protected Button btnVyber;
     private final Binder<Firma> binder = new Binder<>();
     private Firma firmaEditovana;
     private FirmyView firmyView;
 
 
-    public EditacnyForm(){
-        tICO=new TextField("IČO");
+    public EditacnyForm() {
+        tICO = new TextField("IČO");
         tICO.setMaxLength(12);
-        tNazov=new TextField("Názov");
+        tNazov = new TextField("Názov");
         tNazov.setWidth("400");
-        tDic=new TextField("Dič");
+        tDic = new TextField("Dič");
         tDic.setMaxLength(10);
-        tIcDph=new TextField("ič DPH");
+        tIcDph = new TextField("ič DPH");
         tIcDph.setMaxLength(12);
-        tUlica=new TextField("Ulica");
+        tUlica = new TextField("Ulica");
         tUlica.setWidth("400");
-        tMesto=new TextField("Mesto");
+        tMesto = new TextField("Mesto");
         tMesto.setWidth("400");
-        tPsc=new TextField("PSČ");
+        tPsc = new TextField("PSČ");
         tPsc.setMaxLength(5);
         tPsc.setWidth("50%");
-        tTelefon=new TextField("Telefon");
+        tTelefon = new TextField("Telefon");
 
 
-
-
-        btnUloz=new Button("Ulož");
-        btnZmaz =new Button("Zmaž");
+        btnUloz = new Button("Ulož");
+        btnZmaz = new Button("Zmaž");
+        btnVyber = new Button("Výber");
         nastavComponnenty();
-        FormLayout lEdit=new FormLayout();
+        FormLayout lEdit = new FormLayout();
         lEdit.addComponent(tICO);
         lEdit.addComponent(tNazov);
         lEdit.addComponent(tDic);
@@ -68,69 +69,133 @@ public class EditacnyForm extends VerticalLayout {
         lEdit.addComponent(tTelefon);
 
 
-        HorizontalLayout lBtn=new HorizontalLayout();
+        HorizontalLayout lBtn = new HorizontalLayout();
         lBtn.addComponent(btnUloz);
         lBtn.addComponent(btnZmaz);
+        lBtn.addComponent(btnVyber);
 
 
-         this.addComponent(lEdit);
-         this.addComponent(lBtn);
+        this.addComponent(lEdit);
+        this.addComponent(lBtn);
 
     }
-    private void nastavComponnenty(){
+
+    private void nastavComponnenty() {
 
 
-    Binder.Binding<Firma, String> icoBinding = binder.forField(tICO)
+        Binder.Binding<Firma, String> icoBinding = binder.forField(tICO)
                 .withValidator(v -> !tICO.getValue().trim().isEmpty(),
                         "IČO je povinné")
                 .bind(Firma::getIco, Firma::setIco);
 
-    Binder.Binding<Firma, String> nazovBinding = binder.forField(tNazov)
+        Binder.Binding<Firma, String> nazovBinding = binder.forField(tNazov)
                 .withValidator(v -> !tNazov.getValue().trim().isEmpty(),
                         "Názov je poviný")
                 .bind(Firma::getNazov, Firma::setNazov);
 
-    Binder.Binding<Firma, String> dicBinding = binder.forField(tDic)
+        Binder.Binding<Firma, String> dicBinding = binder.forField(tDic)
                 .bind(Firma::getDic, Firma::setDic);
 
-    Binder.Binding<Firma, String> icdphBinding = binder.forField(tIcDph)
+        Binder.Binding<Firma, String> icdphBinding = binder.forField(tIcDph)
                 .bind(Firma::getIc_dph, Firma::setIc_dph);
 
-    Binder.Binding<Firma, String> ulicaBinding = binder.forField(tUlica)
+        Binder.Binding<Firma, String> ulicaBinding = binder.forField(tUlica)
                 .bind(Firma::getUlica, Firma::setUlica);
 
-    Binder.Binding<Firma, String> mestoBinding = binder.forField(tMesto)
+        Binder.Binding<Firma, String> mestoBinding = binder.forField(tMesto)
                 .bind(Firma::getMesto, Firma::setMesto);
 
-    Binder.Binding<Firma, String> pscBinding = binder.forField(tPsc)
+        Binder.Binding<Firma, String> pscBinding = binder.forField(tPsc)
                 .bind(Firma::getPsc, Firma::setPsc);
 
-    Binder.Binding<Firma, String> telefonBinding = binder.forField(tTelefon)
+        Binder.Binding<Firma, String> telefonBinding = binder.forField(tTelefon)
                 .bind(Firma::getTelefon, Firma::setTelefon);
 
-    tICO.addValueChangeListener(event -> icoBinding.validate());
-    tNazov.addValueChangeListener(event -> nazovBinding.validate());
+        tICO.addValueChangeListener(event -> icoBinding.validate());
+        tNazov.addValueChangeListener(event -> nazovBinding.validate());
 
-    btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
-    btnUloz.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-    btnUloz.addClickListener(this::save);
+        btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        btnUloz.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        btnUloz.addClickListener(this::save);
+        btnZmaz.addClickListener(this::delete);
+        btnVyber.addClickListener(this::vyber);
 
-    btnZmaz.addClickListener(this::delete);
-
-    //setVisible(false);
+        //setVisible(false);
 
 
-}
+    }
+
     void edit(Firma firma) {
         firmaEditovana = firma;
         if (firma != null) {
-            System.out.println("Zvolená "+ firmaEditovana.getNazov());
+            System.out.println("Zvolená " + firmaEditovana.getNazov());
+            binder.readBean(firma);
+        } else {
+            System.out.println("Zvolená nová");
             binder.readBean(firma);
         }
-        else{
-            System.out.println("Zvolená nová");
-            binder.readBean(firma);}
 
+    }
+
+    public void vyber(Button.ClickEvent event) {
+        if ((tNazov.getValue().length() < 1) && (tICO.getValue().length() < 3))
+            return;
+        Window subWindow = new Window("Firmy");
+        subWindow.setWidth(900,Unit.PIXELS);
+        subWindow.setHeight(1900,Unit.PIXELS);
+        FilterGrid<FirmaRegistra> grid;
+        FirmySlovenskoDigital fsd = new FirmySlovenskoDigital();
+
+        List<FirmaRegistra> firmaList = fsd.nacitanieDat(tNazov.getValue(), tICO.getValue(), false);
+
+        grid = new FilterGrid<>();
+        grid.setItems(firmaList);
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setWidth(100, Unit.PERCENTAGE);
+        grid.setHeight(100, Unit.PERCENTAGE);
+        grid.setHeightByRows(15);
+
+        grid.addItemClickListener(new ItemClickListener<FirmaRegistra>() {
+                                      @Override
+
+                                     public void itemClick(Grid.ItemClick<FirmaRegistra> event) {
+                                          if (event.getMouseEventDetails().isDoubleClick()) {
+                                              tNazov.setValue(event.getItem().getNazov());
+                                              tICO.setValue(event.getItem().getIco());
+                                              tPsc.setValue(event.getItem().getPsc());
+                                              tUlica.setValue(event.getItem().getUlica()+" "+event.getItem().getCisloDomu());
+                                              tMesto.setValue(event.getItem().getObec());
+                                              subWindow.close();
+                                          }
+                                      }
+                                  }
+        );
+
+
+        // definitionn of columns
+        FilterGrid.Column<FirmaRegistra, String> colIco = grid.addColumn(FirmaRegistra::getIco).setCaption("IČO").setId("ico");
+        FilterGrid.Column<FirmaRegistra, String> colNazov = grid.addColumn(FirmaRegistra::getNazov).setCaption("Názov").setId("nazov");
+        FilterGrid.Column<FirmaRegistra, String> colUlica = grid.addColumn(FirmaRegistra::getUlica).setCaption("Ulica").setId("ulica");
+        FilterGrid.Column<FirmaRegistra, String> colPsc = grid.addColumn(FirmaRegistra::getPsc).setCaption("Psč").setId("psc");
+        FilterGrid.Column<FirmaRegistra, String> colMesto = grid.addColumn(FirmaRegistra::getObec).setCaption("Mesto/obec").setId("mesto");
+
+
+        // filters
+        colIco.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        colNazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        colUlica.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        colPsc.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        colMesto.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        grid.setColumnOrder(colIco, colNazov, colUlica, colPsc, colMesto);
+
+        VerticalLayout vl = new VerticalLayout();
+        vl.addComponentsAndExpand(grid);
+        subWindow.setContent(vl);
+        subWindow.setModal(true);
+
+
+        subWindow.center();
+        UI.getCurrent().addWindow(subWindow);
     }
 
     public void save(Button.ClickEvent event) {
@@ -141,7 +206,7 @@ public class EditacnyForm extends VerticalLayout {
                     firmaEditovana.getNazov());
 
             Notification.show(msg, Notification.Type.TRAY_NOTIFICATION);
-            if (jeFirmaNova){
+            if (jeFirmaNova) {
                 firmyView.pridajNovuFirmu(ulozenaFirma);
             }
             firmyView.refreshFiriem();
@@ -152,7 +217,7 @@ public class EditacnyForm extends VerticalLayout {
 
     public void delete(Button.ClickEvent event) {
 
-        ConfirmDialog.show(UI.getCurrent(), "Odstránenie", "Naozaj si prajete odstrániť firmu "+ firmaEditovana.getNazov()+"?",
+        ConfirmDialog.show(UI.getCurrent(), "Odstránenie", "Naozaj si prajete odstrániť firmu " + firmaEditovana.getNazov() + "?",
                 "Áno", "Nie", new ConfirmDialog.Listener() {
 
                     public void onClose(ConfirmDialog dialog) {
@@ -171,3 +236,4 @@ public class EditacnyForm extends VerticalLayout {
         this.firmyView = firmaView;
     }
 }
+

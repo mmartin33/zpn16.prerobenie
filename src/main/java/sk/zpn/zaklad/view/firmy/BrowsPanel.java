@@ -26,7 +26,7 @@ public class BrowsPanel extends VerticalLayout {
             grid = new FilterGrid<>();
             grid.setItems(this.firmaList);
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-            grid.setWidth(900, Unit.PIXELS);
+            grid.setWidth(100, Unit.PERCENTAGE);
             grid.setHeight(1900, Unit.PIXELS);
             grid.setHeightByRows(15);
 
