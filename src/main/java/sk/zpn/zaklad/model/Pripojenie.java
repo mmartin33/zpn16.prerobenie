@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 
@@ -23,7 +24,21 @@ public class Pripojenie {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
         Uzivatel emp = new Uzivatel(meno, heslo, typUzivatela);
+        emp.setFirma(vytvorDummyFirmu());
         em.persist(emp);
         em.getTransaction().commit();
+    }
+
+    private static Firma vytvorDummyFirmu() {
+        Firma firma = new Firma();
+        firma.setNazov("DummyNazov");
+        firma.setDic("DummyDIC");
+        firma.setIco("DummyICO");
+        firma.setIc_dph("DummyIC_DPH");
+        firma.setUlica("DummyUlica");
+        firma.setMesto("DummyUlica");
+        firma.setPsc("DummyPsc");
+        firma.setTelefon("DummyTelefon");
+        return firma;
     }
 }

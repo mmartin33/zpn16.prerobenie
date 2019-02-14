@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import static javax.persistence.CascadeType.PERSIST;
+
 @Entity(name = "uzivatelia")
 @NamedQueries(value = {
         @NamedQuery(name = "Uzivatel.getPodlaMenaHesla", query = "SELECT u FROM uzivatelia u WHERE u.meno =:meno and u.heslo =:heslo"),
@@ -11,9 +13,9 @@ import javax.validation.constraints.Pattern;
         @NamedQuery(name = "Uzivatel.get", query = "SELECT u FROM uzivatelia u WHERE u.id =:id")})
 
 public class Uzivatel extends Vseobecne {
-//    TODO pridat vztah s firmou, doteraz tu bola lena notacia a ziaden atribut
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "id_firmy", nullable = true)
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
+    @JoinColumn(nullable = true)
     private Firma firma;
 
 

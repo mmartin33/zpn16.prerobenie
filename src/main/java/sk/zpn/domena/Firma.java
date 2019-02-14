@@ -1,6 +1,7 @@
 package sk.zpn.domena;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "firmy")
 @NamedQueries(value = {
@@ -19,7 +20,9 @@ public class Firma extends Vseobecne {
     private String telefon;
 
 
-    private Firma firma;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "firma_id")
+    private List<Uzivatel> listUzivatelov;
 
     public Firma() {
 
@@ -31,10 +34,6 @@ public class Firma extends Vseobecne {
 
     public void setNazov(String nazov) {
         this.nazov = nazov;
-    }
-
-    public Firma getFirma() {
-        return firma;
     }
 
     public String getIc_dph() {
@@ -77,10 +76,15 @@ public class Firma extends Vseobecne {
 
     public void setTelefon(String telefon) {this.telefon = telefon;}
 
-    public void setFirma(Firma firma) {this.firma = firma;}
-
     public boolean isNew() {return this.getId() == null;}
 
+    public List<Uzivatel> getListUzivatelov() {
+        return listUzivatelov;
+    }
+
+    public void setListUzivatelov(List<Uzivatel> listUzivatelov) {
+        this.listUzivatelov = listUzivatelov;
+    }
 }
 
 

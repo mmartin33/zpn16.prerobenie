@@ -64,6 +64,13 @@ public class EditacnyForm extends VerticalLayout {
                     (uzivatel, value) -> uzivatel.setTypUzivatela(
                           TypUzivatela.fromDisplayName(value)));
 
+        Binder.Binding<Uzivatel, String> firmaBinding = binder.forField(tFirma)
+                .withValidator(v -> !tFirma.getValue().trim().isEmpty(),
+                        "Firma je povinna")
+                .bind(uzivatel -> uzivatel.getFirma().getNazov(),
+//                        TODO setter by mat setovat firmu, ktora sa vyquerjuje, toto je len pre demo
+                        (uzivatel, value) -> uzivatel.getFirma().setNazov(value));
+
     tMeno.addValueChangeListener(event -> menoBinding.validate());
 
     btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
