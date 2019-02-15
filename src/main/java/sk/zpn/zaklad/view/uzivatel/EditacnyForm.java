@@ -1,15 +1,19 @@
 package sk.zpn.zaklad.view.uzivatel;
 
 import com.vaadin.data.Binder;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import org.vaadin.dialogs.ConfirmDialog;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
+import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EditacnyForm extends VerticalLayout {
 
@@ -22,7 +26,6 @@ public class EditacnyForm extends VerticalLayout {
     private final Binder<Uzivatel> binder = new Binder<>();
     private Uzivatel uzivateEditovany;
     private UzivateliaView uzivatelView;
-//    private PopupView odstranUzivatelaPopUp;
 
     public EditacnyForm(){
         tMeno=new TextField("Meno");
@@ -41,18 +44,22 @@ public class EditacnyForm extends VerticalLayout {
         lBtn.addComponent(btnZmaz);
 
         typUzivatelaComboBox.setItems(Arrays
-                .stream(TypUzivatela.values())
-                .map(TypUzivatela::getDisplayValue));
+            .stream(TypUzivatela.values())
+            .map(TypUzivatela::getDisplayValue));
 
 
          this.addComponent(lEdit);
          this.addComponent(lBtn);
 
-//        odstranUzivatelaPopUp = new PopupView(new RemoveUzivatelPopUpView());
-//        this.addComponent(odstranUzivatelaPopUp);
+        AutocompleteExtension<Firma> firmaAutocompleteExtension = new AutocompleteExtension<>(tFirma);
+        firmaAutocompleteExtension.setSuggestionGenerator(
+            this::navrhniFirmu,
+            this::transformujFirmuNaNazov,
+            this::transformujFirmuNaNazovSoZvyraznenymQuery);
+
+
     }
     private void nastavComponnenty(){
-
 
     Binder.Binding<Uzivatel, String> menoBinding = binder.forField(tMeno)
                 .withValidator(v -> !tMeno.getValue().trim().isEmpty(),
@@ -65,21 +72,19 @@ public class EditacnyForm extends VerticalLayout {
                           TypUzivatela.fromDisplayName(value)));
 
         Binder.Binding<Uzivatel, String> firmaBinding = binder.forField(tFirma)
-                .withValidator(v -> !tFirma.getValue().trim().isEmpty(),
+                .withValidator(nazovFirmy -> !tFirma.getValue().trim().isEmpty(),
                         "Firma je povinna")
-                .bind(uzivatel -> uzivatel.getFirma().getNazov(),
-//                        TODO setter by mat setovat firmu, ktora sa vyquerjuje, toto je len pre demo
-                        (uzivatel, value) -> uzivatel.getFirma().setNazov(value));
+                .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
+                        "Firma musi byt existujuca")
+                .bind(uzivatel -> uzivatel.getFirma() == null ? "" : uzivatel.getFirma().getNazov(),
+                        (uzivatel, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(uzivatel::setFirma));
 
     tMeno.addValueChangeListener(event -> menoBinding.validate());
 
     btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
-    btnUloz.setClickShortcut(ShortcutAction.KeyCode.ENTER);
     btnUloz.addClickListener(this::save);
 
     btnZmaz.addClickListener(this::delete);
-
-    //setVisible(false);
 
 
 }
@@ -92,7 +97,6 @@ public class EditacnyForm extends VerticalLayout {
         else{
             System.out.println("Zvoleny novy");
             binder.readBean(uzivatel);}
-        //setVisible(uzivatel != null);
     }
 
     public void save(Button.ClickEvent event) {
@@ -113,7 +117,6 @@ public class EditacnyForm extends VerticalLayout {
     }
 
     public void delete(Button.ClickEvent event) {
-    // TODO dokoncit odstranovanie uzivatela
         ConfirmDialog.show(UI.getCurrent(), "Odstránenie uživateľa", "Naozaj si prajete odstrániť uživatela "+uzivateEditovany.getMeno()+"?",
                 "Áno", "Nie", new ConfirmDialog.Listener() {
 
@@ -126,10 +129,32 @@ public class EditacnyForm extends VerticalLayout {
                         }
                     }
                 });
-        //todo getUI().getContent().deselect();
     }
 
     public void setUzivatelView(UzivateliaView uzivatelView) {
         this.uzivatelView = uzivatelView;
+    }
+
+    private List<Firma> navrhniFirmu(String query, int cap) {
+        return  FirmaNastroje.zoznamFiriem().stream()
+                .filter(firma -> firma.getNazov().toLowerCase().contains(query.toLowerCase()))
+                .limit(cap).collect(Collectors.toList());
+    }
+    /**
+     * Co sa zobraziv textfielde, ked sa uz hodnota vyberie
+     * */
+    private String transformujFirmuNaNazov(Firma firma) {
+        return firma.getNazov();
+    }
+    /**
+     * Co sa zobrazi v dropdowne
+     * */
+    private String transformujFirmuNaNazovSoZvyraznenymQuery(Firma firma, String query) {
+        return "<div class='suggestion-container'>"
+                + "<span class='firma'>"
+                + firma.getNazov()
+                .replaceAll("(?i)(" + query + ")", "<b>$1</b>")
+                + "</span>"
+                + "</div>";
     }
 }

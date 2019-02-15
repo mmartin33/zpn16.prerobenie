@@ -6,6 +6,7 @@ import sk.zpn.domena.Firma;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 public class FirmaNastroje {
     public static List<Firma> zoznamFiriem(){
@@ -17,6 +18,16 @@ public class FirmaNastroje {
 
         return u;
     }
+
+    public static Optional<Firma> prvaFirmaPodlaNazvu(String nazov){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Firma> q = em.createNamedQuery("Firma.getPodlaNazvu", Firma.class)
+                .setParameter("nazov", nazov);
+        List<Firma> firmy = q.getResultList();
+        return firmy.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
+    }
+
+
 
     public static Firma ulozFirmu(Firma f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
@@ -36,9 +47,6 @@ public class FirmaNastroje {
         em.getTransaction().begin();
         em.remove(f);
         em.getTransaction().commit();
-
-
-
     }
 
 
