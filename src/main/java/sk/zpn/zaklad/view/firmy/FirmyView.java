@@ -10,7 +10,7 @@ import java.util.List;
 
 public class FirmyView extends HorizontalLayout implements View {
     // ContactForm is an example of a custom component class
-    public static final String NAME = "uzivateliaView";
+    public static final String NAME = "firmyView";
 
     private EditacnyForm editacnyForm;
 
@@ -26,10 +26,7 @@ public class FirmyView extends HorizontalLayout implements View {
         configureComponents();
         this.addComponent(browsPanel);
         this.addComponent(editacnyForm);
-
-
     }
-
 
 
     void deselect() {
