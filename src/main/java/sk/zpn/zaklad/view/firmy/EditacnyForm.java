@@ -2,6 +2,7 @@ package sk.zpn.zaklad.view.firmy;
 
 import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ItemClickListener;
@@ -54,8 +55,8 @@ public class EditacnyForm extends VerticalLayout {
         tTelefon = new TextField("Telefon");
 
 
-        btnUloz = new Button("Ulož");
-        btnZmaz = new Button("Zmaž");
+        btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
+        btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
         btnVyber = new Button("Výber");
         nastavComponnenty();
         FormLayout lEdit = new FormLayout();
@@ -166,8 +167,7 @@ public class EditacnyForm extends VerticalLayout {
                                               tUlica.setValue(event.getItem().getUlica()+" "+event.getItem().getCisloDomu());
                                               tMesto.setValue(event.getItem().getObec());
                                               subWindow.close();
-                                          }
-                                      }
+                                          } }
                                   }
         );
 

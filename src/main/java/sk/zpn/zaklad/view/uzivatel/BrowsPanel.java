@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.uzivatel;
 
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
@@ -22,10 +23,13 @@ public class BrowsPanel extends VerticalLayout {
 
         public BrowsPanel(List<Uzivatel> uzivatelList) {
             this.uzivatelList = uzivatelList;
+            this.setSpacing(false);
             grid = new FilterGrid<>();
             grid.setItems(this.uzivatelList);
+            grid.addStyleName("test");
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-            grid.setWidth(700, Unit.PIXELS);
+            grid.setWidth(1000, Unit.PIXELS);
+            grid.setHeight(700, Unit.PIXELS);
 
             // definitionn of columns
             FilterGrid.Column<Uzivatel, String> colMeno = grid.addColumn(Uzivatel::getMeno).setCaption("Meno").setId("meno");
@@ -39,24 +43,29 @@ public class BrowsPanel extends VerticalLayout {
             colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
 
             grid.setColumnOrder(colMeno, colTypUzivatela,colFirmaNazov);
-            this.addComponent(new Label("Prehľad užívateľov"));
-            HorizontalLayout prvy=new HorizontalLayout();
-
-            Button btnSpat=new Button("Späť");
 
 
+
+            Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
             btnSpat.addClickListener(clickEvent ->
                     UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
             );
-            prvy.addComponent(btnSpat);
 
-            this.addComponent(prvy);
-            VerticalLayout druhy=new VerticalLayout();
-            btnNovy=new Button("Novy");
 
-            druhy.addComponentsAndExpand(grid);
-            druhy.addComponent(btnNovy);
-            this.addComponent(druhy);
+
+            HorizontalLayout tlacitkovy=new HorizontalLayout();
+            btnNovy=new Button("Novy",VaadinIcons.FILE_O);
+
+
+            tlacitkovy.addComponent(btnNovy);
+            tlacitkovy.addComponent(btnSpat);//666
+
+
+            this.addComponent(new Label("Prehľad užívateľov"));
+            this.addComponents(grid);
+
+
+            this.addComponent(tlacitkovy);
 
 
 

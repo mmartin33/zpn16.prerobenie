@@ -2,6 +2,7 @@ package sk.zpn.zaklad.view.uzivatel;
 
 import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.dialogs.ConfirmDialog;
@@ -28,8 +29,9 @@ public class EditacnyForm extends VerticalLayout {
         tMeno=new TextField("Meno");
         tFirma=new TextField("Firma");
         typUzivatelaComboBox =new ComboBox<>("Typ konta");
-        btnUloz=new Button("Ulož");
-        btnZmaz =new Button("Zmaž");
+        btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
+        btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
+
         nastavComponnenty();
         FormLayout lEdit=new FormLayout();
         lEdit.addComponent(tMeno);

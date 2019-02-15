@@ -10,6 +10,7 @@ import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 
 import sk.zpn.zaklad.view.parametre.ParametreView;
+import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
 
 
@@ -40,6 +41,9 @@ public class VitajteView extends MojView {
                     else if (selectedItem.getDescription().equals("parametre")) {
                         n.navigateTo(ParametreView.NAME);
                     }
+                    else if (selectedItem.getDescription().equals("poberatelia")) {
+                        n.navigateTo(PoberateliaView.NAME);
+                    }
                 }
             };
             MenuBar.Command odhlasenie = new MenuBar.Command() {
@@ -55,6 +59,7 @@ public class VitajteView extends MojView {
                     if (selectedItem.getDescription().equals("uzivatelia")){
                         //UI.getCurrent().getNavigator().navigateTo(FirmyView.NAME);
                         System.out.println("Vybrate:"+selectedItem.getDescription());
+
                         n.navigateTo(UzivateliaView.NAME);
                     }
                 }
@@ -72,6 +77,8 @@ public class VitajteView extends MojView {
             menuSpravcu = barmenu.addItem("Spravca ZPN", null, null);
             MenuItem menuFirmy = menuSpravcu.addItem("Firmy", null, mycommand);
             menuFirmy.setDescription("firmy");
+            MenuItem menuPoberatelia = menuSpravcu.addItem("Poberatelia", null, mycommand);
+            menuPoberatelia.setDescription("poberatelia");
             MenuItem menuNezhrateDavky = menuSpravcu.addItem("Nezhrate davky", null, mycommand);
             menuNezhrateDavky.setDescription("davka");
             MenuItem menuProdukty = menuSpravcu.addItem("Stav bodov", null, mycommand);
