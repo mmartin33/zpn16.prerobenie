@@ -25,7 +25,7 @@ public enum TypUzivatela {
             case "Správca ZPN": return SPRAVCA_ZPN;
             case "Predajca": return PREDAJCA;
             default: throw new IllegalArgumentException(
-                    String.format("Typ pouzivatela je nepodporovany: %s", displayName));
+                    String.format("Typ uzivatela je nepodporovany: %s", displayName));
         }
     }
 

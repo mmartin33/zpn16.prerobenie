@@ -25,11 +25,7 @@ public class UzivateliaView extends HorizontalLayout implements View {
         configureComponents();
         this.addComponent(browsPanel);
         this.addComponent(editacnyForm);
-
-
     }
-
-
 
     void deselect() {
         browsPanel.deselect();

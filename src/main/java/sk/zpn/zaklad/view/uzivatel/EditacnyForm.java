@@ -6,6 +6,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.Firma;
+import sk.zpn.domena.StatusUzivatela;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.model.FirmaNastroje;
@@ -21,6 +22,7 @@ public class EditacnyForm extends VerticalLayout {
     private TextField tMeno;
     private TextField tFirma;
     private ComboBox<String> typUzivatelaComboBox;
+    private ComboBox<String> statusUzivatelaComboBox;
     protected Button btnUloz;
     protected Button btnZmaz;
     private final Binder<Uzivatel> binder = new Binder<>();
@@ -31,6 +33,7 @@ public class EditacnyForm extends VerticalLayout {
         tMeno=new TextField("Meno");
         tFirma=new TextField("Firma");
         typUzivatelaComboBox =new ComboBox<>("Typ konta");
+        statusUzivatelaComboBox =new ComboBox<>("Stav konta");
         btnUloz=new Button("Ulož");
         btnZmaz =new Button("Zmaž");
         nastavComponnenty();
@@ -38,15 +41,19 @@ public class EditacnyForm extends VerticalLayout {
         lEdit.addComponent(tMeno);
         lEdit.addComponent(tFirma);
         lEdit.addComponent(typUzivatelaComboBox);
+        lEdit.addComponent(statusUzivatelaComboBox);
 
         HorizontalLayout lBtn=new HorizontalLayout();
         lBtn.addComponent(btnUloz);
         lBtn.addComponent(btnZmaz);
 
-        typUzivatelaComboBox.setItems(Arrays
-            .stream(TypUzivatela.values())
+        typUzivatelaComboBox.setItems(
+            Arrays.stream(TypUzivatela.values())
             .map(TypUzivatela::getDisplayValue));
 
+        statusUzivatelaComboBox.setItems(
+                Arrays.stream(StatusUzivatela.values())
+                .map(StatusUzivatela::getDisplayValue));
 
          this.addComponent(lEdit);
          this.addComponent(lBtn);
@@ -62,22 +69,27 @@ public class EditacnyForm extends VerticalLayout {
     private void nastavComponnenty(){
 
     Binder.Binding<Uzivatel, String> menoBinding = binder.forField(tMeno)
-                .withValidator(v -> !tMeno.getValue().trim().isEmpty(),
-                        "Meno je povinne")
-                .bind(Uzivatel::getMeno, Uzivatel::setMeno);
+        .withValidator(v -> !tMeno.getValue().trim().isEmpty(),
+        "Meno je povinne")
+        .bind(Uzivatel::getMeno, Uzivatel::setMeno);
 
     Binder.Binding<Uzivatel, String> typUzivatelaBinding = binder.forField(typUzivatelaComboBox)
-            .bind(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue(),
-                    (uzivatel, value) -> uzivatel.setTypUzivatela(
-                          TypUzivatela.fromDisplayName(value)));
+        .bind(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue(),
+            (uzivatel, value) -> uzivatel.setTypUzivatela(
+                TypUzivatela.fromDisplayName(value)));
 
         Binder.Binding<Uzivatel, String> firmaBinding = binder.forField(tFirma)
-                .withValidator(nazovFirmy -> !tFirma.getValue().trim().isEmpty(),
-                        "Firma je povinna")
+            .withValidator(nazovFirmy -> !tFirma.getValue().trim().isEmpty(),
+                    "Firma je povinna")
                 .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
-                        "Firma musi byt existujuca")
+                    "Firma musi byt existujuca")
                 .bind(uzivatel -> uzivatel.getFirma() == null ? "" : uzivatel.getFirma().getNazov(),
-                        (uzivatel, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(uzivatel::setFirma));
+                    (uzivatel, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(uzivatel::setFirma));
+
+        Binder.Binding<Uzivatel, String> statusUzivatela = binder.forField(statusUzivatelaComboBox)
+            .bind(uzivatel -> uzivatel.getStatusUzivatela().getDisplayValue(),
+                    (uzivatel, value) -> uzivatel.setStatusUzivatela(
+                            StatusUzivatela.fromDisplayName(statusUzivatelaComboBox.getValue())));
 
     tMeno.addValueChangeListener(event -> menoBinding.validate());
 

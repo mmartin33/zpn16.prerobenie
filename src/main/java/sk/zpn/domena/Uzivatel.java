@@ -28,9 +28,13 @@ public class Uzivatel extends Vseobecne {
     @Enumerated(EnumType.STRING)
     private TypUzivatela typUzivatela;
 
+    @Enumerated(EnumType.STRING)
+    private StatusUzivatela statusUzivatela;
+
 
     public Uzivatel() {
         this.typUzivatela = TypUzivatela.PREDAJCA;
+        this.statusUzivatela = StatusUzivatela.ACTIVE;
     }
 
 
@@ -38,6 +42,7 @@ public class Uzivatel extends Vseobecne {
         this.setTypUzivatela(typUzivatela);
         this.setMeno(meno);
         this.setHeslo(heslo);
+        this.setStatusUzivatela(StatusUzivatela.ACTIVE);
     }
 
 
@@ -82,6 +87,14 @@ public class Uzivatel extends Vseobecne {
 
     public void setTypUzivatela(TypUzivatela typUzivatela) {
         this.typUzivatela = typUzivatela;
+    }
+
+    public StatusUzivatela getStatusUzivatela() {
+        return statusUzivatela;
+    }
+
+    public void setStatusUzivatela(StatusUzivatela statusUzivatela) {
+        this.statusUzivatela = statusUzivatela;
     }
 }
 
