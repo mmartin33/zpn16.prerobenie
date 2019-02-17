@@ -11,7 +11,7 @@ import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "uzivatelia")
 @NamedQueries(value = {
-        @NamedQuery(name = "Uzivatel.getPodlaMenaHesla", query = "SELECT u FROM uzivatelia u WHERE u.meno =:meno and u.heslo =:heslo"),
+        @NamedQuery(name = "Uzivatel.getPodlaMena", query = "SELECT u FROM uzivatelia u WHERE u.meno =:meno"),
         @NamedQuery(name = "Uzivatel.getAll", query = "SELECT u FROM uzivatelia u"),
         @NamedQuery(name = "Uzivatel.get", query = "SELECT u FROM uzivatelia u WHERE u.id =:id")})
 
