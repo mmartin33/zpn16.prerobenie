@@ -14,6 +14,7 @@ import sk.zpn.zaklad.model.UzivatelNastroje;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class EditacnyForm extends VerticalLayout {
@@ -132,12 +133,17 @@ public class EditacnyForm extends VerticalLayout {
                 uzivatelView.pridajNovehoUzivatela(ulozenyUzivatel);
             }
             uzivatelView.refreshUzivatelov();
+            uzivatelView.selectUzivatel(ulozenyUzivatel);
 
         }
 
     }
 
     public void delete(Button.ClickEvent event) {
+        if (!Optional.ofNullable(uzivateEditovany).isPresent()) {
+            return;
+        }
+
         ConfirmDialog.show(UI.getCurrent(), "Odstránenie uživateľa", "Naozaj si prajete odstrániť uživatela "+uzivateEditovany.getMeno()+"?",
                 "Áno", "Nie", new ConfirmDialog.Listener() {
 
@@ -147,9 +153,12 @@ public class EditacnyForm extends VerticalLayout {
                             UzivatelNastroje.zmazUzivatela(uzivateEditovany);
                             uzivatelView.odstranUzivatela(uzivateEditovany);
                             Notification.show("Užívateľ odstránený", Notification.Type.TRAY_NOTIFICATION);
+                            clearEditacnyForm();
+                            uzivatelView.selectFirst();
                         }
                     }
-                });
+        });
+
     }
 
     public void setUzivatelView(UzivateliaView uzivatelView) {
@@ -177,5 +186,12 @@ public class EditacnyForm extends VerticalLayout {
                 .replaceAll("(?i)(" + query + ")", "<b>$1</b>")
                 + "</span>"
                 + "</div>";
+    }
+    private void clearEditacnyForm() {
+        tMeno.clear();
+        tFirma.clear();
+        passwordField.clear();
+        typUzivatelaComboBox.clear();
+        statusUzivatelaComboBox.clear();
     }
 }
