@@ -1,5 +1,8 @@
 package sk.zpn.domena;
 
+import org.apache.log4j.Logger;
+import sk.zpn.authentification.HesloNastroje;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -13,6 +16,8 @@ import static javax.persistence.CascadeType.PERSIST;
         @NamedQuery(name = "Uzivatel.get", query = "SELECT u FROM uzivatelia u WHERE u.id =:id")})
 
 public class Uzivatel extends Vseobecne {
+
+    private static final Logger logger = Logger.getLogger(Uzivatel.class);
 
     @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
     @JoinColumn(nullable = true)
@@ -35,6 +40,7 @@ public class Uzivatel extends Vseobecne {
     public Uzivatel() {
         this.typUzivatela = TypUzivatela.PREDAJCA;
         this.statusUzivatela = StatusUzivatela.ACTIVE;
+        this.heslo = "";
     }
 
 
@@ -59,7 +65,11 @@ public class Uzivatel extends Vseobecne {
     }
 
     public void setHeslo(String heslo) {
-        this.heslo = heslo;
+        try {
+            this.heslo = HesloNastroje.getSaltedHash(heslo);
+        } catch (Exception e) {
+            logger.error("Hashing of password failed", e);
+        }
     }
 
     public Firma getFirma() {

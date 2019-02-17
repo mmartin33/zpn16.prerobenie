@@ -21,6 +21,7 @@ public class EditacnyForm extends VerticalLayout {
 
     private TextField tMeno;
     private TextField tFirma;
+    private PasswordField passwordField;
     private ComboBox<String> typUzivatelaComboBox;
     private ComboBox<String> statusUzivatelaComboBox;
     protected Button btnUloz;
@@ -30,16 +31,18 @@ public class EditacnyForm extends VerticalLayout {
     private UzivateliaView uzivatelView;
 
     public EditacnyForm(){
-        tMeno=new TextField("Meno");
-        tFirma=new TextField("Firma");
-        typUzivatelaComboBox =new ComboBox<>("Typ konta");
-        statusUzivatelaComboBox =new ComboBox<>("Stav konta");
-        btnUloz=new Button("Ulož");
-        btnZmaz =new Button("Zmaž");
+        tMeno = new TextField("Meno");
+        tFirma = new TextField("Firma");
+        passwordField =  new PasswordField("Heslo");
+        typUzivatelaComboBox = new ComboBox<>("Typ konta");
+        statusUzivatelaComboBox = new ComboBox<>("Stav konta");
+        btnUloz = new Button("Ulož");
+        btnZmaz = new Button("Zmaž");
         nastavComponnenty();
         FormLayout lEdit=new FormLayout();
         lEdit.addComponent(tMeno);
         lEdit.addComponent(tFirma);
+        lEdit.addComponent(passwordField);
         lEdit.addComponent(typUzivatelaComboBox);
         lEdit.addComponent(statusUzivatelaComboBox);
 
@@ -78,6 +81,14 @@ public class EditacnyForm extends VerticalLayout {
             (uzivatel, value) -> uzivatel.setTypUzivatela(
                 TypUzivatela.fromDisplayName(value)));
 
+    Binder.Binding<Uzivatel, String> hesloBinding = binder.forField(passwordField)
+        .withValidator(v -> !passwordField.getValue().trim().isEmpty(),
+        "Heslo je povinne")
+        // zobrazene heslo bude mat vzdy rovnaku dlzku
+        .bind(v -> v.getHeslo() == null || v.getHeslo().length() == 0 ? "" : "longString",
+              Uzivatel::setHeslo);
+
+
         Binder.Binding<Uzivatel, String> firmaBinding = binder.forField(tFirma)
             .withValidator(nazovFirmy -> !tFirma.getValue().trim().isEmpty(),
                     "Firma je povinna")
@@ -103,11 +114,9 @@ public class EditacnyForm extends VerticalLayout {
     void edit(Uzivatel uzivatel) {
         uzivateEditovany = uzivatel;
         if (uzivatel != null) {
-            System.out.println("Zvoleny "+uzivateEditovany.getMeno());
             binder.readBean(uzivatel);
         }
         else{
-            System.out.println("Zvoleny novy");
             binder.readBean(uzivatel);}
     }
 
