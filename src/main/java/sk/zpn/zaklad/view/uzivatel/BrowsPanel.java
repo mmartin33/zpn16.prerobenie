@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.uzivatel;
 
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -28,7 +29,8 @@ public class BrowsPanel extends VerticalLayout {
         grid = new FilterGrid<>();
         grid.setItems(this.uzivatelList);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setWidth(850, Unit.PIXELS);
+        grid.setWidth(1000, Unit.PIXELS);
+        grid.setHeight(700, Unit.PIXELS);
 
         // definitionn of columns
         FilterGrid.Column<Uzivatel, String> colMeno = grid.addColumn(Uzivatel::getMeno).setCaption("Meno").setId("meno");
@@ -52,24 +54,30 @@ public class BrowsPanel extends VerticalLayout {
         (cValue, fValue) -> fValue == null || cValue.contains(StatusUzivatela.fromDisplayName(fValue).getIconColor()));
 
         grid.setColumnOrder(colMeno, colTypUzivatela,colFirmaNazov, colStatusUzivatela);
-        this.addComponent(new Label("Prehľad užívateľov"));
-        HorizontalLayout prvy=new HorizontalLayout();
-
-        Button btnSpat=new Button("Späť");
-
-
+        Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
         btnSpat.addClickListener(clickEvent ->
                 UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
         );
-        prvy.addComponent(btnSpat);
 
-        this.addComponent(prvy);
-        VerticalLayout druhy=new VerticalLayout();
-        btnNovy=new Button("Novy");
 
-        druhy.addComponentsAndExpand(grid);
-        druhy.addComponent(btnNovy);
-        this.addComponent(druhy);
+
+        HorizontalLayout tlacitkovy=new HorizontalLayout();
+        btnNovy=new Button("Novy",VaadinIcons.FILE_O);
+
+
+        tlacitkovy.addComponent(btnNovy);
+        tlacitkovy.addComponent(btnSpat);//666
+
+
+        this.addComponent(new Label("Prehľad užívateľov"));
+        this.addComponents(grid);
+
+
+        this.addComponent(tlacitkovy);
+
+
+
+
     }
 
 

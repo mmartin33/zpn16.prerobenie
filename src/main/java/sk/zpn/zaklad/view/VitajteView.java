@@ -11,6 +11,7 @@ import sk.zpn.zaklad.view.firmy.FirmyView;
 
 import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
+import sk.zpn.zaklad.view.produkty.ProduktyView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
 
 
@@ -43,6 +44,9 @@ public class VitajteView extends MojView {
                     }
                     else if (selectedItem.getDescription().equals("poberatelia")) {
                         n.navigateTo(PoberateliaView.NAME);
+                    }
+                    else if (selectedItem.getDescription().equals("produkty")) {
+                        n.navigateTo(ProduktyView.NAME);
                     }
                 }
             };
@@ -79,10 +83,13 @@ public class VitajteView extends MojView {
             menuFirmy.setDescription("firmy");
             MenuItem menuPoberatelia = menuSpravcu.addItem("Poberatelia", null, mycommand);
             menuPoberatelia.setDescription("poberatelia");
+
+            MenuItem menuProdukty = menuSpravcu.addItem("Produkty", null, mycommand);
+            menuProdukty.setDescription("produkty");
             MenuItem menuNezhrateDavky = menuSpravcu.addItem("Nezhrate davky", null, mycommand);
             menuNezhrateDavky.setDescription("davka");
-            MenuItem menuProdukty = menuSpravcu.addItem("Stav bodov", null, mycommand);
-            menuProdukty.setDescription("body");
+            MenuItem menuBody = menuSpravcu.addItem("Stav bodov", null, mycommand);
+            menuBody.setDescription("body");
             MenuItem menuParametre = menuSpravcu.addItem("Parametre", null, mycommand);
             menuParametre.setDescription("parametre");
 

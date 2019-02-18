@@ -17,6 +17,7 @@ import sk.zpn.zaklad.view.firmy.FirmyView;
 import sk.zpn.zaklad.view.LoginView;
 import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
+import sk.zpn.zaklad.view.produkty.ProduktyView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
 import sk.zpn.zaklad.view.VitajteView;
 
@@ -37,6 +38,7 @@ public class MyUI extends UI {
     VitajteView  vitajteView;
     UzivateliaView uzivateliaView;
     PoberateliaView poberateliaView;
+    ProduktyView produktyView;
     FirmyView firmyView;
     Pripojenie p;
     ParametreView parametre;
@@ -50,6 +52,7 @@ public class MyUI extends UI {
         vitajteView = new VitajteView(navigator);
         uzivateliaView=new UzivateliaView();
         poberateliaView=new PoberateliaView();
+        produktyView=new ProduktyView();
         firmyView=new FirmyView();
         parametre=new ParametreView();
 
@@ -57,6 +60,7 @@ public class MyUI extends UI {
         navigator.addView(UzivateliaView.NAME, uzivateliaView);
         navigator.addView(FirmyView.NAME, firmyView);
         navigator.addView(PoberateliaView.NAME, poberateliaView);
+        navigator.addView(ProduktyView.NAME, produktyView);
         navigator.addView(LoginView.NAME, login);
         navigator.addView(ParametreView.NAME, parametre);
 

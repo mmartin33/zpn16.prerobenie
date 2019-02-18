@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.poberatelia;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.converter.LocalDateToDateConverter;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -8,6 +9,9 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.zaklad.model.PoberatelNastroje;
+
+import java.time.ZoneId;
+import java.util.Date;
 
 public class EditacnyForm extends VerticalLayout {
 
@@ -53,8 +57,8 @@ public class EditacnyForm extends VerticalLayout {
         tEmail = new TextField("Email");
 
         dVyznamnyDatum = new DateField("Výynamny dátum");
-        dVyznamnyDatum.setDateFormat("dd.MM.YYYY");
-                tKod = new TextField("Kód");
+        dVyznamnyDatum.setDateFormat("dd.MM.yyyy");
+        tKod = new TextField("Kód");
         tKod.setWidth("300");
         tHeslo = new TextField("Heslo");
         tHeslo.setWidth("300");
@@ -112,8 +116,9 @@ public class EditacnyForm extends VerticalLayout {
                 .bind(Poberatel::getTelefon, Poberatel::setTelefon);
         Binder.Binding<Poberatel, String> emailBinding = binder.forField(tEmail)
                 .bind(Poberatel::getEmail, Poberatel::setEmail);
-//        Binder.Binding<Poberatel, Date> vyznamnyDatumBinding = binder.forField(tVyznamnyDatum)
-//                .bind(Poberatel::getVyznamnyDatum, Poberatel::setVyznamnyDatum);
+        Binder.Binding<Poberatel, Date> vyznamnyDatumBinding = binder.forField(dVyznamnyDatum)
+                .withConverter(new LocalDateToDateConverter(ZoneId.systemDefault()))
+                .bind(Poberatel::getVyznamnyDatum, Poberatel::setVyznamnyDatum);
 
         Binder.Binding<Poberatel, String> kodBinding = binder.forField(tKod)
                 .bind(Poberatel::getKod, Poberatel::setKod);
@@ -127,6 +132,12 @@ public class EditacnyForm extends VerticalLayout {
         tEmail.addValueChangeListener(event -> emailBinding.validate());
         tKod.addValueChangeListener(event -> menoBinding.validate());
         tHeslo.addValueChangeListener(event -> hesloBinding.validate());
+        dVyznamnyDatum.addValueChangeListener(event -> vyznamnyDatumBinding.validate());
+        tKod.addValueChangeListener(event -> kodBinding.validate());
+        tTelefon.addValueChangeListener(event -> telefonBinding.validate());
+        tUlica.addValueChangeListener(event -> ulicaBinding.validate());
+        tPsc.addValueChangeListener(event -> pscBinding.validate());
+        tMesto.addValueChangeListener(event -> mestoBinding.validate());
 
         btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
         btnUloz.setClickShortcut(ShortcutAction.KeyCode.ENTER);

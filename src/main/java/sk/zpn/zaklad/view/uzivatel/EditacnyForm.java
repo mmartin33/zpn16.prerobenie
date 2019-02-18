@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.uzivatel;
 
 import com.vaadin.data.Binder;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
@@ -37,8 +38,8 @@ public class EditacnyForm extends VerticalLayout {
         passwordField =  new PasswordField("Heslo");
         typUzivatelaComboBox = new ComboBox<>("Typ konta");
         statusUzivatelaComboBox = new ComboBox<>("Stav konta");
-        btnUloz = new Button("Ulož");
-        btnZmaz = new Button("Zmaž");
+        btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
+        btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
         nastavComponnenty();
         FormLayout lEdit=new FormLayout();
         lEdit.addComponent(tMeno);
