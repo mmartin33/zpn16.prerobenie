@@ -72,7 +72,7 @@ public class MyUI extends UI {
             String pass = e.getLoginParameter("password");
 
 
-            if (UzivatelNastroje.overUzivatela(name,pass)!=null) {
+            if (UzivatelNastroje.overUzivatela(name,pass)) {
                 System.out.println("uzivatel overeny"+VaadinSession.getCurrent().getAttribute("meno")+VaadinSession.getCurrent().getAttribute("id_uzivatela"));
                 navigator.navigateTo(VitajteView.NAME);
             }

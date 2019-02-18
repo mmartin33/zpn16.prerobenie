@@ -25,11 +25,7 @@ public class UzivateliaView extends HorizontalLayout implements View {
         configureComponents();
         this.addComponent(browsPanel);
         this.addComponent(editacnyForm);
-
-
     }
-
-
 
     void deselect() {
         browsPanel.deselect();
@@ -38,7 +34,10 @@ public class UzivateliaView extends HorizontalLayout implements View {
     private void configureComponents() {
 
         editacnyForm.setUzivatelView(this);
-        browsPanel.btnNovy.addClickListener(clickEvent -> editacnyForm.edit(new Uzivatel()));
+        browsPanel.btnNovy.addClickListener(clickEvent -> {
+            deselect();
+            editacnyForm.edit(new Uzivatel());
+        });
         browsPanel.addSelectionListener(editacnyForm::edit);
         refreshUzivatelov();
     }
@@ -53,10 +52,16 @@ public class UzivateliaView extends HorizontalLayout implements View {
 
     }
     void odstranUzivatela(Uzivatel uzivatel) {
-
         uzivatelList.remove(uzivatel);
         this.refreshUzivatelov();
+    }
 
+    void selectFirst() {
+        browsPanel.selectFirst();
+    }
+
+    void selectUzivatel(Uzivatel uzivatel) {
+        browsPanel.selectUzivatel(uzivatel);
     }
 
 }

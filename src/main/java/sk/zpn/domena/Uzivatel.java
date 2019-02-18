@@ -1,5 +1,8 @@
 package sk.zpn.domena;
 
+import org.apache.log4j.Logger;
+import sk.zpn.authentification.HesloNastroje;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -8,11 +11,13 @@ import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "uzivatelia")
 @NamedQueries(value = {
-        @NamedQuery(name = "Uzivatel.getPodlaMenaHesla", query = "SELECT u FROM uzivatelia u WHERE u.meno =:meno and u.heslo =:heslo"),
+        @NamedQuery(name = "Uzivatel.getPodlaMena", query = "SELECT u FROM uzivatelia u WHERE u.meno =:meno"),
         @NamedQuery(name = "Uzivatel.getAll", query = "SELECT u FROM uzivatelia u"),
         @NamedQuery(name = "Uzivatel.get", query = "SELECT u FROM uzivatelia u WHERE u.id =:id")})
 
 public class Uzivatel extends Vseobecne {
+
+    private static final Logger logger = Logger.getLogger(Uzivatel.class);
 
     @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
     @JoinColumn(nullable = true)
@@ -28,9 +33,14 @@ public class Uzivatel extends Vseobecne {
     @Enumerated(EnumType.STRING)
     private TypUzivatela typUzivatela;
 
+    @Enumerated(EnumType.STRING)
+    private StatusUzivatela statusUzivatela;
+
 
     public Uzivatel() {
         this.typUzivatela = TypUzivatela.PREDAJCA;
+        this.statusUzivatela = StatusUzivatela.ACTIVE;
+        this.heslo = "";
     }
 
 
@@ -38,6 +48,7 @@ public class Uzivatel extends Vseobecne {
         this.setTypUzivatela(typUzivatela);
         this.setMeno(meno);
         this.setHeslo(heslo);
+        this.setStatusUzivatela(StatusUzivatela.ACTIVE);
     }
 
 
@@ -54,7 +65,11 @@ public class Uzivatel extends Vseobecne {
     }
 
     public void setHeslo(String heslo) {
-        this.heslo = heslo;
+        try {
+            this.heslo = HesloNastroje.getSaltedHash(heslo);
+        } catch (Exception e) {
+            logger.error("Hashing of password failed", e);
+        }
     }
 
     public Firma getFirma() {
@@ -82,6 +97,14 @@ public class Uzivatel extends Vseobecne {
 
     public void setTypUzivatela(TypUzivatela typUzivatela) {
         this.typUzivatela = typUzivatela;
+    }
+
+    public StatusUzivatela getStatusUzivatela() {
+        return statusUzivatela;
+    }
+
+    public void setStatusUzivatela(StatusUzivatela statusUzivatela) {
+        this.statusUzivatela = statusUzivatela;
     }
 }
 

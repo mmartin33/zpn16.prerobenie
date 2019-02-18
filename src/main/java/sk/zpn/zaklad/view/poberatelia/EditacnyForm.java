@@ -15,7 +15,7 @@ public class EditacnyForm extends VerticalLayout {
     private TextField tMeno;
     private TextField tPriezvisko;
     private TextField tTitul;
-    private TextField tVyznamnyDatum;
+    private DateField dVyznamnyDatum;
     private TextField tMesto;
     private TextField tUlica;
     private TextField tPsc;
@@ -39,19 +39,25 @@ public class EditacnyForm extends VerticalLayout {
         tMeno = new TextField("Meno");
         tMeno.setWidth("400");
         tPriezvisko = new TextField("Priezvisko");
+        tPriezvisko.setWidth("400");
         tTitul = new TextField("Titul");
-
+        tTitul.setWidth("200");
         tUlica = new TextField("Ulica");
+        tUlica.setWidth("400");
         tMesto = new TextField("Mesto");
+        tMeno.setWidth("400");
         tPsc = new TextField("PSČ");
-
+        tPsc.setWidth("400");
         tMobil = new TextField("Mobil");
         tTelefon = new TextField("Telefon");
         tEmail = new TextField("Email");
 
-        tVyznamnyDatum = new TextField("Vyznamný dátum");
-        tKod = new TextField("Kód");
+        dVyznamnyDatum = new DateField("Výynamny dátum");
+        dVyznamnyDatum.setDateFormat("dd.MM.YYYY");
+                tKod = new TextField("Kód");
+        tKod.setWidth("300");
         tHeslo = new TextField("Heslo");
+        tHeslo.setWidth("300");
 
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
@@ -68,7 +74,7 @@ public class EditacnyForm extends VerticalLayout {
         lEdit.addComponent(tMobil);
         lEdit.addComponent(tTelefon);
         lEdit.addComponent(tEmail);
-        lEdit.addComponent(tVyznamnyDatum);
+        lEdit.addComponent(dVyznamnyDatum);
         lEdit.addComponent(tKod);
         lEdit.addComponent(tHeslo);
 

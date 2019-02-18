@@ -1,6 +1,8 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
+import org.apache.log4j.Logger;
+import sk.zpn.authentification.HesloNastroje;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 
@@ -11,21 +13,28 @@ import java.util.List;
 import java.util.Optional;
 
 public class UzivatelNastroje {
-    public static Uzivatel overUzivatela(String meno, String heslo){
-        System.out.println("Overenie uzivatela:" +meno+" heslo "+heslo);
-        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.getPodlaMenaHesla", Uzivatel.class);
-        q.setParameter("meno", meno);
-        q.setParameter("heslo", heslo);
-        Uzivatel lu = q.getSingleResult();
 
-        if  (lu==null)
-            return null;
-        VaadinSession.getCurrent().setAttribute("id_uzivatela",lu.getId());
-        VaadinSession.getCurrent().setAttribute("meno",lu.getMeno());
-        System.out.println("uzivatel overeny"+VaadinSession.getCurrent().getAttribute("meno")+VaadinSession.getCurrent().getAttribute("id_uzivatela"));
-        return lu;
+    private static final Logger logger = Logger.getLogger(UzivatelNastroje.class);
+
+    public static boolean overUzivatela(String meno, String heslo){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.getPodlaMena", Uzivatel.class);
+        q.setParameter("meno", meno);
+        Optional<Uzivatel> uzivatel = Optional.ofNullable(q.getSingleResult());
+
+        try {
+            if  (uzivatel.isPresent() && HesloNastroje.check(meno, uzivatel.get().getHeslo())) {
+                VaadinSession.getCurrent().setAttribute("id_uzivatela", uzivatel.get().getId());
+                VaadinSession.getCurrent().setAttribute("meno", uzivatel.get().getMeno());
+                logger.info(String.format("Uzivatel %s bol overeny", uzivatel.get().getMeno()));
+            }
+        } catch (Exception e) {
+            logger.error("Heslo nebolo mozne overit", e);
+        }
+        return false;
     }
+
+
     public static Boolean prazdnyUzivatelia(){
         boolean prazdny=true;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
