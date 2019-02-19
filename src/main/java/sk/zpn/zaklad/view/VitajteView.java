@@ -9,6 +9,7 @@ import sk.zpn.domena.TypUzivatela;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 
+import sk.zpn.zaklad.view.mostik.MostikView;
 import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 import sk.zpn.zaklad.view.produkty.ProduktyView;
@@ -47,6 +48,11 @@ public class VitajteView extends MojView {
                     }
                     else if (selectedItem.getDescription().equals("produkty")) {
                         n.navigateTo(ProduktyView.NAME);
+                    }
+                    else if (selectedItem.getDescription().equals("mostik")) {
+                        MostikView mostikView = new MostikView();
+                        UI.getCurrent().getNavigator().addView(MostikView.NAME, mostikView);
+                        n.navigateTo(MostikView.NAME);
                     }
                 }
             };

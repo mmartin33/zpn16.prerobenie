@@ -55,7 +55,9 @@ public class BrowsPanel extends VerticalLayout {
 
             Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
             btnSpat.addClickListener(clickEvent ->
-                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
+                    {
+
+                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME);}
             );
 
 
@@ -80,6 +82,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
         void refresh() {
+
             grid.getDataProvider().refreshAll();
             System.out.println("Refresh browsu all");
 

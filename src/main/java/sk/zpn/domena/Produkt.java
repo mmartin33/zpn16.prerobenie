@@ -1,6 +1,6 @@
 package sk.zpn.domena;
 
-import sk.zpn.zaklad.model.ParametreNastroje;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,22 +10,37 @@ import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "produkty")
 @NamedQueries(value = {
+        @NamedQuery(name = "Produkt.getZaRok", query = "SELECT p FROM produkty p WHERE p.rok =:rok"),
+        @NamedQuery(name = "Produkt.getAll", query = "SELECT p FROM produkty p ")})
 
-        @NamedQuery(name = "Produkt.getAll", query = "SELECT p FROM produkty p")})
+@Table(
+        uniqueConstraints=
+        @UniqueConstraint(columnNames={"rok", "kat"})
+)
 
 public class Produkt extends Vseobecne {
 
 
     @NotNull
     @Pattern(regexp = "[a-z0-9._%+-]$", message = "Zly kod")
-    @Column(name = "kat", nullable = false, unique = true)
+    @Column(name = "kat", nullable = false)
+
     private String kat;
     private String nazov;
     private Double body;
     private Double kusy;
     private String rok;
+
+
+
+
     @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
     @JoinColumn(nullable = true)
+
+
+
+
+
     private Firma firma;
 
 
@@ -37,6 +52,8 @@ public class Produkt extends Vseobecne {
     }
     public Produkt(String rok) {
         this.setRok(rok);
+        this.setBody(new Double(1));
+        this.setKusy(new Double(1));
     }
 
     public Produkt getProdukt() {return produkt;}

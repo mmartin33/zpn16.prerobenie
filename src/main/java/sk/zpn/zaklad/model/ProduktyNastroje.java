@@ -20,6 +20,15 @@ public class ProduktyNastroje {
 
         return u;
     }
+    public static List<Produkt> zoznamProduktovZaRok(){
+        List<Produkt> u = null;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getZaRok", Produkt.class);
+        q.setParameter("rok", ParametreNastroje.nacitajParametre().getRok());
+        u =  q.getResultList();
+
+        return u;
+    }
 
     public static Produkt ulozProdukt(Produkt f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");

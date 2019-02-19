@@ -82,6 +82,12 @@ public class Uzivatel extends Vseobecne {
         else
             return firma.getNazov();
     }
+    public Long getFirmaID() {
+        if (firma == null)
+            return new Long(0);
+        else
+            return firma.getId();
+    }
 
     public void setFirma(Firma firma) {
         this.firma = firma;

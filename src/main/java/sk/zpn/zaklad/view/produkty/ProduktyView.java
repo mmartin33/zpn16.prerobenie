@@ -18,7 +18,7 @@ public class ProduktyView extends HorizontalLayout implements View {
     private List<Produkt> produktList;
 
     public ProduktyView() {
-        produktList = ProduktyNastroje.zoznamProduktov();
+        produktList = ProduktyNastroje.zoznamProduktovZaRok();
         browsPanel=new BrowsPanel(produktList);
         editacnyForm=new EditacnyForm();
         editacnyForm.setProduktyView(this);
@@ -32,7 +32,9 @@ public class ProduktyView extends HorizontalLayout implements View {
 
 
     void deselect() {
+
         browsPanel.deselect();
+
     }
 
     private void configureComponents() {

@@ -83,7 +83,7 @@ public class EditacnyForm extends VerticalLayout {
     private void nastavComponnenty() {
 
         tRok.setEnabled(false);
-        Binder.Binding<Produkt, String> menoBinding = binder.forField(tRok)
+        Binder.Binding<Produkt, String> rokBinding = binder.forField(tRok)
                 .bind(Produkt::getRok, Produkt::setRok);
         Binder.Binding<Produkt, String> kodBinding = binder.forField(tKod)
                 .bind(Produkt::getKat, Produkt::setKat);
@@ -91,9 +91,13 @@ public class EditacnyForm extends VerticalLayout {
                 .bind(Produkt::getNazov, Produkt::setNazov);
         Binder.Binding<Produkt, Double> bodyBinding = binder.forField(tBody)
                 .withConverter(new StringToDoubleConverter("Nie je číslo"))
+                .withValidator(body -> !tBody.getValue().trim().isEmpty(),
+                        "Body su povinne")
                 .bind(Produkt::getBody, Produkt::setBody);
         Binder.Binding<Produkt, Double> kusyBinding = binder.forField(tKusy)
                 .withConverter(new StringToDoubleConverter("Nie je číslo"))
+                .withValidator(kusy -> !tKusy.getValue().trim().isEmpty(),
+                        "Kusy su povinne")
                 .bind(Produkt::getKusy, Produkt::setKusy);
 
         Binder.Binding<Produkt, String> firmaBinding = binder.forField(tFirma)
@@ -169,7 +173,7 @@ public class EditacnyForm extends VerticalLayout {
 
     }
 
-    public void setProduktyView(ProduktyView produktView) {
+    public void setProduktyView(ProduktyView produktyView) {
         this.produktyView = produktyView;
     }
 
