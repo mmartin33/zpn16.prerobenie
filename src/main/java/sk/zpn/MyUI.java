@@ -54,7 +54,7 @@ public class MyUI extends UI {
         vitajteView = new VitajteView(navigator);
         uzivateliaView=new UzivateliaView();
         poberateliaView=new PoberateliaView();
-        produktyView=new ProduktyView();
+        //produktyView=new ProduktyView();
         //mostikView=new MostikView();
         firmyView=new FirmyView();
         parametre=new ParametreView();
@@ -63,7 +63,7 @@ public class MyUI extends UI {
         navigator.addView(UzivateliaView.NAME, uzivateliaView);
         navigator.addView(FirmyView.NAME, firmyView);
         navigator.addView(PoberateliaView.NAME, poberateliaView);
-        navigator.addView(ProduktyView.NAME, produktyView);
+        //navigator.addView(ProduktyView.NAME, produktyView);
         //navigator.addView(MostikView.NAME, mostikView);
         navigator.addView(LoginView.NAME, login);
         navigator.addView(ParametreView.NAME, parametre);

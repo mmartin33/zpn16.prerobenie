@@ -7,6 +7,7 @@ import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.UI;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.zaklad.model.UzivatelNastroje;
+import sk.zpn.zaklad.view.doklady.DokladyView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 
 import sk.zpn.zaklad.view.mostik.MostikView;
@@ -47,7 +48,14 @@ public class VitajteView extends MojView {
                         n.navigateTo(PoberateliaView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("produkty")) {
+                        ProduktyView produktyView = new ProduktyView();
+                        UI.getCurrent().getNavigator().addView(ProduktyView.NAME, produktyView);
                         n.navigateTo(ProduktyView.NAME);
+                    }
+                    else if (selectedItem.getDescription().equals("doklad")) {
+                        DokladyView dokladyView = new DokladyView();
+                        UI.getCurrent().getNavigator().addView(DokladyView.NAME, dokladyView);
+                        n.navigateTo(DokladyView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("mostik")) {
                         MostikView mostikView = new MostikView();
@@ -92,6 +100,8 @@ public class VitajteView extends MojView {
 
             MenuItem menuProdukty = menuSpravcu.addItem("Produkty", null, mycommand);
             menuProdukty.setDescription("produkty");
+            MenuItem menuDoklad = menuSpravcu.addItem("Doklady", null, mycommand);
+            menuDoklad.setDescription("doklad");
             MenuItem menuNezhrateDavky = menuSpravcu.addItem("Nezhrate davky", null, mycommand);
             menuNezhrateDavky.setDescription("davka");
             MenuItem menuBody = menuSpravcu.addItem("Stav bodov", null, mycommand);
