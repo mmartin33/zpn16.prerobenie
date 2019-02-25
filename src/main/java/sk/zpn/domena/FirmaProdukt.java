@@ -2,29 +2,16 @@ package sk.zpn.domena;
 
 
 
-import sk.zpn.zaklad.model.FirmaProduktNastroje;
-
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-import java.math.BigDecimal;
 
 @Entity(name = "firma_produkt")
 @NamedQueries(value = {
     @NamedQuery(name = "FirmaProdukt.getPodlaNazvuFirmy", query = "SELECT fp FROM firma_produkt fp " +
         "JOIN fp.firma firmy " +
         "JOIN fp.produkt produkt " +
-        "WHERE firmy.nazov =:nazov"),
-    @NamedQuery(name = "FirmaProdukt.getMostikoveUdaje", query = "SELECT fp FROM firma_produkt fp " +
-        "JOIN fp.firma firmy " +
-        "JOIN fp.produkt produkt " +
-        "WHERE firmy.id =:idFirmy" +
-                " and  fp.kit=:kit" +
-                " and fp.rok=:rok"),
-    @NamedQuery(name = "FirmaProdukt.getAll", query = "SELECT fp FROM firma_produkt fp " +
-        "JOIN fp.firma firmy " +
-        "JOIN fp.produkt produkt")
+        "WHERE firmy.nazov =:nazov")
 })
-
 @IdClass(FirmaProduktId.class)
 public class FirmaProdukt {
 
@@ -46,17 +33,7 @@ public class FirmaProdukt {
     private String rok;
 
     @Column(name = "koeficient")
-    private BigDecimal koeficient;
-
-    public FirmaProdukt() {}
-
-    public FirmaProdukt(String rok, Produkt produkt, Firma firma){
-        this.kit = "";
-        this.koeficient = new BigDecimal(0);
-        this.rok =  rok;
-        this.produkt = produkt;
-        this.firma = firma;
-    }
+    private String koeficient;
 
     public Firma getFirma() {
         return firma;
@@ -82,11 +59,6 @@ public class FirmaProdukt {
         this.kit = kit;
     }
 
-    public void setKitAndPersist(String kit) {
-        this.kit = kit;
-        FirmaProduktNastroje.ulozFirmaProdukt(this);
-    }
-
     public String getRok() {
         return rok;
     }
@@ -95,17 +67,12 @@ public class FirmaProdukt {
         this.rok = rok;
     }
 
-    public BigDecimal getKoeficient() {
+    public String getKoeficient() {
         return koeficient;
     }
 
-    public void setKoeficient(BigDecimal koeficient) {
+    public void setKoeficient(String koeficient) {
         this.koeficient = koeficient;
-    }
-
-    public void setKoeficientAndPersist(BigDecimal koeficient) {
-        this.koeficient = koeficient;
-        FirmaProduktNastroje.ulozFirmaProdukt(this);
     }
 }
 
