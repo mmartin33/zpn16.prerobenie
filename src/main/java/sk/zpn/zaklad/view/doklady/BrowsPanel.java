@@ -2,11 +2,13 @@ package sk.zpn.zaklad.view.doklady;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
-import com.vaadin.ui.renderers.HtmlRenderer;
+
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.*;
 import sk.zpn.zaklad.view.VitajteView;
+import sk.zpn.zaklad.view.doklady.polozkaDokladu.PolozkyDokladuView;
+
 
 import java.util.Date;
 import java.util.List;
@@ -19,8 +21,9 @@ public class BrowsPanel extends VerticalLayout {
     private FilterGrid<Doklad> grid;
     private List<Doklad> dokladyList;
 
-
+    PolozkyDokladuView polozkyDokladuView;
     public Button btnNovy;
+    public Button btnPolozky;
 
 
     public BrowsPanel(List<Doklad> dokladyList) {
@@ -56,12 +59,26 @@ public class BrowsPanel extends VerticalLayout {
         );
 
 
+        btnPolozky=new Button("Položky", VaadinIcons.BOOK);
+        btnPolozky.addClickListener(clickEvent -> {
+                if (grid.getSelectedItems()!=null) {
+                    polozkyDokladuView = new PolozkyDokladuView();
+                    polozkyDokladuView.setDoklad((Doklad) grid.getSelectedItems());
+                    UI.getCurrent().getNavigator().addView(PolozkyDokladuView.NAME, polozkyDokladuView);
+                    UI.getCurrent().getNavigator().navigateTo(PolozkyDokladuView.NAME);
+                    }
+                }
+        );
+
+
 
         HorizontalLayout tlacitkovy=new HorizontalLayout();
         btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
 
         tlacitkovy.addComponent(btnNovy);
+
+        tlacitkovy.addComponent(btnPolozky);
         tlacitkovy.addComponent(btnSpat);//666
 
 

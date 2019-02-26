@@ -30,6 +30,16 @@ public class ProduktyNastroje {
         return u;
     }
 
+    public static Optional<Produkt> prvyProduktPodlaNazvu(String nazov){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getPodlaNazvu", Produkt.class)
+                .setParameter("nazov", nazov);
+        List<Produkt> produkty = q.getResultList();
+        return produkty.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
+    }
+
+
+
     public static Produkt ulozProdukt(Produkt f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         if (f.isNew())

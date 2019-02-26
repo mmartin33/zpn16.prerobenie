@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Entity(name = "poberatelia")
 @NamedQueries(value = {
-
+        @NamedQuery(name = "Poberatel.getPodlaMena", query = "SELECT p FROM poberatelia p WHERE p.meno =:meno"),
         @NamedQuery(name = "Poberatel.getAll", query = "SELECT p FROM poberatelia p")})
 
 public class Poberatel extends Vseobecne {
