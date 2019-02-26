@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 public class EditacnyForm extends VerticalLayout {
 
-
     private TextField tProdukt;
     private TextField tFirma;
     private TextField tPoberatel;
