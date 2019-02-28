@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static javax.persistence.CascadeType.PERSIST;
@@ -90,6 +91,12 @@ public class Doklad extends Vseobecne {
     public void setCisloDokladu(String cisloDokladu) {this.cisloDokladu = cisloDokladu;}
 
     public Date getDatum() {return datum;}
+
+    public String getFormatovanyDatum() {
+        String pattern = "dd.MM.yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(datum);
+    }
 
     public void setDatum(Date datum) {this.datum = datum; }
 

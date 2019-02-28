@@ -10,6 +10,7 @@ import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.doklady.polozkaDokladu.PolozkyDokladuView;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,10 +35,14 @@ public class BrowsPanel extends VerticalLayout {
         grid.setWidth(1000, Unit.PIXELS);
         grid.setHeight(700, Unit.PIXELS);
 
+
+
+
+
         // definitionn of columns
         FilterGrid.Column<Doklad, String> colCisloDokladu = grid.addColumn(Doklad::getCisloDokladu).setCaption("Doklad").setId("doklad");
         FilterGrid.Column<Doklad, String> colTypDokladu = grid.addColumn(doklad -> doklad.getTypDokladu().getDisplayValue()).setCaption("Typ dokladu").setId("typ");
-        FilterGrid.Column<Doklad, Date> colDatum = grid.addColumn(Doklad::getDatum).setCaption("Dátum").setId("datum");
+        FilterGrid.Column<Doklad, String> colDatum = grid.addColumn(Doklad::getFormatovanyDatum).setCaption("Dátum").setId("datum");
         FilterGrid.Column<Doklad, String> colFirmaNazov = grid.addColumn(Doklad::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
         FilterGrid.Column<Doklad, String> colPoznamka = grid.addColumn(Doklad::getPoznamka).setCaption("Poznámka").setId("poznmla");
 

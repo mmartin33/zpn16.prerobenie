@@ -62,8 +62,9 @@ public class BrowsPanel extends VerticalLayout {
         tlacitkovy.addComponent(btnNovy);
         tlacitkovy.addComponent(btnSpat);//666
 
-
-        String formatovanyDatum =new SimpleDateFormat().format(polozkyDokladuView.getDoklad().getDatum());
+        String pattern = "dd-MM-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String formatovanyDatum =simpleDateFormat.format(polozkyDokladuView.getDoklad().getDatum());
         this.addComponent(new Label("Prehľad položiek dokladu:  "+polozkyDokladuView.getDoklad().getCisloDokladu()+" z dátumu:"+formatovanyDatum));
         this.addComponents(grid);
 
