@@ -6,6 +6,7 @@ import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.zaklad.view.VitajteView;
+import sk.zpn.zaklad.view.doklady.DokladyView;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -61,7 +62,7 @@ public class BrowsPanel extends VerticalLayout {
 
             Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
             btnSpat.addClickListener(clickEvent ->
-                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
+                    UI.getCurrent().getNavigator().navigateTo(DokladyView.NAME)
             );
 
 

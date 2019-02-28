@@ -19,14 +19,17 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     private List<PolozkaDokladu> polozkyDokladuList;
     private Doklad doklad;
 
-    public PolozkyDokladuView() {
+    public PolozkyDokladuView(Doklad doklad) {
+        this.doklad=doklad;
         polozkyDokladuList = PolozkaDokladuNastroje.zoznamPoloziekDokladov(this.doklad);
-        browsPanel=new BrowsPanel(polozkyDokladuList);
+        browsPanel=new BrowsPanel(polozkyDokladuList,this);
         editacnyForm=new EditacnyForm();
         editacnyForm.setDokladyView(this);
         configureComponents();
         this.addComponent(browsPanel);
         this.addComponent(editacnyForm);
+    }
+    public PolozkyDokladuView() {
     }
 
     void deselect() {
@@ -38,9 +41,7 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
         editacnyForm.setDokladyView(this);
         browsPanel.btnNovy.addClickListener(clickEvent -> {
             deselect();
-            editacnyForm.edit(new PolozkaDokladu());
-        });
-        browsPanel.addSelectionListener(editacnyForm::edit);
+            editacnyForm.edit(new PolozkaDokladu()); });browsPanel.addSelectionListener(editacnyForm::edit);
         refreshPoloziekDokladov();
     }
 

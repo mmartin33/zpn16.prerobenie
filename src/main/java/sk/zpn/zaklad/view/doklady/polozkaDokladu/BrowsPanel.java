@@ -6,6 +6,8 @@ import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.zaklad.view.VitajteView;
+import sk.zpn.zaklad.view.doklady.DokladyView;
+
 import java.text.SimpleDateFormat;
 
 import java.util.List;
@@ -18,12 +20,13 @@ public class BrowsPanel extends VerticalLayout {
     private FilterGrid<PolozkaDokladu> grid;
     private List<PolozkaDokladu> polozkyDokladuList;
 
-    PolozkyDokladuView polozkyDokladuView;
+    private PolozkyDokladuView polozkyDokladuView;
     public Button btnNovy;
-    public Button btnPolozky;
 
 
-    public BrowsPanel(List<PolozkaDokladu> polozkyDokladuList) {
+
+    public BrowsPanel(List<PolozkaDokladu> polozkyDokladuList, PolozkyDokladuView pdv) {
+        this.polozkyDokladuView=pdv;
         this.polozkyDokladuList = polozkyDokladuList;
         grid = new FilterGrid<>();
         grid.setItems(this.polozkyDokladuList);
@@ -48,7 +51,7 @@ public class BrowsPanel extends VerticalLayout {
         colPoznamka.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
         btnSpat.addClickListener(clickEvent ->
-                UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
+                UI.getCurrent().getNavigator().navigateTo(DokladyView.NAME)
         );
 
 
@@ -57,8 +60,6 @@ public class BrowsPanel extends VerticalLayout {
 
 
         tlacitkovy.addComponent(btnNovy);
-
-        tlacitkovy.addComponent(btnPolozky);
         tlacitkovy.addComponent(btnSpat);//666
 
 

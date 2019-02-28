@@ -11,7 +11,8 @@ import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "polozkyDokladu")
 @NamedQueries(value = {
-        @NamedQuery(name = "PolozkaDokladu.getAll", query = "SELECT d FROM polozkyDoklady d"),
+        @NamedQuery(name = "PolozkaDokladu.getAll", query = "SELECT d FROM polozkyDokladu d"),
+        @NamedQuery(name = "PolozkaDokladu.getPolozkyJednehoDokladu", query = "SELECT d FROM polozkyDokladu d where d.id_dokladu=:id_dokladu"),
         @NamedQuery(name = "PolozkaDokladu.get", query = "SELECT d FROM polozkyDokladu d WHERE d.id =:id")})
 
 public class PolozkaDokladu extends Vseobecne {
@@ -41,7 +42,8 @@ public class PolozkaDokladu extends Vseobecne {
 
 
     public PolozkaDokladu() {
-
+        this.setBody(new Double(1));
+        this.setMnozstvo(new Double(1));
     }
 
 
@@ -67,6 +69,10 @@ public class PolozkaDokladu extends Vseobecne {
 
     public Doklad getDoklad() {
         return doklad;
+    }
+
+    public void setDoklad(Doklad doklad) {
+        this.doklad = doklad;
     }
 
     public String getDokladCislo() {

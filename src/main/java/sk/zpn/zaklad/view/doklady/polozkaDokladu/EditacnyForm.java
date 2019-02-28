@@ -87,10 +87,13 @@ public class EditacnyForm extends VerticalLayout {
 
 
 
+
+
+
         Binder.Binding<PolozkaDokladu, String> produktBinding = binder.forField(tProdukt)
                 .withValidator(nazovProduktu -> ProduktyNastroje.prvyProduktPodlaNazvu(nazovProduktu).isPresent(),
                     "Produkt musi byt existujuci")
-                .bind(polozkaDokladu -> polozkaDokladu.getProduktNazov() == null ? "" : polozkaDokladu.getProdukt().getNazov(),
+                .bind(polozkaDokladu -> polozkaDokladu.getProdukt() == null ? "" : polozkaDokladu.getProdukt().getNazov(),
                     (polozkaDokladu, s) -> ProduktyNastroje.prvyProduktPodlaNazvu(tProdukt.getValue()).ifPresent(polozkaDokladu::setProdukt));
 
         Binder.Binding<PolozkaDokladu, String> firmaBinding = binder.forField(tFirma)
@@ -102,8 +105,8 @@ public class EditacnyForm extends VerticalLayout {
         Binder.Binding<PolozkaDokladu, String> poberatelBinding = binder.forField(tPoberatel)
                 .withValidator(menoPoberatela -> PoberatelNastroje.prvyPoberatelPodlaMena(menoPoberatela).isPresent(),
                     "poberatel musi byt existujuci")
-                .bind(polozkaDokladu -> polozkaDokladu.getFirma() == null ? "" : polozkaDokladu.getFirma().getNazov(),
-                    (polozkaDokladu, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(polozkaDokladu::setFirma));
+                .bind(polozkaDokladu -> polozkaDokladu.getPoberatel() == null ? "" : polozkaDokladu.getPoberatel().getMeno(),
+                    (polozkaDokladu, s) -> PoberatelNastroje.prvyPoberatelPodlaMena(tPoberatel.getValue()).ifPresent(polozkaDokladu::setPoberatel));
 
 
         Binder.Binding<PolozkaDokladu, String> poznamkaBinding = binder.forField(tPoznamka)
@@ -140,6 +143,7 @@ public class EditacnyForm extends VerticalLayout {
     public void save(Button.ClickEvent event) {
         if (binder.writeBeanIfValid(polozkaEditovana)) {
             boolean jeDokladNovy = polozkaEditovana.isNew();
+            polozkaEditovana.setDoklad(polozkyDokladyView.getDoklad());
             PolozkaDokladu ulozenaPolozka = PolozkaDokladuNastroje.ulozpolozkuDokladu(polozkaEditovana);
             String msg = String.format("Ulozeny .");
 

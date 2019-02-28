@@ -62,8 +62,8 @@ public class BrowsPanel extends VerticalLayout {
         btnPolozky=new Button("Položky", VaadinIcons.BOOK);
         btnPolozky.addClickListener(clickEvent -> {
                 if (grid.getSelectedItems()!=null) {
-                    polozkyDokladuView = new PolozkyDokladuView();
-                    polozkyDokladuView.setDoklad((Doklad) grid.getSelectedItems());
+                    polozkyDokladuView = new PolozkyDokladuView((Doklad) grid.getSelectedItems().iterator().next());
+
                     UI.getCurrent().getNavigator().addView(PolozkyDokladuView.NAME, polozkyDokladuView);
                     UI.getCurrent().getNavigator().navigateTo(PolozkyDokladuView.NAME);
                     }
