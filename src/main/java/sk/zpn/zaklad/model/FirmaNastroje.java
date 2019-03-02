@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class FirmaNastroje {
+//  TODO nemat tieto nastroje staticke, idealne ako beany alebo si spravit aspon list tychto nastrojov a hladat v nom
     public static List<Firma> zoznamFiriem(){
         List<Firma> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
@@ -27,16 +28,6 @@ public class FirmaNastroje {
         return firmy.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
     }
 
-    public static Optional<Firma> firmaPodlaID(Long id){
-        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        TypedQuery<Firma> q = em.createNamedQuery("Firma.getPodlaID", Firma.class)
-                .setParameter("id", id);
-        List<Firma> firmy = q.getResultList();
-        return firmy.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
-    }
-
-
-
     public static Firma ulozFirmu(Firma f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         if (f.isNew())
@@ -46,9 +37,8 @@ public class FirmaNastroje {
         em.persist(f);
         em.getTransaction().commit();
         return f;
-
-
     }
+
     public static void zmazFirmu(Firma f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         System.out.println("Vymazana firma:"+f.getNazov());

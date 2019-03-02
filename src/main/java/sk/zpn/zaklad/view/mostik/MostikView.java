@@ -3,9 +3,8 @@ package sk.zpn.zaklad.view.mostik;
 import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
@@ -19,9 +18,6 @@ import static sk.zpn.zaklad.model.UzivatelNastroje.getUzivatela;
 public class MostikView extends HorizontalLayout implements View {
     // ContactForm is an example of a custom component class
     public static final String NAME = "mostikView";
-
-
-
     private BrowsPanel browsPanel;
     private VerticalLayout mainVerticalLayout =  new VerticalLayout();
     private HorizontalLayout upperHorizontalLayout = new HorizontalLayout();
@@ -29,8 +25,6 @@ public class MostikView extends HorizontalLayout implements View {
     private String rok = "";
     private Label firmaLabel =  new Label("<b>Firma: </b>", ContentMode.HTML);
     private Label rokLabel =  new Label("<b>Rok: </b>", ContentMode.HTML);
-
-
     private List<FirmaProdukt> firmaProduktList;
 
     public MostikView() {
@@ -44,15 +38,15 @@ public class MostikView extends HorizontalLayout implements View {
         rokLabel.setValue(rokLabel.getValue() + rok);
         firmaProduktList = FirmaProduktNastroje.getFirmaProduktPodlaNazvuFirmy(nazovFirmy);
 
+        if(firmaProduktList.isEmpty()) {
+            importSablonuIfRequested();
+        }
         browsPanel = new BrowsPanel(firmaProduktList);
-//        editacnyForm=new EditacnyForm();
-//        editacnyForm.setProduktyView(this);
         configureComponents();
         mainVerticalLayout.addComponent(upperHorizontalLayout);
         mainVerticalLayout.addComponent(browsPanel);
         upperHorizontalLayout.addComponent(firmaLabel);
         upperHorizontalLayout.addComponent(rokLabel);
-//        this.addComponent(editacnyForm);
 
 
     }
@@ -60,18 +54,10 @@ public class MostikView extends HorizontalLayout implements View {
 
 
     void deselect() {
-
         browsPanel.deselect();
-
     }
 
     private void configureComponents() {
-
-//        editacnyForm.setProduktyView(this);
-
-
-//        browsPanel.btnNovy.addClickListener(clickEvent -> editacnyForm.edit(new Produkt(ParametreNastroje.nacitajParametre().getRok())));
-//        browsPanel.addSelectionListener(editacnyForm::edit);
         refreshMostika();
     }
 
@@ -79,16 +65,35 @@ public class MostikView extends HorizontalLayout implements View {
             browsPanel.refresh();
     }
 
-    void pridajNovyMostik(FirmaProdukt novyFirmaProdukt) {
+    void pridajNovZaznamyMostika(FirmaProdukt novyFirmaProdukt) {
         firmaProduktList.add(novyFirmaProdukt);
         this.refreshMostika();
 
     }
-    void odstranMostik(FirmaProdukt firmaProdukt) {
-
+    void odstranZaznamMostika(FirmaProdukt firmaProdukt) {
         firmaProduktList.remove(firmaProdukt);
         this.refreshMostika();
 
+    }
+
+    private void importSablonuIfRequested() {
+        ConfirmDialog.show(UI.getCurrent(), "Import šablóny s produktami",
+            String.format("Pre firmu %s a rok: %s neboli nájdené žiadne produkty.\n Želáte si naimportovať šablónu produktov?", this.nazovFirmy, this.rok),
+                "Áno", "Nie", new ConfirmDialog.Listener() {
+
+                    public void onClose(ConfirmDialog dialog) {
+                        if (dialog.isConfirmed()) {
+                            boolean generovanieUspesne = new FirmaProduktNastroje().vygenerujSablonu(nazovFirmy);
+                            if(generovanieUspesne) {
+                                Notification.show("Import prebehol úspešne", Notification.Type.TRAY_NOTIFICATION);
+                                firmaProduktList.addAll(FirmaProduktNastroje.getFirmaProduktPodlaNazvuFirmy(nazovFirmy));
+                                refreshMostika();
+                            } else {
+                                Notification.show("Import zlyhal!", Notification.Type.WARNING_MESSAGE);
+                            }
+                        }
+                    }
+                });
     }
 
 }

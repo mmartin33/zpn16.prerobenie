@@ -2,6 +2,8 @@ package sk.zpn.domena;
 
 
 
+import sk.zpn.zaklad.model.FirmaProduktNastroje;
+
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 
@@ -33,7 +35,17 @@ public class FirmaProdukt {
     private String rok;
 
     @Column(name = "koeficient")
-    private String koeficient;
+    private Double koeficient;
+
+    public FirmaProdukt() {}
+
+    public FirmaProdukt(String rok, Produkt produkt, Firma firma){
+        this.kit = "";
+        this.koeficient = 0D;
+        this.rok =  rok;
+        this.produkt = produkt;
+        this.firma = firma;
+    }
 
     public Firma getFirma() {
         return firma;
@@ -59,6 +71,11 @@ public class FirmaProdukt {
         this.kit = kit;
     }
 
+    public void setKitAndPersist(String kit) {
+        this.kit = kit;
+        FirmaProduktNastroje.ulozFirmaProdukt(this);
+    }
+
     public String getRok() {
         return rok;
     }
@@ -67,12 +84,17 @@ public class FirmaProdukt {
         this.rok = rok;
     }
 
-    public String getKoeficient() {
+    public Double getKoeficient() {
         return koeficient;
     }
 
-    public void setKoeficient(String koeficient) {
+    public void setKoeficient(Double koeficient) {
         this.koeficient = koeficient;
+    }
+
+    public void setKoeficientAndPersist(Double koeficient) {
+        this.koeficient = koeficient;
+        FirmaProduktNastroje.ulozFirmaProdukt(this);
     }
 }
 
