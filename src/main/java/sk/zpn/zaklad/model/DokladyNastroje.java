@@ -4,6 +4,7 @@ import com.vaadin.server.VaadinSession;
 import org.apache.log4j.Logger;
 
 import sk.zpn.domena.Doklad;
+import sk.zpn.domena.Prevadzka;
 import sk.zpn.domena.TypDokladu;
 
 import javax.persistence.EntityManager;

@@ -62,7 +62,7 @@ public class BrowsPanel extends VerticalLayout {
 
             Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
             btnSpat.addClickListener(clickEvent ->
-                    UI.getCurrent().getNavigator().navigateTo(DokladyView.NAME)
+                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)//UI.getCurrent().getNavigator().navigateTo(DokladyView.NAME)
             );
 
 
