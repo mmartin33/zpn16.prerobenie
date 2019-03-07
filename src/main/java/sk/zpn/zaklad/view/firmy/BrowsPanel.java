@@ -5,9 +5,9 @@ import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Firma;
-import sk.zpn.domena.TypUzivatela;
-import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.view.VitajteView;
+
+import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -17,9 +17,10 @@ public class BrowsPanel extends VerticalLayout {
 
     private FilterGrid<Firma> grid;
     private List<Firma> firmaList;
-
+    private PrevadzkyView prevadzkyView;
 
     public Button btnNovy;
+    public Button btnPrevadzky;
 
 
         public BrowsPanel(List<Firma> firmaList) {
@@ -56,17 +57,30 @@ public class BrowsPanel extends VerticalLayout {
                     UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
             );
 
+            btnPrevadzky=new Button("Prevadzky", VaadinIcons.BOOK);
+            btnPrevadzky.addClickListener(clickEvent -> {
+                        if (grid.getSelectedItems()!=null) {
 
+
+                            prevadzkyView = new PrevadzkyView((Firma) grid.getSelectedItems().iterator().next());
+
+                            UI.getCurrent().getNavigator().addView(PrevadzkyView.NAME, prevadzkyView);
+                            UI.getCurrent().getNavigator().navigateTo(PrevadzkyView.NAME);
+                        }
+                    }
+            );
 
             HorizontalLayout tlacitkovy=new HorizontalLayout();
             btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
 
             tlacitkovy.addComponent(btnNovy);
+            tlacitkovy.addComponent(btnPrevadzky);
+
             tlacitkovy.addComponent(btnSpat);//666
 
 
-            this.addComponent(new Label("Prehľad užívateľov"));
+            this.addComponent(new Label("Prehľad firiem"));
             this.addComponents(grid);
 
 

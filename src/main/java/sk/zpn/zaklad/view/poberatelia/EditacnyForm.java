@@ -17,7 +17,7 @@ public class EditacnyForm extends VerticalLayout {
 
 
     private TextField tMeno;
-    private TextField tPriezvisko;
+//    private TextField tPriezvisko;
     private TextField tTitul;
     private DateField dVyznamnyDatum;
     private TextField tMesto;
@@ -42,8 +42,8 @@ public class EditacnyForm extends VerticalLayout {
     public EditacnyForm() {
         tMeno = new TextField("Meno");
         tMeno.setWidth("400");
-        tPriezvisko = new TextField("Priezvisko");
-        tPriezvisko.setWidth("400");
+//        tPriezvisko = new TextField("Priezvisko");
+//        tPriezvisko.setWidth("400");
         tTitul = new TextField("Titul");
         tTitul.setWidth("200");
         tUlica = new TextField("Ulica");
@@ -51,7 +51,7 @@ public class EditacnyForm extends VerticalLayout {
         tMesto = new TextField("Mesto");
         tMeno.setWidth("400");
         tPsc = new TextField("PSČ");
-        tPsc.setWidth("400");
+        tPsc.setWidth("150");
         tMobil = new TextField("Mobil");
         tTelefon = new TextField("Telefon");
         tEmail = new TextField("Email");
@@ -70,7 +70,7 @@ public class EditacnyForm extends VerticalLayout {
         nastavComponnenty();
         FormLayout lEdit = new FormLayout();
         lEdit.addComponent(tMeno);
-        lEdit.addComponent(tPriezvisko);
+//        lEdit.addComponent(tPriezvisko);
         lEdit.addComponent(tTitul);
         lEdit.addComponent(tUlica);
         lEdit.addComponent(tMesto);
@@ -100,8 +100,8 @@ public class EditacnyForm extends VerticalLayout {
 
         Binder.Binding<Poberatel, String> menoBinding = binder.forField(tMeno)
                 .bind(Poberatel::getMeno, Poberatel::setMeno);
-        Binder.Binding<Poberatel, String> priezviskoBinding = binder.forField(tPriezvisko)
-                .bind(Poberatel::getPriezvisko, Poberatel::setPriezvisko);
+//        Binder.Binding<Poberatel, String> priezviskoBinding = binder.forField(tPriezvisko)
+//                .bind(Poberatel::getPriezvisko, Poberatel::setPriezvisko);
         Binder.Binding<Poberatel, String> titulBinding = binder.forField(tTitul)
                 .bind(Poberatel::getTitul, Poberatel::setTitul);
         Binder.Binding<Poberatel, String> mestoBinding = binder.forField(tMesto)
@@ -127,7 +127,7 @@ public class EditacnyForm extends VerticalLayout {
 
 
         tMeno.addValueChangeListener(event -> menoBinding.validate());
-        tPriezvisko.addValueChangeListener(event -> priezviskoBinding.validate());
+//        tPriezvisko.addValueChangeListener(event -> priezviskoBinding.validate());
         tMobil.addValueChangeListener(event -> mobilBinding.validate());
         tEmail.addValueChangeListener(event -> emailBinding.validate());
         tKod.addValueChangeListener(event -> menoBinding.validate());
@@ -153,7 +153,7 @@ public class EditacnyForm extends VerticalLayout {
     void edit(Poberatel poberatel) {
         poberatelEditovany = poberatel;
         if (poberatel != null) {
-            System.out.println("Zvolená " + poberatelEditovany.getPriezvisko());
+            System.out.println("Zvolená " + poberatelEditovany.getMeno());
             binder.readBean(poberatel);
         } else {
             System.out.println("Zvolená nová");
@@ -168,7 +168,7 @@ public class EditacnyForm extends VerticalLayout {
             boolean jePoberatelNovy = poberatelEditovany.isNew();
             Poberatel ulozenyPoberatel = PoberatelNastroje.ulozPoberatela(poberatelEditovany);
             String msg = String.format("Ulozeny .",
-                    poberatelEditovany.getPriezvisko());
+                    poberatelEditovany.getMeno());
 
             Notification.show(msg, Notification.Type.TRAY_NOTIFICATION);
             if (jePoberatelNovy) {
@@ -182,7 +182,7 @@ public class EditacnyForm extends VerticalLayout {
 
     public void delete(Button.ClickEvent event) {
 
-        ConfirmDialog.show(UI.getCurrent(), "Odstránenie", "Naozaj si prajete odstrániť pobetatela " + poberatelEditovany.getPriezvisko() + "?",
+        ConfirmDialog.show(UI.getCurrent(), "Odstránenie", "Naozaj si prajete odstrániť pobetatela " + poberatelEditovany.getMeno() + "?",
                 "Áno", "Nie", new ConfirmDialog.Listener() {
 
                     public void onClose(ConfirmDialog dialog) {

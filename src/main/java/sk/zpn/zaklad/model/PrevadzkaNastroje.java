@@ -20,6 +20,17 @@ public class PrevadzkaNastroje {
         return u;
     }
 
+    public static List<Prevadzka> zoznamPrevadzka(Firma firma) {
+        List<Prevadzka> u = null;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Prevadzka> q = em.createNamedQuery("Prevadzka.getPrevadzkyFirmy", Prevadzka.class);
+        q.setParameter("firma", firma);
+        u =  q.getResultList();
+
+        return u;
+
+    }
+
     public static Optional<Prevadzka> prvaPrevadzkaPodlaNazvu(String nazov){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Prevadzka> q = em.createNamedQuery("Prevadzka.getPodlaNazvu", Prevadzka.class)
@@ -27,7 +38,6 @@ public class PrevadzkaNastroje {
         List<Prevadzka> prevadzka = q.getResultList();
         return prevadzka.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
     }
-
 
 
     public static Prevadzka ulozPrevadzka(Prevadzka p){
@@ -42,6 +52,7 @@ public class PrevadzkaNastroje {
 
 
     }
+
     public static void zmazPrevadzku(Prevadzka p){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         System.out.println("Vymazana prevadzka:"+p.getNazov());
@@ -49,7 +60,5 @@ public class PrevadzkaNastroje {
         em.remove(p);
         em.getTransaction().commit();
     }
-
-
 
 }

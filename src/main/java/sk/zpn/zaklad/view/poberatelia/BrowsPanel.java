@@ -7,6 +7,7 @@ import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.doklady.DokladyView;
+import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
 public class BrowsPanel extends VerticalLayout {
 
 
+    private final PoberateliaView poberateliaView;
     private FilterGrid<Poberatel> grid;
     private List<Poberatel> poberatelList;
 
@@ -21,7 +23,9 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnNovy;
 
 
-        public BrowsPanel(List<Poberatel> poberatelList) {
+        public BrowsPanel(List<Poberatel> poberatelList,PoberateliaView poberateliaView) {
+
+            this.poberateliaView = poberateliaView;
             this.poberatelList = poberatelList;
             this.setSpacing(false);
             grid = new FilterGrid<>();
@@ -34,7 +38,7 @@ public class BrowsPanel extends VerticalLayout {
 
             // definitionn of columns
             FilterGrid.Column<Poberatel, String> colMeno = grid.addColumn(Poberatel::getMeno).setCaption("Meno").setId("meno");
-            FilterGrid.Column<Poberatel, String> colPriezvisko = grid.addColumn(Poberatel::getPriezvisko).setCaption("Priezvisko").setId("prizvisko");
+//            FilterGrid.Column<Poberatel, String> colPriezvisko = grid.addColumn(Poberatel::getPriezvisko).setCaption("Priezvisko").setId("prizvisko");
             FilterGrid.Column<Poberatel, String> colTitul = grid.addColumn(Poberatel::getTitul).setCaption("Titul").setId("titul");
             FilterGrid.Column<Poberatel, String> colMesto = grid.addColumn(Poberatel::getMesto).setCaption("Mesto").setId("mesto");
             FilterGrid.Column<Poberatel, String> colUlica = grid.addColumn(Poberatel::getUlica).setCaption("Ulica").setId("ulica");
@@ -46,7 +50,7 @@ public class BrowsPanel extends VerticalLayout {
 
             // filters
             colMeno.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-            colPriezvisko.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+//            colPriezvisko.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colTitul.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colMesto.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colUlica.setFilter(new TextField(), StringComparator.containsIgnoreCase());
@@ -56,26 +60,34 @@ public class BrowsPanel extends VerticalLayout {
             colEmail.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colKod.setFilter(new TextField(), StringComparator.containsIgnoreCase());
 //
-            grid.setColumnOrder(colMeno,colPriezvisko);
+//            grid.setColumnOrder(colMeno,colPriezvisko);
 
 
 
             Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
-            btnSpat.addClickListener(clickEvent ->
-                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)//UI.getCurrent().getNavigator().navigateTo(DokladyView.NAME)
-            );
-
-
+            btnSpat.addClickListener(clickEvent -> {
+                        if (poberateliaView.getPrevadzka() != null)
+                            UI.getCurrent().getNavigator().navigateTo(PrevadzkyView.NAME);
+                        else
+                            UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME);
+                    });
 
             HorizontalLayout tlacitkovy=new HorizontalLayout();
             btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
 
             tlacitkovy.addComponent(btnNovy);
+
             tlacitkovy.addComponent(btnSpat);//666
 
 
-            this.addComponent(new Label("Prehľad poberateľov"));
+            String nadpis=new String("Prehľad poberateľov");
+//            if (this.poberateliaView!=null)
+//                if (this.poberateliaView.getPrevadzka()!=null)
+//                    nadpis=nadpis+" prevadzky:"+this.poberateliaView.getPrevadzka().getNazov();
+
+            this.addComponent(new Label(nadpis));
+
             this.addComponents(grid);
 
 

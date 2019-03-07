@@ -8,6 +8,7 @@ import static javax.persistence.CascadeType.PERSIST;
 @Entity(name = "prevadzky")
 @NamedQueries(value = {
         @NamedQuery(name = "Prevadzka.getPodlaNazvu", query = "SELECT p FROM prevadzky p WHERE p.nazov =:nazov"),
+        @NamedQuery(name = "Prevadzka.getPrevadzkyFirmy", query = "SELECT p FROM prevadzky p WHERE  p.firma=:firma"),
         @NamedQuery(name = "Prevadzka.getAll", query = "SELECT p FROM prevadzky p")})
 
 public class Prevadzka extends Vseobecne {
@@ -105,6 +106,13 @@ public class Prevadzka extends Vseobecne {
         else
             return poberatel.getMeno();
     }
+    public String getPoberatelMenoAdresa() {
+        if (poberatel == null)
+            return "";
+        else
+            return poberatel.getMeno()+" "+poberatel.getMesto()+" "+poberatel.getPsc()+" "+poberatel.getUlica();
+    }
+
     public Long getPoberatel_ID() {
         if (poberatel == null)
             return new Long(0);

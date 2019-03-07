@@ -2,6 +2,7 @@ package sk.zpn.domena;
 
 import org.apache.log4j.Logger;
 import sk.zpn.authentification.HesloNastroje;
+import sk.zpn.zaklad.model.DokladyNastroje;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,6 +16,7 @@ import static javax.persistence.CascadeType.PERSIST;
 @Entity(name = "doklady")
 @NamedQueries(value = {
         @NamedQuery(name = "Doklad.getAll", query = "SELECT d FROM doklady d"),
+
         @NamedQuery(name = "Doklad.get", query = "SELECT d FROM doklady d WHERE d.id =:id")})
 
 public class Doklad extends Vseobecne {
@@ -41,6 +43,7 @@ public class Doklad extends Vseobecne {
     public Doklad() {
         this.typDokladu = TypDokladu.INTERNY_DOKLAD;
         this.datum=new Date();
+
 
     }
 

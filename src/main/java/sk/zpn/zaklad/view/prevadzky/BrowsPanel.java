@@ -3,11 +3,11 @@ package sk.zpn.zaklad.view.prevadzky;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
-import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
-import sk.zpn.domena.Doklad;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Prevadzka;
 import sk.zpn.zaklad.view.VitajteView;
+import sk.zpn.zaklad.view.firmy.FirmyView;
+import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,14 +16,17 @@ import java.util.function.Consumer;
 public class BrowsPanel extends VerticalLayout {
 
 
+    private final Button btnPoberatelia;
     private FilterGrid<Prevadzka> grid;
     private List<Prevadzka> prevadzkaList;
 
+    private PrevadzkyView prevadzkyView;
+    private PoberateliaView poberateliaView;
 
     public Button btnNovy;
 
-
-        public BrowsPanel(List<Prevadzka> prevadzkaList) {
+        public BrowsPanel(List<Prevadzka> prevadzkaList, PrevadzkyView prevadzkyView) {
+            this.prevadzkyView=prevadzkyView;
             this.prevadzkaList = prevadzkaList;
             grid = new FilterGrid<>();
             grid.setItems(this.prevadzkaList);
@@ -39,7 +42,7 @@ public class BrowsPanel extends VerticalLayout {
             FilterGrid.Column<Prevadzka, String> colUlica = grid.addColumn(Prevadzka::getUlica).setCaption("Ulica").setId("ulica");
             FilterGrid.Column<Prevadzka, String> colMesto = grid.addColumn(Prevadzka::getMesto).setCaption("Mesto").setId("mesto");
             FilterGrid.Column<Prevadzka, String> colPsc = grid.addColumn(Prevadzka::getPsc).setCaption("PSČ").setId("psc");
-            FilterGrid.Column<Prevadzka, String> colPoberatelNazov = grid.addColumn(Prevadzka::getPoberatelMeno).setCaption("poberatel").setId("menoPoberatela");
+            FilterGrid.Column<Prevadzka, String> colPoberatelNazov = grid.addColumn(Prevadzka::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
 
 
 
@@ -49,7 +52,12 @@ public class BrowsPanel extends VerticalLayout {
 
             Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
             btnSpat.addClickListener(clickEvent ->
-                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
+            { if (prevadzkyView.getFirma()!=null)
+                UI.getCurrent().getNavigator().navigateTo(FirmyView.NAME);
+            else
+                UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME);
+
+            }
             );
 
 
@@ -58,11 +66,31 @@ public class BrowsPanel extends VerticalLayout {
             btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
 
+
+            btnPoberatelia=new Button("Poberatelia", VaadinIcons.BOOK);
+            btnPoberatelia.addClickListener(clickEvent -> {
+                if (grid.getSelectedItems()!=null) {
+
+
+                    poberateliaView = new PoberateliaView((Prevadzka) grid.getSelectedItems().iterator().next());
+
+                    UI.getCurrent().getNavigator().addView(PoberateliaView.NAME, poberateliaView);
+                    UI.getCurrent().getNavigator().navigateTo(PoberateliaView.NAME);
+                }
+                    }
+            );
+
             tlacitkovy.addComponent(btnNovy);
+            tlacitkovy.addComponent(btnPoberatelia);
             tlacitkovy.addComponent(btnSpat);//666
 
 
-            this.addComponent(new Label("Prehľad prevadzok"));
+            String nadpis=new String("Prehľad prevadzok");
+            if (this.prevadzkyView!=null)
+                if (this.prevadzkyView.getFirma()!=null)
+                    nadpis=nadpis+" firmy:"+this.prevadzkyView.getFirma().getNazov();
+
+            this.addComponent(new Label(nadpis));
             this.addComponents(grid);
 
 
@@ -95,19 +123,27 @@ public class BrowsPanel extends VerticalLayout {
                 grid.getSelectionModel().deselect(value);
             }
         }
+
     void selectFirst() {
         List<Prevadzka> prvaPrevadzkaList = grid.getDataCommunicator().fetchItemsWithRange(0,1);
         if(prvaPrevadzkaList.size() > 0){
             grid.asSingleSelect().select(prvaPrevadzkaList.get(0));
         }
     }
-
     void selectPrevadzku(Prevadzka prevadzka) {
         Optional.ofNullable(prevadzka).ifPresent(grid.asSingleSelect()::select);
     }
 
 
+
+    public PrevadzkyView getPrevadzkyView() {
+        return prevadzkyView;
     }
+
+    public void setPrevadzkyView(PrevadzkyView prevadzkyView) {
+        this.prevadzkyView = prevadzkyView;
+    }
+}
 
 
 

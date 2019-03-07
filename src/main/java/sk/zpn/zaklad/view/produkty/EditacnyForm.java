@@ -86,6 +86,11 @@ public class EditacnyForm extends VerticalLayout {
         Binder.Binding<Produkt, String> rokBinding = binder.forField(tRok)
                 .bind(Produkt::getRok, Produkt::setRok);
         Binder.Binding<Produkt, String> kodBinding = binder.forField(tKod)
+                .withValidator(kod -> !tKod.getValue().trim().isEmpty(),
+                "Kod je povinny")
+//                .withValidator(kod2 -> !ProduktyNastroje.uzExistujeProdukt(tKod.getValue()),
+//                        "Kod uz existuje")
+
                 .bind(Produkt::getKat, Produkt::setKat);
         Binder.Binding<Produkt, String> nazovBinding = binder.forField(tNazov)
                 .bind(Produkt::getNazov, Produkt::setNazov);

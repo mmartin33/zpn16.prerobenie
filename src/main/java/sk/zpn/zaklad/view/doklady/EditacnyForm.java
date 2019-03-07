@@ -190,6 +190,8 @@ public class EditacnyForm extends VerticalLayout {
                 + "</div>";
     }
     private void clearEditacnyForm() {
+        String noveCislo;
+        noveCislo=DokladyNastroje.noveCisloDokladu();
         tCislo.clear();
         tFirma.clear();
         tPoznamka.clear();

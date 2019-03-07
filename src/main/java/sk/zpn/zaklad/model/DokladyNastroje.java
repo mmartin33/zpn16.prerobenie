@@ -8,6 +8,7 @@ import sk.zpn.domena.Prevadzka;
 import sk.zpn.domena.TypDokladu;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
@@ -49,9 +50,22 @@ public class DokladyNastroje {
         Optional<Doklad> doklad = getDoklad((Long) VaadinSession.getCurrent().getAttribute("id_dokladu"));
         return doklad.map(Doklad::getTypDokladu);
     }
+
+
     public static List<Doklad> zoznamDokladov(){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Doklad> q = em.createNamedQuery("Doklad.getAll", Doklad.class);
         return q.getResultList();
+    }
+    public static String noveCisloDokladu(){
+        boolean prazdny=true;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        Query query = em.createNativeQuery("SELECT  max(cisloDokladu) FROM  doklady");
+        String result = (String)query.getSingleResult();
+
+        if (result !=null)
+            return Long.toString(Long.parseLong(result)+1);
+        else
+            return null;
     }
 }

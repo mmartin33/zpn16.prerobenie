@@ -12,6 +12,8 @@ import static javax.persistence.CascadeType.PERSIST;
 @NamedQueries(value = {
         @NamedQuery(name = "Produkt.getZaRok", query = "SELECT p FROM produkty p WHERE p.rok =:rok"),
         @NamedQuery(name = "Produkt.getPodlaNazvu", query = "SELECT p FROM produkty p WHERE p.nazov =:nazov"),
+        @NamedQuery(name = "Produkt.getPodlaKodu", query = "SELECT p FROM produkty p WHERE p.kat =:kat"),
+
         @NamedQuery(name = "Produkt.getAll", query = "SELECT p FROM produkty p ")})
 
 @Table(
@@ -24,7 +26,7 @@ public class Produkt extends Vseobecne {
 
     @NotNull
     @Pattern(regexp = "[a-z0-9._%+-]$", message = "Zly kod")
-    @Column(name = "kat", nullable = false)
+    @Column(name = "kat", nullable = false,unique = true)
 
     private String kat;
     private String nazov;

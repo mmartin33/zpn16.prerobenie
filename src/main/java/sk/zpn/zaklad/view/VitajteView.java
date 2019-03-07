@@ -47,6 +47,8 @@ public class VitajteView extends MojView {
                         n.navigateTo(ParametreView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("poberatelia")) {
+                        PoberateliaView poberateliaView= new PoberateliaView(null);
+                        UI.getCurrent().getNavigator().addView(PoberateliaView.NAME, poberateliaView);
                         n.navigateTo(PoberateliaView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("produkty")) {
@@ -55,7 +57,7 @@ public class VitajteView extends MojView {
                         n.navigateTo(ProduktyView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("prevadzky")) {
-                        PrevadzkyView prevadzkyView = new PrevadzkyView();
+                        PrevadzkyView prevadzkyView = new PrevadzkyView(null);
                         UI.getCurrent().getNavigator().addView(PrevadzkyView.NAME, prevadzkyView);
                         n.navigateTo(PrevadzkyView.NAME);
                     }
@@ -103,13 +105,12 @@ public class VitajteView extends MojView {
             MenuItem menuFirmy = menuSpravcu.addItem("Firmy", null, mycommand);
             menuFirmy.setDescription("firmy");
 
-            MenuItem menuPrevadzky = menuSpravcu.addItem("Prevadzky", VaadinIcons.GROUP, mycommand);
+            MenuItem menuPrevadzky = menuSpravcu.addItem("Prevadzky", VaadinIcons.BULLETS, mycommand);
             menuPrevadzky.setDescription("prevadzky");
-
-            MenuItem menuPoberatelia = menuSpravcu.addItem("Poberatelia",VaadinIcons.USER_CARD, mycommand);
+            MenuItem menuPoberatelia = menuSpravcu.addItem("Poberatelia",VaadinIcons.USER_CHECK, mycommand);
             menuPoberatelia.setDescription("poberatelia");
 
-            MenuItem menuProdukty = menuSpravcu.addItem("Produkty", VaadinIcons.FACTORY, mycommand);
+            MenuItem menuProdukty = menuSpravcu.addItem("Produkty", VaadinIcons.GLASS, mycommand);
             menuProdukty.setDescription("produkty");
             MenuItem menuDoklad = menuSpravcu.addItem("Doklady", VaadinIcons.INVOICE, mycommand);
             menuDoklad.setDescription("doklad");

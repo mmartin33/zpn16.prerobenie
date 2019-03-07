@@ -2,6 +2,7 @@ package sk.zpn.zaklad.view.prevadzky;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.HorizontalLayout;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.Prevadzka;
 import sk.zpn.zaklad.model.PrevadzkaNastroje;
 
@@ -15,18 +16,26 @@ public class PrevadzkyView extends HorizontalLayout implements View {
 
     private EditacnyForm editacnyForm;
 
+    private Firma firma;
+
     private BrowsPanel browsPanel;
 
     private List<Prevadzka> prevadzkyList;
 
+
     public PrevadzkyView() {
-        prevadzkyList = PrevadzkaNastroje.zoznamPrevadzka();
-        browsPanel=new BrowsPanel(prevadzkyList);
-        editacnyForm=new EditacnyForm();
-        editacnyForm.setPrevadzkyView(this);
+
+
+    }
+
+    public PrevadzkyView(Firma firma) {
+        if (firma!=null) {
+            prevadzkyList = PrevadzkaNastroje.zoznamPrevadzka(firma);
+            this.setFirma(firma);
+        }
+        else
+            prevadzkyList = PrevadzkaNastroje.zoznamPrevadzka();
         configureComponents();
-        this.addComponent(browsPanel);
-        this.addComponent(editacnyForm);
     }
 
     void deselect() {
@@ -35,13 +44,27 @@ public class PrevadzkyView extends HorizontalLayout implements View {
 
     private void configureComponents() {
 
+        browsPanel=new BrowsPanel(prevadzkyList,this);
+
+        editacnyForm=new EditacnyForm(this);
+        editacnyForm.setPrevadzkyView(this);
+
+
+
+
         editacnyForm.setPrevadzkyView(this);
         browsPanel.btnNovy.addClickListener(clickEvent -> {
             deselect();
-            editacnyForm.edit(new Prevadzka());
+            Prevadzka p= new Prevadzka();
+            if (this.firma!=null)
+                p.setFirma(this.firma);
+            editacnyForm.edit(p);
         });
         browsPanel.addSelectionListener(editacnyForm::edit);
         refreshPrevadzok();
+        this.addComponent(browsPanel);
+        this.addComponent(editacnyForm);
+
     }
 
     public void refreshPrevadzok() {
@@ -53,11 +76,11 @@ public class PrevadzkyView extends HorizontalLayout implements View {
         this.refreshPrevadzok();
 
     }
+
     void odstranPrevadzku(Prevadzka prevadzka) {
         prevadzkyList.remove(prevadzka);
         this.refreshPrevadzok();
     }
-
     void selectFirst() {
         browsPanel.selectFirst();
     }
@@ -66,5 +89,13 @@ public class PrevadzkyView extends HorizontalLayout implements View {
         browsPanel.selectPrevadzku(prevadzka);
     }
 
+
+    public Firma getFirma() {
+        return firma;
+    }
+
+    public void setFirma(Firma firma) {
+        this.firma = firma;
+    }
 }
 

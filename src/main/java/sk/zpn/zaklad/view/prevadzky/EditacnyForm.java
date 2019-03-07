@@ -36,6 +36,10 @@ public class EditacnyForm extends VerticalLayout {
     private PrevadzkyView prevadzkyView;
 
     public EditacnyForm(){
+    }
+
+    public EditacnyForm(PrevadzkyView components){
+        this.prevadzkyView=components;
         tNazov = new TextField("Prevádzka");
         tNazov.setWidth("400");
 
@@ -117,9 +121,15 @@ public class EditacnyForm extends VerticalLayout {
 
         Binder.Binding<Prevadzka, String> poberatelBinding = binder.forField(tMenoPoberatela)
                 .withValidator(nazovPoberatela -> PoberatelNastroje.prvyPoberatelPodlaMena(nazovPoberatela).isPresent(),
-                        "Poberateľ musi byt existujuca")
+                        "Poberateľ musi byt existujuci")
                 .bind(prevadzka -> prevadzka.getPoberatel() == null ? "" : prevadzka.getPoberatel().getMeno(),
-                        (prevadzka, s) -> PoberatelNastroje.prvyPoberatelPodlaMena(tMenoPoberatela.getValue()).ifPresent(prevadzka::setPoberatel));
+                        (prevadzka, s) -> PoberatelNastroje.PoberatelPodlaId(prevadzkaEditovana.getPoberatel_ID()).ifPresent(prevadzka::setPoberatel));
+
+        //        Binder.Binding<Prevadzka, String> poberatelBinding = binder.forField(tMenoPoberatela)
+//                .withValidator(nazovPoberatela -> PoberatelNastroje.prvyPoberatelPodlaMena(nazovPoberatela).isPresent(),
+//                        "Poberateľ musi byt existujuci")
+//                .bind(prevadzka -> prevadzka.getPoberatel() == null ? "" : prevadzka.getPoberatel().getMeno(),
+//                        (prevadzka, s) -> PoberatelNastroje.prvyPoberatelPodlaMena(tMenoPoberatela.getValue()).ifPresent(prevadzka::setPoberatel));
 
 
 
@@ -127,7 +137,7 @@ public class EditacnyForm extends VerticalLayout {
     tNazov.addValueChangeListener(event -> nazovBinding.validate());
     tNazovFirmy.addValueChangeListener(event -> firmaBinding.validate());
     //toto by sa malo doriest asi dame poberatelovi iba meno
-    //tMenoPoberatela.addValueChangeListener(event -> poberatelBinding.validate());
+    tMenoPoberatela.addValueChangeListener(event -> poberatelBinding.validate());
 
     btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
     btnUloz.addClickListener(this::save);
@@ -212,6 +222,7 @@ public class EditacnyForm extends VerticalLayout {
                 + "</div>";
     }
     private List<Poberatel> navrhniPoberatela(String query, int cap) {
+
         return  PoberatelNastroje.zoznamPoberatelov().stream()
                 .filter(poberatel -> poberatel.getMeno().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
@@ -220,7 +231,10 @@ public class EditacnyForm extends VerticalLayout {
      * Co sa zobraziv textfielde, ked sa uz hodnota vyberie
      * */
     private String transformujPoberatelaNaMeno(Poberatel poberatel) {
+        System.out.println("Vybraty poberate aaaaa"+ poberatel.getPoberatelMenoAdresa()+ poberatel.getId());
+        prevadzkaEditovana.setPoberatel(poberatel);
         return poberatel.getMeno();
+
     }
     /**
      * Co sa zobrazi v dropdowne
@@ -228,7 +242,8 @@ public class EditacnyForm extends VerticalLayout {
     private String transformujPoberatelaNaMenoSoZvyraznenymQuery(Poberatel poberatel, String query) {
         return "<div class='suggestion-container'>"
                 + "<span class='poberatel'>"
-                + poberatel.getMeno()
+                + poberatel.getPoberatelMenoAdresa()
+//                + poberatel.getMeno()
                 .replaceAll("(?i)(" + query + ")", "<b>$1</b>")
                 + "</span>"
                 + "</div>";

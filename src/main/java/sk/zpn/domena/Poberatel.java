@@ -8,12 +8,13 @@ import java.util.Date;
 @Entity(name = "poberatelia")
 @NamedQueries(value = {
         @NamedQuery(name = "Poberatel.getPodlaMena", query = "SELECT p FROM poberatelia p WHERE p.meno =:meno"),
+        @NamedQuery(name = "Poberatel.get", query = "SELECT p FROM poberatelia p WHERE p.id =:id"),
         @NamedQuery(name = "Poberatel.getAll", query = "SELECT p FROM poberatelia p")})
 
 public class Poberatel extends Vseobecne {
 
     private String meno;
-    private String priezvisko;
+//    private String priezvisko;
     private String titul;
     private Date vyznamnyDatum;
     private String ulica;
@@ -37,10 +38,21 @@ public class Poberatel extends Vseobecne {
 
     public void setMeno(String meno) {this.meno = meno;}
 
-    public String getPriezvisko() {return priezvisko;}
 
-    public void setPriezvisko(String priezvisko) {this.priezvisko = priezvisko;}
 
+    public String getPoberatelMenoAdresa() {
+        if (this == null)
+            return "";
+        else
+            return this.getMeno()+" "+this.getMesto()+" "+this.getPsc()+" "+this.getUlica();
+    }
+
+
+
+    //    public String getPriezvisko() {return priezvisko;}
+//
+//    public void setPriezvisko(String priezvisko) {this.priezvisko = priezvisko;}
+//
     public String getTitul() {return titul;}
 
     public void setTitul(String titul) {this.titul = titul;}
