@@ -37,10 +37,10 @@ public class ProduktyNastroje {
         List<Produkt> produkty = q.getResultList();
         return produkty.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
     }
-    public static boolean uzExistujeProdukt(String kod){
+    public static boolean uzExistujeKat(String kat){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getPodlaKodu", Produkt.class)
-                .setParameter("kod", kod);
+                .setParameter("kat", kat);
         List<Produkt> produkty = q.getResultList();
         return (produkty.size() > 0) ;
     }

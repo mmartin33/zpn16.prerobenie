@@ -2,11 +2,8 @@ package sk.zpn.zaklad.view.produkty;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToDoubleConverter;
-import com.vaadin.data.converter.StringToLongConverter;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.Firma;
@@ -88,8 +85,8 @@ public class EditacnyForm extends VerticalLayout {
         Binder.Binding<Produkt, String> kodBinding = binder.forField(tKod)
                 .withValidator(kod -> !tKod.getValue().trim().isEmpty(),
                 "Kod je povinny")
-//                .withValidator(kod2 -> !ProduktyNastroje.uzExistujeProdukt(tKod.getValue()),
-//                        "Kod uz existuje")
+                .withValidator(kod -> !ProduktyNastroje.uzExistujeKat(tKod.getValue()),
+                        "Kod uz existuje")
 
                 .bind(Produkt::getKat, Produkt::setKat);
         Binder.Binding<Produkt, String> nazovBinding = binder.forField(tNazov)
