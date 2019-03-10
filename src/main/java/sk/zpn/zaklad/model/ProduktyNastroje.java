@@ -15,11 +15,9 @@ public class ProduktyNastroje {
         List<Produkt> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getAll", Produkt.class);
-
-        u =  q.getResultList();
-
-        return u;
+        return q.getResultList();
     }
+
     public static List<Produkt> zoznamProduktovZaRok(){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getZaRok", Produkt.class);
@@ -35,17 +33,13 @@ public class ProduktyNastroje {
         em.persist(f);
         em.getTransaction().commit();
         return f;
-
-
     }
+
     public static void zmazProdukt(Produkt f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
         em.remove(f);
         em.getTransaction().commit();
-
-
-
     }
 
 

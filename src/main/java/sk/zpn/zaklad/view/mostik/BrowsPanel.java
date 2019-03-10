@@ -2,13 +2,11 @@ package sk.zpn.zaklad.view.mostik;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToDoubleConverter;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.zaklad.view.ViewConstants;
-import sk.zpn.zaklad.view.VitajteView;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -18,6 +16,7 @@ public class BrowsPanel extends VerticalLayout {
     private FilterGrid<FirmaProdukt> grid;
     private List<FirmaProdukt> firmaProduktList;
     public Button btnNovy;
+    private FirmaProdukt oznacenyFirmaProdukt;
 
     public BrowsPanel(List<FirmaProdukt> firmaProduktList) {
         this.firmaProduktList = firmaProduktList;
@@ -94,13 +93,11 @@ public class BrowsPanel extends VerticalLayout {
 
         grid.setColumnOrder(colKat, colKit, colNazov, colBody, colKusy, colKoeficient);
 
-        Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
-        btnSpat.addClickListener(clickEvent -> UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME));
-
         HorizontalLayout tlacitkovy = new HorizontalLayout();
-        tlacitkovy.addComponent(btnSpat);
         this.addComponents(grid);
         this.addComponent(tlacitkovy);
+
+        this.addSelectionListener(firmaProdukt -> oznacenyFirmaProdukt = firmaProdukt);
     }
 
     void refresh() {
@@ -108,10 +105,6 @@ public class BrowsPanel extends VerticalLayout {
         System.out.println("Refresh browsu all");
     }
 
-    void addEditListener(Runnable editListener) {
-        btnNovy.addClickListener(e -> editListener.run());
-
-    }
 
     void addSelectionListener(Consumer<FirmaProdukt> listener) {
         grid.asSingleSelect()
@@ -130,6 +123,21 @@ public class BrowsPanel extends VerticalLayout {
         return (koeficient == null || koeficient.equals(0D)) ? "" : koeficient.toString();
     }
 
+    public FirmaProdukt getOznacenyFirmaProdukt() {
+        return oznacenyFirmaProdukt;
+    }
+
+    void odstranZaznam(FirmaProdukt firmaProdukt) {
+        firmaProduktList.remove(firmaProdukt);
+        this.refresh();
+    }
+
+    void selectFirst() {
+        List<FirmaProdukt> prvyFirmaProduktList = grid.getDataCommunicator().fetchItemsWithRange(0,1);
+        if(prvyFirmaProduktList.size() > 0){
+            grid.asSingleSelect().select(prvyFirmaProduktList.get(0));
+        }
+    }
 }
 
 

@@ -12,8 +12,12 @@ import javax.validation.constraints.Pattern;
     @NamedQuery(name = "FirmaProdukt.getPodlaNazvuFirmy", query = "SELECT fp FROM firma_produkt fp " +
         "JOIN fp.firma firmy " +
         "JOIN fp.produkt produkt " +
-        "WHERE firmy.nazov =:nazov")
+        "WHERE firmy.nazov =:nazov"),
+    @NamedQuery(name = "FirmaProdukt.getAll", query = "SELECT fp FROM firma_produkt fp " +
+        "JOIN fp.firma firmy " +
+        "JOIN fp.produkt produkt")
 })
+
 @IdClass(FirmaProduktId.class)
 public class FirmaProdukt {
 
