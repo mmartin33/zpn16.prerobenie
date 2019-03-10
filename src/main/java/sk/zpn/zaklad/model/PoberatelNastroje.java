@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
+import org.apache.log4j.Logger;
 import sk.zpn.domena.Poberatel;
 
 import javax.persistence.EntityManager;
@@ -10,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class PoberatelNastroje {
+
+    private static final Logger logger = Logger.getLogger(PoberatelNastroje.class);
+
     public static List<Poberatel> zoznamPoberatelov(){
         List<Poberatel> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
@@ -40,7 +44,8 @@ public class PoberatelNastroje {
         return poberatel.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
     }
 
-    public static Optional<Poberatel> PoberatelPodlaId(Long id){
+    public static Optional<Poberatel> poberatelPodlaId(Long id){
+        logger.info("Poberatel query by id" + id.toString());
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Poberatel> q = em.createNamedQuery("Poberatel.get", Poberatel.class);
         q.setParameter("id", id);

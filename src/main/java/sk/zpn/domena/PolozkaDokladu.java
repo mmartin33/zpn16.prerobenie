@@ -132,6 +132,14 @@ public class PolozkaDokladu extends Vseobecne {
         else
             return poberatel.getMeno();
     }
+
+    public String getPoberatelMenoAdresa() {
+        if (poberatel == null)
+            return "";
+        else
+            return poberatel.getMeno()+" "+poberatel.getMesto()+" "+poberatel.getPsc()+" "+poberatel.getUlica();
+    }
+
     public Long getPoberatelID() {
         if (poberatel == null)
             return new Long(0);

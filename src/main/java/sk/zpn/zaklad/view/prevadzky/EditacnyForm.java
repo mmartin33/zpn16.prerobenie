@@ -5,12 +5,13 @@ import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.log4j.Logger;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.*;
-
 import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.PoberatelNastroje;
+
 import sk.zpn.zaklad.model.PrevadzkaNastroje;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 public class EditacnyForm extends VerticalLayout {
 
+    private static final Logger logger = Logger.getLogger(EditacnyForm.class);
 
     private TextField tNazov;
     private TextField tMesto;
@@ -34,17 +36,22 @@ public class EditacnyForm extends VerticalLayout {
     private final Binder<Prevadzka> binder = new Binder<>();
     private Prevadzka prevadzkaEditovana;
     private PrevadzkyView prevadzkyView;
+    private Poberatel aktualnyPoberatel;
+    private Firma aktualnaFirma;
 
     public EditacnyForm(){
     }
 
     public EditacnyForm(PrevadzkyView components){
+        this.aktualnyPoberatel= null;
         this.prevadzkyView=components;
         tNazov = new TextField("Prevádzka");
         tNazov.setWidth("400");
 
         tNazovFirmy = new TextField("Firma");
         tNazovFirmy.setWidth("400");
+        if (this.prevadzkyView.getFirma()!=null)
+            tNazovFirmy.setEnabled(false);
 
         tMesto = new TextField("Mesto");
         tMesto.setWidth("400");
@@ -56,7 +63,7 @@ public class EditacnyForm extends VerticalLayout {
         tUlica.setWidth("400");
 
         tMenoPoberatela = new TextField("Poberateľ" );
-        tMenoPoberatela.setWidth("400");
+                tMenoPoberatela.setWidth("400");
 
 
 
@@ -87,12 +94,20 @@ public class EditacnyForm extends VerticalLayout {
             this::navrhniFirmu,
             this::transformujFirmuNaNazov,
             this::transformujFirmuNaNazovSoZvyraznenymQuery);
+        firmaAutocompleteExtension.addSuggestionSelectListener(event -> {
+            event.getSelectedItem().ifPresent(firma -> this.aktualnaFirma = firma);
+        });
+
 
         AutocompleteExtension<Poberatel> poberatelAutocompleteExtension = new AutocompleteExtension<>(tMenoPoberatela);
         poberatelAutocompleteExtension.setSuggestionGenerator(
             this::navrhniPoberatela,
             this::transformujPoberatelaNaMeno,
             this::transformujPoberatelaNaMenoSoZvyraznenymQuery);
+
+        poberatelAutocompleteExtension.addSuggestionSelectListener(event -> {
+            event.getSelectedItem().ifPresent(poberatel -> this.aktualnyPoberatel = poberatel);
+        });
 
 
     }
@@ -105,12 +120,10 @@ public class EditacnyForm extends VerticalLayout {
 
 
         Binder.Binding<Prevadzka, String> firmaBinding = binder.forField(tNazovFirmy)
-                .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
-                        "Firma musi byt existujuca")
-                .withValidator(v -> !tNazovFirmy.getValue().trim().isEmpty(),
-                        "Názov firmy je povinný")
+                .withValidator(v ->  this.aktualnaFirma != null,"Názov firmy je povinný")
+                .withValidator(nazovFirmy -> FirmaNastroje.firmaPodlaID(this.aktualnaFirma.getId()).isPresent(),"Firma musi byt existujuca")
                 .bind(prevadzka -> prevadzka.getFirma() == null ? "" : prevadzka.getFirma().getNazov(),
-                        (prevadzka, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tNazovFirmy.getValue()).ifPresent(prevadzka::setFirma));
+                        (firma, s) -> FirmaNastroje.firmaPodlaID(this.aktualnaFirma.getId()).ifPresent(firma::setFirma));
 
         Binder.Binding<Prevadzka, String> MestoBinding = binder.forField(tMesto)
                 .bind(Prevadzka::getMesto, Prevadzka::setMesto);
@@ -120,16 +133,11 @@ public class EditacnyForm extends VerticalLayout {
                 .bind(Prevadzka::getUlica, Prevadzka::setUlica);
 
         Binder.Binding<Prevadzka, String> poberatelBinding = binder.forField(tMenoPoberatela)
-                .withValidator(nazovPoberatela -> PoberatelNastroje.prvyPoberatelPodlaMena(nazovPoberatela).isPresent(),
-                        "Poberateľ musi byt existujuci")
-                .bind(prevadzka -> prevadzka.getPoberatel() == null ? "" : prevadzka.getPoberatel().getMeno(),
-                        (prevadzka, s) -> PoberatelNastroje.PoberatelPodlaId(prevadzkaEditovana.getPoberatel_ID()).ifPresent(prevadzka::setPoberatel));
-
-        //        Binder.Binding<Prevadzka, String> poberatelBinding = binder.forField(tMenoPoberatela)
-//                .withValidator(nazovPoberatela -> PoberatelNastroje.prvyPoberatelPodlaMena(nazovPoberatela).isPresent(),
-//                        "Poberateľ musi byt existujuci")
-//                .bind(prevadzka -> prevadzka.getPoberatel() == null ? "" : prevadzka.getPoberatel().getMeno(),
-//                        (prevadzka, s) -> PoberatelNastroje.prvyPoberatelPodlaMena(tMenoPoberatela.getValue()).ifPresent(prevadzka::setPoberatel));
+            .withValidator(nazovPoberatel -> this.aktualnyPoberatel != null, "Poberteľ musi bzt vyplneny")
+            .withValidator(nazovPoberatela -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId()).isPresent(),
+        "Poberateľ musi byt existujuci")
+            .bind(prevadzka -> prevadzka.getPoberatel() == null ? "" : prevadzka.getPoberatel().getMeno(),
+                (prevadzka, s) -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId()).ifPresent(prevadzka::setPoberatel));
 
 
 
@@ -148,6 +156,7 @@ public class EditacnyForm extends VerticalLayout {
 }
     void edit(Prevadzka prevadzka) {
         prevadzkaEditovana = prevadzka;
+        aktualnyPoberatel=prevadzka.getPoberatel();
         if (prevadzka != null) {
             binder.readBean(prevadzka);
         }
@@ -223,16 +232,19 @@ public class EditacnyForm extends VerticalLayout {
     }
     private List<Poberatel> navrhniPoberatela(String query, int cap) {
 
-        return  PoberatelNastroje.zoznamPoberatelov().stream()
+        List<Poberatel> poberiatelia = PoberatelNastroje.zoznamPoberatelov().stream()
                 .filter(poberatel -> poberatel.getMeno().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
+        poberiatelia.forEach(poberatel -> {
+                logger.info(poberatel.getId().toString() + "  " + poberatel.getMesto());
+        });
+        return poberiatelia;
     }
     /**
      * Co sa zobraziv textfielde, ked sa uz hodnota vyberie
      * */
     private String transformujPoberatelaNaMeno(Poberatel poberatel) {
-        System.out.println("Vybraty poberate aaaaa"+ poberatel.getPoberatelMenoAdresa()+ poberatel.getId());
-        prevadzkaEditovana.setPoberatel(poberatel);
+        logger.info("Vybraty poberate aaaaa"+ poberatel.getPoberatelMenoAdresa()+ poberatel.getId());
         return poberatel.getMeno();
 
     }

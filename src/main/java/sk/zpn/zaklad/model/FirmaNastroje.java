@@ -27,6 +27,14 @@ public class FirmaNastroje {
         return firmy.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
     }
 
+    public static Optional<Firma> firmaPodlaID(Long id){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Firma> q = em.createNamedQuery("Firma.getPodlaID", Firma.class)
+                .setParameter("id", id);
+        List<Firma> firmy = q.getResultList();
+        return firmy.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
+    }
+
 
 
     public static Firma ulozFirmu(Firma f){

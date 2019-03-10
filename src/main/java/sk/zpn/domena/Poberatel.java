@@ -27,6 +27,7 @@ public class Poberatel extends Vseobecne {
     private String email;
 
 
+
     private Poberatel firma;
 
     public Poberatel() {

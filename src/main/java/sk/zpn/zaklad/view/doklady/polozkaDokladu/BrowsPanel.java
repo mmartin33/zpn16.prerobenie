@@ -4,6 +4,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
+import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.doklady.DokladyView;
@@ -38,7 +39,7 @@ public class BrowsPanel extends VerticalLayout {
         FilterGrid.Column<PolozkaDokladu, String> colProduktKod = grid.addColumn(PolozkaDokladu::getProduktKod).setCaption("Kód produktu").setId("kodProduktu");
         FilterGrid.Column<PolozkaDokladu, String> colProduktNazov = grid.addColumn(PolozkaDokladu::getProduktNazov).setCaption("Názov produktu").setId("nazovProduktu");
         FilterGrid.Column<PolozkaDokladu, String> colFirmaNazov = grid.addColumn(PolozkaDokladu::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
-        FilterGrid.Column<PolozkaDokladu, String> colPoberatel = grid.addColumn(PolozkaDokladu::getPoberatelMeno).setCaption("Poberateľ").setId("poberatel");
+        FilterGrid.Column<PolozkaDokladu, String> colPoberatel = grid.addColumn(PolozkaDokladu::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
         FilterGrid.Column<PolozkaDokladu, Double> colBody = grid.addColumn(PolozkaDokladu::getBody).setCaption("Body").setId("body");
         FilterGrid.Column<PolozkaDokladu, Double> colMnozstvo = grid.addColumn(PolozkaDokladu::getMnozstvo).setCaption("Množstvo").setId("mnozstvo");
         FilterGrid.Column<PolozkaDokladu, String> colPoznamka = grid.addColumn(PolozkaDokladu::getPoznamka).setCaption("Poznámka").setId("poznamka");

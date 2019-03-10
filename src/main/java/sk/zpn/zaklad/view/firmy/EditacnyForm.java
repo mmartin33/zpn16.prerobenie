@@ -7,13 +7,17 @@ import com.vaadin.shared.Registration;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.*;
 import sk.zpn.zaklad.model.FirmaNastroje;
+import sk.zpn.zaklad.model.PoberatelNastroje;
+import sk.zpn.zaklad.model.PrevadzkaNastroje;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EditacnyForm extends VerticalLayout {
 
@@ -26,15 +30,20 @@ public class EditacnyForm extends VerticalLayout {
     private TextField tNazov;
     private TextField tDic;
     private TextField tIcDph;
+    private TextField tPoberatelNazov;
 
+
+    private Poberatel poberatel;
 
     protected Button btnUloz;
+
     protected Button btnZmaz;
+
     protected Button btnVyber;
     private final Binder<Firma> binder = new Binder<>();
     private Firma firmaEditovana;
     private FirmyView firmyView;
-
+    private Poberatel aktualnyPoberatel;
 
     public EditacnyForm() {
         tICO = new TextField("IČO");
@@ -54,10 +63,11 @@ public class EditacnyForm extends VerticalLayout {
         tPsc.setWidth("50%");
         tTelefon = new TextField("Telefon");
 
+        tPoberatelNazov = new TextField("Poberatel");
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
-        btnVyber = new Button("Výber");
+        btnVyber = new Button("Výber firmy zo slovensko-digital");
         nastavComponnenty();
         FormLayout lEdit = new FormLayout();
         lEdit.addComponent(tICO);
@@ -68,6 +78,7 @@ public class EditacnyForm extends VerticalLayout {
         lEdit.addComponent(tMesto);
         lEdit.addComponent(tPsc);
         lEdit.addComponent(tTelefon);
+        lEdit.addComponent(tPoberatelNazov);
 
 
         HorizontalLayout lBtn = new HorizontalLayout();
@@ -78,6 +89,14 @@ public class EditacnyForm extends VerticalLayout {
 
         this.addComponent(lEdit);
         this.addComponent(lBtn);
+
+
+        AutocompleteExtension<Poberatel> poberatelAutocompleteExtension = new AutocompleteExtension<>(tPoberatelNazov);
+        poberatelAutocompleteExtension.setSuggestionGenerator(
+                this::navrhniPoberatela,
+                this::transformujPoberatelaNaMeno,
+                this::transformujPoberatelaNaMenoSoZvyraznenymQuery);
+
 
     }
 
@@ -111,6 +130,24 @@ public class EditacnyForm extends VerticalLayout {
 
         Binder.Binding<Firma, String> telefonBinding = binder.forField(tTelefon)
                 .bind(Firma::getTelefon, Firma::setTelefon);
+
+
+//       Binder.Binding<Prevadzka, String> poberatelBinding = binder.forField(tPoberatelNazov)
+//           .withValidator(nazovPoberatela -> PoberatelNastroje.prvyPoberatelPodlaMena(nazovPoberatela).isPresent(),
+//               "Poberateľ musi byt existujuci")
+//           .bind(poberatel -> this.getPoberatel() == null ? "" : this.getPoberatel().getMeno(),
+//               (poberatel, s) -> PoberatelNastroje.prvyPoberatelPodlaMena(tPoberatelNazov.getValue()).ifPresent(poberatel::this.setPoberatel(poberatel)));
+
+
+//        Binder.Binding<Firma, String> poberatelBinding = binder.forField(tPoberatelNazov)
+//                .withValidator(nazovPoberatel -> this.aktualnyPoberatel != null, "Poberteľ musi bzt vyplneny")
+//                .withValidator(nazovPoberatela -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId()).isPresent(),
+//                        "Poberateľ musi byt existujuci")
+//                .bind(firma -> firma.getPoberatel() == null ? "" : prevadzka.getPoberatel().getMeno(),
+//                        (prevadzka, s) -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId()).ifPresent(prevadzka::setPoberatel));
+
+
+
 
         tICO.addValueChangeListener(event -> icoBinding.validate());
         tNazov.addValueChangeListener(event -> nazovBinding.validate());
@@ -207,6 +244,7 @@ public class EditacnyForm extends VerticalLayout {
 
             Notification.show(msg, Notification.Type.TRAY_NOTIFICATION);
             if (jeFirmaNova) {
+                PrevadzkaNastroje.ulozPrvuPrevadzku(ulozenaFirma);
                 firmyView.pridajNovuFirmu(ulozenaFirma);
             }
             firmyView.refreshFiriem();
@@ -232,8 +270,43 @@ public class EditacnyForm extends VerticalLayout {
 
     }
 
+    private List<Poberatel> navrhniPoberatela(String query, int cap) {
+
+        return  PoberatelNastroje.zoznamPoberatelov().stream()
+                .filter(poberatel -> poberatel.getMeno().toLowerCase().contains(query.toLowerCase()))
+                .limit(cap).collect(Collectors.toList());
+    }
+
+    /**
+     * Co sa zobraziv textfielde, ked sa uz hodnota vyberie
+     * */
+    private String transformujPoberatelaNaMeno(Poberatel poberatel) {
+        return poberatel.getMeno();
+
+    }
+
+    /**
+     * Co sa zobrazi v dropdowne
+     * */
+    private String transformujPoberatelaNaMenoSoZvyraznenymQuery(Poberatel poberatel, String query) {
+        return "<div class='suggestion-container'>"
+                + "<span class='poberatel'>"
+                + poberatel.getPoberatelMenoAdresa()
+//                + poberatel.getMeno()
+                .replaceAll("(?i)(" + query + ")", "<b>$1</b>")
+                + "</span>"
+                + "</div>";
+    }
     public void setFirmaView(FirmyView firmaView) {
         this.firmyView = firmaView;
+    }
+
+    public Poberatel getPoberatel() {
+        return poberatel;
+    }
+
+    public void setPoberatel(Poberatel poberatel) {
+        this.poberatel = poberatel;
     }
 }
 

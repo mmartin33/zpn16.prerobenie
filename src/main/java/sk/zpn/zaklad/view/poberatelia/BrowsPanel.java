@@ -6,7 +6,6 @@ import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.zaklad.view.VitajteView;
-import sk.zpn.zaklad.view.doklady.DokladyView;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 
 import java.util.List;

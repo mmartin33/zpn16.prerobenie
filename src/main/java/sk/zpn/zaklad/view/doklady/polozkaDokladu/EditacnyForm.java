@@ -30,6 +30,7 @@ public class EditacnyForm extends VerticalLayout {
     private final Binder <PolozkaDokladu> binder = new Binder<>();
     private PolozkaDokladu polozkaEditovana;
     private PolozkyDokladuView polozkyDokladyView;
+    private Poberatel aktualnyPoberatel;
 
     public EditacnyForm(){
         tProdukt = new TextField("Produkt");
@@ -81,6 +82,11 @@ public class EditacnyForm extends VerticalLayout {
             this::transformujPoberatelaNaNazov,
             this::transformujPoberatelaNaNazovSoZvyraznenymQuery);
 
+        dokladAutocompleteExtensionProberatel.addSuggestionSelectListener(event -> {
+            event.getSelectedItem().ifPresent(poberatel -> this.aktualnyPoberatel = poberatel);
+        });
+
+
 
     }
     private void nastavComponnenty(){
@@ -102,11 +108,15 @@ public class EditacnyForm extends VerticalLayout {
                 .bind(polozkaDokladu -> polozkaDokladu.getFirma() == null ? "" : polozkaDokladu.getFirma().getNazov(),
                     (polozkaDokladu, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(polozkaDokladu::setFirma));
 
+
         Binder.Binding<PolozkaDokladu, String> poberatelBinding = binder.forField(tPoberatel)
-                .withValidator(menoPoberatela -> PoberatelNastroje.prvyPoberatelPodlaMena(menoPoberatela).isPresent(),
-                    "poberatel musi byt existujuci")
+                .withValidator(nazovPoberatel -> this.aktualnyPoberatel != null, "Poberteľ musi bzt vyplneny")
+                .withValidator(nazovPoberatela -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId()).isPresent(),
+                        "Poberateľ musi byt existujuci")
                 .bind(polozkaDokladu -> polozkaDokladu.getPoberatel() == null ? "" : polozkaDokladu.getPoberatel().getMeno(),
-                    (polozkaDokladu, s) -> PoberatelNastroje.prvyPoberatelPodlaMena(tPoberatel.getValue()).ifPresent(polozkaDokladu::setPoberatel));
+                        (polozkaDokladu, s) -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId()).ifPresent(polozkaDokladu::setPoberatel));
+
+
 
 
         Binder.Binding<PolozkaDokladu, String> poznamkaBinding = binder.forField(tPoznamka)
@@ -133,6 +143,7 @@ public class EditacnyForm extends VerticalLayout {
 }
     void edit(PolozkaDokladu polozkaDokladu) {
         polozkaEditovana = polozkaDokladu;
+        aktualnyPoberatel=polozkaDokladu.getPoberatel();
         if (polozkaDokladu != null) {
             binder.readBean(polozkaDokladu);
         }
@@ -248,7 +259,7 @@ public class EditacnyForm extends VerticalLayout {
     private String transformujPoberatelaNaNazovSoZvyraznenymQuery(Poberatel poberatel, String query) {
         return "<div class='suggestion-container'>"
                 + "<span class='poberatel'>"
-                + poberatel.getMeno()
+                + poberatel.getPoberatelMenoAdresa()
                 .replaceAll("(?i)(" + query + ")", "<b>$1</b>")
                 + "</span>"
                 + "</div>";

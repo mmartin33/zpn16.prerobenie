@@ -7,6 +7,7 @@ import java.util.List;
 @NamedQueries(value = {
         @NamedQuery(name = "Firma.getPodlaIca", query = "SELECT f FROM firmy f WHERE f.ico =:ico"),
         @NamedQuery(name = "Firma.getPodlaNazvu", query = "SELECT f FROM firmy f WHERE f.nazov =:nazov"),
+        @NamedQuery(name = "Firma.getPodlaID", query = "SELECT f FROM firmy f WHERE f.id =:id"),
         @NamedQuery(name = "Firma.getAll", query = "SELECT f FROM firmy f")})
 
 public class Firma extends Vseobecne {

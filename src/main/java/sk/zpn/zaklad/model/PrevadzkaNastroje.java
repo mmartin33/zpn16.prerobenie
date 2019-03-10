@@ -61,4 +61,22 @@ public class PrevadzkaNastroje {
         em.getTransaction().commit();
     }
 
+    public static Prevadzka ulozPrvuPrevadzku(Firma firma) {
+        Prevadzka p=new Prevadzka();
+        p.setNazov(firma.getNazov());
+        p.setMesto(firma.getMesto());
+        p.setUlica(firma.getUlica());
+        p.setPsc(firma.getPsc());
+        p.setFirma(firma);
+
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        if (p.isNew())
+            p.setId((long)0);
+        System.out.println("Ulozena prevadzka:"+p.getNazov());
+        em.getTransaction().begin();
+        em.persist(p);
+        em.getTransaction().commit();
+        return p;
+
+    }
 }
