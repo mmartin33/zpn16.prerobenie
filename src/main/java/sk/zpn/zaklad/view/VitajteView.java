@@ -12,6 +12,7 @@ import sk.zpn.zaklad.view.doklady.DokladyView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 
 
+import sk.zpn.zaklad.view.nacitanieDBF.NacitanieDbfView;
 import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
@@ -65,6 +66,11 @@ public class VitajteView extends MojView {
                         DokladyView dokladyView = new DokladyView();
                         UI.getCurrent().getNavigator().addView(DokladyView.NAME, dokladyView);
                         n.navigateTo(DokladyView.NAME);
+                    }
+                    else if (selectedItem.getDescription().equals("odosli")) {
+                        NacitanieDbfView nacitanieDbfView = new NacitanieDbfView();
+                        UI.getCurrent().getNavigator().addView(NacitanieDbfView.NAME, nacitanieDbfView);
+                        n.navigateTo(NacitanieDbfView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("mostik")) {
 //                        MostikView mostikView = new MostikView();
