@@ -1,9 +1,11 @@
-package sk.zpn.zaklad.view.nacitanieDBF;
+package sk.zpn.zaklad.view.nacitanieCSV;
 
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 
 import com.vaadin.icons.VaadinIcons;
@@ -15,33 +17,27 @@ import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
+import sk.zpn.domena.ZaznamCsv;
+import sk.zpn.zaklad.model.DavkaCsvImporter;
+import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
-public class UploadDBF extends CustomComponent  {
+public class UploadCSV extends CustomComponent  {
     private static final long serialVersionUID = -4292553844521293140L;
     Upload upload;
     Label label;
     Button btnSpat;
     Panel panel;
     VerticalLayout layout;
-    public void init (String context) {
-        layout = new VerticalLayout();
+    String adresar="/c:/zpn/upload/";
 
-        if ("basic".equals(context))
-            basic(layout);
-//        else if ("advanced".equals(context))
-//            advanced(layout);
-//        else
-//            layout.addComponent(new Label("Invalid context: " + context));
 
-        setCompositionRoot(layout);
-    }
-
-    void basic(VerticalLayout layout) {
+    public void init() {
         class FileReceiver implements Receiver, SucceededListener {
             private static final long serialVersionUID = -1276759102490466761L;
 
             public File file;
+
 
             public OutputStream receiveUpload(String filename,
                                               String mimeType) {
@@ -49,7 +45,8 @@ public class UploadDBF extends CustomComponent  {
                 FileOutputStream fos = null; // Stream to write to
                 try {
                     // Open the file for writing.
-                    file = new File("//c:/tmp/uploads/" + filename);
+                    //file = new File("//d:/tmp/uploads/" + filename);
+                    file = new File(adresar + filename);
                     fos = new FileOutputStream(file);
                 } catch (final java.io.FileNotFoundException e) {
                     new Notification("Súbor sa nedá otvoriť <br/>",
@@ -60,16 +57,21 @@ public class UploadDBF extends CustomComponent  {
                 }
                 return fos; // Return the output stream to write to
             }
-
             public void uploadSucceeded(SucceededEvent event) {
                 upload.setVisible(false);
+                zhrajDavku(file.toString());
                 zobrazDavku();
 
 //                image.setVisible(true);
 //                image.setSource(new FileResource(file));
             }
         };
+        layout = new VerticalLayout();
         FileReceiver receiver = new FileReceiver();
+
+        String ico= UzivatelNastroje.getIcoVlastnejFirmyPrihlasenehoUzivala();
+        this.adresar=this.adresar+ico+"/";
+
 
         // Create the upload with a caption and set receiver later
         upload = new Upload("Výberte dávku na odoslanie", receiver);
@@ -77,7 +79,7 @@ public class UploadDBF extends CustomComponent  {
         upload.addSucceededListener(receiver);
 
         // Prevent too big downloads
-        final long UPLOAD_LIMIT = 1000000l;
+        final long UPLOAD_LIMIT = 10000000l;
         upload.addStartedListener(new StartedListener() {
             private static final long serialVersionUID = 4728847902678459488L;
 
@@ -114,18 +116,21 @@ public class UploadDBF extends CustomComponent  {
         // END-EXAMPLE: component.upload.basic
 
         // Create uploads directory
-        File uploads = new File("/tmp/uploads");
+//        File uploads = new File("/tmp/uploads");
+        File uploads = new File(adresar);
         if (!uploads.exists() && !uploads.mkdir())
             layout.addComponent(new Label("ERROR: Could not create upload dir"));
 
         ((VerticalLayout) panel.getContent()).setSpacing(true);
         panel.setWidth("-1");
         layout.addComponent(panel);
+        setCompositionRoot(layout);
     }
 
     void zobrazDavku() {
         panel.setVisible(false);
-        label= new Label("Dávka úspešne odoslaná");
+        label= new Label("Subor úspešne odoslaný");
+        //zhrajDavku();
         btnSpat= new Button("Späť",VaadinIcons.ARROW_BACKWARD);
 
         btnSpat.addClickListener(clickEvent ->
@@ -137,7 +142,16 @@ public class UploadDBF extends CustomComponent  {
         layout.addComponentsAndExpand(label);
         layout.addComponentsAndExpand(btnSpat);
     }
+    void zhrajDavku(String file){
+        List <ZaznamCsv> zaznam;
+        try {
+            zaznam= DavkaCsvImporter.nacitajCsvDavku(file);
+            System.out.println(zaznam.size());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+    }
 //    void advanced(VerticalLayout layout) {
 //        // BEGIN-EXAMPLE: component.upload.advanced
 //        class UploadBox extends CustomComponent

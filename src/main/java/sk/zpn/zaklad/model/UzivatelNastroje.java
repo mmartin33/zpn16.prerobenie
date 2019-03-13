@@ -92,4 +92,9 @@ public class UzivatelNastroje {
         TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.getAll", Uzivatel.class);
         return q.getResultList();
     }
+
+    public static String getIcoVlastnejFirmyPrihlasenehoUzivala() {
+        Uzivatel u =getUzivatela((Long) VaadinSession.getCurrent().getAttribute("id_uzivatela")).get();
+        return u.getFirma().getIco();
+    }
 }

@@ -12,6 +12,7 @@ import sk.zpn.zaklad.view.doklady.DokladyView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 
 
+import sk.zpn.zaklad.view.nacitanieCSV.NacitanieCSVView;
 import sk.zpn.zaklad.view.nacitanieDBF.NacitanieDbfView;
 import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
@@ -68,9 +69,12 @@ public class VitajteView extends MojView {
                         n.navigateTo(DokladyView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("odosli")) {
-                        NacitanieDbfView nacitanieDbfView = new NacitanieDbfView();
-                        UI.getCurrent().getNavigator().addView(NacitanieDbfView.NAME, nacitanieDbfView);
-                        n.navigateTo(NacitanieDbfView.NAME);
+//                        NacitanieDbfView nacitanieCSVView = new NacitanieDbfView();
+//                        UI.getCurrent().getNavigator().addView(NacitanieDbfView.NAME, nacitanieCSVView);
+//                        n.navigateTo(NacitanieDbfView.NAME);
+                        NacitanieCSVView nacitanieCSVView = new NacitanieCSVView();
+                        UI.getCurrent().getNavigator().addView(NacitanieCSVView.NAME, nacitanieCSVView);
+                        n.navigateTo(NacitanieCSVView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("mostik")) {
 //                        MostikView mostikView = new MostikView();
