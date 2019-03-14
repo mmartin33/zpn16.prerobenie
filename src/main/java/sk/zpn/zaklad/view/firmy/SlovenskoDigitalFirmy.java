@@ -18,5 +18,4 @@ public class SlovenskoDigitalFirmy {
         this.zaznamy = sd.nacitanieDat(nazovFirmy, ico, true);
 
     }
-
 }

@@ -2,10 +2,10 @@ package sk.zpn.zaklad.view;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.*;
 import com.vaadin.ui.MenuBar.MenuItem;
-import com.vaadin.ui.UI;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
@@ -13,7 +13,7 @@ import sk.zpn.zaklad.view.firmy.FirmyView;
 
 
 import sk.zpn.zaklad.view.nacitanieCSV.NacitanieCSVView;
-import sk.zpn.zaklad.view.nacitanieDBF.NacitanieDbfView;
+
 import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
@@ -37,6 +37,10 @@ public class VitajteView extends MojView {
             this.n=n;
             MenuBar barmenu = new MenuBar();
             this.addComponent(barmenu);
+            HorizontalLayout infoPanel=new HorizontalLayout();
+            ExternalResource resource = new ExternalResource("/img/zpn_logo.jpg");
+            infoPanel.addComponentsAndExpand(new Image(null,resource));
+            this.addComponent(infoPanel);
             // A top-level menu item that opens a submenu
 
             MenuBar.Command mycommand = new MenuBar.Command() {
@@ -104,31 +108,31 @@ public class VitajteView extends MojView {
 
             menuLogout = barmenu.addItem("Odhlasenie", null, odhlasenie);
             menuPredajcu = barmenu.addItem("Pre predajcu", null, null);
-            MenuItem menuMostik = menuPredajcu.addItem("Párovaci postik", null, mycommand);
+            MenuItem menuMostik = menuPredajcu.addItem("Párovaci postik",VaadinIcons.RESIZE_V, mycommand);
             menuMostik.setDescription("mostik");
-            MenuItem menuOdosli = menuPredajcu.addItem("Odošli", null, mycommand);
+            MenuItem menuOdosli = menuPredajcu.addItem("Odošli", VaadinIcons.UPLOAD, mycommand);
             menuOdosli.setDescription("odosli");
-            MenuItem menuStav = menuPredajcu.addItem("Stav bodov", null, mycommand);
+            MenuItem menuStav = menuPredajcu.addItem("Stav bodov", VaadinIcons.PIGGY_BANK_COIN, mycommand);
             menuStav.setDescription("stavbodov");
 
             menuSpravcu = barmenu.addItem("Spravca ZPN", null, null);
-            MenuItem menuFirmy = menuSpravcu.addItem("Firmy", null, mycommand);
+            MenuItem menuFirmy = menuSpravcu.addItem("Firmy", VaadinIcons.BUILDING, mycommand);
             menuFirmy.setDescription("firmy");
 
-            MenuItem menuPrevadzky = menuSpravcu.addItem("Prevadzky", VaadinIcons.BULLETS, mycommand);
+            MenuItem menuPrevadzky = menuSpravcu.addItem("Prevadzky", VaadinIcons.BUILDING_O, mycommand);
             menuPrevadzky.setDescription("prevadzky");
             MenuItem menuPoberatelia = menuSpravcu.addItem("Poberatelia",VaadinIcons.USER_CHECK, mycommand);
             menuPoberatelia.setDescription("poberatelia");
 
             MenuItem menuProdukty = menuSpravcu.addItem("Produkty", VaadinIcons.GLASS, mycommand);
             menuProdukty.setDescription("produkty");
-            MenuItem menuDoklad = menuSpravcu.addItem("Doklady", VaadinIcons.INVOICE, mycommand);
+            MenuItem menuDoklad = menuSpravcu.addItem("Doklady", VaadinIcons.RECORDS, mycommand);
             menuDoklad.setDescription("doklad");
-            MenuItem menuNezhrateDavky = menuSpravcu.addItem("Nezhrate davky", null, mycommand);
+            MenuItem menuNezhrateDavky = menuSpravcu.addItem("Nezhrate davky", VaadinIcons.CHECK, mycommand);
             menuNezhrateDavky.setDescription("davka");
-            MenuItem menuBody = menuSpravcu.addItem("Stav bodov", null, mycommand);
+            MenuItem menuBody = menuSpravcu.addItem("Stav bodov", VaadinIcons.PIGGY_BANK, mycommand);
             menuBody.setDescription("body");
-            MenuItem menuParametre = menuSpravcu.addItem("Parametre", VaadinIcons.CONTROLLER, mycommand);
+            MenuItem menuParametre = menuSpravcu.addItem("Parametre", VaadinIcons.COG_O, mycommand);
             menuParametre.setDescription("parametre");
 
             menuAdmin = barmenu.addItem("Spravca", null, null);

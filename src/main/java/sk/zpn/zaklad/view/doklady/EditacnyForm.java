@@ -47,6 +47,7 @@ public class EditacnyForm extends VerticalLayout {
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
+
         nastavComponnenty();
         FormLayout lEdit=new FormLayout();
 

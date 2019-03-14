@@ -4,10 +4,12 @@ import com.vaadin.navigator.View;
 import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Mostik;
 
+import sk.zpn.domena.ZaznamCsv;
+import sk.zpn.zaklad.model.DavkaCsvImporter;
 import sk.zpn.zaklad.model.MostikNastroje;
 
 
-
+import java.io.IOException;
 import java.util.List;
 
 public class MostikView extends HorizontalLayout implements View {
@@ -21,51 +23,17 @@ public class MostikView extends HorizontalLayout implements View {
     private List<Mostik> mostikList;
 
     public MostikView() {
-
-        mostikList = MostikNastroje.mostikZaRokAFirmu();
-        browsPanel=new BrowsPanel(mostikList);
-//        editacnyForm=new EditacnyForm();
-//        editacnyForm.setProduktyView(this);
-        configureComponents();
-        this.addComponent(browsPanel);
-//        this.addComponent(editacnyForm);
+        List<ZaznamCsv> zaznam=null;
+        try {
+            zaznam=DavkaCsvImporter.nacitajCsvDavku("//c:/klient/zpn1901.csv");
+            System.out.println(zaznam.size());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
 
-
-
-    void deselect() {
-
-        browsPanel.deselect();
-
-    }
-
-    private void configureComponents() {
-
-//        editacnyForm.setProduktyView(this);
-
-
-//        browsPanel.btnNovy.addClickListener(clickEvent -> editacnyForm.edit(new Produkt(ParametreNastroje.nacitajParametre().getRok())));
-//        browsPanel.addSelectionListener(editacnyForm::edit);
-        refreshMostika();
-    }
-
-    public void refreshMostika() {
-            browsPanel.refresh();
-    }
-
-    void pridajNovyMostik(Mostik novyMostik) {
-        mostikList.add(novyMostik);
-        this.refreshMostika();
-
-    }
-    void odstranMostik(Mostik mostik) {
-
-        mostikList.remove(mostik);
-        this.refreshMostika();
-
-    }
 
 }
 

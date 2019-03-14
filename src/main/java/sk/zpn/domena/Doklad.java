@@ -1,9 +1,6 @@
 package sk.zpn.domena;
 
 import org.apache.log4j.Logger;
-import sk.zpn.authentification.HesloNastroje;
-import sk.zpn.zaklad.model.DokladyNastroje;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

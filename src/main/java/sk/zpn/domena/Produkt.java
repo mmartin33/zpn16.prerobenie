@@ -40,10 +40,6 @@ public class Produkt extends Vseobecne {
     @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
     @JoinColumn(nullable = true)
 
-
-
-
-
     private Firma firma;
 
 
