@@ -106,7 +106,7 @@ public class VitajteView extends MojView {
 
             menuLogout = barmenu.addItem("Odhlasenie", null, odhlasenie);
             menuPredajcu = barmenu.addItem("Pre predajcu", null, null);
-            MenuItem menuMostik = menuPredajcu.addItem("Párovaci postik",VaadinIcons.RESIZE_V, mycommand);
+            MenuItem menuMostik = menuPredajcu.addItem("Párovaci mostík",VaadinIcons.RESIZE_V, mycommand);
             menuMostik.setDescription("mostik");
             MenuItem menuOdosli = menuPredajcu.addItem("Odošli", VaadinIcons.UPLOAD, mycommand);
             menuOdosli.setDescription("odosli");

@@ -18,6 +18,7 @@ import java.util.Optional;
 import static sk.zpn.zaklad.model.UzivatelNastroje.getUzivatela;
 
 public class MostikView extends HorizontalLayout implements View {
+
     // ContactForm is an example of a custom component class
     public static final String NAME = "mostikView";
     private BrowsPanel browsPanel;
@@ -33,6 +34,15 @@ public class MostikView extends HorizontalLayout implements View {
     private Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
 
     public MostikView() {
+        // TODO nejak to zpracovat do view
+//        List<ZaznamCsv> zaznam=null;
+//        try {
+//            zaznam= DavkaCsvImporter.nacitajCsvDavku("//c:/klient/zpn1901.csv");
+//            System.out.println(zaznam.size());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
         configureComponents();
         this.addComponent(mainVerticalLayout);
         tlacitkovyLayout.addComponent(btnZmaz);
