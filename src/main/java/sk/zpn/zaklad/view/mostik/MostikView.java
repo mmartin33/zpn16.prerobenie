@@ -23,7 +23,6 @@ public class MostikView extends HorizontalLayout implements View {
     private BrowsPanel browsPanel;
     private VerticalLayout mainVerticalLayout =  new VerticalLayout();
     private HorizontalLayout upperLabelHorizontalLayout = new HorizontalLayout();
-    private HorizontalLayout upperFilterHorizontalLayout = new HorizontalLayout();
     private HorizontalLayout tlacitkovyLayout = new HorizontalLayout();
     private String nazovFirmy = "";
     private String rok = "";
@@ -41,7 +40,6 @@ public class MostikView extends HorizontalLayout implements View {
         upperLabelHorizontalLayout.addComponent(firmaLabel);
         upperLabelHorizontalLayout.addComponent(rokLabel);
         mainVerticalLayout.addComponent(upperLabelHorizontalLayout);
-        mainVerticalLayout.addComponent(upperFilterHorizontalLayout);
         mainVerticalLayout.addComponent(browsPanel);
         mainVerticalLayout.addComponent(tlacitkovyLayout);
         btnZmaz.addClickListener(this::delete);
@@ -62,9 +60,9 @@ public class MostikView extends HorizontalLayout implements View {
         });
         rok = ParametreNastroje.nacitajParametre().getRok();
         rokLabel.setValue(rokLabel.getValue() + rok);
-        new FirmaProduktNastroje().generateMissingFirmaProductItems(nazovFirmy);
+        FirmaProduktNastroje.generateMissingFirmaProductItems(nazovFirmy);
         firmaProduktList = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
-        browsPanel = new BrowsPanel(firmaProduktList);
+        browsPanel = new BrowsPanel(firmaProduktList, nazovFirmy);
         refreshMostika();
     }
 

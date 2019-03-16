@@ -38,7 +38,7 @@ public class FirmaProduktNastroje {
         return firmaProdukt;
     }
 
-    public boolean generateMissingFirmaProductItems(String nazovFirmy) {
+    public static boolean generateMissingFirmaProductItems(String nazovFirmy) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         List<Produkt> produkty = ProduktyNastroje.zoznamProduktovZaRok();
         Optional<Firma> firma = FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy);
@@ -57,7 +57,7 @@ public class FirmaProduktNastroje {
         return true;
     }
 
-    private List<Produkt> filterNonYetAssignedProducts(List<Produkt> allProducts,
+    private static List<Produkt> filterNonYetAssignedProducts(List<Produkt> allProducts,
                             List<FirmaProdukt> existingFirmaProductItems) {
         List<Long> existingProductsIds = existingFirmaProductItems.stream()
             .map(firmaProdukt -> firmaProdukt.getProdukt().getId())
@@ -72,6 +72,17 @@ public class FirmaProduktNastroje {
         em.getTransaction().begin();
         em.remove(f);
         em.getTransaction().commit();
+    }
+
+    /**
+     * Returns items that do not have KIT or koeficient not filled in.
+     * @param firmaProduktList input list
+     * @return filtered list of FirmaProdukt
+     */
+    public static List<FirmaProdukt> filterInvalidRecords(List<FirmaProdukt> firmaProduktList) {
+        return firmaProduktList.stream()
+            .filter(firmaProdukt -> firmaProdukt.getKit().equals("") || firmaProdukt.getKoeficient().equals(0D))
+            .collect(Collectors.toList());
     }
 
 }

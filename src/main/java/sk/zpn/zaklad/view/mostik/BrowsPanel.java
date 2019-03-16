@@ -6,6 +6,7 @@ import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.FirmaProdukt;
+import sk.zpn.zaklad.model.FirmaProduktNastroje;
 import sk.zpn.zaklad.view.ViewConstants;
 
 import java.util.List;
@@ -17,10 +18,14 @@ public class BrowsPanel extends VerticalLayout {
     private List<FirmaProdukt> firmaProduktList;
     public Button btnNovy;
     private FirmaProdukt oznacenyFirmaProdukt;
+    private HorizontalLayout upperFilterHorizontalLayout = new HorizontalLayout();
+    private CheckBox cbFilerInvalid = new CheckBox("Zobraz len nevalidné zaznamy");
+    private String nazovFirmy;
 
-    public BrowsPanel(List<FirmaProdukt> firmaProduktList) {
+    public BrowsPanel(List<FirmaProdukt> firmaProduktList, String nazovFirmy) {
+        this.nazovFirmy = nazovFirmy;
         this.firmaProduktList = firmaProduktList;
-
+        upperFilterHorizontalLayout.addComponent(cbFilerInvalid);
         this.setSpacing(false);
         grid = new FilterGrid<>();
         grid.setItems(this.firmaProduktList);
@@ -40,7 +45,11 @@ public class BrowsPanel extends VerticalLayout {
                 .forField(new TextField())
                 .withValidator(kit -> !kit.trim().isEmpty(),
                     "Kit nesmie byt prázdny")
-                .bind(FirmaProdukt::getKit, FirmaProdukt::setKitAndPersist))
+                .bind(FirmaProdukt::getKit,
+                    (produkt, kit) -> {
+                    produkt.setKitAndPersist(kit);
+                    refresh();
+                }))
             .setEditable(true);
         FilterGrid.Column<FirmaProdukt, String> colKat = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getKat())
             .setCaption("Kat")
@@ -60,9 +69,13 @@ public class BrowsPanel extends VerticalLayout {
             .setEditorBinding(binder
                 .forField(new TextField())
                 .withConverter(new StringToDoubleConverter("Koeficient musi byt desatinné číslo"))
-                .withValidator(koeficient -> !koeficient.toString().trim().isEmpty(),
-                        "Koeficient nesmie byt prázdny")
-                .bind(FirmaProdukt::getKoeficient, FirmaProdukt::setKoeficientAndPersist))
+                .withValidator(koeficient -> koeficient != 0D,
+                    "Koeficient nesmie byt prázdny")
+                .bind(FirmaProdukt::getKoeficient,
+                    (produkt, koeficient) -> {
+                    produkt.setKoeficientAndPersist(koeficient);
+                    refresh();
+                    }))
             .setEditable(true);
 
         colKit.setWidth(ViewConstants.THIN_COLUMN_WIDTH);
@@ -94,13 +107,18 @@ public class BrowsPanel extends VerticalLayout {
         grid.setColumnOrder(colKat, colKit, colNazov, colBody, colKusy, colKoeficient);
 
         HorizontalLayout tlacitkovy = new HorizontalLayout();
+        this.addComponent(upperFilterHorizontalLayout);
         this.addComponents(grid);
         this.addComponent(tlacitkovy);
 
         this.addSelectionListener(firmaProdukt -> oznacenyFirmaProdukt = firmaProdukt);
+        cbFilerInvalid.addValueChangeListener(
+            event -> refresh()
+        );
     }
 
     void refresh() {
+        filterInvalid(cbFilerInvalid.getValue(), nazovFirmy);
         grid.getDataProvider().refreshAll();
         System.out.println("Refresh browsu all");
     }
@@ -118,7 +136,7 @@ public class BrowsPanel extends VerticalLayout {
         }
     }
 
-    private String getKoeficientDisplayValue(FirmaProdukt firmaProdukt){
+    private String getKoeficientDisplayValue(FirmaProdukt firmaProdukt) {
         Double koeficient = firmaProdukt.getKoeficient();
         return (koeficient == null || koeficient.equals(0D)) ? "" : koeficient.toString();
     }
@@ -133,10 +151,26 @@ public class BrowsPanel extends VerticalLayout {
     }
 
     void selectFirst() {
-        List<FirmaProdukt> prvyFirmaProduktList = grid.getDataCommunicator().fetchItemsWithRange(0,1);
-        if(prvyFirmaProduktList.size() > 0){
+        List<FirmaProdukt> prvyFirmaProduktList = grid.getDataCommunicator().fetchItemsWithRange(0, 1);
+        if (prvyFirmaProduktList.size() > 0) {
             grid.asSingleSelect().select(prvyFirmaProduktList.get(0));
         }
+    }
+
+    /**
+     * If filter enabled displays only item, that are invalid/incomplete.
+     *
+     * @param filterEnabled flag determining if filter should be applied
+     * @param nazovFirmy name of the company
+     *
+     */
+    public void filterInvalid(boolean filterEnabled, String nazovFirmy) {
+        if (filterEnabled) {
+            firmaProduktList = FirmaProduktNastroje.filterInvalidRecords(firmaProduktList);
+        } else {
+            firmaProduktList = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
+        }
+        grid.setItems(firmaProduktList);
     }
 }
 
