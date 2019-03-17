@@ -43,7 +43,7 @@ public class BrowsPanel extends VerticalLayout {
         FilterGrid.Column<Doklad, String> colCisloDokladu = grid.addColumn(Doklad::getCisloDokladu).setCaption("Doklad").setId("doklad");
         FilterGrid.Column<Doklad, String> colTypDokladu = grid.addColumn(doklad -> doklad.getTypDokladu().getDisplayValue()).setCaption("Typ dokladu").setId("typ");
         FilterGrid.Column<Doklad, String> colDatum = grid.addColumn(Doklad::getFormatovanyDatum).setCaption("Dátum").setId("datum");
-        FilterGrid.Column<Doklad, String> colFirmaNazov = grid.addColumn(Doklad::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
+        FilterGrid.Column<Doklad, String> colPrevadzkaNazov = grid.addColumn(Doklad::getFirmaNazov).setCaption("Prevadzka").setId("nazovPrevadzky");
         FilterGrid.Column<Doklad, String> colPoznamka = grid.addColumn(Doklad::getPoznamka).setCaption("Poznámka").setId("poznmla");
 
 
@@ -55,9 +55,9 @@ public class BrowsPanel extends VerticalLayout {
         colPoznamka.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colTypDokladu.setFilter(new ComboBox<>("", TypDokladu.getListOfDisplayValues()),
                 (cValue, fValue) -> fValue == null || fValue.equals(cValue));
-        colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+        colPrevadzkaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
 
-        grid.setColumnOrder(colCisloDokladu, colTypDokladu,colFirmaNazov, colDatum);
+        grid.setColumnOrder(colCisloDokladu, colTypDokladu,colPrevadzkaNazov, colDatum);
         Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
         btnSpat.addClickListener(clickEvent ->
                 UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)

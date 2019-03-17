@@ -58,5 +58,7 @@ public class FirmaNastroje {
     }
 
 
-
+    public static Firma najdiAleboZaloz(String ico, String nazovFirmy) {
+        return null;
+    }
 }

@@ -3,13 +3,12 @@ package sk.zpn.zaklad.model;
 import com.vaadin.server.VaadinSession;
 import org.apache.log4j.Logger;
 
-import sk.zpn.domena.Doklad;
-import sk.zpn.domena.Prevadzka;
-import sk.zpn.domena.TypDokladu;
+import sk.zpn.domena.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,5 +66,26 @@ public class DokladyNastroje {
             return Long.toString(Long.parseLong(result)+1);
         else
             return null;
+    }
+
+    public static void zalozDokladovuDavku(List<ZaznamCsv> zaznam) {
+
+        Doklad hlavickaDokladu=new Doklad();
+        hlavickaDokladu.setCisloDokladu(noveCisloDokladu());
+        hlavickaDokladu.setTypDokladu(TypDokladu.DAVKA);
+        hlavickaDokladu.setDatum(new Date());
+        hlavickaDokladu.setFirma(UzivatelNastroje.getVlastnuFirmuPrihlasenehoUzivala());
+        DokladyNastroje.ulozDoklad(hlavickaDokladu);
+        for (ZaznamCsv s: zaznam){
+            PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(s,hlavickaDokladu);
+
+        }
+
+
+
+
+
+
+
     }
 }

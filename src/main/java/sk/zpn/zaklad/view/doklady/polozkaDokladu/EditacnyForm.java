@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class EditacnyForm extends VerticalLayout {
 
     private TextField tProdukt;
-    private TextField tFirma;
+    private TextField tPrevadzka;
     private TextField tPoberatel;
     private TextField tBody;
     private TextField tMnozstvo;
@@ -35,8 +35,8 @@ public class EditacnyForm extends VerticalLayout {
     public EditacnyForm(){
         tProdukt = new TextField("Produkt");
         tProdukt.setWidth("400");
-        tFirma = new TextField("Firma");
-        tFirma.setWidth("400");
+        tPrevadzka = new TextField("Prevádzka" );
+        tPrevadzka.setWidth("400");
         tPoberatel = new TextField("Poberateľ");
         tPoberatel.setWidth("400");
         tBody = new TextField("Body");
@@ -49,7 +49,7 @@ public class EditacnyForm extends VerticalLayout {
         FormLayout lEdit=new FormLayout();
 
         lEdit.addComponent(tProdukt);
-        lEdit.addComponent(tFirma);
+        lEdit.addComponent(tPrevadzka);
         lEdit.addComponent(tPoberatel);
         lEdit.addComponent(tBody);
         lEdit.addComponent(tMnozstvo);
@@ -64,11 +64,11 @@ public class EditacnyForm extends VerticalLayout {
          this.addComponent(lEdit);
          this.addComponent(lBtn);
 
-        AutocompleteExtension<Firma> dokladAutocompleteExtension = new AutocompleteExtension<>(tFirma);
+        AutocompleteExtension<Prevadzka> dokladAutocompleteExtension = new AutocompleteExtension<>(tPrevadzka);
         dokladAutocompleteExtension.setSuggestionGenerator(
-            this::navrhniFirmu,
-            this::transformujFirmuNaNazov,
-            this::transformujFirmuNaNazovSoZvyraznenymQuery);
+            this::navrhniPrevadzku,
+            this::transformujPrevadzkuNaNazov,
+            this::transformujPrevádzkuNaNazovSoZvyraznenymQuery);
 
         AutocompleteExtension<Produkt> dokladAutocompleteExtensionProdukt = new AutocompleteExtension<>(tProdukt);
         dokladAutocompleteExtensionProdukt.setSuggestionGenerator(
@@ -102,11 +102,11 @@ public class EditacnyForm extends VerticalLayout {
                 .bind(polozkaDokladu -> polozkaDokladu.getProdukt() == null ? "" : polozkaDokladu.getProdukt().getNazov(),
                     (polozkaDokladu, s) -> ProduktyNastroje.prvyProduktPodlaNazvu(tProdukt.getValue()).ifPresent(polozkaDokladu::setProdukt));
 
-        Binder.Binding<PolozkaDokladu, String> firmaBinding = binder.forField(tFirma)
-                .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
-                    "Firma musi byt existujuca")
-                .bind(polozkaDokladu -> polozkaDokladu.getFirma() == null ? "" : polozkaDokladu.getFirma().getNazov(),
-                    (polozkaDokladu, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(polozkaDokladu::setFirma));
+        Binder.Binding<PolozkaDokladu, String> prevadzkaBinding = binder.forField(tPrevadzka)
+                .withValidator(nazovPrevadzky -> PrevadzkaNastroje.prvaPrevadzkaPodlaNazvu(nazovPrevadzky).isPresent(),
+                    "Prevádzka musi byt existujuca")
+                .bind(polozkaDokladu -> polozkaDokladu.getPrevadzka() == null ? "" : polozkaDokladu.getPrevadzka().getNazov(),
+                    (polozkaDokladu, s) -> PrevadzkaNastroje.prvaPrevadzkaPodlaNazvu(tPrevadzka.getValue()).ifPresent(polozkaDokladu::setPrevadzka));
 
 
         Binder.Binding<PolozkaDokladu, String> poberatelBinding = binder.forField(tPoberatel)
@@ -195,24 +195,24 @@ public class EditacnyForm extends VerticalLayout {
         this.polozkyDokladyView = polozkyDokladuView;
     }
 
-    private List<Firma> navrhniFirmu(String query, int cap) {
-        return  FirmaNastroje.zoznamFiriem().stream()
-                .filter(firma -> firma.getNazov().toLowerCase().contains(query.toLowerCase()))
+    private List<Prevadzka> navrhniPrevadzku(String query, int cap) {
+        return  PrevadzkaNastroje.zoznamPrevadzka().stream()
+                .filter(prevadzka -> prevadzka.getNazov().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
     }
     /**
      * Co sa zobraziv textfielde, ked sa uz hodnota vyberie
      * */
-    private String transformujFirmuNaNazov(Firma firma) {
-        return firma.getNazov();
+    private String transformujPrevadzkuNaNazov(Prevadzka prevadzka) {
+        return prevadzka.getNazov();
     }
     /**
      * Co sa zobrazi v dropdowne
      * */
-    private String transformujFirmuNaNazovSoZvyraznenymQuery(Firma firma, String query) {
+    private String transformujPrevádzkuNaNazovSoZvyraznenymQuery(Prevadzka prevadzka, String query) {
         return "<div class='suggestion-container'>"
-                + "<span class='firma'>"
-                + firma.getNazov()
+                + "<span class='prevadzka'>"
+                + prevadzka.getNazov()
                 .replaceAll("(?i)(" + query + ")", "<b>$1</b>")
                 + "</span>"
                 + "</div>";
@@ -266,7 +266,7 @@ public class EditacnyForm extends VerticalLayout {
     }
     private void clearEditacnyForm() {
         tProdukt.clear();
-        tFirma.clear();
+        tPrevadzka.clear();
         tPoberatel.clear();
         tBody.clear();
         tMnozstvo.clear();

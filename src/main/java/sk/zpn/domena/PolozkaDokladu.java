@@ -3,9 +3,6 @@ package sk.zpn.domena;
 import org.apache.log4j.Logger;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.util.Date;
 
 import static javax.persistence.CascadeType.PERSIST;
 
@@ -29,7 +26,7 @@ public class PolozkaDokladu extends Vseobecne {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
     @JoinColumn(nullable = false)
-    private Firma firma;
+    private Prevadzka prevadzka;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
     @JoinColumn(nullable = false)
@@ -49,21 +46,21 @@ public class PolozkaDokladu extends Vseobecne {
 
 
 
-    public Firma getFirma() {
-        return firma;
+    public Prevadzka getPrevadzka() {
+        return prevadzka;
     }
 
-    public String getFirmaNazov() {
-        if (firma == null)
+    public String getPrevadzkaNazov() {
+        if (prevadzka == null)
             return "";
         else
-            return firma.getNazov();
+            return prevadzka.getNazov();
     }
-    public Long getFirmaID() {
-        if (firma == null)
+    public Long getPrevadzkaID() {
+        if (prevadzka == null)
             return new Long(0);
         else
-            return firma.getId();
+            return prevadzka.getId();
     }
 
 
@@ -147,8 +144,8 @@ public class PolozkaDokladu extends Vseobecne {
             return poberatel.getId();
     }
 
-    public void setFirma(Firma firma) {
-        this.firma = firma;
+    public void setPrevadzka(Prevadzka prevadzka) {
+        this.prevadzka = prevadzka;
     }
 
     public Double getBody() {return body;}

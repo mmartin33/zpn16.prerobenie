@@ -4,7 +4,7 @@ import com.vaadin.server.VaadinSession;
 import org.apache.log4j.Logger;
 import sk.zpn.domena.Doklad;
 import sk.zpn.domena.PolozkaDokladu;
-import sk.zpn.domena.TypDokladu;
+import sk.zpn.domena.ZaznamCsv;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -50,5 +50,19 @@ public class PolozkaDokladuNastroje {
         TypedQuery<PolozkaDokladu> q = em.createNamedQuery("PolozkaDokladu.getPolozkyJednehoDokladu", PolozkaDokladu.class);
         q.setParameter("doklad", d);
         return q.getResultList();
+    }
+
+    public static PolozkaDokladu vytvorPolozkuZoZaznamuCSV(ZaznamCsv zaznam,Doklad doklad) {
+        PolozkaDokladu pd=new PolozkaDokladu();
+        pd.setDoklad(doklad);
+        //todo dopracovat prepocet mnzostvo cez koeficient z mostika a firmu
+        pd.setMnozstvo(zaznam.getMnozstvo());
+        //todo dopracovat vypocet bodov cez koeficient a mostik  a firmu
+//        pd.setBody(new Double(1));
+//        pd.setPrevadzka(FirmaNastroje.najdiAleboZaloz(zaznam.getIco(),zaznam.getNazvFirmy()));
+//        pd.setPoberatel();
+//        pd.setProdukt();
+//        pd.set
+        return pd;
     }
 }

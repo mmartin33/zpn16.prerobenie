@@ -3,6 +3,7 @@ package sk.zpn.zaklad.model;
 import com.vaadin.server.VaadinSession;
 import org.apache.log4j.Logger;
 import sk.zpn.authentification.HesloNastroje;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 
@@ -96,5 +97,9 @@ public class UzivatelNastroje {
     public static String getIcoVlastnejFirmyPrihlasenehoUzivala() {
         Uzivatel u =getUzivatela((Long) VaadinSession.getCurrent().getAttribute("id_uzivatela")).get();
         return u.getFirma().getIco();
+    }
+    public static Firma getVlastnuFirmuPrihlasenehoUzivala() {
+        Uzivatel u =getUzivatela((Long) VaadinSession.getCurrent().getAttribute("id_uzivatela")).get();
+        return u.getFirma();
     }
 }

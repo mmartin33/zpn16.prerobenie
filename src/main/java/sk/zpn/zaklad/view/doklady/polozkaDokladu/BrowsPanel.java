@@ -4,9 +4,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
-import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.PolozkaDokladu;
-import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.doklady.DokladyView;
 
 import java.text.SimpleDateFormat;
@@ -38,7 +36,7 @@ public class BrowsPanel extends VerticalLayout {
         // definitionn of columns
         FilterGrid.Column<PolozkaDokladu, String> colProduktKod = grid.addColumn(PolozkaDokladu::getProduktKod).setCaption("Kód produktu").setId("kodProduktu");
         FilterGrid.Column<PolozkaDokladu, String> colProduktNazov = grid.addColumn(PolozkaDokladu::getProduktNazov).setCaption("Názov produktu").setId("nazovProduktu");
-        FilterGrid.Column<PolozkaDokladu, String> colFirmaNazov = grid.addColumn(PolozkaDokladu::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
+        FilterGrid.Column<PolozkaDokladu, String> colPrevadzkaNazov = grid.addColumn(PolozkaDokladu::getPrevadzkaNazov).setCaption("Prevádzka").setId("nazovPrevadzky");
         FilterGrid.Column<PolozkaDokladu, String> colPoberatel = grid.addColumn(PolozkaDokladu::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
         FilterGrid.Column<PolozkaDokladu, Double> colBody = grid.addColumn(PolozkaDokladu::getBody).setCaption("Body").setId("body");
         FilterGrid.Column<PolozkaDokladu, Double> colMnozstvo = grid.addColumn(PolozkaDokladu::getMnozstvo).setCaption("Množstvo").setId("mnozstvo");
@@ -47,7 +45,7 @@ public class BrowsPanel extends VerticalLayout {
         // filters
         colProduktKod.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colProduktNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-        colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+        colPrevadzkaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colPoberatel.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colPoznamka.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
