@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class FirmaNastroje {
-//  TODO nemat tieto nastroje staticke, idealne ako beany alebo si spravit aspon list tychto nastrojov a hladat v nom
     public static List<Firma> zoznamFiriem(){
         List<Firma> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
@@ -37,8 +36,9 @@ public class FirmaNastroje {
         em.persist(f);
         em.getTransaction().commit();
         return f;
-    }
 
+
+    }
     public static void zmazFirmu(Firma f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         System.out.println("Vymazana firma:"+f.getNazov());
