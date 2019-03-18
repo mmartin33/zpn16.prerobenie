@@ -23,6 +23,18 @@ public class FirmaProduktNastroje {
         return q.getResultList();
     }
 
+    public static FirmaProdukt getFirmaProduktPreImport(Firma firma,Long rok,String kit) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<FirmaProdukt> q = em.createNamedQuery("FirmaProdukt.getMostikoveUdaje", FirmaProdukt.class)
+            .setParameter("idFirmy", firma.getId())
+            .setParameter("kit",kit)
+            .setParameter("rok",ParametreNastroje.nacitajParametre().getRok());
+
+
+
+        return (FirmaProdukt) q;
+    }
+
 
     public static List<FirmaProdukt> getAll() {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");

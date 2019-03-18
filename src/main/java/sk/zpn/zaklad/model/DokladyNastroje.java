@@ -76,8 +76,8 @@ public class DokladyNastroje {
         hlavickaDokladu.setDatum(new Date());
         hlavickaDokladu.setFirma(UzivatelNastroje.getVlastnuFirmuPrihlasenehoUzivala());
         DokladyNastroje.ulozDoklad(hlavickaDokladu);
-        for (ZaznamCsv z: zaznam){
-            PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
+        for (ZaznamCsv s: zaznam){
+            PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(s,hlavickaDokladu);
 
         }
 
