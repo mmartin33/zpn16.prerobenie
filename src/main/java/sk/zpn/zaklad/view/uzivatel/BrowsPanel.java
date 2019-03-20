@@ -58,26 +58,15 @@ public class BrowsPanel extends VerticalLayout {
         btnSpat.addClickListener(clickEvent ->
                 UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
         );
-
-
-
         HorizontalLayout tlacitkovy=new HorizontalLayout();
         btnNovy=new Button("Novy",VaadinIcons.FILE_O);
-
 
         tlacitkovy.addComponent(btnNovy);
         tlacitkovy.addComponent(btnSpat);//666
 
-
         this.addComponent(new Label("Prehľad užívateľov"));
         this.addComponents(grid);
-
-
         this.addComponent(tlacitkovy);
-
-
-
-
     }
 
 
@@ -86,7 +75,6 @@ public class BrowsPanel extends VerticalLayout {
         System.out.println("Refresh browsu all");
 
     }
-
 
     void addSelectionListener(Consumer<Uzivatel> listener) {
         grid.asSingleSelect()

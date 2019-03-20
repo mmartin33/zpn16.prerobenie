@@ -27,8 +27,9 @@ public class Poberatel extends Vseobecne {
     private String email;
 
 
+    //todo naco tu je????
 
-    private Poberatel firma;
+
 
     public Poberatel() {
 
@@ -95,9 +96,6 @@ public class Poberatel extends Vseobecne {
 
     public void setEmail(String email) {this.email = email;}
 
-    public Poberatel getFirma() {return firma;}
-
-    public void setFirma(Poberatel firma) {this.firma = firma;}
 
     public boolean isNew() {
         return this.getId() == null;

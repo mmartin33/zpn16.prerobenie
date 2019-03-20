@@ -5,6 +5,7 @@ import sk.zpn.domena.ZaznamCsv;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,9 +29,9 @@ public class DavkaCsvImporter {
         while ((nextLine = reader.readNext()) != null) {
             try {
                 if (!nextLine[0].isEmpty() && nextLine[0]!=null && nextLine!=null) {
-                    zaznam.setScm(nextLine[0]);
+                    zaznam.setKit(nextLine[0]);
                     zaznam.setNazov(nextLine[1]);
-                    zaznam.setMnozstvo(Double.parseDouble(nextLine[2].replace(",", ".")));
+                    zaznam.setMnozstvo(new BigDecimal(nextLine[2].replace(",", ".")));
                     zaznam.setNazvFirmy(nextLine[3]);
                     zaznam.setDatumVydaja(formatter.parse(nextLine[4]));
                     zaznam.setMtzDoklad(nextLine[5]);
@@ -41,7 +42,7 @@ public class DavkaCsvImporter {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if ((zaznam !=null) && (zaznam.getScm()!=null))
+            if ((zaznam !=null) && (zaznam.getKit()!=null))
                 davka.add(zaznam);
             //zaznam=null;
         }

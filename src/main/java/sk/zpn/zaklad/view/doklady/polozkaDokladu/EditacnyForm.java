@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.doklady.polozkaDokladu;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -10,6 +11,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.*;
 import sk.zpn.zaklad.model.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -110,7 +112,7 @@ public class EditacnyForm extends VerticalLayout {
 
 
         Binder.Binding<PolozkaDokladu, String> poberatelBinding = binder.forField(tPoberatel)
-                .withValidator(nazovPoberatel -> this.aktualnyPoberatel != null, "Poberteľ musi bzt vyplneny")
+                .withValidator(nazovPoberatel -> this.aktualnyPoberatel != null, "Poberateľ musi byť vyplnený")
                 .withValidator(nazovPoberatela -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId()).isPresent(),
                         "Poberateľ musi byt existujuci")
                 .bind(polozkaDokladu -> polozkaDokladu.getPoberatel() == null ? "" : polozkaDokladu.getPoberatel().getMeno(),
@@ -122,12 +124,12 @@ public class EditacnyForm extends VerticalLayout {
         Binder.Binding<PolozkaDokladu, String> poznamkaBinding = binder.forField(tPoznamka)
                 .bind(PolozkaDokladu::getPoznamka, PolozkaDokladu::setPoznamka);
 
-        Binder.Binding<PolozkaDokladu, Double> bodyBinding = binder.forField(tBody)
-                .withConverter(new StringToDoubleConverter("Nie je číslo"))
+        Binder.Binding<PolozkaDokladu, BigDecimal> bodyBinding = binder.forField(tBody)
+                .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
                 .bind(PolozkaDokladu::getBody, PolozkaDokladu::setBody);
 
-        Binder.Binding<PolozkaDokladu, Double> mnozstvoBinding = binder.forField(tMnozstvo)
-                .withConverter(new StringToDoubleConverter("Nie je číslo"))
+        Binder.Binding<PolozkaDokladu, BigDecimal> mnozstvoBinding = binder.forField(tMnozstvo)
+                .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
                 .bind(PolozkaDokladu::getMnozstvo, PolozkaDokladu::setMnozstvo);
 
 

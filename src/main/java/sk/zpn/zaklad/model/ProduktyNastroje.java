@@ -15,19 +15,14 @@ public class ProduktyNastroje {
         List<Produkt> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getAll", Produkt.class);
-
-        u =  q.getResultList();
-
-        return u;
+        return q.getResultList();
     }
+
     public static List<Produkt> zoznamProduktovZaRok(){
-        List<Produkt> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getZaRok", Produkt.class);
         q.setParameter("rok", ParametreNastroje.nacitajParametre().getRok());
-        u =  q.getResultList();
-
-        return u;
+        return q.getResultList();
     }
 
     public static Optional<Produkt> prvyProduktPodlaNazvu(String nazov){
@@ -55,17 +50,13 @@ public class ProduktyNastroje {
         em.persist(f);
         em.getTransaction().commit();
         return f;
-
-
     }
+
     public static void zmazProdukt(Produkt f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
         em.remove(f);
         em.getTransaction().commit();
-
-
-
     }
 
 

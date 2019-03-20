@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 
 import javax.persistence.*;
 
+import java.math.BigDecimal;
+
 import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "polozkyDokladu")
@@ -32,15 +34,15 @@ public class PolozkaDokladu extends Vseobecne {
     @JoinColumn(nullable = false)
     private Produkt produkt;
 
-    private Double  body;
-    private Double  mnozstvo;
+    private BigDecimal body;
+    private BigDecimal  mnozstvo;
 
     private String poznamka;
 
 
     public PolozkaDokladu() {
-        this.setBody(new Double(1));
-        this.setMnozstvo(new Double(1));
+        this.setBody(new BigDecimal(1));
+        this.setMnozstvo(new BigDecimal(1));
     }
 
 
@@ -148,13 +150,13 @@ public class PolozkaDokladu extends Vseobecne {
         this.prevadzka = prevadzka;
     }
 
-    public Double getBody() {return body;}
+    public BigDecimal getBody() {return body;}
 
-    public void setBody(Double body) {this.body = body;}
+    public void setBody(BigDecimal body) {this.body = body;}
 
-    public Double getMnozstvo() {return mnozstvo;}
+    public BigDecimal getMnozstvo() {return mnozstvo;}
 
-    public void setMnozstvo(Double mnozstvo) {this.mnozstvo = mnozstvo;}
+    public void setMnozstvo(BigDecimal mnozstvo) {this.mnozstvo = mnozstvo;}
 
     public boolean isNew() {
         return this.getId() == null;

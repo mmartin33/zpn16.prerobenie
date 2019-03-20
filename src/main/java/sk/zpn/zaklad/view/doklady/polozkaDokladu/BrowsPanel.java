@@ -7,6 +7,7 @@ import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.zaklad.view.doklady.DokladyView;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
 import java.util.List;
@@ -38,8 +39,8 @@ public class BrowsPanel extends VerticalLayout {
         FilterGrid.Column<PolozkaDokladu, String> colProduktNazov = grid.addColumn(PolozkaDokladu::getProduktNazov).setCaption("Názov produktu").setId("nazovProduktu");
         FilterGrid.Column<PolozkaDokladu, String> colPrevadzkaNazov = grid.addColumn(PolozkaDokladu::getPrevadzkaNazov).setCaption("Prevádzka").setId("nazovPrevadzky");
         FilterGrid.Column<PolozkaDokladu, String> colPoberatel = grid.addColumn(PolozkaDokladu::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
-        FilterGrid.Column<PolozkaDokladu, Double> colBody = grid.addColumn(PolozkaDokladu::getBody).setCaption("Body").setId("body");
-        FilterGrid.Column<PolozkaDokladu, Double> colMnozstvo = grid.addColumn(PolozkaDokladu::getMnozstvo).setCaption("Množstvo").setId("mnozstvo");
+        FilterGrid.Column<PolozkaDokladu, BigDecimal> colBody = grid.addColumn(PolozkaDokladu::getBody).setCaption("Body").setId("body");
+        FilterGrid.Column<PolozkaDokladu, BigDecimal> colMnozstvo = grid.addColumn(PolozkaDokladu::getMnozstvo).setCaption("Množstvo").setId("mnozstvo");
         FilterGrid.Column<PolozkaDokladu, String> colPoznamka = grid.addColumn(PolozkaDokladu::getPoznamka).setCaption("Poznámka").setId("poznamka");
 
         // filters

@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.produkty;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -11,6 +12,7 @@ import sk.zpn.domena.Produkt;
 import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.ProduktyNastroje;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,13 +93,13 @@ public class EditacnyForm extends VerticalLayout {
                 .bind(Produkt::getKat, Produkt::setKat);
         Binder.Binding<Produkt, String> nazovBinding = binder.forField(tNazov)
                 .bind(Produkt::getNazov, Produkt::setNazov);
-        Binder.Binding<Produkt, Double> bodyBinding = binder.forField(tBody)
-                .withConverter(new StringToDoubleConverter("Nie je číslo"))
+        Binder.Binding<Produkt, BigDecimal> bodyBinding = binder.forField(tBody)
+                .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
                 .withValidator(body -> !tBody.getValue().trim().isEmpty(),
                         "Body su povinne")
                 .bind(Produkt::getBody, Produkt::setBody);
-        Binder.Binding<Produkt, Double> kusyBinding = binder.forField(tKusy)
-                .withConverter(new StringToDoubleConverter("Nie je číslo"))
+        Binder.Binding<Produkt, BigDecimal> kusyBinding = binder.forField(tKusy)
+                .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
                 .withValidator(kusy -> !tKusy.getValue().trim().isEmpty(),
                         "Kusy su povinne")
                 .bind(Produkt::getKusy, Produkt::setKusy);

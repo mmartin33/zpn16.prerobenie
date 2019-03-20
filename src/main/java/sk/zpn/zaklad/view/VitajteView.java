@@ -12,6 +12,7 @@ import sk.zpn.zaklad.view.doklady.DokladyView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 
 
+import sk.zpn.zaklad.view.mostik.MostikView;
 import sk.zpn.zaklad.view.nacitanieCSV.NacitanieCSVView;
 
 import sk.zpn.zaklad.view.parametre.ParametreView;
@@ -73,17 +74,14 @@ public class VitajteView extends MojView {
                         n.navigateTo(DokladyView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("odosli")) {
-//                        NacitanieDbfView nacitanieCSVView = new NacitanieDbfView();
-//                        UI.getCurrent().getNavigator().addView(NacitanieDbfView.NAME, nacitanieCSVView);
-//                        n.navigateTo(NacitanieDbfView.NAME);
                         NacitanieCSVView nacitanieCSVView = new NacitanieCSVView();
                         UI.getCurrent().getNavigator().addView(NacitanieCSVView.NAME, nacitanieCSVView);
                         n.navigateTo(NacitanieCSVView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("mostik")) {
-//                        MostikView mostikView = new MostikView();
-//                        UI.getCurrent().getNavigator().addView(MostikView.NAME, mostikView);
-//                        n.navigateTo(MostikView.NAME);
+                        MostikView mostikView = new MostikView();
+                        UI.getCurrent().getNavigator().addView(MostikView.NAME, mostikView);
+                        n.navigateTo(MostikView.NAME);
                     }
                 }
             };
@@ -108,11 +106,7 @@ public class VitajteView extends MojView {
 
             menuLogout = barmenu.addItem("Odhlasenie", null, odhlasenie);
             menuPredajcu = barmenu.addItem("Pre predajcu", null, null);
-<<<<<<< HEAD
             MenuItem menuMostik = menuPredajcu.addItem("Párovaci postik",VaadinIcons.RESIZE_V, mycommand);
-=======
-            MenuItem menuMostik = menuPredajcu.addItem("Párovaci mostik", null, mycommand);
->>>>>>> mostik view zaciatok
             menuMostik.setDescription("mostik");
             MenuItem menuOdosli = menuPredajcu.addItem("Odošli", VaadinIcons.UPLOAD, mycommand);
             menuOdosli.setDescription("odosli");

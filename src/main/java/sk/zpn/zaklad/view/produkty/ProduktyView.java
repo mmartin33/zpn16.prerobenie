@@ -6,6 +6,8 @@ import sk.zpn.domena.Parametre;
 import sk.zpn.domena.Produkt;
 import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.model.ProduktyNastroje;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ProduktyView extends HorizontalLayout implements View {
@@ -45,8 +47,8 @@ public class ProduktyView extends HorizontalLayout implements View {
 
         browsPanel.btnNovy.addClickListener(clickEvent -> editacnyForm.edit(new Produkt()
             .setRok(ParametreNastroje.nacitajParametre().getRok())
-            .setBody(1D)
-            .setKusy(1D)
+            .setBody(BigDecimal.valueOf(1))
+            .setKusy(BigDecimal.valueOf(1))
             ));
         browsPanel.addSelectionListener(editacnyForm::edit);
         refreshProduktov();

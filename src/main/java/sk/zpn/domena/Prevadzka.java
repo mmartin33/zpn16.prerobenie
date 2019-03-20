@@ -8,6 +8,10 @@ import static javax.persistence.CascadeType.PERSIST;
 @Entity(name = "prevadzky")
 @NamedQueries(value = {
         @NamedQuery(name = "Prevadzka.getPodlaNazvu", query = "SELECT p FROM prevadzky p WHERE p.nazov =:nazov"),
+        @NamedQuery(name = "Prevadzka.getPodlaICAaNazvu", query = "SELECT p FROM prevadzky p " +
+                "JOIN p.firma f " +
+                "WHERE f.ico =:ico " +
+                    " and p.nazov =:nazov"),
         @NamedQuery(name = "Prevadzka.getPrevadzkyFirmy", query = "SELECT p FROM prevadzky p WHERE  p.firma=:firma"),
         @NamedQuery(name = "Prevadzka.getAll", query = "SELECT p FROM prevadzky p")})
 

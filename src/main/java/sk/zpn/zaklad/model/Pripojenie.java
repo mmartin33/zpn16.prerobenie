@@ -2,6 +2,7 @@ package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
 import sk.zpn.domena.Firma;
+import sk.zpn.domena.Parametre;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.model.util.TestDataFactory;
@@ -20,6 +21,7 @@ public class Pripojenie {
             Pripojenie.vytvorUzivatela(1, "m", "m", TypUzivatela.ADMIN);
             TestDataFactory testDataFactory = new TestDataFactory();
             testDataFactory.createProdukty();
+            ParametreNastroje.ulozParametre(new Parametre().setRok("2019"));
         }
     }
 

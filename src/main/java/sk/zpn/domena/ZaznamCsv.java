@@ -1,6 +1,8 @@
 package sk.zpn.domena;
 
 import org.apache.log4j.Logger;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -10,9 +12,9 @@ public class ZaznamCsv
 
 {
     private static final Logger logger = Logger.getLogger(Doklad.class);
-    String scm;
+    String kit;
     private String nazov;
-    private Double mnozstvo;
+    private BigDecimal mnozstvo;
     private String nazvFirmy;
     private Date datumVydaja;
     private String mtzDoklad;
@@ -69,11 +71,11 @@ public class ZaznamCsv
         this.nazvFirmy = nazvFirmy;
     }
 
-    public Double getMnozstvo() {
+    public BigDecimal getMnozstvo() {
         return mnozstvo;
     }
 
-    public void setMnozstvo(Double mnozstvo) {
+    public void setMnozstvo(BigDecimal mnozstvo) {
         this.mnozstvo = mnozstvo;
     }
 
@@ -85,11 +87,11 @@ public class ZaznamCsv
         this.nazov = nazov;
     }
 
-    public String getScm() {
-        return scm;
+    public String getKit() {
+        return kit;
     }
 
-    public void setScm(String scm) {
-        this.scm = scm;
+    public void setKit(String kit) {
+        this.kit = kit;
     }
 }

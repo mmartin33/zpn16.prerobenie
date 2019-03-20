@@ -17,6 +17,7 @@ import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
+import sk.zpn.domena.Doklad;
 import sk.zpn.domena.ZaznamCsv;
 import sk.zpn.zaklad.model.DavkaCsvImporter;
 import sk.zpn.zaklad.model.DokladyNastroje;
@@ -148,7 +149,7 @@ public class UploadCSV extends CustomComponent  {
         try {
             zaznam= DavkaCsvImporter.nacitajCsvDavku(file);
             DokladyNastroje.zalozDokladovuDavku(zaznam);
-
+            
             System.out.println(zaznam.size());
         } catch (IOException e) {
             e.printStackTrace();

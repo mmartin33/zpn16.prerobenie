@@ -68,27 +68,26 @@ public class EditacnyForm extends VerticalLayout {
             this::navrhniFirmu,
             this::transformujFirmuNaNazov,
             this::transformujFirmuNaNazovSoZvyraznenymQuery);
-
-
     }
+
     private void nastavComponnenty(){
 
-    Binder.Binding<Uzivatel, String> menoBinding = binder.forField(tMeno)
-        .withValidator(v -> !tMeno.getValue().trim().isEmpty(),
-        "Meno je povinne")
-        .bind(Uzivatel::getMeno, Uzivatel::setMeno);
+        Binder.Binding<Uzivatel, String> menoBinding = binder.forField(tMeno)
+            .withValidator(v -> !tMeno.getValue().trim().isEmpty(),
+            "Meno je povinne")
+            .bind(Uzivatel::getMeno, Uzivatel::setMeno);
 
-    Binder.Binding<Uzivatel, String> typUzivatelaBinding = binder.forField(typUzivatelaComboBox)
-        .bind(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue(),
-            (uzivatel, value) -> uzivatel.setTypUzivatela(
-                TypUzivatela.fromDisplayName(value)));
+        Binder.Binding<Uzivatel, String> typUzivatelaBinding = binder.forField(typUzivatelaComboBox)
+            .bind(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue(),
+                (uzivatel, value) -> uzivatel.setTypUzivatela(
+                    TypUzivatela.fromDisplayName(value)));
 
-    Binder.Binding<Uzivatel, String> hesloBinding = binder.forField(passwordField)
-        .withValidator(v -> !passwordField.getValue().trim().isEmpty(),
-        "Heslo je povinne")
-        // zobrazene heslo bude mat vzdy rovnaku dlzku
-        .bind(v -> v.getHeslo() == null || v.getHeslo().length() == 0 ? "" : "longString",
-              Uzivatel::setHeslo);
+        Binder.Binding<Uzivatel, String> hesloBinding = binder.forField(passwordField)
+            .withValidator(v -> !passwordField.getValue().trim().isEmpty(),
+            "Heslo je povinne")
+            // zobrazene heslo bude mat vzdy rovnaku dlzku
+            .bind(v -> v.getHeslo() == null || v.getHeslo().length() == 0 ? "" : "longString",
+                  Uzivatel::setHeslo);
 
 
         Binder.Binding<Uzivatel, String> firmaBinding = binder.forField(tFirma)
@@ -104,15 +103,15 @@ public class EditacnyForm extends VerticalLayout {
                     (uzivatel, value) -> uzivatel.setStatusUzivatela(
                             StatusUzivatela.fromDisplayName(statusUzivatelaComboBox.getValue())));
 
-    tMeno.addValueChangeListener(event -> menoBinding.validate());
+        tMeno.addValueChangeListener(event -> menoBinding.validate());
 
-    btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
-    btnUloz.addClickListener(this::save);
+        btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        btnUloz.addClickListener(this::save);
 
-    btnZmaz.addClickListener(this::delete);
+        btnZmaz.addClickListener(this::delete);
 
 
-}
+    }
     void edit(Uzivatel uzivatel) {
         uzivateEditovany = uzivatel;
         if (uzivatel != null) {
