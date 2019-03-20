@@ -6,6 +6,7 @@ import sk.zpn.zaklad.model.FirmaProduktNastroje;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.math.BigDecimal;
 
 @Entity(name = "firma_produkt")
 @NamedQueries(value = {
@@ -45,13 +46,13 @@ public class FirmaProdukt {
     private String rok;
 
     @Column(name = "koeficient")
-    private Double koeficient;
+    private BigDecimal koeficient;
 
     public FirmaProdukt() {}
 
     public FirmaProdukt(String rok, Produkt produkt, Firma firma){
         this.kit = "";
-        this.koeficient = 0D;
+        this.koeficient = new BigDecimal(0);
         this.rok =  rok;
         this.produkt = produkt;
         this.firma = firma;
@@ -94,15 +95,15 @@ public class FirmaProdukt {
         this.rok = rok;
     }
 
-    public Double getKoeficient() {
+    public BigDecimal getKoeficient() {
         return koeficient;
     }
 
-    public void setKoeficient(Double koeficient) {
+    public void setKoeficient(BigDecimal koeficient) {
         this.koeficient = koeficient;
     }
 
-    public void setKoeficientAndPersist(Double koeficient) {
+    public void setKoeficientAndPersist(BigDecimal koeficient) {
         this.koeficient = koeficient;
         FirmaProduktNastroje.ulozFirmaProdukt(this);
     }

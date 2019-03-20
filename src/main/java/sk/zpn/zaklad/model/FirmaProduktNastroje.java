@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.ofNullable;
+
 public class FirmaProduktNastroje {
 
     private static final Logger logger = Logger.getLogger(FirmaProduktNastroje.class);
@@ -23,7 +25,7 @@ public class FirmaProduktNastroje {
         return q.getResultList();
     }
 
-    public static FirmaProdukt getFirmaProduktPreImport(Firma firma,Long rok,String kit) {
+    public static FirmaProdukt getFirmaProduktPreImport(Firma firma, String rok, String kit) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<FirmaProdukt> q = em.createNamedQuery("FirmaProdukt.getMostikoveUdaje", FirmaProdukt.class)
             .setParameter("idFirmy", firma.getId())
@@ -31,8 +33,8 @@ public class FirmaProduktNastroje {
             .setParameter("rok",ParametreNastroje.nacitajParametre().getRok());
 
 
-
         return (FirmaProdukt) q;
+
     }
 
 

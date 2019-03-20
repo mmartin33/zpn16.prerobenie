@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.mostik;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -9,6 +10,7 @@ import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
 import sk.zpn.zaklad.view.ViewConstants;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -57,10 +59,10 @@ public class BrowsPanel extends VerticalLayout {
         FilterGrid.Column<FirmaProdukt, String> colNazov = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getNazov())
             .setCaption("Názov")
             .setId("nazov");
-        FilterGrid.Column<FirmaProdukt, Double> colKusy = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getKusy())
+        FilterGrid.Column<FirmaProdukt, BigDecimal> colKusy = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getKusy())
             .setCaption("Kusy")
             .setId("kusy");
-        FilterGrid.Column<FirmaProdukt, Double> colBody = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getBody())
+        FilterGrid.Column<FirmaProdukt, BigDecimal> colBody = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getBody())
             .setCaption("Body")
             .setId("body");
         FilterGrid.Column<FirmaProdukt, String> colKoeficient = grid.addColumn(this::getKoeficientDisplayValue);
@@ -68,8 +70,8 @@ public class BrowsPanel extends VerticalLayout {
             .setId("koeficient")
             .setEditorBinding(binder
                 .forField(new TextField())
-                .withConverter(new StringToDoubleConverter("Koeficient musi byt desatinné číslo"))
-                .withValidator(koeficient -> koeficient != 0D,
+                .withConverter(new StringToBigDecimalConverter("Koeficient musi byt desatinné číslo"))
+                .withValidator(koeficient -> koeficient.compareTo(BigDecimal.valueOf(0)) != 0,
                     "Koeficient nesmie byt prázdny")
                 .bind(FirmaProdukt::getKoeficient,
                     (produkt, koeficient) -> {
@@ -137,8 +139,8 @@ public class BrowsPanel extends VerticalLayout {
     }
 
     private String getKoeficientDisplayValue(FirmaProdukt firmaProdukt) {
-        Double koeficient = firmaProdukt.getKoeficient();
-        return (koeficient == null || koeficient.equals(0D)) ? "" : koeficient.toString();
+        BigDecimal koeficient = firmaProdukt.getKoeficient();
+        return (koeficient == null || koeficient.equals(0)) ? "" : koeficient.toString();
     }
 
     public FirmaProdukt getOznacenyFirmaProdukt() {

@@ -148,7 +148,7 @@ public class UploadCSV extends CustomComponent  {
         List <ZaznamCsv> zaznam;
         try {
             zaznam= DavkaCsvImporter.nacitajCsvDavku(file);
-            DokladyNastroje.zalozkDokladovuDavku(zaznam);
+            DokladyNastroje.zalozDokladovuDavku(zaznam);
             
             System.out.println(zaznam.size());
         } catch (IOException e) {
