@@ -2,7 +2,6 @@ package sk.zpn.zaklad.view.doklady.polozkaDokladu;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
-import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -157,7 +156,7 @@ public class EditacnyForm extends VerticalLayout {
         if (binder.writeBeanIfValid(polozkaEditovana)) {
             boolean jeDokladNovy = polozkaEditovana.isNew();
             polozkaEditovana.setDoklad(polozkyDokladyView.getDoklad());
-            PolozkaDokladu ulozenaPolozka = PolozkaDokladuNastroje.ulozpolozkuDokladu(polozkaEditovana);
+            PolozkaDokladu ulozenaPolozka = PolozkaDokladuNastroje.ulozPolozkuDokladu(polozkaEditovana);
             String msg = String.format("Ulozeny .");
 
             Notification.show(msg, Notification.Type.TRAY_NOTIFICATION);

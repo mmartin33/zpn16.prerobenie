@@ -30,10 +30,11 @@ public class FirmaProduktNastroje {
         TypedQuery<FirmaProdukt> q = em.createNamedQuery("FirmaProdukt.getMostikoveUdaje", FirmaProdukt.class)
             .setParameter("idFirmy", firma.getId())
             .setParameter("kit",kit)
-            .setParameter("rok",ParametreNastroje.nacitajParametre().getRok());
+            .setParameter("rok",rok);
 
-
-        return (FirmaProdukt) q;
+        List results = q.getResultList();
+        if (results.isEmpty()) return null;
+        return (FirmaProdukt) results.get(0);
 
     }
 

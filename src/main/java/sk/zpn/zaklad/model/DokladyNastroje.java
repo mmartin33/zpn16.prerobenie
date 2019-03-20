@@ -8,6 +8,7 @@ import sk.zpn.domena.*;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -68,24 +69,64 @@ public class DokladyNastroje {
             return null;
     }
 
-    public static void zalozDokladovuDavku(List<ZaznamCsv> zaznam) {
+    public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam) {
+        List <ChybaImportu> chyby = new ArrayList<>();;
+        VysledokImportu vysledok=new VysledokImportu();
 
         Doklad hlavickaDokladu=new Doklad();
-        hlavickaDokladu.setCisloDokladu(noveCisloDokladu());
-        hlavickaDokladu.setTypDokladu(TypDokladu.DAVKA);
-        hlavickaDokladu.setDatum(new Date());
-        hlavickaDokladu.setFirma(UzivatelNastroje.getVlastnuFirmuPrihlasenehoUzivala());
-        DokladyNastroje.ulozDoklad(hlavickaDokladu);
-        for (ZaznamCsv z: zaznam){
-            PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
 
+        String noveCisloDokladu = noveCisloDokladu();
+        if   (noveCisloDokladu==null || noveCisloDokladu.isEmpty()){
+            chyby.add(new ChybaImportu(
+                    "",
+                    "",
+                    "",
+                    "Nepodarilo sa vygenerovat cislo dokladu"));
+            return vysledok;
         }
 
+        hlavickaDokladu.setCisloDokladu(noveCisloDokladu);
+        hlavickaDokladu.setTypDokladu(TypDokladu.DAVKA);
+        hlavickaDokladu.setDatum(new Date());
+
+        hlavickaDokladu.setFirma(UzivatelNastroje.getVlastnuFirmuPrihlasenehoUzivala());
+
+
+
+        List<PolozkaDokladu> polozkyDokladu = new ArrayList<>();;
+        for (ZaznamCsv z: zaznam){
+            PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
+            if (pd!=null)
+                polozkyDokladu.add(pd);
+            else
+                chyby.add(new ChybaImportu(
+                    z.getNazvFirmy(),
+                    z.getIco(),
+                    z.getKit(),
+                    "Nepodarilo sa zalozit polozku dokladu"));
+
+        }
+        DokladyNastroje.ulozDokladDavky(hlavickaDokladu,polozkyDokladu);
+
+        vysledok.setDoklad(hlavickaDokladu);
+        vysledok.setPolozky(polozkyDokladu);
+        vysledok.setChyby(chyby);
+        return vysledok;
 
 
 
 
 
 
+    }
+
+    private static void ulozDokladDavky(Doklad hlavickaDokladu, List<PolozkaDokladu> polozkyDokladu) {
+        if (polozkyDokladu.size()==0)
+            return;
+
+        ulozDoklad(hlavickaDokladu);
+        for (PolozkaDokladu polozka: polozkyDokladu){
+            PolozkaDokladuNastroje.ulozPolozkuDokladu(polozka);
+        }
     }
 }

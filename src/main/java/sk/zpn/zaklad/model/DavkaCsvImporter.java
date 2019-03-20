@@ -36,7 +36,7 @@ public class DavkaCsvImporter {
                     zaznam.setDatumVydaja(formatter.parse(nextLine[4]));
                     zaznam.setMtzDoklad(nextLine[5]);
                     zaznam.setIco(nextLine[6]);
-                    zaznam.setMalopredaj(nextLine[6].contains("A"));
+                    zaznam.setMalopredaj(nextLine[7].contains("A"));
                     zaznam.setPcIco(Integer.parseInt(nextLine[8]));
                 }
             } catch (ParseException e) {

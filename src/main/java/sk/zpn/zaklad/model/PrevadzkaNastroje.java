@@ -72,28 +72,59 @@ public class PrevadzkaNastroje {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         if (p.isNew())
             p.setId((long)0);
+
+        p.setPoberatel(PoberatelNastroje.ulozPrvehoPoberatela(p));
+
         System.out.println("Ulozena prevadzka:"+p.getNazov());
         em.getTransaction().begin();
         em.persist(p);
         em.getTransaction().commit();
+
+
         return p;
 
     }
 
-    public static Prevadzka najdiAleboZaloz(String ico, String nazvFirmy) {
+    public static Prevadzka najdiAleboZaloz(String ico, String nazovFirmy) {
 
+        if (ico==null ||ico.isEmpty())
+            return null;
+        if (nazovFirmy==null ||nazovFirmy.isEmpty())
+            return null;
+        //hladame prevadzku podla ica a nazvu
+        Prevadzka prevadzka =prevadzkaPodlaICOaNazvu(ico, nazovFirmy);
+        if (prevadzka!=null)
+            return prevadzka;
+        //hladame firmu podla ica
+        Firma firma =FirmaNastroje.firmaPodlaICO(ico);
+        if (firma!=null) {
+            prevadzka = ulozPrvuPrevadzku(firma);
+            return prevadzka;
+        }
+        //zaklada sa firma
+        firma=new Firma();
+        firma.setIco(ico);
+        firma.setNazov(nazovFirmy);
+        Firma novaFirma=FirmaNastroje.ulozFirmu(firma);
+        if (novaFirma==null)
+            return null;
+        //zaklada sa prevadzka
+        prevadzka = ulozPrvuPrevadzku(firma);
+        return prevadzka;
 
-        return null;
     }
 
 
-    public static Optional<Prevadzka> PrevadzkaPodlaICOaNazvu(String ico, String nazov){
+    public static Prevadzka prevadzkaPodlaICOaNazvu(String ico, String nazov){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Prevadzka> q = em.createNamedQuery("Prevadzka.getPodlaICAaNazvu", Prevadzka.class)
                 .setParameter("nazov", nazov)
                 .setParameter("ico", ico);
-        List<Prevadzka> prevadzka = q.getResultList();
-        return prevadzka.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
+
+        List results = q.getResultList();
+        if (results.isEmpty()) return null;
+        return (Prevadzka) results.get(0);
+
     }
 
 

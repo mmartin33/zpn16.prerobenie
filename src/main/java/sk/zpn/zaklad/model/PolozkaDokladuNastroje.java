@@ -2,10 +2,7 @@ package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
 import org.apache.log4j.Logger;
-import sk.zpn.domena.Doklad;
-import sk.zpn.domena.FirmaProdukt;
-import sk.zpn.domena.PolozkaDokladu;
-import sk.zpn.domena.ZaznamCsv;
+import sk.zpn.domena.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -25,7 +22,7 @@ public class PolozkaDokladuNastroje {
         return Optional.ofNullable(q.getSingleResult());
     }
 
-    public static PolozkaDokladu ulozpolozkuDokladu(PolozkaDokladu d) {
+    public static PolozkaDokladu ulozPolozkuDokladu(PolozkaDokladu d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         if (d.isNew())
             d.setId((long) 0);
@@ -58,25 +55,33 @@ public class PolozkaDokladuNastroje {
 
     public static PolozkaDokladu vytvorPolozkuZoZaznamuCSV(ZaznamCsv zaznam, Doklad doklad) {
         PolozkaDokladu pd = new PolozkaDokladu();
-        FirmaProdukt fp = FirmaProduktNastroje.getFirmaProduktPreImport(doklad.getFirma(),
-                                                                        ParametreNastroje.nacitajParametre().getRok(),
-                                                                        zaznam.getKit());
+        FirmaProdukt fp = new FirmaProdukt();
+
+        fp=FirmaProduktNastroje.getFirmaProduktPreImport(doklad.getFirma(),
+                                                                      ParametreNastroje.nacitajParametre().getRok(),
+                                                                               zaznam.getKit());
+
         if (fp==null)
             return null;
-
         pd.setDoklad(doklad);
 
         if (fp.getKoeficient()!=null && fp.getKoeficient().compareTo(BigDecimal.valueOf(0))!=0 )
                 pd.setMnozstvo(zaznam.getMnozstvo().multiply(fp.getKoeficient()));
         else
             pd.setMnozstvo(zaznam.getMnozstvo());
-
         pd.setBody(pd.getBody().multiply(pd.getMnozstvo()));
-        pd.setPrevadzka(PrevadzkaNastroje.najdiAleboZaloz(zaznam.getIco(), zaznam.getNazvFirmy()));
-//        pd.setPoberatel();
-//        pd.setProdukt();
-//       pd.set
-        return null;
+
+        Prevadzka prevadzka=PrevadzkaNastroje.najdiAleboZaloz(zaznam.getIco(), zaznam.getNazvFirmy());
+        if (prevadzka==null)
+            return null;
+        pd.setPrevadzka(prevadzka);
+        pd.setPoberatel(prevadzka.getPoberatel());
+
+        pd.setPoznamka(zaznam.getMtzDoklad());
+        pd.setProdukt(fp.getProdukt());
+
+
+        return pd;
     }
 
 }

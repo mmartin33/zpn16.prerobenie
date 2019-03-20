@@ -18,6 +18,7 @@ import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
 import sk.zpn.domena.Doklad;
+import sk.zpn.domena.VysledokImportu;
 import sk.zpn.domena.ZaznamCsv;
 import sk.zpn.zaklad.model.DavkaCsvImporter;
 import sk.zpn.zaklad.model.DokladyNastroje;
@@ -32,7 +33,7 @@ public class UploadCSV extends CustomComponent  {
     Panel panel;
     VerticalLayout layout;
     String adresar="/c:/zpn/upload/";
-
+    VysledokImportu vysledokSpracovania;
 
     public void init() {
         class FileReceiver implements Receiver, SucceededListener {
@@ -144,17 +145,26 @@ public class UploadCSV extends CustomComponent  {
         layout.addComponentsAndExpand(label);
         layout.addComponentsAndExpand(btnSpat);
     }
+
     void zhrajDavku(String file){
         List <ZaznamCsv> zaznam;
         try {
             zaznam= DavkaCsvImporter.nacitajCsvDavku(file);
-            DokladyNastroje.zalozDokladovuDavku(zaznam);
-            
+            this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
+
             System.out.println(zaznam.size());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void setVysledokSpracovania(VysledokImportu vysledokSpracovania) {
+        this.vysledokSpracovania = vysledokSpracovania;
+    }
+
+    public VysledokImportu getVysledokSpracovania() {
+        return vysledokSpracovania;
     }
 //    void advanced(VerticalLayout layout) {
 //        // BEGIN-EXAMPLE: component.upload.advanced

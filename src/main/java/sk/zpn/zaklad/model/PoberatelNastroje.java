@@ -3,6 +3,7 @@ package sk.zpn.zaklad.model;
 import com.vaadin.server.VaadinSession;
 import org.apache.log4j.Logger;
 import sk.zpn.domena.Poberatel;
+import sk.zpn.domena.Prevadzka;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -23,6 +24,22 @@ public class PoberatelNastroje {
 
         return u;
     }
+
+    public static Poberatel ulozPrvehoPoberatela(Prevadzka prevadzka) {
+        Poberatel poberatel=new Poberatel();
+        poberatel.setMeno(prevadzka.getNazov());
+
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        if (poberatel.isNew())
+            poberatel.setId((long)0);
+
+        em.getTransaction().begin();
+        em.persist(poberatel);
+        em.getTransaction().commit();
+        return poberatel;
+
+    }
+
 
     public static Poberatel ulozPoberatela(Poberatel f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");

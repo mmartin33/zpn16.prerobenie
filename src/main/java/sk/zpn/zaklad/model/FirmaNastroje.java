@@ -27,6 +27,8 @@ public class FirmaNastroje {
         return firmy.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
     }
 
+
+
     public static Optional<Firma> firmaPodlaID(Long id){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Firma> q = em.createNamedQuery("Firma.getPodlaID", Firma.class)
@@ -58,5 +60,20 @@ public class FirmaNastroje {
     }
 
 
-
+    public static Firma firmaPodlaICOaNazvu(String ico, String nazovFirmy) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Firma> q = em.createNamedQuery("Firma.getPodlaICOaNazvu", Firma.class)
+                .setParameter("nazov", nazovFirmy)
+                .setParameter("ico", ico);
+        Firma firma = q.getSingleResult();
+        return  firma;
+    }
+    public static Firma firmaPodlaICO(String ico) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Firma> q = em.createNamedQuery("Firma.getPodlaICO", Firma.class)
+                .setParameter("ico", ico);
+        List results = q.getResultList();
+        if (results.isEmpty()) return null;
+        return (Firma) results.get(0);
+    }
 }
