@@ -4,6 +4,7 @@ import com.vaadin.server.VaadinSession;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
+import sk.zpn.zaklad.model.util.TestDataFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,12 +13,14 @@ import javax.persistence.Persistence;
 public class Pripojenie {
     private static EntityManager em;
     public Pripojenie(){
-
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
-    em = emf.createEntityManager();
-    VaadinSession.getCurrent().setAttribute("createEntityManager",em);
-    if (UzivatelNastroje.prazdnyUzivatelia())
-         Pripojenie.vytvorUzivatela(1,"m","m", TypUzivatela.ADMIN);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        em = emf.createEntityManager();
+        VaadinSession.getCurrent().setAttribute("createEntityManager",em);
+        if (UzivatelNastroje.prazdnyUzivatelia()) {
+            Pripojenie.vytvorUzivatela(1, "m", "m", TypUzivatela.ADMIN);
+            TestDataFactory testDataFactory = new TestDataFactory();
+            testDataFactory.createProdukty();
+        }
     }
 
     public static void vytvorUzivatela(int id, String meno, String heslo, TypUzivatela typUzivatela) {

@@ -38,7 +38,8 @@ public class BrowsPanel extends VerticalLayout {
             FilterGrid.Column<Produkt, String> colNazov = grid.addColumn(Produkt::getNazov).setCaption("Názov").setId("nazov");
             FilterGrid.Column<Produkt, Double> colKusy = grid.addColumn(Produkt::getKusy).setCaption("kusy").setId("kusy");
             FilterGrid.Column<Produkt, Double> colBody = grid.addColumn(Produkt::getBody).setCaption("Body").setId("body");
-            FilterGrid.Column<Produkt, String> colFirmaNazov = grid.addColumn(Produkt::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
+//            TODO pridat cez query na vazobnu entitu
+//            FilterGrid.Column<Produkt, String> colFirmaNazov = grid.addColumn(Produkt::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
 
             // filters
             colRok.setFilter(new TextField(), StringComparator.containsIgnoreCase());
@@ -46,10 +47,10 @@ public class BrowsPanel extends VerticalLayout {
             colNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colKusy.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colBody.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-            colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+//            colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
 
 //
-            grid.setColumnOrder(colKat,colNazov,colKusy,colBody,colFirmaNazov);
+            grid.setColumnOrder(colKat,colNazov,colKusy,colBody);
 
 
 

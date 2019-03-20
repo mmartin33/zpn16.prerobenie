@@ -1,12 +1,11 @@
 package sk.zpn.domena;
 
 
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import static javax.persistence.CascadeType.PERSIST;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Entity(name = "produkty")
 @NamedQueries(value = {
@@ -23,75 +22,58 @@ import static javax.persistence.CascadeType.PERSIST;
 
 public class Produkt extends Vseobecne {
 
-
     @NotNull
     @Pattern(regexp = "[a-z0-9._%+-]$", message = "Zly kod")
-    @Column(name = "kat", nullable = false,unique = true)
-
+    @Column(name = "kat", nullable = false)
     private String kat;
+
+    @OneToMany(mappedBy = "produkt")
+    private List<FirmaProdukt> firmaMostik;
+
     private String nazov;
-    private Double body;
-    private Double kusy;
+    private BigDecimal body;
+    private BigDecimal kusy;
     private String rok;
 
-
-
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
-    @JoinColumn(nullable = true)
-
-    private Firma firma;
-
-
-
-    private Produkt produkt;
-
-    public Produkt() {
-
-    }
-    public Produkt(String rok) {
-        this.setRok(rok);
-        this.setBody(new Double(1));
-        this.setKusy(new Double(1));
-    }
-
-    public Produkt getProdukt() {return produkt;}
-
-    public void setProdukt(Produkt produkt) {this.produkt = produkt;}
+    public Produkt() {}
 
     public String getRok() {return rok;}
 
-    public void setRok(String rok) {this.rok = rok;}
+    public Produkt setRok(String rok) {
+        this.rok = rok;
+        return this;
+    }
 
-    public Double getKusy() {return kusy;}
+    public BigDecimal getKusy() {return kusy;}
 
-    public void setKusy(Double kusy) {this.kusy = kusy;}
+    public Produkt setKusy(BigDecimal kusy) {
+        this.kusy = kusy;
+        return this;
+    }
 
-    public Double getBody() {return body;}
+    public BigDecimal getBody() {return body;}
 
-    public void setBody(Double body) {this.body = body;}
+    public Produkt setBody(BigDecimal body) {
+        this.body = body;
+        return this;
+    }
 
     public String getNazov() {return nazov;}
 
-    public void setNazov(String nazov) {this.nazov = nazov;}
+    public Produkt setNazov(String nazov) {
+        this.nazov = nazov;
+        return this;
+    }
 
     public String getKat() {return kat;}
 
-    public void setKat(String kat) {this.kat = kat;}
-
-    public Firma getFirma() {return firma;}
-
-    public void setFirma(Firma firma) {this.firma = firma;}
+    public Produkt setKat(String kat) {
+        this.kat = kat;
+        return this;
+    }
 
     public boolean isNew() {
         return this.getId() == null;
-    }
-
-    public String getFirmaNazov() {
-        if (firma == null)
-            return "";
-        else
-            return firma.getNazov();
     }
 
 

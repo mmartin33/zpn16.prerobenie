@@ -2,6 +2,7 @@ package sk.zpn.zaklad.view.produkty;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.HorizontalLayout;
+import sk.zpn.domena.Parametre;
 import sk.zpn.domena.Produkt;
 import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.model.ProduktyNastroje;
@@ -42,7 +43,11 @@ public class ProduktyView extends HorizontalLayout implements View {
         editacnyForm.setProduktyView(this);
 
 
-        browsPanel.btnNovy.addClickListener(clickEvent -> editacnyForm.edit(new Produkt(ParametreNastroje.nacitajParametre().getRok())));
+        browsPanel.btnNovy.addClickListener(clickEvent -> editacnyForm.edit(new Produkt()
+            .setRok(ParametreNastroje.nacitajParametre().getRok())
+            .setBody(1D)
+            .setKusy(1D)
+            ));
         browsPanel.addSelectionListener(editacnyForm::edit);
         refreshProduktov();
     }

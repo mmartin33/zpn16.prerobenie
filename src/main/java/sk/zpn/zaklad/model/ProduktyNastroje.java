@@ -60,7 +60,6 @@ public class ProduktyNastroje {
     }
     public static void zmazProdukt(Produkt f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        System.out.println("Vymazany produkt:"+f.getProdukt());
         em.getTransaction().begin();
         em.remove(f);
         em.getTransaction().commit();

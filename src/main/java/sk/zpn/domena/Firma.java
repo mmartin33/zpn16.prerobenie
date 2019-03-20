@@ -26,6 +26,9 @@ public class Firma extends Vseobecne {
     @JoinColumn(name = "firma_id")
     private List<Uzivatel> listUzivatelov;
 
+    @OneToMany(mappedBy = "firma")
+    private List<FirmaProdukt> produktMostik;
+
     public Firma() {
 
     }
@@ -86,6 +89,14 @@ public class Firma extends Vseobecne {
 
     public void setListUzivatelov(List<Uzivatel> listUzivatelov) {
         this.listUzivatelov = listUzivatelov;
+    }
+
+    public List<FirmaProdukt> getProduktMostik() {
+        return produktMostik;
+    }
+
+    public void setProduktMostik(List<FirmaProdukt> produktMostik) {
+        this.produktMostik = produktMostik;
     }
 }
 

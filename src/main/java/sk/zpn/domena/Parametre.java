@@ -20,12 +20,10 @@ public class Parametre extends Vseobecne {
     public Parametre() {
 
     }
-
-    public Parametre(String rok) {
-        this.rok = rok;
-    }
     public String getRok() {return rok;
     }
-    public void setRok(String rok) {this.rok = rok;
+    public Parametre setRok(String rok) {
+        this.rok = rok;
+        return this;
     }
 }

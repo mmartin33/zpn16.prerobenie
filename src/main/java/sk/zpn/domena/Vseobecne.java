@@ -14,8 +14,9 @@ public abstract class Vseobecne {
         return id;
     }
 
-    public void setId(Long id) {
+    public Vseobecne setId(Long id) {
         this.id = id;
+        return this;
     }
 
 

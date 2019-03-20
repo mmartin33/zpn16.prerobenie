@@ -1,14 +1,16 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
+import org.apache.log4j.Logger;
 import sk.zpn.domena.Parametre;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.util.Optional;
 
 public class ParametreNastroje {
+
+    private static final Logger logger = Logger.getLogger(Parametre.class);
 
     public static Parametre ulozParametre(Parametre parametre) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
@@ -20,15 +22,20 @@ public class ParametreNastroje {
     }
 
     public static Parametre nacitajParametre() {
-        Parametre  p=null;
-        try{
+        try {
             EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
             TypedQuery<Parametre> q = em.createNamedQuery("Parametre.get", Parametre.class);
-            p=q.getSingleResult();
-            return p;
-        } catch(NoResultException e) {
-            return new Parametre();
+            return q.getSingleResult();
+        } catch (NoResultException e){
+            logger.error("No parameters found", e);
+            return createDefaultParameters();
         }
-
     }
+
+    private static Parametre createDefaultParameters() {
+        return new Parametre().setRok("2019");
+    }
+
+
+
 }
