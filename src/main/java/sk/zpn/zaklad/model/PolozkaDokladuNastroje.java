@@ -49,7 +49,7 @@ public class PolozkaDokladuNastroje {
     }
 
     public static List<PolozkaDokladu> zoznamPoloziekDokladov(Doklad d) {
-        //todo doplnit filter na doklad aj na domene
+
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<PolozkaDokladu> q = em.createNamedQuery("PolozkaDokladu.getPolozkyJednehoDokladu", PolozkaDokladu.class);
         q.setParameter("doklad", d);

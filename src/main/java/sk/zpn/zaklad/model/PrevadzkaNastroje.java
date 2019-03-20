@@ -81,6 +81,20 @@ public class PrevadzkaNastroje {
     }
 
     public static Prevadzka najdiAleboZaloz(String ico, String nazvFirmy) {
+
+
         return null;
     }
+
+
+    public static Optional<Prevadzka> PrevadzkaPodlaICOaNazvu(String ico, String nazov){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Prevadzka> q = em.createNamedQuery("Prevadzka.getPodlaICAaNazvu", Prevadzka.class)
+                .setParameter("nazov", nazov)
+                .setParameter("ico", ico);
+        List<Prevadzka> prevadzka = q.getResultList();
+        return prevadzka.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
+    }
+
+
 }

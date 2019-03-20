@@ -18,8 +18,8 @@ import java.math.BigDecimal;
         "JOIN fp.firma firmy " +
         "JOIN fp.produkt produkt " +
         "WHERE firmy.id =:idFirmy" +
-                "and  fp.kit=:kit" +
-                "and fp.rok=:rok"),
+                " and  fp.kit=:kit" +
+                " and fp.rok=:rok"),
     @NamedQuery(name = "FirmaProdukt.getAll", query = "SELECT fp FROM firma_produkt fp " +
         "JOIN fp.firma firmy " +
         "JOIN fp.produkt produkt")
