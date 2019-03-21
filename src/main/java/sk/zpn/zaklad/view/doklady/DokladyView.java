@@ -61,6 +61,12 @@ public class DokladyView extends HorizontalLayout implements View {
     void selectFirst() {
         browsPanel.selectFirst();
     }
+    void selectNejaky(Doklad staryDokladEditovany) {
+        if (staryDokladEditovany!=null)
+           browsPanel.selectDoklad(staryDokladEditovany);
+        else
+            browsPanel.selectFirst();
+    }
 
     void selectDoklad(Doklad doklad) {
         browsPanel.selectDoklad(doklad);

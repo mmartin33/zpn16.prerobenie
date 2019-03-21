@@ -6,6 +6,7 @@ import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.ChybaImportu;
 import sk.zpn.domena.Poberatel;
+import sk.zpn.domena.VysledokImportu;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
@@ -13,23 +14,22 @@ import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class BrowsPanelVysledku extends VerticalLayout {
+public class BrowsPanelVysledkov extends VerticalLayout {
 
     private NacitanieCSVView nacitanieCSVView;
     private FilterGrid<ChybaImportu> grid;
-    private List<ChybaImportu> chybyList;
+    private VysledokImportu vysledokImportu;
+
 
 
     public Button btnNovy;
 
+        public BrowsPanelVysledkov(){}
 
-        public BrowsPanelVysledku(List<ChybaImportu> chybyList, NacitanieCSVView nacitanieCSVView) {
-
-            this.nacitanieCSVView = nacitanieCSVView;
-            this.chybyList = chybyList;
+        private void  init(){
             this.setSpacing(false);
             grid = new FilterGrid<>();
-            grid.setItems(this.chybyList);
+            grid.setItems(this.vysledokImportu.getChyby());
 
             grid.addStyleName("test");
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
@@ -68,7 +68,19 @@ public class BrowsPanelVysledku extends VerticalLayout {
 
 
         }
+
+    public VysledokImportu getVysledokImportu() {
+        return vysledokImportu;
     }
+
+    public void setVysledokImportu(VysledokImportu vysledokImportu) {
+        this.vysledokImportu = vysledokImportu;
+        this.init();
+        this.setVisible(true);
+        this.refresh();
+
+    }
+}
 
 
 

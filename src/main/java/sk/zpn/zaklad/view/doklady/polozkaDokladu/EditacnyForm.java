@@ -29,6 +29,7 @@ public class EditacnyForm extends VerticalLayout {
     protected Button btnZmaz;
 
     private final Binder <PolozkaDokladu> binder = new Binder<>();
+    private PolozkaDokladu staraEditovana;
     private PolozkaDokladu polozkaEditovana;
     private PolozkyDokladuView polozkyDokladyView;
     private Poberatel aktualnyPoberatel;
@@ -143,6 +144,7 @@ public class EditacnyForm extends VerticalLayout {
 
 }
     void edit(PolozkaDokladu polozkaDokladu) {
+        staraEditovana=polozkaEditovana;
         polozkaEditovana = polozkaDokladu;
         aktualnyPoberatel=polozkaDokladu.getPoberatel();
         if (polozkaDokladu != null) {

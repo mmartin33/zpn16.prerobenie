@@ -22,6 +22,8 @@ public class BrowsPanel extends VerticalLayout {
     private FilterGrid<Doklad> grid;
     private List<Doklad> dokladyList;
 
+
+
     PolozkyDokladuView polozkyDokladuView;
     public Button btnNovy;
     public Button btnPolozky;
@@ -34,6 +36,7 @@ public class BrowsPanel extends VerticalLayout {
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setWidth(1000, Unit.PIXELS);
         grid.setHeight(700, Unit.PIXELS);
+
 
 
 

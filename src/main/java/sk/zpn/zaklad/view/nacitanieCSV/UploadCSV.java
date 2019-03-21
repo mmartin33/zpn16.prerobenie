@@ -25,6 +25,7 @@ import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
+
 public class UploadCSV extends CustomComponent  {
     private static final long serialVersionUID = -4292553844521293140L;
     Upload upload;
@@ -34,6 +35,11 @@ public class UploadCSV extends CustomComponent  {
     VerticalLayout layout;
     String adresar="/c:/zpn/upload/";
     VysledokImportu vysledokSpracovania;
+    private NacitanieCSVView nacitanieView;
+
+    public UploadCSV(NacitanieCSVView nacitanieCSVView) {
+        this.nacitanieView=nacitanieCSVView;
+    }
 
     public void init() {
         class FileReceiver implements Receiver, SucceededListener {
@@ -150,8 +156,9 @@ public class UploadCSV extends CustomComponent  {
         List <ZaznamCsv> zaznam;
         try {
             zaznam= DavkaCsvImporter.nacitajCsvDavku(file);
-            this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
-
+            //this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
+            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file);
+            nacitanieView.setVysledokImportu(vi);
             System.out.println(zaznam.size());
         } catch (IOException e) {
             e.printStackTrace();

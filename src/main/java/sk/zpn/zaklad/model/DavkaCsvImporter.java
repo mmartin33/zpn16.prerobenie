@@ -24,11 +24,13 @@ public class DavkaCsvImporter {
 
         String [] nextLine;
         List<ZaznamCsv> davka =new ArrayList<ZaznamCsv>();;
-        ZaznamCsv zaznam=new ZaznamCsv();
+
         reader.readNext();
         while ((nextLine = reader.readNext()) != null) {
+            ZaznamCsv zaznam=new ZaznamCsv();
             try {
                 if (!nextLine[0].isEmpty() && nextLine[0]!=null && nextLine!=null) {
+
                     zaznam.setKit(nextLine[0]);
                     zaznam.setNazov(nextLine[1]);
                     zaznam.setMnozstvo(new BigDecimal(nextLine[2].replace(",", ".")));

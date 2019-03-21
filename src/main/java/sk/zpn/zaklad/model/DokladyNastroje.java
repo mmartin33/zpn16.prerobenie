@@ -26,8 +26,10 @@ public class DokladyNastroje {
     }
     public static Doklad ulozDoklad(Doklad d){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        if (d.isNew())
-            d.setId((long)0);
+        if (d.isNew()) {
+            d.setId((long) 0);
+            d.setKedy();
+        }
         System.out.println("Ulozeny dokald"+d.getCisloDokladu());
         em.getTransaction().begin();
         em.persist(d);
@@ -69,13 +71,14 @@ public class DokladyNastroje {
             return null;
     }
 
-    public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam) {
+    public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam, String file) {
         List <ChybaImportu> chyby = new ArrayList<>();;
         VysledokImportu vysledok=new VysledokImportu();
 
         Doklad hlavickaDokladu=new Doklad();
 
         String noveCisloDokladu = noveCisloDokladu();
+
         if   (noveCisloDokladu==null || noveCisloDokladu.isEmpty()){
             chyby.add(new ChybaImportu(
                     "",
@@ -88,6 +91,7 @@ public class DokladyNastroje {
         hlavickaDokladu.setCisloDokladu(noveCisloDokladu);
         hlavickaDokladu.setTypDokladu(TypDokladu.DAVKA);
         hlavickaDokladu.setDatum(new Date());
+        hlavickaDokladu.setPoznamka(file);
 
         hlavickaDokladu.setFirma(UzivatelNastroje.getVlastnuFirmuPrihlasenehoUzivala());
 

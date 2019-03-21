@@ -33,6 +33,7 @@ public class EditacnyForm extends VerticalLayout {
     protected Button btnUloz;
     protected Button btnZmaz;
     private final Binder<Doklad> binder = new Binder<>();
+    private Doklad staryDokladEditovany;
     private Doklad dokladEditovany;
     private DokladyView dokladyView;
 
@@ -116,6 +117,7 @@ public class EditacnyForm extends VerticalLayout {
 
 }
     void edit(Doklad doklad) {
+        staryDokladEditovany=dokladEditovany;
         dokladEditovany = doklad;
         if (doklad != null) {
             binder.readBean(doklad);
@@ -157,7 +159,7 @@ public class EditacnyForm extends VerticalLayout {
                             dokladyView.odstranDoklad(dokladEditovany);
                             Notification.show("Doklad odstránený", Notification.Type.TRAY_NOTIFICATION);
                             clearEditacnyForm();
-                            dokladyView.selectFirst();
+                            dokladyView.selectNejaky(staryDokladEditovany);
                         }
                     }
         });
