@@ -2,6 +2,7 @@ package sk.zpn.zaklad.view;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.ClassResource;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
@@ -39,9 +40,15 @@ public class VitajteView extends MojView {
             MenuBar barmenu = new MenuBar();
             this.addComponent(barmenu);
             HorizontalLayout infoPanel=new HorizontalLayout();
-            ExternalResource resource = new ExternalResource("/img/zpn_logo.jpg");
-            infoPanel.addComponentsAndExpand(new Image(null,resource));
-            this.addComponent(infoPanel);
+            local(this);
+
+
+
+
+
+//        ExternalResource resource = new ExternalResource("/img/zpn_logo.jpg");
+//        infoPanel.addComponentsAndExpand(new Image(null,resource));
+//            this.addComponent(infoPanel);
             // A top-level menu item that opens a submenu
 
             MenuBar.Command mycommand = new MenuBar.Command() {
@@ -144,6 +151,13 @@ public class VitajteView extends MojView {
 
         }
 
+     void local(VerticalLayout layout) {
+//    ExternalResource resource =
+//    new ExternalResource("/img/zpn_logo.png");
+//    Embedded image = new Embedded("", resource);
+    layout.addComponent(new Image(null, new ClassResource("/img/zpn_logo.png")));
+
+    }
 
 
     @Override

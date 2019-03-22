@@ -5,8 +5,8 @@ import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Produkt;
-import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.view.VitajteView;
+import sk.zpn.zaklad.view.firmy.FirmyView;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,6 +20,8 @@ public class BrowsPanel extends VerticalLayout {
 
 
     public Button btnNovy;
+    public Button btnFirmy;
+    private FirmyView firmyView;
 
 
         public BrowsPanel(List<Produkt> produktList) {
@@ -62,13 +64,14 @@ public class BrowsPanel extends VerticalLayout {
                     UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME);}
             );
 
-
+            btnFirmy =new Button("Firmy", VaadinIcons.BUILDING);
 
             HorizontalLayout tlacitkovy=new HorizontalLayout();
             btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
 
             tlacitkovy.addComponent(btnNovy);
+            tlacitkovy.addComponent(btnFirmy);
             tlacitkovy.addComponent(btnSpat);//666
 
 

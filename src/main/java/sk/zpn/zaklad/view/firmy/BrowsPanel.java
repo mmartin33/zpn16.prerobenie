@@ -20,6 +20,7 @@ public class BrowsPanel extends VerticalLayout {
     private PrevadzkyView prevadzkyView;
 
     public Button btnNovy;
+    public Button btnSpat;
     public Button btnPrevadzky;
 
 
@@ -52,10 +53,10 @@ public class BrowsPanel extends VerticalLayout {
 
             grid.setColumnOrder(colIco, colNazov,colIcDPH,colDic);
 
-            Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
-            btnSpat.addClickListener(clickEvent ->
-                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
-            );
+            btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
+//            btnSpat.addClickListener(clickEvent ->
+//                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
+//            );
 
             btnPrevadzky=new Button("Prevadzky", VaadinIcons.BOOK);
             btnPrevadzky.addClickListener(clickEvent -> {

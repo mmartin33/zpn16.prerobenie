@@ -79,6 +79,7 @@ public class PolozkaDokladuNastroje {
 
         pd.setPoznamka(zaznam.getMtzDoklad());
         pd.setProdukt(fp.getProdukt());
+        pd.setPoznamka(zaznam.getMtzDoklad());
 
 
         return pd;

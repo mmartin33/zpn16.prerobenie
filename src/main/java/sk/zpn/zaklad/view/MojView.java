@@ -16,8 +16,8 @@ public abstract class  MojView  extends VerticalLayout implements View {
         Navigator n;
         public MojView() {
                 setSizeFull();
-                setSpacing(true);
-                addStyleName("aaaa");
+                setSpacing(false);
+                //addStyleName("aaaa");
 
         }
 

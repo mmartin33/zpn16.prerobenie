@@ -2,10 +2,12 @@ package sk.zpn.zaklad.view.produkty;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import sk.zpn.domena.Parametre;
 import sk.zpn.domena.Produkt;
 import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.model.ProduktyNastroje;
+import sk.zpn.zaklad.view.firmy.FirmyView;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -46,12 +48,21 @@ public class ProduktyView extends HorizontalLayout implements View {
 
 
         browsPanel.btnNovy.addClickListener(clickEvent -> editacnyForm.edit(new Produkt()
+
             .setRok(ParametreNastroje.nacitajParametre().getRok())
             .setBody(BigDecimal.valueOf(1))
             .setKusy(BigDecimal.valueOf(1))
             ));
+        browsPanel.btnFirmy.addClickListener(clickEvent -> spustiFirmy());
         browsPanel.addSelectionListener(editacnyForm::edit);
         refreshProduktov();
+    }
+
+    private void spustiFirmy() {
+        FirmyView firmyView = new FirmyView(ProduktyView.NAME);
+        UI.getCurrent().getNavigator().addView(FirmyView.NAME, firmyView);
+        UI.getCurrent().getNavigator().navigateTo(FirmyView.NAME);
+
     }
 
     public void refreshProduktov() {

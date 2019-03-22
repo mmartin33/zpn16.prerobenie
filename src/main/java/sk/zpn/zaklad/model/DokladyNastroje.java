@@ -28,7 +28,7 @@ public class DokladyNastroje {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         if (d.isNew()) {
             d.setId((long) 0);
-            d.setKedy();
+
         }
         System.out.println("Ulozeny dokald"+d.getCisloDokladu());
         em.getTransaction().begin();
