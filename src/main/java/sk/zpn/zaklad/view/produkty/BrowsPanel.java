@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.produkty;
 
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.Responsive;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
@@ -29,8 +30,8 @@ public class BrowsPanel extends VerticalLayout {
             this.setSpacing(false);
             grid = new FilterGrid<>();
             grid.setItems(this.produktList);
-
-            grid.addStyleName("test");
+            this.addStyleName("flexwrap");
+            //grid.addStyleName("test");
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
             grid.setWidth(1000, Unit.PIXELS);
             grid.setHeight(700, Unit.PIXELS);
@@ -77,7 +78,8 @@ public class BrowsPanel extends VerticalLayout {
 
             this.addComponent(new Label("Prehľad produktov"));
             this.addComponents(grid);
-
+            Responsive.makeResponsive(grid);
+            Responsive.makeResponsive(this);
 
             this.addComponent(tlacitkovy);
 

@@ -7,6 +7,7 @@ import sk.zpn.domena.Produkt;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,8 +45,11 @@ public class ProduktyNastroje {
 
     public static Produkt ulozProdukt(Produkt f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        if (f.isNew())
-            f.setId((long)0);
+        if (f.isNew()) {
+            f.setId((long) 0);
+            f.setKedy(new Date());
+            f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+        }
         em.getTransaction().begin();
         em.persist(f);
         em.getTransaction().commit();

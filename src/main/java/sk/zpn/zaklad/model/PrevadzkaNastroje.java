@@ -6,6 +6,7 @@ import sk.zpn.domena.Prevadzka;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,8 +43,11 @@ public class PrevadzkaNastroje {
 
     public static Prevadzka ulozPrevadzka(Prevadzka p){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        if (p.isNew())
-            p.setId((long)0);
+        if (p.isNew()) {
+            p.setId((long) 0);
+            p.setKedy(new Date());
+            p.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+        }
         System.out.println("Ulozena prevadzka:"+p.getNazov());
         em.getTransaction().begin();
         em.persist(p);
@@ -68,17 +72,14 @@ public class PrevadzkaNastroje {
         p.setUlica(firma.getUlica());
         p.setPsc(firma.getPsc());
         p.setFirma(firma);
-
-        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        if (p.isNew())
-            p.setId((long)0);
+        ulozPrevadzka(p);
 
         p.setPoberatel(PoberatelNastroje.ulozPrvehoPoberatela(p));
 
         System.out.println("Ulozena prevadzka:"+p.getNazov());
-        em.getTransaction().begin();
-        em.persist(p);
-        em.getTransaction().commit();
+//        em.getTransaction().begin();
+//        em.persist(p);
+//        em.getTransaction().commit();
 
 
         return p;

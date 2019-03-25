@@ -56,6 +56,12 @@ public class UzivatelNastroje {
         q.setParameter("id", id);
         return Optional.ofNullable(q.getSingleResult());
     }
+    public static Uzivatel getPrihlasenehoUzivatela(){
+        Optional<Uzivatel> uzivatel = getUzivatela((Long) VaadinSession.getCurrent().getAttribute("id_uzivatela"));
+        return uzivatel.get();
+
+
+    }
     public static Optional<Uzivatel> getUzivatela(String login){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.getPodlaMena", Uzivatel.class);

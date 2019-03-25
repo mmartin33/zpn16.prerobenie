@@ -8,6 +8,7 @@ import sk.zpn.domena.Prevadzka;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,13 +30,14 @@ public class PoberatelNastroje {
         Poberatel poberatel=new Poberatel();
         poberatel.setMeno(prevadzka.getNazov());
 
-        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        if (poberatel.isNew())
-            poberatel.setId((long)0);
-
-        em.getTransaction().begin();
-        em.persist(poberatel);
-        em.getTransaction().commit();
+        ulozPoberatela(poberatel);
+//        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+//        if (poberatel.isNew())
+//            poberatel.setId((long)0);
+//
+//        em.getTransaction().begin();
+//        em.persist(poberatel);
+//        em.getTransaction().commit();
         return poberatel;
 
     }
@@ -43,8 +45,11 @@ public class PoberatelNastroje {
 
     public static Poberatel ulozPoberatela(Poberatel f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        if (f.isNew())
-            f.setId((long)0);
+        if (f.isNew()) {
+            f.setId((long) 0);
+            f.setKedy(new Date());
+            f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+        }
         em.getTransaction().begin();
         em.persist(f);
         em.getTransaction().commit();

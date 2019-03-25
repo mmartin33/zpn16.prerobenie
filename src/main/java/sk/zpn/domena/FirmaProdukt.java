@@ -3,10 +3,12 @@ package sk.zpn.domena;
 
 
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
+import sk.zpn.zaklad.model.UzivatelNastroje;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity(name = "firma_produkt")
 @NamedQueries(value = {
@@ -26,7 +28,10 @@ import java.math.BigDecimal;
 })
 
 @IdClass(FirmaProduktId.class)
-public class FirmaProdukt {
+public class FirmaProdukt{
+
+
+
 
     @Id
     @ManyToOne
@@ -56,6 +61,9 @@ public class FirmaProdukt {
         this.rok =  rok;
         this.produkt = produkt;
         this.firma = firma;
+//        this.setKedy(new Date());
+//        this.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+//        this.setId(new Long(0));
     }
 
     public Firma getFirma() {

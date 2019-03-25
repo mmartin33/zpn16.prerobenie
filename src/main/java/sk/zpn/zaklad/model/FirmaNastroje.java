@@ -5,6 +5,7 @@ import sk.zpn.domena.Firma;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +42,11 @@ public class FirmaNastroje {
 
     public static Firma ulozFirmu(Firma f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        if (f.isNew())
-            f.setId((long)0);
+        if (f.isNew()) {
+            f.setId((long) 0);
+            f.setKedy(new Date());
+            f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+        }
         System.out.println("Ulozena firma:"+f.getNazov());
         em.getTransaction().begin();
         em.persist(f);

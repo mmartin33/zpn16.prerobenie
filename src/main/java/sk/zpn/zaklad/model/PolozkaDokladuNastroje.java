@@ -7,6 +7,7 @@ import sk.zpn.domena.*;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +25,11 @@ public class PolozkaDokladuNastroje {
 
     public static PolozkaDokladu ulozPolozkuDokladu(PolozkaDokladu d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        if (d.isNew())
+        if (d.isNew()) {
             d.setId((long) 0);
+            d.setKedy(new Date());
+            d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+        }
         System.out.println("Ulozena polozka");
         em.getTransaction().begin();
         em.persist(d);
