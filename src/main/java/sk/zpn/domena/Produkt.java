@@ -5,6 +5,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Entity(name = "produkty")
@@ -77,6 +79,20 @@ public class Produkt extends Vseobecne {
     }
 
 
+    public static String getToolTip(Produkt produkt) {
+         {
+            if (produkt.getKedy()==null)
+                return "";
+            Format formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String s = formatter.format(produkt.getKedy());
+            return s;
+        }
+
+
+
+
+//        return produkt.getKedy().toString();
+    }
 }
 
 

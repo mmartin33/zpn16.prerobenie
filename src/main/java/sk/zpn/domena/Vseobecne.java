@@ -4,6 +4,8 @@ import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -37,6 +39,8 @@ public abstract class Vseobecne {
         return kedy;
     }
 
+
+
     public void setKedy(Date kedy) {
         this.kedy = kedy;
     }
@@ -48,6 +52,8 @@ public abstract class Vseobecne {
     public void setKto(Uzivatel kto) {
         this.kto = kto;
     }
+
+
 }
 
 

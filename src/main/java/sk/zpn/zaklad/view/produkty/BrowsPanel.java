@@ -33,12 +33,20 @@ public class BrowsPanel extends VerticalLayout {
             this.addStyleName("flexwrap");
             //grid.addStyleName("test");
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+
+
+
             grid.setWidth(1000, Unit.PIXELS);
-            grid.setHeight(700, Unit.PIXELS);
+            grid.setSizeFull();
+            //grid.setHeight(700, Unit.PIXELS);
 
             // definitionn of columns
+
             FilterGrid.Column<Produkt, String > colRok = grid.addColumn(Produkt::getRok).setCaption("Rok").setId("rok");
-            FilterGrid.Column<Produkt, String> colKat = grid.addColumn(Produkt::getKat).setCaption("KAT").setId("kat");
+            FilterGrid.Column<Produkt, String> colKat = grid.addColumn(Produkt::getKat)
+                    .setCaption("KAT")
+                    .setId("kat")
+                    .setDescriptionGenerator(Produkt::getToolTip);
             FilterGrid.Column<Produkt, String> colNazov = grid.addColumn(Produkt::getNazov).setCaption("Názov").setId("nazov");
             FilterGrid.Column<Produkt, BigDecimal> colKusy = grid.addColumn(Produkt::getKusy).setCaption("kusy").setId("kusy");
             FilterGrid.Column<Produkt, BigDecimal> colBody = grid.addColumn(Produkt::getBody).setCaption("Body").setId("body");
