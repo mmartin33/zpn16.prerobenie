@@ -124,6 +124,7 @@ public class EditacnyForm extends VerticalLayout {
         }
         else{
             binder.readBean(doklad);}
+
     }
 
     public void save(Button.ClickEvent event) {

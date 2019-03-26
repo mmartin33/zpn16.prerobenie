@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.doklady.polozkaDokladu;
 
 import com.vaadin.navigator.View;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Doklad;
 import sk.zpn.domena.PolozkaDokladu;
@@ -20,14 +21,22 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     private Doklad doklad;
 
     public PolozkyDokladuView(Doklad doklad) {
+        GridLayout gr=new GridLayout(2,2);
+        gr.setSpacing(false);
+        gr.setSizeFull();
+        gr.setColumnExpandRatio(0, 0.60f);
+        gr.setColumnExpandRatio(1, 0.40f);
+
         this.doklad=doklad;
         polozkyDokladuList = PolozkaDokladuNastroje.zoznamPoloziekDokladov(this.doklad);
         browsPanel=new BrowsPanel(polozkyDokladuList,this);
         editacnyForm=new EditacnyForm();
         editacnyForm.setDokladyView(this);
         configureComponents();
-        this.addComponent(browsPanel);
-        this.addComponent(editacnyForm);
+        gr.addComponent(browsPanel,0,0,0,1);
+        gr.addComponent(editacnyForm,1,0,1,0);
+        this.addComponent(gr);
+        this.setSizeFull();
     }
     public PolozkyDokladuView() {
     }

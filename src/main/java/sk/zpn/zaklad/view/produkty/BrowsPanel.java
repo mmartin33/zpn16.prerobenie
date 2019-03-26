@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.produkty;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.*;
@@ -26,19 +27,21 @@ public class BrowsPanel extends VerticalLayout {
 
 
         public BrowsPanel(List<Produkt> produktList) {
+            GridLayout gl =new GridLayout(1,3);
+            gl.setSizeFull();
+            gl.setRowExpandRatio(0, 0.05f);
+            gl.setRowExpandRatio(1, 0.90f);
+            gl.setRowExpandRatio(2, 0.05f);
+
             this.produktList = produktList;
             this.setSpacing(false);
+
             grid = new FilterGrid<>();
             grid.setItems(this.produktList);
-            this.addStyleName("flexwrap");
-            //grid.addStyleName("test");
+
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-
-
-
-            grid.setWidth(1000, Unit.PIXELS);
             grid.setSizeFull();
-            //grid.setHeight(700, Unit.PIXELS);
+
 
             // definitionn of columns
 
@@ -78,18 +81,25 @@ public class BrowsPanel extends VerticalLayout {
             HorizontalLayout tlacitkovy=new HorizontalLayout();
             btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
+            btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+            btnNovy.setClickShortcut(ShortcutAction.KeyCode.N,
+                    new int[] { ShortcutAction.ModifierKey.ALT });
 
             tlacitkovy.addComponent(btnNovy);
             tlacitkovy.addComponent(btnFirmy);
             tlacitkovy.addComponent(btnSpat);//666
 
+            Label l=new Label("Prehľad produktov");
+            gl.addComponent(l);
+            gl.setComponentAlignment(l,Alignment.TOP_LEFT);
 
-            this.addComponent(new Label("Prehľad produktov"));
-            this.addComponents(grid);
-            Responsive.makeResponsive(grid);
-            Responsive.makeResponsive(this);
+            gl.addComponents(grid);
+            gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
 
-            this.addComponent(tlacitkovy);
+            gl.addComponent(tlacitkovy);
+            gl.setComponentAlignment(tlacitkovy,Alignment.BOTTOM_LEFT);
+            gl.setVisible(true);
+            this.addComponentsAndExpand(gl);
 
 
 

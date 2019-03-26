@@ -55,6 +55,7 @@ public class EditacnyForm extends VerticalLayout {
 
         nastavComponnenty();
         FormLayout lEdit = new FormLayout();
+
         lEdit.addComponent(tRok);
         lEdit.addComponent(tKod);
         lEdit.addComponent(tNazov);

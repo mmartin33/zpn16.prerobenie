@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.prevadzky;
 
 import com.vaadin.navigator.View;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Prevadzka;
@@ -43,6 +44,12 @@ public class PrevadzkyView extends HorizontalLayout implements View {
     }
 
     private void configureComponents() {
+        GridLayout gr=new GridLayout(2,2);
+        gr.setSpacing(false);
+        gr.setSizeFull();
+        gr.setColumnExpandRatio(0, 0.60f);
+        gr.setColumnExpandRatio(1, 0.40f);
+
 
         browsPanel=new BrowsPanel(prevadzkyList,this);
 
@@ -62,8 +69,11 @@ public class PrevadzkyView extends HorizontalLayout implements View {
         });
         browsPanel.addSelectionListener(editacnyForm::edit);
         refreshPrevadzok();
-        this.addComponent(browsPanel);
-        this.addComponent(editacnyForm);
+        gr.addComponent(browsPanel,0,0,0,1);
+        gr.addComponent(editacnyForm,1,0,1,0);
+
+        this.addComponent(gr);
+        this.setSizeFull();
 
     }
 

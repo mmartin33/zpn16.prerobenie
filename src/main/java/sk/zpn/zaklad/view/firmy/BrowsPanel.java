@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.firmy;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -25,13 +26,16 @@ public class BrowsPanel extends VerticalLayout {
 
 
         public BrowsPanel(List<Firma> firmaList) {
+            GridLayout gl =new GridLayout(1,3);
+            gl.setSizeFull();
+            gl.setRowExpandRatio(0, 0.05f);
+            gl.setRowExpandRatio(1, 0.90f);
+
             this.firmaList = firmaList;
             grid = new FilterGrid<>();
             grid.setItems(this.firmaList);
 
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-            grid.setWidth(1000, Unit.PIXELS);
-            grid.setHeight(800, Unit.PIXELS);
             grid.setHeightByRows(15);
 
             // definitionn of columns
@@ -74,6 +78,10 @@ public class BrowsPanel extends VerticalLayout {
             HorizontalLayout tlacitkovy=new HorizontalLayout();
             btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
+            btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+            btnNovy.setClickShortcut(ShortcutAction.KeyCode.N,
+                    new int[] { ShortcutAction.ModifierKey.ALT });
+
 
             tlacitkovy.addComponent(btnNovy);
             tlacitkovy.addComponent(btnPrevadzky);
@@ -81,11 +89,19 @@ public class BrowsPanel extends VerticalLayout {
             tlacitkovy.addComponent(btnSpat);//666
 
 
-            this.addComponent(new Label("Prehľad firiem"));
-            this.addComponents(grid);
+
+            gl.addComponent(new Label("Prehľad firiem"));
 
 
-            this.addComponent(tlacitkovy);
+            gl.addComponents(grid);
+            gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
+
+            gl.addComponent(tlacitkovy);
+            gl.setComponentAlignment(tlacitkovy,Alignment.BOTTOM_LEFT);
+            gl.setVisible(true);
+            grid.setSizeFull();
+            this.setSizeFull();
+            this.addComponentsAndExpand(gl);
 
 
 

@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.prevadzky;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -26,15 +27,21 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnNovy;
 
         public BrowsPanel(List<Prevadzka> prevadzkaList, PrevadzkyView prevadzkyView) {
+            GridLayout gl =new GridLayout(1,3);
+            gl.setSizeFull();
+            gl.setRowExpandRatio(0, 0.05f);
+            gl.setRowExpandRatio(1, 0.90f);
+            gl.setRowExpandRatio(2, 0.05f);
+
+
             this.prevadzkyView=prevadzkyView;
             this.prevadzkaList = prevadzkaList;
             grid = new FilterGrid<>();
             grid.setItems(this.prevadzkaList);
 
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-            grid.setWidth(1000, Unit.PIXELS);
-            grid.setHeight(800, Unit.PIXELS);
-            grid.setHeightByRows(15);
+            grid.setHeightByRows(5);
+
 
             // definitionn of columns
             FilterGrid.Column<Prevadzka, String> colnazov = grid.addColumn(Prevadzka::getNazov).setCaption("Názov").setId("nazov");
@@ -90,11 +97,24 @@ public class BrowsPanel extends VerticalLayout {
                 if (this.prevadzkyView.getFirma()!=null)
                     nadpis=nadpis+" firmy:"+this.prevadzkyView.getFirma().getNazov();
 
-            this.addComponent(new Label(nadpis));
-            this.addComponents(grid);
+
+            btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+            btnNovy.setClickShortcut(ShortcutAction.KeyCode.N,
+                    new int[] { ShortcutAction.ModifierKey.ALT });
 
 
-            this.addComponent(tlacitkovy);
+            gl.addComponent(new Label(nadpis));
+
+
+            gl.addComponents(grid);
+            gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
+
+            gl.addComponent(tlacitkovy);
+            gl.setComponentAlignment(tlacitkovy,Alignment.BOTTOM_LEFT);
+            gl.setVisible(true);
+            grid.setSizeFull();
+            this.setSizeFull();
+            this.addComponentsAndExpand(gl);
 
 
 

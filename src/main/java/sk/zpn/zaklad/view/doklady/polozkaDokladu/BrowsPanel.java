@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.doklady.polozkaDokladu;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -26,6 +27,13 @@ public class BrowsPanel extends VerticalLayout {
 
 
     public BrowsPanel(List<PolozkaDokladu> polozkyDokladuList, PolozkyDokladuView pdv) {
+
+        GridLayout gl =new GridLayout(1,3);
+        gl.setSizeFull();
+        gl.setRowExpandRatio(0, 0.05f);
+        gl.setRowExpandRatio(1, 0.90f);
+
+
         this.polozkyDokladuView=pdv;
         this.polozkyDokladuList = polozkyDokladuList;
         grid = new FilterGrid<>();
@@ -33,8 +41,6 @@ public class BrowsPanel extends VerticalLayout {
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 
-        grid.setWidth(1000, Unit.PIXELS);
-        grid.setHeight(700, Unit.PIXELS);
 
         // definitionn of columns
         FilterGrid.Column<PolozkaDokladu, String> colProduktKod = grid.addColumn(PolozkaDokladu::getProduktKod).setCaption("Kód produktu").setId("kodProduktu");
@@ -61,17 +67,33 @@ public class BrowsPanel extends VerticalLayout {
         btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
 
+
+        btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+        btnNovy.setClickShortcut(ShortcutAction.KeyCode.N,
+                new int[] { ShortcutAction.ModifierKey.ALT });
+
+
+
         tlacitkovy.addComponent(btnNovy);
         tlacitkovy.addComponent(btnSpat);//666
 
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String formatovanyDatum =simpleDateFormat.format(polozkyDokladuView.getDoklad().getDatum());
-        this.addComponent(new Label("Prehľad položiek dokladu:  "+polozkyDokladuView.getDoklad().getCisloDokladu()+" z dátumu:"+formatovanyDatum));
-        this.addComponents(grid);
 
 
-        this.addComponent(tlacitkovy);
+        gl.addComponent(new Label("Prehľad položiek dokladu:  "+polozkyDokladuView.getDoklad().getCisloDokladu()+" z dátumu:"+formatovanyDatum));
+
+
+        gl.addComponents(grid);
+        gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
+
+        gl.addComponent(tlacitkovy);
+        gl.setComponentAlignment(tlacitkovy,Alignment.BOTTOM_LEFT);
+        gl.setVisible(true);
+        grid.setSizeFull();
+        this.setSizeFull();
+        this.addComponentsAndExpand(gl);
 
 
 

@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.poberatelia;
 
 import com.vaadin.navigator.View;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
@@ -21,14 +22,24 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
     private List<Poberatel> poberatelList;
     public PoberateliaView(Prevadzka prevadzka) {
+        GridLayout gr=new GridLayout(2,2);
+        gr.setSpacing(false);
+        gr.setSizeFull();
+        gr.setColumnExpandRatio(0, 0.60f);
+        gr.setColumnExpandRatio(1, 0.40f);
+
+
         this.prevadzka=prevadzka;
         poberatelList = PoberatelNastroje.zoznamPoberatelov();
         browsPanel=new BrowsPanel(poberatelList,this);
         editacnyForm=new EditacnyForm();
         editacnyForm.setPoberatelView(this);
         configureComponents();
-        this.addComponent(browsPanel);
-        this.addComponent(editacnyForm);
+        gr.addComponent(browsPanel,0,0,0,1);
+        gr.addComponent(editacnyForm,1,0,1,0);
+
+        this.addComponent(gr);
+        this.setSizeFull();
 
 
     }

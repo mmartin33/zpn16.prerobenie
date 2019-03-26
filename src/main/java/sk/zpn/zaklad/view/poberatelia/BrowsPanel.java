@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.poberatelia;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
@@ -23,6 +24,10 @@ public class BrowsPanel extends VerticalLayout {
 
 
         public BrowsPanel(List<Poberatel> poberatelList,PoberateliaView poberateliaView) {
+            GridLayout gl =new GridLayout(1,3);
+            gl.setSizeFull();
+            gl.setRowExpandRatio(0, 0.05f);
+            gl.setRowExpandRatio(1, 0.90f);
 
             this.poberateliaView = poberateliaView;
             this.poberatelList = poberatelList;
@@ -32,8 +37,6 @@ public class BrowsPanel extends VerticalLayout {
 
             grid.addStyleName("test");
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-            grid.setWidth(1000, Unit.PIXELS);
-            grid.setHeight(700, Unit.PIXELS);
 
             // definitionn of columns
             FilterGrid.Column<Poberatel, String> colMeno = grid.addColumn(Poberatel::getMeno).setCaption("Meno").setId("meno");
@@ -74,6 +77,10 @@ public class BrowsPanel extends VerticalLayout {
             HorizontalLayout tlacitkovy=new HorizontalLayout();
             btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
+            btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+            btnNovy.setClickShortcut(ShortcutAction.KeyCode.N,
+                    new int[] { ShortcutAction.ModifierKey.ALT });
+
 
             tlacitkovy.addComponent(btnNovy);
 
@@ -85,13 +92,19 @@ public class BrowsPanel extends VerticalLayout {
 //                if (this.poberateliaView.getPrevadzka()!=null)
 //                    nadpis=nadpis+" prevadzky:"+this.poberateliaView.getPrevadzka().getNazov();
 
-            this.addComponent(new Label(nadpis));
 
-            this.addComponents(grid);
+            gl.addComponent(new Label(nadpis));
 
 
-            this.addComponent(tlacitkovy);
+            gl.addComponents(grid);
+            gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
 
+            gl.addComponent(tlacitkovy);
+            gl.setComponentAlignment(tlacitkovy,Alignment.BOTTOM_LEFT);
+            gl.setVisible(true);
+            grid.setSizeFull();
+            this.setSizeFull();
+            this.addComponentsAndExpand(gl);
 
 
         }

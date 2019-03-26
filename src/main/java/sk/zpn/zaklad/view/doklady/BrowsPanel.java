@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.doklady;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 
@@ -30,12 +31,15 @@ public class BrowsPanel extends VerticalLayout {
 
 
     public BrowsPanel(List<Doklad> dokladyList) {
+        GridLayout gl =new GridLayout(1,3);
+        gl.setSizeFull();
+        gl.setRowExpandRatio(0, 0.05f);
+        gl.setRowExpandRatio(1, 0.90f);
+
         this.dokladyList = dokladyList;
         grid = new FilterGrid<>();
         grid.setItems(this.dokladyList);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setWidth(1000, Unit.PIXELS);
-        grid.setHeight(700, Unit.PIXELS);
 
 
 
@@ -62,6 +66,7 @@ public class BrowsPanel extends VerticalLayout {
 
         grid.setColumnOrder(colCisloDokladu, colTypDokladu,colFirmaNazov, colDatum);
         Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
+
         btnSpat.addClickListener(clickEvent ->
                 UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
         );
@@ -83,6 +88,10 @@ public class BrowsPanel extends VerticalLayout {
         HorizontalLayout tlacitkovy=new HorizontalLayout();
         btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
+        btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+        btnNovy.setClickShortcut(ShortcutAction.KeyCode.N,
+                new int[] { ShortcutAction.ModifierKey.ALT });
+
 
         tlacitkovy.addComponent(btnNovy);
 
@@ -90,11 +99,19 @@ public class BrowsPanel extends VerticalLayout {
         tlacitkovy.addComponent(btnSpat);//666
 
 
-        this.addComponent(new Label("Prehľad Dokladov"));
-        this.addComponents(grid);
+
+        gl.addComponent(new Label("Prehľad Dokladov"));
 
 
-        this.addComponent(tlacitkovy);
+        gl.addComponents(grid);
+        gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
+
+        gl.addComponent(tlacitkovy);
+        gl.setComponentAlignment(tlacitkovy,Alignment.BOTTOM_LEFT);
+        gl.setVisible(true);
+        grid.setSizeFull();
+        this.setSizeFull();
+        this.addComponentsAndExpand(gl);
 
 
 

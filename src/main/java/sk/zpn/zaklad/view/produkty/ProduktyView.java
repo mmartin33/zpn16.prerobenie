@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.produkty;
 
 import com.vaadin.navigator.View;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
 import sk.zpn.domena.Parametre;
@@ -23,13 +24,23 @@ public class ProduktyView extends HorizontalLayout implements View {
     private List<Produkt> produktList;
 
     public ProduktyView() {
+        GridLayout  gr=new GridLayout(2,2);
+        gr.setSpacing(false);
+        gr.setSizeFull();
+        gr.setColumnExpandRatio(0, 0.60f);
+        gr.setColumnExpandRatio(1, 0.40f);
         produktList = ProduktyNastroje.zoznamProduktovZaRok();
         browsPanel=new BrowsPanel(produktList);
         editacnyForm=new EditacnyForm();
         editacnyForm.setProduktyView(this);
         configureComponents();
-        this.addComponent(browsPanel);
-        this.addComponent(editacnyForm);
+        browsPanel.setHeight("100%");
+
+        gr.addComponent(browsPanel,0,0,0,1);
+        gr.addComponent(editacnyForm,1,0,1,0);
+
+        this.addComponent(gr);
+        this.setSizeFull();
 
 
     }

@@ -163,7 +163,7 @@ public class VitajteView extends MojView {
     @Override
         protected void init() {
             addStyleName("welcome");
-            setTitle("Vitajte", "Ste prihlásený ako " +VaadinSession.getCurrent().getAttribute("meno"));
+            setTitle("Vitajte", "Ste prihlásený ako " +VaadinSession.getCurrent().getAttribute("meno")+" >>verzia;190330<<");
             if  (!UzivatelNastroje.TypUzivatela().isPresent()) {
                 menuAdmin.setVisible(false);
                 menuSpravcu.setVisible(false);
@@ -181,6 +181,7 @@ public class VitajteView extends MojView {
 
         @Override
         public void enter(ViewChangeListener.ViewChangeEvent event) {
+            
             super.enter(event);
         }
     }
