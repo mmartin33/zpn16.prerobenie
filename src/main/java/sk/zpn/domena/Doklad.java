@@ -34,6 +34,11 @@ public class Doklad extends Vseobecne {
     @Enumerated(EnumType.STRING)
     private TypDokladu typDokladu;
 
+
+    @Enumerated(EnumType.STRING)
+    private StavDokladu stavDokladu;
+
+
     private String poznamka;
 
 
@@ -103,6 +108,14 @@ public class Doklad extends Vseobecne {
     public String getPoznamka() {return poznamka;}
 
     public void setPoznamka(String poznamka) {this.poznamka = poznamka;}
+
+    public StavDokladu getStavDokladu() {
+        return stavDokladu;
+    }
+
+    public void setStavDokladu(StavDokladu stavDokladu) {
+        this.stavDokladu = stavDokladu;
+    }
 }
 
 

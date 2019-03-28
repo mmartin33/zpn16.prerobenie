@@ -36,16 +36,18 @@ public class BrowsPanel extends VerticalLayout {
         FilterGrid.Column<Uzivatel, String> colMeno = grid.addColumn(Uzivatel::getMeno).setCaption("Meno").setId("meno");
         FilterGrid.Column<Uzivatel, String> colTypUzivatela = grid.addColumn(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue()).setCaption("Typ konta").setId("typ");
         FilterGrid.Column<Uzivatel, String> colFirmaNazov = grid.addColumn(Uzivatel::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
-        FilterGrid.Column<Uzivatel, String> colStatusUzivatela = grid.addColumn(uzivatel ->
-                uzivatel.getStatusUzivatela().getIconValue()).setCaption("Stav konta").setId("statusUzivatela");
+        FilterGrid.Column<Uzivatel, String> colStatusUzivatela = grid.addColumn(uzivatel -> uzivatel.getStatusUzivatela().getIconValue()).setCaption("Stav konta").setId("statusUzivatela");
         colStatusUzivatela.setRenderer(new HtmlRenderer());
         colStatusUzivatela.setWidth(150);
 
         // filters
+
+
         colMeno.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colTypUzivatela.setFilter(new ComboBox<>("", TypUzivatela.getListOfDisplayValues()),
                 (cValue, fValue) -> fValue == null || fValue.equals(cValue));
         colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+
 
         ComboBox<String> statusUzivatelaFilter = new ComboBox<>("", StatusUzivatela.getListOfDisplayValues());
         statusUzivatelaFilter.setWidth(120, Unit.PIXELS);

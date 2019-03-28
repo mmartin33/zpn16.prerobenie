@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static sk.zpn.zaklad.model.UzivatelNastroje.getUzivatela;
 
+
 public class MostikView extends HorizontalLayout implements View {
 
     // ContactForm is an example of a custom component class

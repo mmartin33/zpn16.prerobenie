@@ -51,6 +51,8 @@ public class UzivatelNastroje {
     }
 
     public static Optional<Uzivatel> getUzivatela(Long id){
+        if (id==null)
+            return null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.get", Uzivatel.class);
         q.setParameter("id", id);
@@ -91,6 +93,7 @@ public class UzivatelNastroje {
 
     }
     public static Optional<TypUzivatela> TypUzivatela() {
+
         Optional<Uzivatel> uzivatel = getUzivatela((Long) VaadinSession.getCurrent().getAttribute("id_uzivatela"));
         return uzivatel.map(Uzivatel::getTypUzivatela);
     }
