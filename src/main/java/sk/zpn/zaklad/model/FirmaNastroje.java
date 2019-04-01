@@ -58,7 +58,11 @@ public class FirmaNastroje {
     public static void zmazFirmu(Firma f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         System.out.println("Vymazana firma:"+f.getNazov());
-        em.getTransaction().begin();
+        if(!em.getTransaction().isActive())
+            em.getTransaction().begin();
+        if (!em.contains(f)) {
+            f = em.merge(f);
+        }
         em.remove(f);
         em.getTransaction().commit();
     }

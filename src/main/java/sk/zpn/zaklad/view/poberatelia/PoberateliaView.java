@@ -70,9 +70,25 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
     void odstranPoberatela(Poberatel poberatel) {
 
+      int i= poberatelList.indexOf(poberatel);
         poberatelList.remove(poberatel);
-        this.refreshPoberatelov();
+        Poberatel p;
+        if (i>=poberatelList.size())
+            p=poberatelList.get(poberatelList.size()-1);
+        else
+            p=poberatelList.get(i);
+        this.refreshPoberatelov(p);
 
+
+
+
+    }
+
+    private void refreshPoberatelov(Poberatel p) {
+        if (p==null)
+            refreshPoberatelov();
+        else
+            browsPanel.refresh(p);
     }
 
     public Prevadzka getPrevadzka() {

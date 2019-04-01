@@ -9,6 +9,7 @@ import sk.zpn.domena.Poberatel;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -49,6 +50,7 @@ public class BrowsPanel extends VerticalLayout {
             FilterGrid.Column<Poberatel, String> colTelefon = grid.addColumn(Poberatel::getTelefon).setCaption("Telefon").setId("telefon");
             FilterGrid.Column<Poberatel, String> colEmail = grid.addColumn(Poberatel::getEmail).setCaption("Email").setId("email");
             FilterGrid.Column<Poberatel, String> colKod = grid.addColumn(Poberatel::getKod).setCaption("Kód").setId("kod");
+            FilterGrid.Column<Poberatel, BigDecimal> colPociatocnyStav = grid.addColumn(Poberatel::getPociatocnyStav).setCaption("PS bodov").setId("ps_body");
 
             // filters
             colMeno.setFilter(new TextField(), StringComparator.containsIgnoreCase());
@@ -133,7 +135,12 @@ public class BrowsPanel extends VerticalLayout {
             }
         }
 
+    public void refresh(Poberatel p) {
+        grid.getDataProvider().refreshAll();
+        grid.select(p);
+
     }
+}
 
 
 

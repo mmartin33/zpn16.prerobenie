@@ -3,6 +3,7 @@ package sk.zpn.domena;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity(name = "poberatelia")
@@ -25,10 +26,7 @@ public class Poberatel extends Vseobecne {
     private String mobil;
     private String telefon;
     private String email;
-
-
-    //todo naco tu je????
-
+    private BigDecimal pociatocnyStav;
 
 
     public Poberatel() {
@@ -96,6 +94,9 @@ public class Poberatel extends Vseobecne {
 
     public void setEmail(String email) {this.email = email;}
 
+    public BigDecimal getPociatocnyStav() {return pociatocnyStav;}
+
+    public void setPociatocnyStav(BigDecimal pociatocnyStav) {this.pociatocnyStav = pociatocnyStav;}
 
     public boolean isNew() {
         return this.getId() == null;

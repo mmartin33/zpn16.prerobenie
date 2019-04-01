@@ -6,10 +6,10 @@ import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Firma;
-import sk.zpn.zaklad.view.VitajteView;
 
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -47,6 +47,7 @@ public class BrowsPanel extends VerticalLayout {
             FilterGrid.Column<Firma, String> colMesto = grid.addColumn(Firma::getMesto).setCaption("Mesto").setId("mesto");
             FilterGrid.Column<Firma, String> colPsc = grid.addColumn(Firma::getPsc).setCaption("PSČ").setId("psc");
             FilterGrid.Column<Firma, String> colTelefon = grid.addColumn(Firma::getTelefon).setCaption("Telefón").setId("telefon");
+            FilterGrid.Column<Firma, BigDecimal> colPociatovnyStav = grid.addColumn(Firma::getPociatocnyStav).setCaption("PS Bodov").setId("ps_body");
 
 
             // filters
@@ -131,7 +132,12 @@ public class BrowsPanel extends VerticalLayout {
             }
         }
 
+    public void refresh(Firma firma) {
+        grid.getDataProvider().refreshAll();
+        grid.select(firma);
+
     }
+}
 
 
 

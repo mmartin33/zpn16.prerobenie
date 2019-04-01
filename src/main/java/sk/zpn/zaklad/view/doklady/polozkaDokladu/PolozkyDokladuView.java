@@ -65,8 +65,31 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
 
     }
     void odstranPolozkuDokladu(PolozkaDokladu polozkaDokladu) {
+
+
+        int i= polozkyDokladuList.indexOf(polozkaDokladu);
         polozkyDokladuList.remove(polozkaDokladu);
         this.refreshPoloziekDokladov();
+
+        PolozkaDokladu p;
+        if (i>=polozkyDokladuList.size())
+            p=polozkyDokladuList.get(polozkyDokladuList.size()-1);
+        else
+            p=polozkyDokladuList.get(i);
+        this.refreshPoloziekDokladov(p);
+
+
+
+
+
+    }
+
+    private void refreshPoloziekDokladov(PolozkaDokladu p) {
+        if (p==null)
+            refreshPoloziekDokladov();
+        else
+            browsPanel.refresh(p);
+
     }
 
     void selectFirst() {

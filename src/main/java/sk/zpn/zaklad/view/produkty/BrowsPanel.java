@@ -130,7 +130,12 @@ public class BrowsPanel extends VerticalLayout {
             }
         }
 
+    public void refresh(Produkt p) {
+        grid.getDataProvider().refreshAll();
+        grid.select(p);
+
     }
+}
 
 
 

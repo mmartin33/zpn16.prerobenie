@@ -63,8 +63,28 @@ public class DokladyView extends HorizontalLayout implements View {
 
     }
     void odstranDoklad(Doklad doklad) {
+        int i= dokladyList.indexOf(doklad);
         dokladyList.remove(doklad);
         this.refreshDokladov();
+
+        Doklad d;
+        if (i>=dokladyList.size())
+                d=dokladyList.get(dokladyList.size()-1);
+        else
+                d=dokladyList.get(i);
+        this.refreshDokladov(d);
+
+
+
+
+    }
+
+    private void refreshDokladov(Doklad d) {
+        if (d==null)
+            refreshDokladov();
+        else
+            browsPanel.refresh(d);
+
     }
 
     void selectFirst() {

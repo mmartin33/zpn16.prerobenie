@@ -87,9 +87,24 @@ public class ProduktyView extends HorizontalLayout implements View {
     }
     void odstranProdukt(Produkt produkt) {
 
+        int i= produktList.indexOf(produkt);
         produktList.remove(produkt);
-        this.refreshProduktov();
+        Produkt p;
+        if (i>=produktList.size())
+                p=produktList.get(produktList.size()-1);
+        else
+                p=produktList.get(i);
+        this.refreshProduktov(p);
 
+
+    }
+
+    private void refreshProduktov(Produkt p) {
+
+        if (p==null)
+            refreshProduktov();
+        else
+            browsPanel.refresh(p);
     }
 
 }

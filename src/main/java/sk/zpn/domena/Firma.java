@@ -1,6 +1,7 @@
 package sk.zpn.domena;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity(name = "firmy")
@@ -25,7 +26,7 @@ public class Firma extends Vseobecne {
     private String mesto;
     private String psc;
     private String telefon;
-
+    private BigDecimal pociatocnyStav;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "firma_id")
@@ -86,6 +87,10 @@ public class Firma extends Vseobecne {
 
     public void setTelefon(String telefon) {this.telefon = telefon;}
 
+    public BigDecimal getPociatocnyStav() {return pociatocnyStav;}
+
+    public void setPociatocnyStav(BigDecimal pociatocnyStav) {this.pociatocnyStav = pociatocnyStav;}
+
     public boolean isNew() {return this.getId() == null;}
 
     public List<Uzivatel> getListUzivatelov() {
@@ -103,6 +108,8 @@ public class Firma extends Vseobecne {
     public void setProduktMostik(List<FirmaProdukt> produktMostik) {
         this.produktMostik = produktMostik;
     }
+
+
 }
 
 

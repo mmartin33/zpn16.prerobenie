@@ -148,6 +148,11 @@ public class BrowsPanel extends VerticalLayout {
         Optional.ofNullable(doklad).ifPresent(grid.asSingleSelect()::select);
     }
 
+    public void refresh(Doklad d) {
+        grid.getDataProvider().refreshAll();
+        grid.select(d);
+
+    }
 }
 
 

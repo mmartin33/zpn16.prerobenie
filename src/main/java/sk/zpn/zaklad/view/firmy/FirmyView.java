@@ -79,8 +79,29 @@ public class FirmyView extends HorizontalLayout implements View {
     }
     void odstranFirmu(Firma firma) {
 
+
+
+        int i= firmaList.indexOf(firma);
         firmaList.remove(firma);
         this.refreshFiriem();
+
+        Firma f;
+        if (i>=firmaList.size())
+            f=firmaList.get(firmaList.size()-1);
+        else
+            f=firmaList.get(i);
+        this.refreshFiriem(f);
+
+
+
+
+    }
+
+    private void refreshFiriem(Firma firma) {
+        if (firma==null)
+            refreshFiriem();
+        else
+            browsPanel.refresh(firma);
 
     }
 

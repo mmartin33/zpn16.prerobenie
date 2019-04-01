@@ -80,6 +80,13 @@ public class PoberatelNastroje {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         System.out.println("Vymazany poberatel:"+f.getMeno());
         em.getTransaction().begin();
+
+        if (!em.contains(f)) {
+            f = em.merge(f);
+        }
+
+
+
         em.remove(f);
         em.getTransaction().commit();
 
