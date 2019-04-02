@@ -59,7 +59,7 @@ public class DokladyView extends HorizontalLayout implements View {
 
     void pridajNovyDoklad(Doklad novyDoklad) {
         dokladyList.add(novyDoklad);
-        this.refreshDokladov();
+        this.refreshDokladov(novyDoklad);
 
     }
     void odstranDoklad(Doklad doklad) {

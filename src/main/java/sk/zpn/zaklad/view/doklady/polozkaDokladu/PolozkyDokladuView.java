@@ -61,7 +61,7 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
 
     void pridajNovuPolozkuDokladu(PolozkaDokladu novaPolozkaDokladu) {
         polozkyDokladuList.add(novaPolozkaDokladu);
-        this.refreshPoloziekDokladov();
+        this.refreshPoloziekDokladov(novaPolozkaDokladu);
 
     }
     void odstranPolozkuDokladu(PolozkaDokladu polozkaDokladu) {

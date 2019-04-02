@@ -39,7 +39,7 @@ public class EditacnyForm extends VerticalLayout {
 
     protected Button btnZmaz;
 
-    protected Button btnVyber;
+    protected Button abtnVyber;
     private final Binder<Firma> binder = new Binder<>();
     private Firma firmaEditovana;
     private FirmyView firmyView;
@@ -106,6 +106,8 @@ public class EditacnyForm extends VerticalLayout {
         Binder.Binding<Firma, String> icoBinding = binder.forField(tICO)
                 .withValidator(v -> !tICO.getValue().trim().isEmpty(),
                         "IČO je povinné")
+//                .withValidator(b -> (FirmaNastroje.firmaPodlaICO(tICO.getValue())==null),
+//                        "IČO už existuje")
                 .bind(Firma::getIco, Firma::setIco);
 
         Binder.Binding<Firma, String> nazovBinding = binder.forField(tNazov)

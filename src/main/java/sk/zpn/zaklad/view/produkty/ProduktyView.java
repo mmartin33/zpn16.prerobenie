@@ -82,7 +82,7 @@ public class ProduktyView extends HorizontalLayout implements View {
 
     void pridajNovyProdukt(Produkt novyProdukt) {
         produktList.add(novyProdukt);
-        this.refreshProduktov();
+        this.refreshProduktov(novyProdukt);
 
     }
     void odstranProdukt(Produkt produkt) {

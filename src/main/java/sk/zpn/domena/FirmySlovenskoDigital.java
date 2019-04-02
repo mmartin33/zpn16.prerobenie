@@ -91,8 +91,18 @@ public final class FirmySlovenskoDigital {
                     if(StringUtils.isEmpty(firma.getUlica()))
                         firma.setUlica(cd);
                     firma.setPsc(psc);
+                    if(StringUtils.isEmpty(firma.getPsc()))
+                        firma.setPsc(cd);
+
                     firma.setObec(obec);
+                    if(StringUtils.isEmpty(firma.getObec()))
+                            firma.setObec(cd);
+
                     firma.setKrajina(krajina);
+                    if(StringUtils.isEmpty(firma.getKrajina()))
+                        firma.setKrajina(cd);
+
+
                     if(zdrojDat!=null&&zdrojDat.equals("Obchodný register"))
                         firma.setPravnickaOsoba(true);
 

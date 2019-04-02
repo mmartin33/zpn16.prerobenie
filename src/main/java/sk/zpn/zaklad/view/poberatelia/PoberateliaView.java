@@ -64,7 +64,7 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
     void pridajNovehoPoberatela(Poberatel novyPoberatel) {
         poberatelList.add(novyPoberatel);
-        this.refreshPoberatelov();
+        this.refreshPoberatelov(novyPoberatel);
 
     }
 

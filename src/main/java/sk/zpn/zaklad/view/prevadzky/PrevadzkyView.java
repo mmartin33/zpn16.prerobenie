@@ -83,8 +83,15 @@ public class PrevadzkyView extends HorizontalLayout implements View {
 
     void pridajNovuPrevadzku(Prevadzka novaPrevazka) {
         prevadzkyList.add(novaPrevazka);
-        this.refreshPrevadzok();
+        this.refreshPrevadzok(novaPrevazka);
 
+    }
+
+    private void refreshPrevadzok(Prevadzka novaPrevazka) {
+        if (novaPrevazka==null)
+            refreshPrevadzok();
+        else
+            browsPanel.refresh(novaPrevazka);
     }
 
     void odstranPrevadzku(Prevadzka prevadzka) {

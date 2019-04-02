@@ -19,6 +19,7 @@ import java.util.List;
 public class Firma extends Vseobecne {
 
     private String nazov;
+    @Column(name = "ico", nullable = false, unique = true)
     private String ico;
     private String dic;
     private String ic_dph;

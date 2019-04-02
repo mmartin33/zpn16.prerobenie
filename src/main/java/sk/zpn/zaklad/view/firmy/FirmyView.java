@@ -74,7 +74,7 @@ public class FirmyView extends HorizontalLayout implements View {
 
     void pridajNovuFirmu(Firma novaFirma) {
         firmaList.add(novaFirma);
-        this.refreshFiriem();
+        this.refreshFiriem(novaFirma);
 
     }
     void odstranFirmu(Firma firma) {

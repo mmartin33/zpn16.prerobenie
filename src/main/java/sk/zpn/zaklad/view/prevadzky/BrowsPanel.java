@@ -163,6 +163,12 @@ public class BrowsPanel extends VerticalLayout {
     public void setPrevadzkyView(PrevadzkyView prevadzkyView) {
         this.prevadzkyView = prevadzkyView;
     }
+
+    public void refresh(Prevadzka novaPrevazka) {
+        grid.getDataProvider().refreshAll();
+        grid.select(novaPrevazka);
+
+    }
 }
 
 
