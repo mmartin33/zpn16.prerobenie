@@ -39,7 +39,7 @@ public class EditacnyForm extends VerticalLayout {
 
     protected Button btnZmaz;
 
-    protected Button abtnVyber;
+    protected Button btnVyber;
     private final Binder<Firma> binder = new Binder<>();
     private Firma firmaEditovana;
     private FirmyView firmyView;
