@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.mostik;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinSession;
@@ -23,7 +24,8 @@ public class MostikView extends HorizontalLayout implements View {
     // ContactForm is an example of a custom component class
     public static final String NAME = "mostikView";
     private BrowsPanel browsPanel;
-    private VerticalLayout mainVerticalLayout =  new VerticalLayout();
+
+    private GridLayout mainGridLayout =  new GridLayout(1,3);
     private HorizontalLayout upperLabelHorizontalLayout = new HorizontalLayout();
     private HorizontalLayout tlacitkovyLayout = new HorizontalLayout();
     private String nazovFirmy = "";
@@ -35,28 +37,35 @@ public class MostikView extends HorizontalLayout implements View {
     private Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
 
     public MostikView() {
-        // TODO nejak to zpracovat do view
-//        List<ZaznamCsv> zaznam=null;
-//        try {
-//            zaznam= DavkaCsvImporter.nacitajCsvDavku("//c:/klient/zpn1901.csv");
-//            System.out.println(zaznam.size());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
+        mainGridLayout.setSizeFull();
+        mainGridLayout.setRowExpandRatio(0, 0.05f);
+        mainGridLayout.setRowExpandRatio(1, 0.90f);
+        mainGridLayout.setRowExpandRatio(2, 0.05f);
+
 
         configureComponents();
-        this.addComponent(mainVerticalLayout);
         tlacitkovyLayout.addComponent(btnZmaz);
         tlacitkovyLayout.addComponent(btnSpat);
         upperLabelHorizontalLayout.addComponent(firmaLabel);
         upperLabelHorizontalLayout.addComponent(rokLabel);
-        mainVerticalLayout.addComponent(upperLabelHorizontalLayout);
-        mainVerticalLayout.addComponent(browsPanel);
-        mainVerticalLayout.addComponent(tlacitkovyLayout);
+        upperLabelHorizontalLayout.addComponent(new Label("Dvojklikom opravit KIT a koeficient "));
+
+        mainGridLayout.addComponent(upperLabelHorizontalLayout);
+        mainGridLayout.addComponent(browsPanel);
+        mainGridLayout.setComponentAlignment(browsPanel,Alignment.MIDDLE_LEFT);
+        mainGridLayout.addComponent(tlacitkovyLayout);
+        mainGridLayout.setComponentAlignment(tlacitkovyLayout,Alignment.BOTTOM_LEFT);
+        this.addComponent(mainGridLayout);
+        this.setSizeFull();
+        this. setVisible(true);
+
+
         btnZmaz.addClickListener(this::delete);
         btnSpat.addClickListener(clickEvent ->
             UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
         );
+        btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
     }
 
     void deselect() {

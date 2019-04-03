@@ -24,10 +24,12 @@ public class UzivatelNastroje {
         Optional<Uzivatel> uzivatel = Optional.ofNullable(q.getSingleResult());
 
         try {
-            if  (uzivatel.isPresent() && HesloNastroje.check(meno, uzivatel.get().getHeslo())) {
+            if  (uzivatel.isPresent() && HesloNastroje.check(heslo, uzivatel.get().getHeslo())) {
                 VaadinSession.getCurrent().setAttribute("id_uzivatela", uzivatel.get().getId());
                 VaadinSession.getCurrent().setAttribute("meno", uzivatel.get().getMeno());
                 logger.info(String.format("Uzivatel %s bol overeny", uzivatel.get().getMeno()));
+                return true;
+
             }
         } catch (Exception e) {
             logger.error("Heslo nebolo mozne overit", e);

@@ -25,17 +25,22 @@ public class BrowsPanel extends VerticalLayout {
     private String nazovFirmy;
 
     public BrowsPanel(List<FirmaProdukt> firmaProduktList, String nazovFirmy) {
+        GridLayout gl =new GridLayout(1,1);
+        gl.setSizeFull();
+        gl.setColumnExpandRatio(0,1f);
+        gl.setRowExpandRatio(0, 1f);
+
+
+
         this.nazovFirmy = nazovFirmy;
         this.firmaProduktList = firmaProduktList;
         upperFilterHorizontalLayout.addComponent(cbFilerInvalid);
-        this.setSpacing(false);
+
         grid = new FilterGrid<>();
         grid.setItems(this.firmaProduktList);
 
         grid.addStyleName("test");
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.setWidth(1000, Unit.PIXELS);
-        grid.setHeight(700, Unit.PIXELS);
         grid.getEditor().setEnabled(true);
 
         Binder<FirmaProdukt> binder = grid.getEditor().getBinder();
@@ -108,10 +113,23 @@ public class BrowsPanel extends VerticalLayout {
 
         grid.setColumnOrder(colKat, colKit, colNazov, colBody, colKusy, colKoeficient);
 
-        HorizontalLayout tlacitkovy = new HorizontalLayout();
-        this.addComponent(upperFilterHorizontalLayout);
-        this.addComponents(grid);
-        this.addComponent(tlacitkovy);
+
+
+
+
+        gl.addComponents(grid);
+        gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
+
+
+        gl.setVisible(true);
+        grid.setSizeFull();
+        this.setSizeFull();
+        this.addComponentsAndExpand(gl);
+
+
+//        this.addComponent(upperFilterHorizontalLayout);
+//        this.addComponents(grid);
+//        this.addComponent(tlacitkovy);
 
         this.addSelectionListener(firmaProdukt -> oznacenyFirmaProdukt = firmaProdukt);
         cbFilerInvalid.addValueChangeListener(
