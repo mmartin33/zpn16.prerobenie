@@ -52,8 +52,7 @@ public class BrowsPanel extends VerticalLayout {
         FilterGrid.Column<Doklad, String> colDatum = grid.addColumn(Doklad::getFormatovanyDatum).setCaption("Dátum").setId("datum");
         FilterGrid.Column<Doklad, String> colFirmaNazov = grid.addColumn(Doklad::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
         FilterGrid.Column<Doklad, String> colPoznamka = grid.addColumn(Doklad::getPoznamka).setCaption("Poznámka").setId("poznmla");
-//        FilterGrid.Column<Doklad, String> colStavDokladu = grid.addColumn(doklad ->doklad.getStavDokladu().getIconValue()).setCaption("Stav dokladu").setId("stavDokladu");
-
+        /*        FilterGrid.Column<Doklad, String> colStavDokladu = grid.addColumn(doklad ->doklad.getStavDokladu().getIconValue()).setCaption("Stav dokladu").setId("stavDokladu");*/
 
         // filters
         colCisloDokladu.setFilter(new TextField(), StringComparator.containsIgnoreCase());

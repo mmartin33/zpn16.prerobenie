@@ -4,7 +4,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
-import sk.zpn.domena.Firma;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import sk.zpn.domena.Prevadzka;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
@@ -38,9 +38,9 @@ public class BrowsPanel extends VerticalLayout {
             this.prevadzkaList = prevadzkaList;
             grid = new FilterGrid<>();
             grid.setItems(this.prevadzkaList);
-
+            grid.addStyleName("test");
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-            grid.setHeightByRows(5);
+            //grid.setHeightByRows(5);
 
 
             // definitionn of columns
@@ -54,6 +54,15 @@ public class BrowsPanel extends VerticalLayout {
 
 
             // filters
+            colnazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+            colFirmaNazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+            colUlica.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+            colMesto.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+            colPsc.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+            colPoberatelNazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+
+
+
 
             grid.setColumnOrder(colnazov,colFirmaNazov,colPsc,colPoberatelNazov,colUlica, colMesto);
 
