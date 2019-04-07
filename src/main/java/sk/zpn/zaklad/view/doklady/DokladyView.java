@@ -16,7 +16,7 @@ public class DokladyView extends HorizontalLayout implements View {
 
     private BrowsPanel browsPanel;
 
-    private List<Doklad> dokladyList;
+    private List<Doklad> dokladyList=null;
 
     public DokladyView() {
         GridLayout gr=new GridLayout(2,2);

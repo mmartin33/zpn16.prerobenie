@@ -27,6 +27,8 @@ public class DokladyNastroje {
     public static Doklad ulozDoklad(Doklad d){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         if (d.isNew()) {
+            if (d.getStavDokladu()==null)
+                d.setStavDokladu(StavDokladu.POTVRDENY);
             d.setId((long) 0);
             d.setKedy(new Date());
             d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
@@ -57,6 +59,7 @@ public class DokladyNastroje {
 
     public static List<Doklad> zoznamDokladov(){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
         TypedQuery<Doklad> q = em.createNamedQuery("Doklad.getAll", Doklad.class);
         return q.getResultList();
     }
@@ -93,6 +96,8 @@ public class DokladyNastroje {
         hlavickaDokladu.setTypDokladu(TypDokladu.DAVKA);
         hlavickaDokladu.setDatum(new Date());
         hlavickaDokladu.setPoznamka(file);
+        hlavickaDokladu.setStavDokladu(StavDokladu.NEPOTVRDENY);
+
 
         hlavickaDokladu.setFirma(UzivatelNastroje.getVlastnuFirmuPrihlasenehoUzivala());
 
