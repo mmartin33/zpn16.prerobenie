@@ -52,6 +52,7 @@ public class PolozkaDokladuNastroje {
     public static List<PolozkaDokladu> zoznamPoloziekDokladov(Doklad d) {
 
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
         TypedQuery<PolozkaDokladu> q = em.createNamedQuery("PolozkaDokladu.getPolozkyJednehoDokladu", PolozkaDokladu.class);
         q.setParameter("doklad", d);
         return q.getResultList();

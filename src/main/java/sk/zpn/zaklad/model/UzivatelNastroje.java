@@ -101,6 +101,7 @@ public class UzivatelNastroje {
     }
     public static List<Uzivatel> zoznamUzivatelov(){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
         TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.getAll", Uzivatel.class);
         return q.getResultList();
     }

@@ -19,6 +19,7 @@ public class PoberatelNastroje {
     public static List<Poberatel> zoznamPoberatelov(){
         List<Poberatel> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
         TypedQuery<Poberatel> q = em.createNamedQuery("Poberatel.getAll", Poberatel.class);
 
         u =  q.getResultList();

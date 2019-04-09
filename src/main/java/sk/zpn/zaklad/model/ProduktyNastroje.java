@@ -15,6 +15,7 @@ public class ProduktyNastroje {
     public static List<Produkt> zoznamProduktov(){
         List<Produkt> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
         TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getAll", Produkt.class);
         return q.getResultList();
     }

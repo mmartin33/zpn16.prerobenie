@@ -53,8 +53,7 @@ public class BrowsPanel extends VerticalLayout {
             FilterGrid.Column<Produkt, String> colNazov = grid.addColumn(Produkt::getNazov).setCaption("Názov").setId("nazov");
             FilterGrid.Column<Produkt, BigDecimal> colKusy = grid.addColumn(Produkt::getKusy).setCaption("kusy").setId("kusy");
             FilterGrid.Column<Produkt, BigDecimal> colBody = grid.addColumn(Produkt::getBody).setCaption("Body").setId("body");
-//            TODO pridat cez query na vazobnu entitu
-//            FilterGrid.Column<Produkt, String> colFirmaNazov = grid.addColumn(Produkt::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
+            FilterGrid.Column<Produkt, String> colFirmaNazov = grid.addColumn(Produkt::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
 
             // filters
             colRok.setFilter(new TextField(), StringComparator.containsIgnoreCase());

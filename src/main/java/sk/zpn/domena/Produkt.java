@@ -32,6 +32,12 @@ public class Produkt extends Vseobecne {
     @OneToMany(mappedBy = "produkt")
     private List<FirmaProdukt> firmaMostik;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = true)
+    private Firma firma;
+
+
     private String nazov;
     private BigDecimal body;
     private BigDecimal kusy;
@@ -92,6 +98,22 @@ public class Produkt extends Vseobecne {
 
 
 //        return produkt.getKedy().toString();
+    }
+
+    public Firma getFirma() {
+        return firma;
+    }
+
+    public void setFirma(Firma firma) {
+        this.firma = firma;
+    }
+
+    public String  getFirmaNazov() {
+        if (firma == null)
+            return "";
+        else
+            return firma.getNazov();
+
     }
 }
 

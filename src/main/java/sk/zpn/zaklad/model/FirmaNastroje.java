@@ -13,6 +13,7 @@ public class FirmaNastroje {
     public static List<Firma> zoznamFiriem(){
         List<Firma> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
         TypedQuery<Firma> q = em.createNamedQuery("Firma.getAll", Firma.class);
 
         u =  q.getResultList();

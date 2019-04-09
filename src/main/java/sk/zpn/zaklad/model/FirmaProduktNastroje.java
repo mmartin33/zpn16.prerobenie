@@ -20,6 +20,7 @@ public class FirmaProduktNastroje {
 
     public static List<FirmaProdukt> getListFirmaProduktPodlaNazvuFirmy(String nazov) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
         TypedQuery<FirmaProdukt> q = em.createNamedQuery("FirmaProdukt.getPodlaNazvuFirmy", FirmaProdukt.class)
             .setParameter("nazov", nazov);
         return q.getResultList();
@@ -41,6 +42,7 @@ public class FirmaProduktNastroje {
 
     public static List<FirmaProdukt> getAll() {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
         TypedQuery<FirmaProdukt> q = em.createNamedQuery("FirmaProdukt.getAll", FirmaProdukt.class);
         return q.getResultList();
     }

@@ -105,14 +105,14 @@ public class EditacnyForm extends VerticalLayout {
                         "Kusy su povinne")
                 .bind(Produkt::getKusy, Produkt::setKusy);
 
-//        TODO pridat firmu ale cez mostik
-//        Binder.Binding<Produkt, String> firmaBinding = binder.forField(tFirma)
-//                .withValidator(nazovFirmy -> !tFirma.getValue().trim().isEmpty(),
-//                        "Firma je povinna")
-//                .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
-//                        "Firma musi byt existujuca")
-//                .bind(uzivatel -> uzivatel.getFirma() == null ? "" : uzivatel.getFirma().getNazov(),
-//                        (uzivatel, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(uzivatel::setFirma));
+
+        Binder.Binding<Produkt, String> firmaBinding = binder.forField(tFirma)
+                .withValidator(nazovFirmy -> !tFirma.getValue().trim().isEmpty(),
+                        "Firma je povinna")
+                .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
+                        "Firma musi byt existujuca")
+                .bind(uzivatel -> uzivatel.getFirma() == null ? "" : uzivatel.getFirma().getNazov(),
+                        (uzivatel, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(uzivatel::setFirma));
 
         tKod.addValueChangeListener(event -> kodBinding.validate());
         tNazov.addValueChangeListener(event -> nazovBinding.validate());

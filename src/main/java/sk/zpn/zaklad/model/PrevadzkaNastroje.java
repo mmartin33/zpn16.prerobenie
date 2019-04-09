@@ -24,6 +24,7 @@ public class PrevadzkaNastroje {
     public static List<Prevadzka> zoznamPrevadzka(Firma firma) {
         List<Prevadzka> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
         TypedQuery<Prevadzka> q = em.createNamedQuery("Prevadzka.getPrevadzkyFirmy", Prevadzka.class);
         q.setParameter("firma", firma);
         u =  q.getResultList();
