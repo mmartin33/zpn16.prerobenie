@@ -61,7 +61,7 @@ public class PrevadzkyView extends HorizontalLayout implements View {
 
         editacnyForm.setPrevadzkyView(this);
         browsPanel.btnNovy.addClickListener(clickEvent -> {
-            deselect();
+//            deselect();
             Prevadzka p= new Prevadzka();
             if (this.firma!=null)
                 p.setFirma(this.firma);

@@ -4,6 +4,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Doklad;
+import sk.zpn.domena.StavDokladu;
 import sk.zpn.zaklad.model.DokladyNastroje;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class DokladyView extends HorizontalLayout implements View {
         browsPanel.btnNovy.addClickListener(clickEvent -> {
             deselect();
             Doklad d=new Doklad();
+            d.setStavDokladu(StavDokladu.POTVRDENY);
             d.setCisloDokladu(DokladyNastroje.noveCisloDokladu());
             editacnyForm.edit(d);
         });

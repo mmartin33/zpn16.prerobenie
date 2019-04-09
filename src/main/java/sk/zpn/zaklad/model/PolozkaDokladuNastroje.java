@@ -28,7 +28,7 @@ public class PolozkaDokladuNastroje {
         if (d.isNew()) {
             d.setId((long) 0);
             d.setKedy(new Date());
-            d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+            d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
         }
         System.out.println("Ulozena polozka");
         em.getTransaction().begin();

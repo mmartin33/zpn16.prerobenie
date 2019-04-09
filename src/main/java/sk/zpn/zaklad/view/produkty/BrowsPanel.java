@@ -61,7 +61,7 @@ public class BrowsPanel extends VerticalLayout {
             colNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colKusy.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colBody.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-//            colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+            colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
 
 //
             grid.setColumnOrder(colKat,colNazov,colKusy,colBody);

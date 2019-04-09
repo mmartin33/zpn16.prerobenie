@@ -28,6 +28,7 @@ public class EditacnyForm extends VerticalLayout {
     private ComboBox<String> typDokladuComboBox;
     private TextField tPoznamka;
     private TextField tFirma;
+    private ComboBox<String> stavDokladuComboBox;
 
 
     protected Button btnUloz;
@@ -41,10 +42,12 @@ public class EditacnyForm extends VerticalLayout {
         tCislo = new TextField("Číslo");
         dDatum = new DateField("Dátum");
         tFirma = new TextField("Firma");
+
         tFirma.setWidth("400");
         typDokladuComboBox = new ComboBox<>("Typ dokladu");
         tPoznamka = new TextField("Poznámka");
         tPoznamka.setWidth("400");
+        stavDokladuComboBox = new ComboBox<>("Stav dokladu");
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
@@ -57,6 +60,7 @@ public class EditacnyForm extends VerticalLayout {
         lEdit.addComponent(tFirma);
         lEdit.addComponent(typDokladuComboBox);
         lEdit.addComponent(tPoznamka);
+        lEdit.addComponent(stavDokladuComboBox);
 
 
         HorizontalLayout lBtn=new HorizontalLayout();
@@ -66,6 +70,11 @@ public class EditacnyForm extends VerticalLayout {
         typDokladuComboBox.setItems(
             Arrays.stream(TypDokladu.values())
             .map(TypDokladu::getDisplayValue));
+
+        stavDokladuComboBox.setItems(
+                Arrays.stream(StavDokladu.values())
+                        .map(StavDokladu::getDisplayValue));
+
 
 
          this.addComponent(lEdit);
@@ -91,6 +100,11 @@ public class EditacnyForm extends VerticalLayout {
             (doklad, value) -> doklad.setTypDokladu(
                 TypDokladu.fromDisplayName(value)));
 
+
+        Binder.Binding<Doklad, String> stavDokladuBinding = binder.forField(stavDokladuComboBox)
+                .bind(doklad -> doklad.getStavDokladu().getDisplayValue(),
+                        (doklad, value) -> doklad.setStavDokladu(
+                                StavDokladu.fromDisplayName(value)));
 
         Binder.Binding<Doklad, String> firmaBinding = binder.forField(tFirma)
                 .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
@@ -200,6 +214,7 @@ public class EditacnyForm extends VerticalLayout {
         tFirma.clear();
         tPoznamka.clear();
         typDokladuComboBox.clear();
+        stavDokladuComboBox.clear();
         dDatum.clear();
     }
 }

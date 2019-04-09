@@ -41,7 +41,7 @@ public class MyUI extends UI {
 //    PoberateliaView poberateliaView;
     ProduktyView produktyView;
     MostikView mostikView;
-    FirmyView firmyView;
+    //FirmyView firmyView;
     Pripojenie p;
     ParametreView parametre;
 
@@ -56,12 +56,12 @@ public class MyUI extends UI {
 //        poberateliaView=new PoberateliaView();
         //produktyView=new ProduktyView();
         //mostikView=new MostikView();
-        firmyView=new FirmyView();
+        //firmyView=new FirmyView();
         parametre=new ParametreView();
 
         navigator.addView(VitajteView.NAME, vitajteView);
         navigator.addView(UzivateliaView.NAME, uzivateliaView);
-        navigator.addView(FirmyView.NAME, firmyView);
+        //navigator.addView(FirmyView.NAME, firmyView);
 //        navigator.addView(PoberateliaView.NAME, poberateliaView);
         //navigator.addView(ProduktyView.NAME, produktyView);
         //navigator.addView(MostikView.NAME, mostikView);

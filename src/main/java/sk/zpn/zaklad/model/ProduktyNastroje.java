@@ -46,10 +46,11 @@ public class ProduktyNastroje {
 
     public static Produkt ulozProdukt(Produkt f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
         if (f.isNew()) {
             f.setId((long) 0);
             f.setKedy(new Date());
-            f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+            f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
         }
         em.getTransaction().begin();
         em.persist(f);

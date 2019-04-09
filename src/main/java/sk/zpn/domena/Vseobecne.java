@@ -1,17 +1,8 @@
 package sk.zpn.domena;
 
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
-
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
-
-import static javax.persistence.CascadeType.PERSIST;
 
 @MappedSuperclass
 public abstract class Vseobecne {
@@ -23,9 +14,7 @@ public abstract class Vseobecne {
     @Column
     private Date kedy;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = PERSIST)
-    @JoinColumn(nullable = true)
-    private Uzivatel kto;
+    private Long kto_id;
     public Long getId() {
         return id;
     }
@@ -45,12 +34,12 @@ public abstract class Vseobecne {
         this.kedy = kedy;
     }
 
-    public Uzivatel getKto() {
-        return kto;
+    public Long getKto() {
+        return kto_id;
     }
 
-    public void setKto(Uzivatel kto) {
-        this.kto = kto;
+    public void setKto(Long kto) {
+        this.kto_id = kto;
     }
 
 

@@ -55,6 +55,12 @@ public class VitajteView extends MojView {
                 public void menuSelected(MenuItem selectedItem) {
                     System.out.println(selectedItem.getText());// + MyUI.getUser().getPopis());
                     if (selectedItem.getDescription().equals("firmy")) {
+                        FirmyView firmyView= new FirmyView(null);
+                        UI.getCurrent().getNavigator().addView(FirmyView.NAME, firmyView);
+                        n.navigateTo(FirmyView.NAME);
+
+
+
                         n.navigateTo(FirmyView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("parametre")) {

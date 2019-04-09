@@ -31,7 +31,7 @@ public class DokladyNastroje {
                 d.setStavDokladu(StavDokladu.POTVRDENY);
             d.setId((long) 0);
             d.setKedy(new Date());
-            d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+            d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
         }
         System.out.println("Ulozeny dokald"+d.getCisloDokladu());
         em.getTransaction().begin();
@@ -82,6 +82,7 @@ public class DokladyNastroje {
         Doklad hlavickaDokladu=new Doklad();
 
         String noveCisloDokladu = noveCisloDokladu();
+
 
         if   (noveCisloDokladu==null || noveCisloDokladu.isEmpty()){
             chyby.add(new ChybaImportu(

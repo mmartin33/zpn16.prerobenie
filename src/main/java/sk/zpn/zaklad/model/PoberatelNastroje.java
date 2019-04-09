@@ -49,11 +49,12 @@ public class PoberatelNastroje {
         if (f.isNew()) {
             f.setId((long) 0);
             f.setKedy(new Date());
-            f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+            f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
         }
         em.getTransaction().begin();
         em.persist(f);
         em.getTransaction().commit();
+
         return f;
 
 

@@ -47,7 +47,7 @@ public class PrevadzkaNastroje {
         if (p.isNew()) {
             p.setId((long) 0);
             p.setKedy(new Date());
-            p.setKto(UzivatelNastroje.getPrihlasenehoUzivatela());
+            p.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
         }
         System.out.println("Ulozena prevadzka:"+p.getNazov());
         em.getTransaction().begin();
