@@ -18,7 +18,7 @@ public class Pripojenie {
         em = emf.createEntityManager();
         VaadinSession.getCurrent().setAttribute("createEntityManager",em);
         if (UzivatelNastroje.prazdnyUzivatelia()) {
-            Pripojenie.vytvorUzivatela(1, "m", "m", TypUzivatela.ADMIN);
+            Pripojenie.vytvorUzivatela(1, "m", "m789", TypUzivatela.ADMIN);
             TestDataFactory testDataFactory = new TestDataFactory();
             testDataFactory.createProdukty();
             ParametreNastroje.ulozParametre(new Parametre().setRok("2019"));

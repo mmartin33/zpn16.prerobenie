@@ -26,6 +26,8 @@ public class PolozkaDokladuNastroje {
     public static PolozkaDokladu ulozPolozkuDokladu(PolozkaDokladu d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         if (d.isNew()) {
+            d.setDoklad(em.find(Doklad.class, d.getDoklad().getId()));
+
             d.setId((long) 0);
             d.setKedy(new Date());
             d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());

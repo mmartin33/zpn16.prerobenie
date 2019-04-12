@@ -29,9 +29,7 @@ public class Firma extends Vseobecne {
     private String telefon;
     private BigDecimal pociatocnyStav;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "firma_id")
-    private List<Uzivatel> listUzivatelov;
+
 
     @OneToMany(mappedBy = "firma")
     private List<FirmaProdukt> produktMostik;
@@ -94,13 +92,7 @@ public class Firma extends Vseobecne {
 
     public boolean isNew() {return this.getId() == null;}
 
-    public List<Uzivatel> getListUzivatelov() {
-        return listUzivatelov;
-    }
 
-    public void setListUzivatelov(List<Uzivatel> listUzivatelov) {
-        this.listUzivatelov = listUzivatelov;
-    }
 
     public List<FirmaProdukt> getProduktMostik() {
         return produktMostik;

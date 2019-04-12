@@ -68,11 +68,11 @@ public class MyUI extends UI {
         navigator.addView(LoginView.NAME, login);
         navigator.addView(ParametreView.NAME, parametre);
 
-        boolean testRezim=true;
+        boolean testRezim=false;
 
         if (testRezim){
             String name = "m";
-            String pass = "m";
+            String pass = "";
             UzivatelNastroje.overUzivatela(name,pass);
         }
         login.addLoginListener(e-> {

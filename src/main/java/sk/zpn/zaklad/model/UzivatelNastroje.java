@@ -74,11 +74,12 @@ public class UzivatelNastroje {
     }
     public static Uzivatel ulozUzivatela(Uzivatel u){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        if (u.isNew())
-            u.setId((long)0);
-        System.out.println("Ulozeny uzivate:"+u.getMeno());
         em.getTransaction().begin();
-        em.persist(u);
+        if (u.isNew()){
+            u.setId((long)0);
+            em.persist(u);}
+        else
+            em.merge(u);
         em.getTransaction().commit();
         return u;
 
