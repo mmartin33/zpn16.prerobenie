@@ -52,7 +52,7 @@ public class PoberatelNastroje {
             f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
         }
         em.getTransaction().begin();
-        em.persist(f);
+        em.merge(f);
         em.getTransaction().commit();
 
         return f;

@@ -16,7 +16,7 @@ public class ParametreNastroje {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
 
         em.getTransaction().begin();
-        em.persist(parametre);
+        em.merge(parametre);
         em.getTransaction().commit();
         return parametre;
     }

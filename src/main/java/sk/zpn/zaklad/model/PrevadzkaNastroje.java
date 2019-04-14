@@ -51,7 +51,7 @@ public class PrevadzkaNastroje {
         }
         System.out.println("Ulozena prevadzka:"+p.getNazov());
         em.getTransaction().begin();
-        em.persist(p);
+        em.merge(p);
         em.getTransaction().commit();
         return p;
 

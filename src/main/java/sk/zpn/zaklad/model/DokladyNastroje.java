@@ -35,7 +35,7 @@ public class DokladyNastroje {
         }
         System.out.println("Ulozeny dokald"+d.getCisloDokladu());
         em.getTransaction().begin();
-        em.persist(d);
+        em.merge(d);
         em.getTransaction().commit();
         return d;
 

@@ -16,6 +16,19 @@
             <property name="javax.persistence.jdbc.user" value="postgres" />
             <property name="javax.persistence.jdbc.password" value="postgres" />
             <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+
+
+            <!-- custom SessionLog implementation to use apache commons logging 1.1 API (so log4J) -->
+            <!--<property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.CommonsLoggingSessionLog"/>-->
+            <property name="eclipselink.logging.level" value="FINE" />
+            <property name="eclipselink.logging.parameters" value="true"/>
         </properties>
+
+    <!--<property name="eclipselink.weaving" value="static" />-->
+    <!--<property name="eclipselink.logging.level.sql" value="FINEST" />-->
+    <!--<property name="eclipselink.logging.level.cache" value="FINEST" />-->
+
+
+
     </persistence-unit>
 </persistence>

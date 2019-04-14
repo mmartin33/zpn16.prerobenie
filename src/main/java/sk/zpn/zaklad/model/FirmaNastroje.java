@@ -43,14 +43,18 @@ public class FirmaNastroje {
 
     public static Firma ulozFirmu(Firma f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        System.out.println("Ulozena firma:"+f.getNazov());
+        em.getTransaction().begin();
+
         if (f.isNew()) {
             f.setId((long) 0);
             f.setKedy(new Date());
             f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
-        }
-        System.out.println("Ulozena firma:"+f.getNazov());
-        em.getTransaction().begin();
-        em.persist(f);
+            em.persist(f);
+            }
+        else
+            em.merge(f);
+
         em.getTransaction().commit();
 
         return f;

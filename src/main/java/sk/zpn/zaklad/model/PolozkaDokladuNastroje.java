@@ -34,7 +34,7 @@ public class PolozkaDokladuNastroje {
         }
         System.out.println("Ulozena polozka");
         em.getTransaction().begin();
-        em.persist(d);
+        em.merge(d);
         em.getTransaction().commit();
         return d;
 

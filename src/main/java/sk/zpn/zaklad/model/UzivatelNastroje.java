@@ -24,7 +24,7 @@ public class UzivatelNastroje {
         Optional<Uzivatel> uzivatel = Optional.ofNullable(q.getSingleResult());
 
         try {
-            if  (uzivatel.isPresent() && HesloNastroje.check(heslo, uzivatel.get().getHeslo())) {
+            if  (uzivatel.isPresent()  && HesloNastroje.check(heslo, uzivatel.get().getHeslo())){
                 VaadinSession.getCurrent().setAttribute("id_uzivatela", uzivatel.get().getId());
                 VaadinSession.getCurrent().setAttribute("meno", uzivatel.get().getMeno());
                 logger.info(String.format("Uzivatel %s bol overeny", uzivatel.get().getMeno()));
@@ -75,10 +75,10 @@ public class UzivatelNastroje {
     public static Uzivatel ulozUzivatela(Uzivatel u){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
-        if (u.isNew()){
+        if (u.isNew())
             u.setId((long)0);
-            em.persist(u);}
-        else
+//            em.persist(u);}
+//        else
             em.merge(u);
         em.getTransaction().commit();
         return u;

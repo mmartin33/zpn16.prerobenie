@@ -111,8 +111,8 @@ public class EditacnyForm extends VerticalLayout {
                         "Firma je povinna")
                 .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
                         "Firma musi byt existujuca")
-                .bind(uzivatel -> uzivatel.getFirma() == null ? "" : uzivatel.getFirma().getNazov(),
-                        (uzivatel, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(uzivatel::setFirma));
+                .bind(poberatel -> poberatel.getFirma() == null ? "" : poberatel.getFirma().getNazov(),
+                        (poberatel, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(poberatel::setFirma));
 
         tKod.addValueChangeListener(event -> kodBinding.validate());
         tNazov.addValueChangeListener(event -> nazovBinding.validate());

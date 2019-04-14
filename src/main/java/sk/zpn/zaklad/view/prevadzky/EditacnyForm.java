@@ -119,11 +119,23 @@ public class EditacnyForm extends VerticalLayout {
         .bind(Prevadzka::getNazov, Prevadzka::setNazov);
 
 
+//        Binder.Binding<Prevadzka, String> firmaBinding = binder.forField(tNazovFirmy)
+//                .withValidator(v ->  this.aktualnaFirma != null,"Názov firmy je povinný")
+//             //  .withValidator(nazovFirmy -> FirmaNastroje.firmaPodlaID(this.aktualnaFirma.getId()).isPresent(),"Firma musi byt existujuca")
+//                .bind(prevadzka -> prevadzka.getFirma() == null ? "" : prevadzka.getFirma().getNazov(),
+//                        (firma, s) -> FirmaNastroje.firmaPodlaID(this.aktualnaFirma.getId()).ifPresent(firma::setFirma));
+
         Binder.Binding<Prevadzka, String> firmaBinding = binder.forField(tNazovFirmy)
-                .withValidator(v ->  this.aktualnaFirma != null,"Názov firmy je povinný")
-                .withValidator(nazovFirmy -> FirmaNastroje.firmaPodlaID(this.aktualnaFirma.getId()).isPresent(),"Firma musi byt existujuca")
+                .withValidator(nazovFirmy -> !tNazovFirmy.getValue().trim().isEmpty(),
+                        "Firma je povinna")
+                .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
+                        "Firma musi byt existujuca")
                 .bind(prevadzka -> prevadzka.getFirma() == null ? "" : prevadzka.getFirma().getNazov(),
-                        (firma, s) -> FirmaNastroje.firmaPodlaID(this.aktualnaFirma.getId()).ifPresent(firma::setFirma));
+                        (prevadzka, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tNazovFirmy.getValue()).ifPresent(prevadzka::setFirma));
+
+
+
+
 
         Binder.Binding<Prevadzka, String> MestoBinding = binder.forField(tMesto)
                 .bind(Prevadzka::getMesto, Prevadzka::setMesto);
