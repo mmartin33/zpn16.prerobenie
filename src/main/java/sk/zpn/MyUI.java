@@ -10,6 +10,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
+import sk.zpn.zaklad.model.LogPrihlaseniaNastroje;
 import sk.zpn.zaklad.model.Pripojenie;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.firmy.FirmyView;
@@ -82,6 +83,8 @@ public class MyUI extends UI {
 
             if (UzivatelNastroje.overUzivatela(name,pass)) {
                 System.out.println("uzivatel overeny"+VaadinSession.getCurrent().getAttribute("meno")+VaadinSession.getCurrent().getAttribute("id_uzivatela"));
+                new LogPrihlaseniaNastroje().uloz();
+
                 navigator.navigateTo(VitajteView.NAME);
             }
             else

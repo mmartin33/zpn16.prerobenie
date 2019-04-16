@@ -3,6 +3,8 @@ package sk.zpn.zaklad.view.doklady.polozkaDokladu;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
+import com.vaadin.ui.components.grid.MultiSelectionModel;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.PolozkaDokladu;
@@ -38,7 +40,9 @@ public class BrowsPanel extends VerticalLayout {
         this.polozkyDokladuList = polozkyDokladuList;
         grid = new FilterGrid<>();
         grid.setItems(this.polozkyDokladuList);
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+ //     grid.setSelectionMode(Grid.SelectionMode.);
+//        MultiSelectionModelImpl<?> model = (MultiSelectionModelImpl<?>) grid.getSelectionModel();
+//        model.setSelectAllCheckBoxVisibility(MultiSelectionModel.SelectAllCheckBoxVisibility.VISIBLE);
 
 
 
@@ -116,7 +120,7 @@ public class BrowsPanel extends VerticalLayout {
     void deselect() {
         PolozkaDokladu value = grid.asSingleSelect().getValue();
         if (value != null) {
-            grid.getSelectionModel().deselect(value);
+//            grid.getSelectionModel().deselect(value);
         }
     }
 
