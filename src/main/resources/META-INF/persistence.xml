@@ -15,8 +15,8 @@
             <property name="javax.persistence.jdbc.user" value="postgres" />
             <property name="javax.persistence.jdbc.password" value="postgres" />
             <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
-            <property name="eclipselink.logging.level.sql" value="FINE"/>
-            <property name="eclipselink.logging.parameters" value="true"/>
+            <!--<property name="eclipselink.logging.level.sql" value="FINE"/>-->
+            <!--<property name="eclipselink.logging.parameters" value="true"/>-->
 
         </properties>
     </persistence-unit>

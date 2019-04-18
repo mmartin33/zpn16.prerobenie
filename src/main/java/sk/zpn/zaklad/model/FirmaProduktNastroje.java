@@ -50,7 +50,7 @@ public class FirmaProduktNastroje {
     public static FirmaProdukt ulozFirmaProdukt(FirmaProdukt firmaProdukt) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
-        em.persist(firmaProdukt);
+        em.merge(firmaProdukt);
         em.getTransaction().commit();
         return firmaProdukt;
     }

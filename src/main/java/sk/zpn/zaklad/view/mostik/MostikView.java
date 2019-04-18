@@ -103,7 +103,7 @@ public class MostikView extends HorizontalLayout implements View {
         }
 
         ConfirmDialog.show(UI.getCurrent(), "Odstránenie mapovania medzi KIT a KAT",
-            "Naozaj si prajete odstrániť mapovanie na produkt "+ oznacenyFirmaProdukt.getProdukt().getNazov()+"?",
+            "Naozaj si prajete odstrániť prepoj na produkt "+ oznacenyFirmaProdukt.getProdukt().getNazov()+"?",
             "Áno", "Nie", new ConfirmDialog.Listener() {
 
                 public void onClose(ConfirmDialog dialog) {
