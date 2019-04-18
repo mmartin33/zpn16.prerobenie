@@ -100,9 +100,9 @@ public class VitajteView extends MojView {
             };
             MenuBar.Command odhlasenie = new MenuBar.Command() {
                 public void menuSelected(MenuItem selectedItem) {
+                    UI.getCurrent().getNavigator().navigateTo(LoginView.NAME);
                     VaadinSession.getCurrent().setAttribute("id_uzivatela",null);
                     VaadinSession.getCurrent().setAttribute("meno",null);
-                    UI.getCurrent().getNavigator().navigateTo(LoginView.NAME);
                 }
             };
             MenuBar.Command sp_admin = new MenuBar.Command() {
@@ -139,8 +139,6 @@ public class VitajteView extends MojView {
             menuProdukty.setDescription("produkty");
             MenuItem menuDoklad = menuSpravcu.addItem("Doklady", VaadinIcons.RECORDS, mycommand);
             menuDoklad.setDescription("doklad");
-            MenuItem menuNezhrateDavky = menuSpravcu.addItem("Nezhrate davky", VaadinIcons.CHECK, mycommand);
-            menuNezhrateDavky.setDescription("davka");
             MenuItem menuBody = menuSpravcu.addItem("Stav bodov", VaadinIcons.PIGGY_BANK, mycommand);
             menuBody.setDescription("body");
             MenuItem menuParametre = menuSpravcu.addItem("Parametre", VaadinIcons.COG_O, mycommand);
