@@ -13,6 +13,7 @@ import sk.zpn.zaklad.model.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class EditacnyForm extends VerticalLayout {
@@ -26,7 +27,7 @@ public class EditacnyForm extends VerticalLayout {
 
 
     protected Button btnUloz;
-    protected Button btnZmaz;
+
 
     private final Binder <PolozkaDokladu> binder = new Binder<>();
     private PolozkaDokladu staraEditovana;
@@ -46,7 +47,7 @@ public class EditacnyForm extends VerticalLayout {
         tPoznamka = new TextField("Poznamka");
         tPoznamka.setWidth("400");
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
-        btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
+
         nastavComponnenty();
         FormLayout lEdit=new FormLayout();
 
@@ -60,7 +61,7 @@ public class EditacnyForm extends VerticalLayout {
 
         HorizontalLayout lBtn=new HorizontalLayout();
         lBtn.addComponent(btnUloz);
-        lBtn.addComponent(btnZmaz);
+
 
 
          this.addComponent(lEdit);
@@ -139,7 +140,7 @@ public class EditacnyForm extends VerticalLayout {
     btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
     btnUloz.addClickListener(this::save);
 
-    btnZmaz.addClickListener(this::delete);
+
 
 
 }
@@ -172,27 +173,6 @@ public class EditacnyForm extends VerticalLayout {
 
     }
 
-    public void delete(Button.ClickEvent event) {
-        if (!Optional.ofNullable(polozkyDokladyView).isPresent()) {
-            return;
-        }
-
-        ConfirmDialog.show(UI.getCurrent(), "Odstránenie dokladu", "Naozaj si prajete odstrániť položku "+"?",
-                "Áno", "Nie", new ConfirmDialog.Listener() {
-
-                    public void onClose(ConfirmDialog dialog) {
-                        if (dialog.isConfirmed()) {
-                            // Confirmed to continue
-                            PolozkaDokladuNastroje.zmazPolozkyDoklady(polozkaEditovana);
-                            polozkyDokladyView.odstranPolozkuDokladu(polozkaEditovana);
-                            Notification.show("Doklad odstránený", Notification.Type.TRAY_NOTIFICATION);
-                            clearEditacnyForm();
-                            polozkyDokladyView.selectFirst();
-                        }
-                    }
-        });
-
-    }
 
     public void setDokladyView(PolozkyDokladuView polozkyDokladuView) {
         this.polozkyDokladyView = polozkyDokladuView;

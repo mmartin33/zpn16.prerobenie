@@ -7,7 +7,9 @@ import com.vaadin.ui.components.grid.MultiSelectionModel;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
+import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.PolozkaDokladu;
+import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
 
 import java.math.BigDecimal;
@@ -15,6 +17,7 @@ import java.text.SimpleDateFormat;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class BrowsPanel extends VerticalLayout {
@@ -25,6 +28,7 @@ public class BrowsPanel extends VerticalLayout {
 
     private PolozkyDokladuView polozkyDokladuView;
     public Button btnNovy;
+
 
 
 
@@ -40,7 +44,7 @@ public class BrowsPanel extends VerticalLayout {
         this.polozkyDokladuList = polozkyDokladuList;
         grid = new FilterGrid<>();
         grid.setItems(this.polozkyDokladuList);
- //     grid.setSelectionMode(Grid.SelectionMode.);
+        grid.setSelectionMode(Grid.SelectionMode.MULTI);
 //        MultiSelectionModelImpl<?> model = (MultiSelectionModelImpl<?>) grid.getSelectionModel();
 //        model.setSelectAllCheckBoxVisibility(MultiSelectionModel.SelectAllCheckBoxVisibility.VISIBLE);
 
@@ -67,6 +71,14 @@ public class BrowsPanel extends VerticalLayout {
         );
 
 
+
+
+        Button btnZmaz=new Button("Zmaž", VaadinIcons.CLOSE_CIRCLE);
+        btnZmaz.addClickListener(clickEvent ->
+                zmaz()
+        );
+
+
         HorizontalLayout tlacitkovy=new HorizontalLayout();
         btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
@@ -79,6 +91,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
         tlacitkovy.addComponent(btnNovy);
+        tlacitkovy.addComponent(btnZmaz);
         tlacitkovy.addComponent(btnSpat);//666
 
         String pattern = "dd-MM-yyyy";
@@ -104,6 +117,31 @@ public class BrowsPanel extends VerticalLayout {
 
     }
 
+    private void zmaz() {
+        if (grid.getSelectedItems().size()<=0)
+            return;
+        String otazka=new String("Naozaj si prajete odstrániť položku");
+        if (grid.getSelectedItems().size()>1)
+            otazka="Naozaj si prajete odstrániť položky";
+        ConfirmDialog.show(UI.getCurrent(), "Odstránenie", otazka+"?",
+                "Áno", "Nie", new ConfirmDialog.Listener() {
+
+                    public void onClose(ConfirmDialog dialog) {
+                        if (dialog.isConfirmed()) {
+                            // Confirmed to continue
+
+                            for(Object o : grid.getSelectionModel().getSelectedItems()){
+                                PolozkaDokladuNastroje.zmazPolozkyDoklady((PolozkaDokladu) o);
+                                polozkyDokladuList.remove(o);
+                            }
+                            grid.getDataProvider().refreshAll();
+
+                        }
+                    }
+                });
+
+    }
+
 
     void refresh() {
         grid.getDataProvider().refreshAll();
@@ -113,26 +151,29 @@ public class BrowsPanel extends VerticalLayout {
 
 
     void addSelectionListener(Consumer<PolozkaDokladu> listener) {
-        grid.asSingleSelect()
-                .addValueChangeListener(e -> listener.accept(e.getValue()));
+        grid.asMultiSelect()
+                .addValueChangeListener(e -> {
+                    Set<PolozkaDokladu> polozkaDokladuSet = e.getValue();
+                    listener.accept(polozkaDokladuSet.iterator().next());
+                });
     }
 
-    void deselect() {
-        PolozkaDokladu value = grid.asSingleSelect().getValue();
-        if (value != null) {
+//    void deselect() {
+//        PolozkaDokladu value = grid.asSingleSelect().getValue();
+//        if (value != null) {
 //            grid.getSelectionModel().deselect(value);
-        }
-    }
+//        }
+//    }
 
     void selectFirst() {
         List<PolozkaDokladu> prvaPolozkaDokladu = grid.getDataCommunicator().fetchItemsWithRange(0,1);
         if(prvaPolozkaDokladu.size() > 0){
-            grid.asSingleSelect().select(prvaPolozkaDokladu.get(0));
+            grid.asMultiSelect().select(prvaPolozkaDokladu.get(0));
         }
     }
 
     void selectDoklad(PolozkaDokladu polozkaDokladu) {
-        Optional.ofNullable(polozkaDokladu).ifPresent(grid.asSingleSelect()::select);
+        Optional.ofNullable(polozkaDokladu).ifPresent(grid.asMultiSelect()::select);
     }
 
     public void refresh(PolozkaDokladu p) {

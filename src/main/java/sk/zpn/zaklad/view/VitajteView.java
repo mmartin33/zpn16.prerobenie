@@ -114,6 +114,12 @@ public class VitajteView extends MojView {
 
                         n.navigateTo(UzivateliaView.NAME);
                     }
+                    else if (selectedItem.getDescription().equals("log")){
+                        LogView LogView = new LogView();
+                        UI.getCurrent().getNavigator().addView(LogView.NAME, LogView);
+                        n.navigateTo(LogView.NAME);
+
+                    }
                 }
             };
 
@@ -147,6 +153,8 @@ public class VitajteView extends MojView {
             menuAdmin = barmenu.addItem("Spravca", null, null);
             MenuItem menuUzivatelia = menuAdmin.addItem("Užívatelia", VaadinIcons.USERS, sp_admin);
             menuUzivatelia.setDescription("uzivatelia");
+            MenuItem menuLog = menuAdmin.addItem("Log prihlásení", VaadinIcons.LIST, sp_admin);
+            menuLog.setDescription("log");
 
 
 
