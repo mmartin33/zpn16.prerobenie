@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.mostik;
 
+import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -7,9 +8,11 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import org.vaadin.dialogs.ConfirmDialog;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
+import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
 import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.model.UzivatelNastroje;
@@ -27,6 +30,7 @@ public class MostikView extends HorizontalLayout implements View {
     public static final String NAME = "mostikView";
     private BrowsPanel browsPanel;
 
+    private final Binder<Firma> binder = new Binder<>();
     private GridLayout mainGridLayout =  new GridLayout(1,4);
     private HorizontalLayout upperLabelHorizontalLayout = new HorizontalLayout();
     private HorizontalLayout tlacitkovyLayout = new HorizontalLayout();
@@ -44,8 +48,8 @@ public class MostikView extends HorizontalLayout implements View {
         mainGridLayout.setSizeFull();
         mainGridLayout.setRowExpandRatio(0, 0.05f);
         mainGridLayout.setRowExpandRatio(1, 0.05f);
-        mainGridLayout.setRowExpandRatio(1, 0.85f);
-        mainGridLayout.setRowExpandRatio(2, 0.05f);
+        mainGridLayout.setRowExpandRatio(2, 0.85f);
+        mainGridLayout.setRowExpandRatio(3, 0.05f);
 
 
         configureComponents();
@@ -85,6 +89,17 @@ public class MostikView extends HorizontalLayout implements View {
         });
         rok = ParametreNastroje.nacitajParametre().getRok();
         rokLabel.setValue(rokLabel.getValue() + rok);
+
+
+//        Binder.Binding<Firma, String> firmaBinding = binder.forField(txtFirma)
+//                .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
+//                        "Firma musi byt existujuca");
+//                .bind(doklad -> doklad.getFirma() == null ? "" : doklad.getFirma().getNazov(),
+//                        (doklad, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(doklad::setFirma));
+
+
+        txtFirma=new TextField();
+
         txtFirma.setWidth("200");
         txtFirma.setValue(nazovFirmy);
         txtFirma.setEnabled(false);

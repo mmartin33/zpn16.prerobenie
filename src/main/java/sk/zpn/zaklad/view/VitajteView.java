@@ -13,6 +13,7 @@ import sk.zpn.zaklad.view.doklady.DokladyView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 
 
+import sk.zpn.zaklad.view.log.LogView;
 import sk.zpn.zaklad.view.mostik.MostikView;
 import sk.zpn.zaklad.view.nacitanieCSV.NacitanieCSVView;
 
@@ -115,9 +116,9 @@ public class VitajteView extends MojView {
                         n.navigateTo(UzivateliaView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("log")){
-//                        LogView LogView = new LogView();
-//                        UI.getCurrent().getNavigator().addView(LogView.NAME, LogView);
-//                        n.navigateTo(LogView.NAME);
+                        LogView LogView = new LogView();
+                        UI.getCurrent().getNavigator().addView(LogView.NAME, LogView);
+                        n.navigateTo(LogView.NAME);
 
                     }
                 }

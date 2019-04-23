@@ -1,7 +1,10 @@
 package sk.zpn.domena;
 
+import sk.zpn.zaklad.model.UzivatelNastroje;
+
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @MappedSuperclass
@@ -40,6 +43,18 @@ public abstract class Vseobecne {
 
     public void setKto(Long kto) {
         this.kto_id = kto;
+    }
+
+    public String getKedyFormatovany() {
+        String pattern = "dd.MM.yyyy HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(this.getKedy());
+    }
+
+    public String getKtoMeno() {
+
+
+        return UzivatelNastroje.getUzivatela(getKto()).get().getMeno();
     }
 
 
