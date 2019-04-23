@@ -115,9 +115,9 @@ public class VitajteView extends MojView {
                         n.navigateTo(UzivateliaView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("log")){
-                        LogView LogView = new LogView();
-                        UI.getCurrent().getNavigator().addView(LogView.NAME, LogView);
-                        n.navigateTo(LogView.NAME);
+//                        LogView LogView = new LogView();
+//                        UI.getCurrent().getNavigator().addView(LogView.NAME, LogView);
+//                        n.navigateTo(LogView.NAME);
 
                     }
                 }

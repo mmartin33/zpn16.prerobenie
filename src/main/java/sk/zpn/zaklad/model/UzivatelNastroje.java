@@ -115,4 +115,8 @@ public class UzivatelNastroje {
         Uzivatel u =getUzivatela((Long) VaadinSession.getCurrent().getAttribute("id_uzivatela")).get();
         return u.getFirma();
     }
+    public static boolean jeUzivatelAdminAleboSpravca() {
+        return (getPrihlasenehoUzivatela().getTypUzivatela()==TypUzivatela.ADMIN ||
+                getPrihlasenehoUzivatela().getTypUzivatela()==TypUzivatela.SPRAVCA_ZPN)?true:false;
+    }
 }

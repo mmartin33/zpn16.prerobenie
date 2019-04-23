@@ -8,9 +8,11 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.FirmaProdukt;
+import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
 import sk.zpn.zaklad.model.ParametreNastroje;
+import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
 import java.util.List;
@@ -25,13 +27,14 @@ public class MostikView extends HorizontalLayout implements View {
     public static final String NAME = "mostikView";
     private BrowsPanel browsPanel;
 
-    private GridLayout mainGridLayout =  new GridLayout(1,3);
+    private GridLayout mainGridLayout =  new GridLayout(1,4);
     private HorizontalLayout upperLabelHorizontalLayout = new HorizontalLayout();
     private HorizontalLayout tlacitkovyLayout = new HorizontalLayout();
     private String nazovFirmy = "";
     private String rok = "";
     private Label firmaLabel =  new Label("<b>Firma: </b>", ContentMode.HTML);
     private Label rokLabel =  new Label("<b>Rok: </b>", ContentMode.HTML);
+    private TextField txtFirma;
     private List<FirmaProdukt> firmaProduktList;
     private Button btnZmaz = new Button("Zmaž", VaadinIcons.CLOSE_CIRCLE);;
     private Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
@@ -40,7 +43,8 @@ public class MostikView extends HorizontalLayout implements View {
 
         mainGridLayout.setSizeFull();
         mainGridLayout.setRowExpandRatio(0, 0.05f);
-        mainGridLayout.setRowExpandRatio(1, 0.90f);
+        mainGridLayout.setRowExpandRatio(1, 0.05f);
+        mainGridLayout.setRowExpandRatio(1, 0.85f);
         mainGridLayout.setRowExpandRatio(2, 0.05f);
 
 
@@ -49,9 +53,10 @@ public class MostikView extends HorizontalLayout implements View {
         tlacitkovyLayout.addComponent(btnSpat);
         upperLabelHorizontalLayout.addComponent(firmaLabel);
         upperLabelHorizontalLayout.addComponent(rokLabel);
-        upperLabelHorizontalLayout.addComponent(new Label("Dvojklikom opravit KIT a koeficient "));
+        upperLabelHorizontalLayout.addComponent(new Label("Dvojklikom opraviť KIT a koeficient "));
 
         mainGridLayout.addComponent(upperLabelHorizontalLayout);
+        mainGridLayout.addComponent(txtFirma);
         mainGridLayout.addComponent(browsPanel);
         mainGridLayout.setComponentAlignment(browsPanel,Alignment.MIDDLE_LEFT);
         mainGridLayout.addComponent(tlacitkovyLayout);
@@ -80,6 +85,11 @@ public class MostikView extends HorizontalLayout implements View {
         });
         rok = ParametreNastroje.nacitajParametre().getRok();
         rokLabel.setValue(rokLabel.getValue() + rok);
+        txtFirma.setWidth("200");
+        txtFirma.setValue(nazovFirmy);
+        txtFirma.setEnabled(false);
+        if (UzivatelNastroje.jeUzivatelAdminAleboSpravca())
+            txtFirma.setEnabled(true);
         FirmaProduktNastroje.generateMissingFirmaProductItems(nazovFirmy);
         firmaProduktList = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
         browsPanel = new BrowsPanel(firmaProduktList, nazovFirmy);

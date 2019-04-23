@@ -84,6 +84,9 @@ public class BrowsPanel extends VerticalLayout {
                     refresh();
                     }))
             .setEditable(true);
+        FilterGrid.Column<FirmaProdukt, String> colFirma = grid.addColumn(firmaProdukt -> firmaProdukt.getFirma().getNazov())
+                .setCaption("Firma")
+                .setId("firma");
 
         colKit.setWidth(ViewConstants.THIN_COLUMN_WIDTH);
         colKat.setWidth(ViewConstants.THIN_COLUMN_WIDTH);
@@ -111,7 +114,7 @@ public class BrowsPanel extends VerticalLayout {
         colBodyFilter.setWidth(ViewConstants.THIN_COLUMN_FILTER_WIDTH, Unit.PIXELS);
         colKoeficientFilter.setWidth(ViewConstants.THIN_COLUMN_FILTER_WIDTH, Unit.PIXELS);
 
-        grid.setColumnOrder(colKat, colKit, colNazov, colBody, colKusy, colKoeficient);
+        grid.setColumnOrder(colKat, colKit, colNazov, colBody, colKusy, colKoeficient,colFirma);
 
 
 
