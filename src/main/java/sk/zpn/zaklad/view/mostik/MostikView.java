@@ -51,7 +51,7 @@ public class MostikView extends HorizontalLayout implements View {
         mainGridLayout.setRowExpandRatio(2, 0.85f);
         mainGridLayout.setRowExpandRatio(3, 0.05f);
 
-
+        mainGridLayout.setSpacing(false);
         configureComponents();
         tlacitkovyLayout.addComponent(btnZmaz);
         tlacitkovyLayout.addComponent(btnSpat);

@@ -72,8 +72,10 @@ public class MyUI extends UI {
         boolean testRezim=true;
 
         if (testRezim){
-            String name = "m";
-            String pass = "m789";
+            String name = "nkovacik";
+            String pass = "nkovacik3569";
+//            String name = "m";
+//            String pass = "m789";
             UzivatelNastroje.overUzivatela(name,pass);
         }
         login.addLoginListener(e-> {

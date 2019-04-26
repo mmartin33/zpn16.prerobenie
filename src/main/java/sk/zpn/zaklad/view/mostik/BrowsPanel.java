@@ -26,6 +26,7 @@ public class BrowsPanel extends VerticalLayout {
 
     public BrowsPanel(List<FirmaProdukt> firmaProduktList, String nazovFirmy) {
         GridLayout gl =new GridLayout(1,1);
+        gl.setSpacing(false);
         gl.setSizeFull();
         gl.setColumnExpandRatio(0,1f);
         gl.setRowExpandRatio(0, 1f);
