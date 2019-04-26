@@ -53,8 +53,7 @@ public class BrowsPanel extends VerticalLayout {
                 .forField(new TextField())
                 .withValidator(kit -> !kit.trim().isEmpty(),
                     "Kit nesmie byt prázdny")
-                .bind(FirmaProdukt::getKit,
-                    (produkt, kit) -> {
+                .bind(FirmaProdukt::getKit,(produkt, kit) -> {
                     produkt.setKitAndPersist(kit);
                     refresh();
                 }))

@@ -6,6 +6,7 @@ public class FirmaProduktId implements Serializable {
 
     private Long firma;
     private Long produkt;
+    private String kit;
 
     public Long getFirma() {
         return firma;
@@ -22,4 +23,8 @@ public class FirmaProduktId implements Serializable {
     public void setProdukt(Long produkt) {
         this.produkt = produkt;
     }
+
+    public String getKit() {return kit;  }
+
+    public void setKit(String kit) {this.kit = kit;}
 }
