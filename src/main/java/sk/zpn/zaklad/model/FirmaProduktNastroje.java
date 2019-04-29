@@ -102,4 +102,8 @@ public class FirmaProduktNastroje {
             .collect(Collectors.toList());
     }
 
+    public static void nastavAtributyPriNovej(FirmaProdukt fpEditovana) {
+        fpEditovana.setRok(ParametreNastroje.nacitajParametre().getRok());
+        fpEditovana.setFirma(UzivatelNastroje.getPrihlasenehoUzivatela().getFirma());
+    }
 }

@@ -146,6 +146,12 @@ public class BrowsPanel extends VerticalLayout {
         System.out.println("Refresh browsu all");
     }
 
+    public void refresh(FirmaProdukt fp) {
+        grid.getDataProvider().refreshAll();
+        grid.select(fp);
+
+    }
+
 
     void addSelectionListener(Consumer<FirmaProdukt> listener) {
         grid.asSingleSelect()

@@ -115,6 +115,7 @@ public class Produkt extends Vseobecne {
             return firma.getNazov();
 
     }
+
 }
 
 

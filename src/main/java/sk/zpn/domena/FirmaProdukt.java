@@ -74,17 +74,13 @@ public class FirmaProdukt extends  Vseobecne{
         this.firma = firma;
     }
 
-    public Produkt getProdukt() {
-        return produkt;
-    }
+    public Produkt getProdukt() {return produkt;}
 
     public void setProdukt(Produkt produkt) {
         this.produkt = produkt;
     }
 
-    public String getKit() {
-        return kit;
-    }
+    public String getKit() {return kit;}
 
     public void setKit(String kit) {
         this.kit = kit;
@@ -115,6 +111,7 @@ public class FirmaProdukt extends  Vseobecne{
         this.koeficient = koeficient;
         FirmaProduktNastroje.ulozFirmaProdukt(this);
     }
+    public boolean isNew() {return this.getId() == null;}
 }
 
 
