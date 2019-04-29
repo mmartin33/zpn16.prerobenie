@@ -18,6 +18,7 @@ import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,7 +82,11 @@ public class MostikView extends HorizontalLayout implements View {
     }
 
     private void novy(Button.ClickEvent clickEvent) {
-        MostikEdit me=new MostikEdit(new FirmaProdukt(),this);
+        FirmaProdukt novyFirmaProdukt=new FirmaProdukt();
+        novyFirmaProdukt.setKoeficient(new BigDecimal(1));
+        novyFirmaProdukt.setProdukt(browsPanel.getOznacenyFirmaProdukt().getProdukt());
+
+        MostikEdit me=new MostikEdit(novyFirmaProdukt,this);
 
 
     }
@@ -124,11 +129,6 @@ public class MostikView extends HorizontalLayout implements View {
             browsPanel.refresh();
     }
 
-    void pridajNovZaznamyMostika(FirmaProdukt novyFirmaProdukt) {
-        firmaProduktList.add(novyFirmaProdukt);
-        this.refreshMostika();
-
-    }
 
     void delete(Button.ClickEvent event) {
         FirmaProdukt oznacenyFirmaProdukt = browsPanel.getOznacenyFirmaProdukt();
@@ -155,21 +155,11 @@ public class MostikView extends HorizontalLayout implements View {
 
     public void pridajNovy(FirmaProdukt novaFirmaProdukt) {
         firmaProduktList.add(novaFirmaProdukt);
-        this.refresh(novaFirmaProdukt);
+        if (novaFirmaProdukt!=null)
+            browsPanel.pridaj(novaFirmaProdukt);
 
     }
 
-    private void refresh(FirmaProdukt novaFirmaProdukt) {
-
-            if (novaFirmaProdukt==null)
-                refresh();
-            else
-                browsPanel.refresh(novaFirmaProdukt);
-
-
-
-
-    }
 
     public void refresh() {browsPanel.refresh(); }
 }

@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.mostik;
 
+import com.sun.javafx.tk.TKDropTargetListener;
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.icons.VaadinIcons;
@@ -31,9 +32,11 @@ public class MostikEdit {
         fpEditovana=fp;
         mostikView =mv;
         tKat = new TextField("   KAT");
-        tKat.setMaxLength(50);
+        tKat.setMaxLength(150);
+        tKat.setWidth(90, Sizeable.Unit.PERCENTAGE);
         tKoeficient = new TextField("    Koeficient");
         tKoeficient.setMaxLength(10);
+
         //tKoeficient.setWidth("30");
         tKit = new TextField("   KIT");
         tKit.setMaxLength(50);
@@ -88,7 +91,9 @@ public class MostikEdit {
 
 
     private void nastavComponnenty() {
-
+        binder.readBean(fpEditovana);
+        tKoeficient.setValue(fpEditovana.getKoeficient().toString());
+        tKat.setValue(fpEditovana.getProdukt().getKat());
 
         Binder.Binding<FirmaProdukt, String> produktBinding = binder.forField(tKat)
                 .withValidator(katProduktu -> ProduktyNastroje.prvyProduktPodlaKat(katProduktu).isPresent(),
@@ -140,8 +145,9 @@ public class MostikEdit {
 
             if (jeNova) {
                 mostikView.pridajNovy(ulozenyFirmaProdukt);
+
             }
-            mostikView.refresh();
+
 
         }
         subWindow.close();
@@ -169,6 +175,8 @@ public class MostikEdit {
         return "<div class='suggestion-container'>"
                 + "<span class='produkt'>"
                 + produkt.getKat()
+                +"  "
+                +produkt.getNazov()
                 .replaceAll("(?i)(" + query + ")", "<b>$1</b>")
                 + "</span>"
                 + "</div>";

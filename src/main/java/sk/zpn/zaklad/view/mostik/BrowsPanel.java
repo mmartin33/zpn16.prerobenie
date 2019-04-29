@@ -201,6 +201,12 @@ public class BrowsPanel extends VerticalLayout {
         }
         grid.setItems(firmaProduktList);
     }
+
+    public void pridaj(FirmaProdukt novaFirmaProdukt) {
+        firmaProduktList.add(novaFirmaProdukt);
+        this.refresh(novaFirmaProdukt);
+
+    }
 }
 
 
