@@ -27,8 +27,8 @@ import java.util.Date;
         "JOIN fp.produkt produkt")
 })
 
-@IdClass(FirmaProduktId.class)
-public class FirmaProdukt{
+//@IdClass(FirmaProduktId.class)
+public class FirmaProdukt extends  Vseobecne{
 
 
 

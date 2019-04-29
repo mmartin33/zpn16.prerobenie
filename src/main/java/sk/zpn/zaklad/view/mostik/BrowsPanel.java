@@ -26,6 +26,7 @@ public class BrowsPanel extends VerticalLayout {
 
     public BrowsPanel(List<FirmaProdukt> firmaProduktList, String nazovFirmy) {
         GridLayout gl =new GridLayout(1,1);
+        gl.setSpacing(false);
         gl.setSizeFull();
         gl.setColumnExpandRatio(0,1f);
         gl.setRowExpandRatio(0, 1f);
@@ -52,8 +53,7 @@ public class BrowsPanel extends VerticalLayout {
                 .forField(new TextField())
                 .withValidator(kit -> !kit.trim().isEmpty(),
                     "Kit nesmie byt prázdny")
-                .bind(FirmaProdukt::getKit,
-                    (produkt, kit) -> {
+                .bind(FirmaProdukt::getKit,(produkt, kit) -> {
                     produkt.setKitAndPersist(kit);
                     refresh();
                 }))
