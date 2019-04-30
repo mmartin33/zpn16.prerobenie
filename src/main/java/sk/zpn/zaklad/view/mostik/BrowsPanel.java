@@ -207,6 +207,11 @@ public class BrowsPanel extends VerticalLayout {
         this.refresh(novaFirmaProdukt);
 
     }
+
+    public void refresh(String nazovFirmy) {
+        this.nazovFirmy=nazovFirmy;
+        this.refresh();
+    }
 }
 
 
