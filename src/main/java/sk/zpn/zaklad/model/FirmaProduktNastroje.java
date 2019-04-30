@@ -53,7 +53,7 @@ public class FirmaProduktNastroje {
 
         em.getTransaction().begin();
         em.merge(firmaProdukt);
-        em.flush();
+
         em.getTransaction().commit();
         return firmaProdukt;
     }
@@ -108,5 +108,16 @@ public class FirmaProduktNastroje {
     public static void nastavAtributyPriNovej(FirmaProdukt fpEditovana) {
         fpEditovana.setRok(ParametreNastroje.nacitajParametre().getRok());
         fpEditovana.setFirma(UzivatelNastroje.getPrihlasenehoUzivatela().getFirma());
+    }
+
+    public static FirmaProdukt pridajFirmaProdukt(FirmaProdukt firmaProdukt) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+
+        em.getTransaction().begin();
+        em.persist(firmaProdukt);
+
+        em.getTransaction().commit();
+        return firmaProdukt;
+
     }
 }

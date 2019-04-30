@@ -36,6 +36,7 @@ public class EditacnyForm extends VerticalLayout {
     private Poberatel aktualnyPoberatel;
 
     public EditacnyForm(){
+        this.setSpacing(true);
         tProdukt = new TextField("Produkt");
         tProdukt.setWidth("400");
         tPrevadzka = new TextField("Prevádzka" );
@@ -49,7 +50,10 @@ public class EditacnyForm extends VerticalLayout {
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
 
         nastavComponnenty();
+        HorizontalLayout hl=new HorizontalLayout();
+
         FormLayout lEdit=new FormLayout();
+        lEdit.setSpacing(true);
 
         lEdit.addComponent(tProdukt);
         lEdit.addComponent(tPrevadzka);

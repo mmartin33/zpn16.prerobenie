@@ -141,7 +141,7 @@ public class MostikEdit {
                 FirmaProduktNastroje.nastavAtributyPriNovej(fpEditovana);
                 jeNova=true;
             }
-            FirmaProdukt ulozenyFirmaProdukt = FirmaProduktNastroje.ulozFirmaProdukt(fpEditovana);
+            FirmaProdukt ulozenyFirmaProdukt = FirmaProduktNastroje.pridajFirmaProdukt(fpEditovana);
 
             if (jeNova) {
                 mostikView.pridajNovy(ulozenyFirmaProdukt);
