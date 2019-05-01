@@ -95,6 +95,8 @@ public class MostikView extends HorizontalLayout implements View {
     }
 
     private void novy(Button.ClickEvent clickEvent) {
+        if (browsPanel.getOznacenyFirmaProdukt().getProdukt()==null)
+            return;
         FirmaProdukt novyFirmaProdukt=new FirmaProdukt();
         novyFirmaProdukt.setKoeficient(new BigDecimal(1));
         novyFirmaProdukt.setProdukt(browsPanel.getOznacenyFirmaProdukt().getProdukt());
