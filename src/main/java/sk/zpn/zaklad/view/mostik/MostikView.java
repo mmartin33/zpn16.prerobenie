@@ -59,7 +59,7 @@ public class MostikView extends HorizontalLayout implements View {
         mainGridLayout.setRowExpandRatio(2, 0.85f);
         mainGridLayout.setRowExpandRatio(3, 0.05f);
 
-        mainGridLayout.setSpacing(false);
+        mainGridLayout.setSpacing(true);
         configureComponents();
         tlacitkovyLayout.addComponent(btnNova);
         tlacitkovyLayout.addComponent(btnZmaz);
@@ -80,7 +80,7 @@ public class MostikView extends HorizontalLayout implements View {
         mainGridLayout.addComponent(browsPanel);
         mainGridLayout.setComponentAlignment(browsPanel,Alignment.MIDDLE_LEFT);
         mainGridLayout.addComponent(tlacitkovyLayout);
-        mainGridLayout.setComponentAlignment(tlacitkovyLayout,Alignment.BOTTOM_LEFT);
+        //mainGridLayout.setComponentAlignment(tlacitkovyLayout,Alignment.BOTTOM_LEFT);
         this.addComponent(mainGridLayout);
         this.setSizeFull();
         this.setVisible(true);
@@ -124,13 +124,15 @@ public class MostikView extends HorizontalLayout implements View {
         btnFirma=new Button("Prezobraz");
         btnFirma.setWidth("150");
         btnFirma.addClickListener(this::aktivujHF);
+        btnFirma.setEnabled(false);
         txtFirma=new TextField();
-        txtFirma.setWidth("200");
+        txtFirma.setWidth("400");
         txtFirma.setValue(nazovFirmy);
         txtFirma.setEnabled(false);
-        if (UzivatelNastroje.jeUzivatelAdminAleboSpravca())
+        if (UzivatelNastroje.jeUzivatelAdminAleboSpravca()) {
             txtFirma.setEnabled(true);
             btnFirma.setEnabled(true);
+        }
         FirmaProduktNastroje.generateMissingFirmaProductItems(nazovFirmy);
         firmaProduktList = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
         browsPanel = new BrowsPanel(firmaProduktList, nazovFirmy);

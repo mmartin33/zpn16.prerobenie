@@ -39,10 +39,7 @@ public class MyUI extends UI {
     LoginView login;
     VitajteView  vitajteView;
     UzivateliaView uzivateliaView;
-//    PoberateliaView poberateliaView;
     ProduktyView produktyView;
-    MostikView mostikView;
-    //FirmyView firmyView;
     Pripojenie p;
     ParametreView parametre;
 
@@ -54,18 +51,10 @@ public class MyUI extends UI {
         login = new LoginView();
         vitajteView = new VitajteView(navigator);
         uzivateliaView=new UzivateliaView();
-//        poberateliaView=new PoberateliaView();
-        //produktyView=new ProduktyView();
-        //mostikView=new MostikView();
-        //firmyView=new FirmyView();
         parametre=new ParametreView();
 
         navigator.addView(VitajteView.NAME, vitajteView);
         navigator.addView(UzivateliaView.NAME, uzivateliaView);
-        //navigator.addView(FirmyView.NAME, firmyView);
-//        navigator.addView(PoberateliaView.NAME, poberateliaView);
-        //navigator.addView(ProduktyView.NAME, produktyView);
-        //navigator.addView(MostikView.NAME, mostikView);
         navigator.addView(LoginView.NAME, login);
         navigator.addView(ParametreView.NAME, parametre);
 
@@ -74,6 +63,8 @@ public class MyUI extends UI {
         if (testRezim){
 //            String name = "nkovacik";
 //            String pass = "nkovacik3569";
+//            String name = "igendova";
+//            String pass = "igendova3658";
             String name = "m";
             String pass = "m789";
             UzivatelNastroje.overUzivatela(name,pass);

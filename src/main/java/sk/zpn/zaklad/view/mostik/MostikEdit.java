@@ -5,6 +5,7 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Sizeable;
+import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
@@ -70,15 +71,16 @@ public class MostikEdit {
         gl.addComponent(new Label("Mostik"));
 
         gl.addComponent(lEdit);
-        gl.setComponentAlignment(lEdit,Alignment.MIDDLE_CENTER);
+        //gl.setComponentAlignment(lEdit,Alignment.MIDDLE_CENTER);
         gl.addComponent(lBtn);
-        gl.setComponentAlignment(lBtn,Alignment.BOTTOM_CENTER);
+        //gl.setComponentAlignment(lBtn,Alignment.BOTTOM_CENTER);
 
 
         subWindow.setWidth(550, Sizeable.Unit.PIXELS);
         subWindow.setHeight(350, Sizeable.Unit.PIXELS);
         subWindow.setContent(gl);
         subWindow.setModal(true);
+
 
 
 
