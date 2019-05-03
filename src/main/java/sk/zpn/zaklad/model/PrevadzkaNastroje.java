@@ -73,9 +73,9 @@ public class PrevadzkaNastroje {
         p.setUlica(firma.getUlica());
         p.setPsc(firma.getPsc());
         p.setFirma(firma);
+        p.setPoberatel(PoberatelNastroje.ulozPrvehoPoberatela(p));
         ulozPrevadzka(p);
 
-        p.setPoberatel(PoberatelNastroje.ulozPrvehoPoberatela(p));
 
         System.out.println("Ulozena prevadzka:"+p.getNazov());
 //        em.getTransaction().begin();

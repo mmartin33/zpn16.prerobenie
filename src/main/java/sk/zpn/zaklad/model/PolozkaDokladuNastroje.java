@@ -32,7 +32,7 @@ public class PolozkaDokladuNastroje {
             d.setKedy(new Date());
             d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
         }
-        System.out.println("Ulozena polozka");
+
         em.getTransaction().begin();
         em.merge(d);
         em.getTransaction().commit();

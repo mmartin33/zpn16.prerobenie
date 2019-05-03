@@ -58,7 +58,7 @@ public class UploadCSV extends CustomComponent  {
                     file = new File(adresar + filename);
                     fos = new FileOutputStream(file);
                 } catch (final java.io.FileNotFoundException e) {
-                    new Notification("Súbor sa nedá otvoriť <br/>",
+                    new Notification("Súbor sa nedá otvoriť ",
                             e.getMessage(),
                             Notification.Type.ERROR_MESSAGE)
                             .show(Page.getCurrent());
@@ -88,7 +88,7 @@ public class UploadCSV extends CustomComponent  {
         upload.addSucceededListener(receiver);
 
         // Prevent too big downloads
-        final long UPLOAD_LIMIT = 10000000l;
+        final long UPLOAD_LIMIT = 10000000000l;
         upload.addStartedListener(new StartedListener() {
             private static final long serialVersionUID = 4728847902678459488L;
 

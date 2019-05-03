@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.ProgressBar;
 import org.apache.log4j.Logger;
 
 import sk.zpn.domena.*;
@@ -8,6 +9,7 @@ import sk.zpn.domena.*;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +31,7 @@ public class DokladyNastroje {
         if (d.isNew()) {
             if (d.getStavDokladu()==null)
                 d.setStavDokladu(StavDokladu.POTVRDENY);
-            d.setId((long) 0);
+            d.setId(null);
             d.setKedy(new Date());
             d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
         }
@@ -105,7 +107,13 @@ public class DokladyNastroje {
 
 
         List<PolozkaDokladu> polozkyDokladu = new ArrayList<>();;
+
+        ProgressBar progressBar = new ProgressBar();
+
+        int i=0;
         for (ZaznamCsv z: zaznam){
+            i++;
+            progressBar.setValue(i/zaznam.size());
             PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
             if (pd!=null)
                 polozkyDokladu.add(pd);
@@ -117,6 +125,7 @@ public class DokladyNastroje {
                     "Nepodarilo sa zalozit polozku dokladu"));
 
         }
+        progressBar.setVisible(false);
         DokladyNastroje.ulozDokladDavky(hlavickaDokladu,polozkyDokladu);
 
         vysledok.setDoklad(hlavickaDokladu);
@@ -134,10 +143,28 @@ public class DokladyNastroje {
     private static void ulozDokladDavky(Doklad hlavickaDokladu, List<PolozkaDokladu> polozkyDokladu) {
         if (polozkyDokladu.size()==0)
             return;
+        Doklad ulozenyDoklad;
 
-        ulozDoklad(hlavickaDokladu);
+        ulozenyDoklad=vytvorDoklad(hlavickaDokladu);
         for (PolozkaDokladu polozka: polozkyDokladu){
+            polozka.setDoklad(ulozenyDoklad);
             PolozkaDokladuNastroje.ulozPolozkuDokladu(polozka);
         }
+    }
+
+    private static Doklad vytvorDoklad(Doklad d) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        if (d.isNew()) {
+            if (d.getStavDokladu()==null)
+                d.setStavDokladu(StavDokladu.POTVRDENY);
+            d.setId(null);
+            d.setKedy(new Date());
+            d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
+        }
+        System.out.println("Ulozeny dokald"+d.getCisloDokladu());
+        em.getTransaction().begin();
+        em.persist(d);
+        em.getTransaction().commit();
+        return d;
     }
 }

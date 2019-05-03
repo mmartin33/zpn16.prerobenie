@@ -3,8 +3,10 @@ package sk.zpn.zaklad.model;
 import au.com.bytecode.opencsv.CSVReader;
 import sk.zpn.domena.ZaznamCsv;
 
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +22,7 @@ public class DavkaCsvImporter {
         //todo kontrola ci subor extuje
         //tuto
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-        CSVReader reader = new CSVReader(new FileReader(suborCsv),';');
+        CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(suborCsv), "windows-1250"),';');
 
         String [] nextLine;
         List<ZaznamCsv> davka =new ArrayList<ZaznamCsv>();;
