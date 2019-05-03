@@ -48,11 +48,14 @@ public class BrowsPanel extends VerticalLayout {
         FilterGrid.Column<Doklad, String> colDatum = grid.addColumn(Doklad::getFormatovanyDatum).setCaption("Dátum").setId("datum");
         FilterGrid.Column<Doklad, String> colFirmaNazov = grid.addColumn(Doklad::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
         FilterGrid.Column<Doklad, String> colPoznamka = grid.addColumn(Doklad::getPoznamka).setCaption("Poznámka").setId("poznmla");
-        FilterGrid.Column<Doklad, String> colStavDokladu = grid.addColumn(doklad -> doklad.getStavDokladu().getIconValue()).setCaption("Stav dokladu").setId("stavDokladu");
-        colStavDokladu.setRenderer(new HtmlRenderer());
+        FilterGrid.Column<Doklad, String> colStavDokladu = grid.addColumn(doklad -> doklad.getStavDokladu().getDisplayValue()).setCaption("Stav dokladu").setId("stavDokladu");
+//        FilterGrid.Column<Doklad, String> colStavDokladu = grid.addColumn(doklad -> doklad.getStavDokladu().getIconValue()).setCaption("Stav dokladu").setId("stavDokladu");
+//        colStavDokladu.setRenderer(new HtmlRenderer());
 
-        ComboBox<String> statusDokladuFilter = new ComboBox<>("", StavDokladu.getListOfDisplayValues());
-        statusDokladuFilter.setWidth(120, Unit.PIXELS);
+        //colStavDokladu.setRenderer(new HtmlRenderer());
+
+//        ComboBox<String> statusDokladuFilter = new ComboBox<>("", StavDokladu.getListOfDisplayValues());
+//        statusDokladuFilter.setWidth(120, Unit.PIXELS);
 
         // filters
         colCisloDokladu.setFilter(new TextField(), StringComparator.containsIgnoreCase());
@@ -61,10 +64,12 @@ public class BrowsPanel extends VerticalLayout {
         colTypDokladu.setFilter(new ComboBox<>("", TypDokladu.getListOfDisplayValues()),
                 (cValue, fValue) -> fValue == null || fValue.equals(cValue));
         colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-        colStavDokladu.setFilter(statusDokladuFilter,
-                (cValue, fValue) -> fValue == null || cValue.contains(StavDokladu.fromDisplayName(fValue).getIconColor()));
+//        colStavDokladu.setFilter(statusDokladuFilter,
+//                (cValue, fValue) -> fValue == null || cValue.contains(StavDokladu.fromDisplayName(fValue).getIconColor()));
+
 
         grid.setColumnOrder(colCisloDokladu, colStavDokladu,colTypDokladu, colFirmaNazov, colDatum);
+//        grid.setColumnOrder(colCisloDokladu, colTypDokladu, colFirmaNazov, colDatum);
         Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
 
         btnSpat.addClickListener(clickEvent ->

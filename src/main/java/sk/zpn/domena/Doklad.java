@@ -44,6 +44,7 @@ public class Doklad extends Vseobecne {
 
     public Doklad() {
         this.typDokladu = TypDokladu.INTERNY_DOKLAD;
+        this.stavDokladu = StavDokladu.POTVRDENY;
         this.datum=new Date();
 
 
@@ -110,7 +111,7 @@ public class Doklad extends Vseobecne {
     public void setPoznamka(String poznamka) {this.poznamka = poznamka;}
 
     public StavDokladu getStavDokladu() {
-        return stavDokladu;
+        return this.stavDokladu;
     }
 
     public void setStavDokladu(StavDokladu stavDokladu) {
