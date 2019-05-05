@@ -2,6 +2,7 @@ package sk.zpn.zaklad.model;
 
 import au.com.bytecode.opencsv.CSVReader;
 import sk.zpn.domena.ZaznamCsv;
+import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -18,7 +19,7 @@ public class DavkaCsvImporter {
     public DavkaCsvImporter() {
 
     }
-    public static List<ZaznamCsv> nacitajCsvDavku(String suborCsv) throws IOException {
+    public static List<ZaznamCsv> nacitajCsvDavku(String suborCsv, ProgressBarZPN progressBarZPN) throws IOException {
         //todo kontrola ci subor extuje
         //tuto
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
@@ -26,10 +27,12 @@ public class DavkaCsvImporter {
 
         String [] nextLine;
         List<ZaznamCsv> davka =new ArrayList<ZaznamCsv>();;
-
+        progressBarZPN.zobraz();
+        progressBarZPN.nadstavNadpis("Načítanie súboru");
         reader.readNext();
         while ((nextLine = reader.readNext()) != null) {
             ZaznamCsv zaznam=new ZaznamCsv();
+            progressBarZPN.posun(new BigDecimal(100),new BigDecimal(500));
             try {
                 if (!nextLine[0].isEmpty() && nextLine[0]!=null && nextLine!=null) {
 
@@ -50,6 +53,7 @@ public class DavkaCsvImporter {
                 davka.add(zaznam);
             //zaznam=null;
         }
+        progressBarZPN.koniec();
 
         return davka;
     }

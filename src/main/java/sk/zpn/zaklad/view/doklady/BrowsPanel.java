@@ -54,8 +54,8 @@ public class BrowsPanel extends VerticalLayout {
 
         //colStavDokladu.setRenderer(new HtmlRenderer());
 
-//        ComboBox<String> statusDokladuFilter = new ComboBox<>("", StavDokladu.getListOfDisplayValues());
-//        statusDokladuFilter.setWidth(120, Unit.PIXELS);
+        ComboBox<String> statusDokladuFilter = new ComboBox<>("", StavDokladu.getListOfDisplayValues());
+        statusDokladuFilter.setWidth(120, Unit.PIXELS);
 
         // filters
         colCisloDokladu.setFilter(new TextField(), StringComparator.containsIgnoreCase());
@@ -64,8 +64,8 @@ public class BrowsPanel extends VerticalLayout {
         colTypDokladu.setFilter(new ComboBox<>("", TypDokladu.getListOfDisplayValues()),
                 (cValue, fValue) -> fValue == null || fValue.equals(cValue));
         colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-//        colStavDokladu.setFilter(statusDokladuFilter,
-//                (cValue, fValue) -> fValue == null || cValue.contains(StavDokladu.fromDisplayName(fValue).getIconColor()));
+        colStavDokladu.setFilter(new ComboBox<>("",StavDokladu.getListOfDisplayValues()),
+                (cValue, fValue) -> fValue == null || fValue.equals(cValue));
 
 
         grid.setColumnOrder(colCisloDokladu, colStavDokladu,colTypDokladu, colFirmaNazov, colDatum);

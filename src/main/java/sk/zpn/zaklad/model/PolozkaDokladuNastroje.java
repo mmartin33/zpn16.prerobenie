@@ -40,6 +40,21 @@ public class PolozkaDokladuNastroje {
 
 
     }
+    public static PolozkaDokladu vytvorPolozkuDokladu(PolozkaDokladu d) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        if (d.isNew()) {
+        d.setId(null);
+            d.setKedy(new Date());
+            d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
+        }
+
+        em.getTransaction().begin();
+        em.persist(d);
+        em.getTransaction().commit();
+        return d;
+
+
+    }
 
     public static void zmazPolozkyDoklady(PolozkaDokladu d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
@@ -72,11 +87,17 @@ public class PolozkaDokladuNastroje {
             return null;
         pd.setDoklad(doklad);
 
-        if (fp.getKoeficient()!=null && fp.getKoeficient().compareTo(BigDecimal.valueOf(0))!=0 )
-                pd.setMnozstvo(zaznam.getMnozstvo().multiply(fp.getKoeficient()));
-        else
-            pd.setMnozstvo(zaznam.getMnozstvo());
-        pd.setBody(pd.getBody().multiply(pd.getMnozstvo()));
+
+        pd.setMnozstvo(zaznam.getMnozstvo().multiply(fp.getKoeficient()));
+
+        pd.setMnozstvo(zaznam.getMnozstvo());
+        pd.setBody(VypoctyUtil.vypocitajBody(
+                pd.getMnozstvo(),
+                fp.getKoeficient(),
+                fp.getProdukt().getKusy(),
+                fp.getProdukt().getBody()
+        ));
+                //pd.getMnozstvo().multiply(fp.getKoeficient().divide(fp.getProdukt().getKusy()).multiply(fp.getProdukt().getBody())));
 
         Prevadzka prevadzka=PrevadzkaNastroje.najdiAleboZaloz(zaznam.getIco(), zaznam.getNazvFirmy());
         if (prevadzka==null)

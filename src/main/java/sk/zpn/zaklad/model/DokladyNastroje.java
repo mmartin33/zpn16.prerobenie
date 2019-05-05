@@ -5,6 +5,7 @@ import com.vaadin.ui.ProgressBar;
 import org.apache.log4j.Logger;
 
 import sk.zpn.domena.*;
+import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -77,10 +78,11 @@ public class DokladyNastroje {
             return null;
     }
 
-    public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam, String file) {
+    public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam, String file, ProgressBarZPN progressBarZPN) {
         List <ChybaImportu> chyby = new ArrayList<>();;
         VysledokImportu vysledok=new VysledokImportu();
-
+        progressBarZPN.nadstavNadpis("Zhranie dokladu");
+        progressBarZPN.zobraz();
         Doklad hlavickaDokladu=new Doklad();
 
         String noveCisloDokladu = noveCisloDokladu();
@@ -108,12 +110,12 @@ public class DokladyNastroje {
 
         List<PolozkaDokladu> polozkyDokladu = new ArrayList<>();;
 
-        ProgressBar progressBar = new ProgressBar();
+
 
         int i=0;
         for (ZaznamCsv z: zaznam){
             i++;
-            progressBar.setValue(i/zaznam.size());
+            progressBarZPN.posun(new BigDecimal(zaznam.size()),new BigDecimal(i));
             PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
             if (pd!=null)
                 polozkyDokladu.add(pd);
@@ -125,8 +127,8 @@ public class DokladyNastroje {
                     "Nepodarilo sa zalozit polozku dokladu"));
 
         }
-        progressBar.setVisible(false);
-        DokladyNastroje.ulozDokladDavky(hlavickaDokladu,polozkyDokladu);
+        progressBarZPN.koniec();
+        DokladyNastroje.ulozDokladDavky(hlavickaDokladu,polozkyDokladu,progressBarZPN);
 
         vysledok.setDoklad(hlavickaDokladu);
         vysledok.setPolozky(polozkyDokladu);
@@ -140,16 +142,21 @@ public class DokladyNastroje {
 
     }
 
-    private static void ulozDokladDavky(Doklad hlavickaDokladu, List<PolozkaDokladu> polozkyDokladu) {
+    private static void ulozDokladDavky(Doklad hlavickaDokladu, List<PolozkaDokladu> polozkyDokladu, ProgressBarZPN progressBarZPN) {
         if (polozkyDokladu.size()==0)
             return;
         Doklad ulozenyDoklad;
-
+        progressBarZPN.nadstavNadpis("ukladanie položiek dokladu");
+        progressBarZPN.zobraz();
         ulozenyDoklad=vytvorDoklad(hlavickaDokladu);
+        int i=0;
         for (PolozkaDokladu polozka: polozkyDokladu){
+            i++;
+            progressBarZPN.posun(new BigDecimal(polozkyDokladu.size()),new BigDecimal(i));
             polozka.setDoklad(ulozenyDoklad);
-            PolozkaDokladuNastroje.ulozPolozkuDokladu(polozka);
+            PolozkaDokladuNastroje.vytvorPolozkuDokladu(polozka);
         }
+        progressBarZPN.koniec();
     }
 
     private static Doklad vytvorDoklad(Doklad d) {

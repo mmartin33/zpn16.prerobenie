@@ -246,7 +246,7 @@ public class EditacnyForm extends VerticalLayout {
 
             Notification.show(msg, Notification.Type.TRAY_NOTIFICATION);
             if (jeFirmaNova) {
-                PrevadzkaNastroje.ulozPrvuPrevadzku(ulozenaFirma);
+                PrevadzkaNastroje.ulozPrvuPrevadzku(ulozenaFirma,null);
                 firmyView.pridajNovuFirmu(ulozenaFirma);
             }
             firmyView.refreshFiriem();

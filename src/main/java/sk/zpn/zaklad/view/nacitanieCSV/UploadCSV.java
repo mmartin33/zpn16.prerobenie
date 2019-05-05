@@ -20,6 +20,7 @@ import com.vaadin.ui.Upload.SucceededListener;
 import sk.zpn.domena.Doklad;
 import sk.zpn.domena.VysledokImportu;
 import sk.zpn.domena.ZaznamCsv;
+import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 import sk.zpn.zaklad.model.DavkaCsvImporter;
 import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.UzivatelNastroje;
@@ -32,10 +33,12 @@ public class UploadCSV extends CustomComponent  {
     Label label;
     Button btnSpat;
     Panel panel;
+    ProgressBarZPN progressBarZPN;
     VerticalLayout layout;
     String adresar="/c:/zpn/upload/";
     VysledokImportu vysledokSpracovania;
     private NacitanieCSVView nacitanieView;
+
 
     public UploadCSV(NacitanieCSVView nacitanieCSVView) {
         this.nacitanieView=nacitanieCSVView;
@@ -77,14 +80,14 @@ public class UploadCSV extends CustomComponent  {
         };
         layout = new VerticalLayout();
         FileReceiver receiver = new FileReceiver();
-
+        progressBarZPN= new ProgressBarZPN("");
         String ico= UzivatelNastroje.getIcoVlastnejFirmyPrihlasenehoUzivala();
         this.adresar=this.adresar+ico+"/";
 
 
         // Create the upload with a caption and set receiver later
-        upload = new Upload("Výberte dávku na odoslanie", receiver);
-        upload.setButtonCaption("Štart odosielania");
+        upload = new Upload("Výberte súbor na odoslanie, Po výbere sa automaticky spustí zhranie", receiver);
+        upload.setButtonCaption("Výber súboru");
         upload.addSucceededListener(receiver);
 
         // Prevent too big downloads
@@ -133,6 +136,7 @@ public class UploadCSV extends CustomComponent  {
         ((VerticalLayout) panel.getContent()).setSpacing(true);
         panel.setWidth("-1");
         layout.addComponent(panel);
+        layout.addComponents(progressBarZPN);
         setCompositionRoot(layout);
     }
 
@@ -155,9 +159,9 @@ public class UploadCSV extends CustomComponent  {
     void zhrajDavku(String file){
         List <ZaznamCsv> zaznam;
         try {
-            zaznam= DavkaCsvImporter.nacitajCsvDavku(file);
+            zaznam= DavkaCsvImporter.nacitajCsvDavku(file,progressBarZPN);
             //this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
-            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file);
+            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file,progressBarZPN);
             nacitanieView.setVysledokImportu(vi);
             System.out.println(zaznam.size());
         } catch (IOException e) {

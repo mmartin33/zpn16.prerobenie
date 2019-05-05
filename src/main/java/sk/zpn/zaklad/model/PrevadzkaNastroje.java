@@ -58,6 +58,22 @@ public class PrevadzkaNastroje {
 
     }
 
+    public static Prevadzka zalozPrevadzku(Prevadzka p){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        if (p.isNew()) {
+            p.setId(null);
+            p.setKedy(new Date());
+            p.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
+        }
+        System.out.println("Ulozena prevadzka:"+p.getNazov());
+        em.getTransaction().begin();
+        em.persist(p);
+        em.getTransaction().commit();
+        return p;
+
+
+    }
+
     public static void zmazPrevadzku(Prevadzka p){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         System.out.println("Vymazana prevadzka:"+p.getNazov());
@@ -66,15 +82,18 @@ public class PrevadzkaNastroje {
         em.getTransaction().commit();
     }
 
-    public static Prevadzka ulozPrvuPrevadzku(Firma firma) {
+    public static Prevadzka ulozPrvuPrevadzku(Firma firma,String nazovPrevadzky) {
         Prevadzka p=new Prevadzka();
-        p.setNazov(firma.getNazov());
+        if (nazovPrevadzky==null)
+            p.setNazov(firma.getNazov());
+        else
+            p.setNazov(nazovPrevadzky);
         p.setMesto(firma.getMesto());
         p.setUlica(firma.getUlica());
         p.setPsc(firma.getPsc());
         p.setFirma(firma);
         p.setPoberatel(PoberatelNastroje.ulozPrvehoPoberatela(p));
-        ulozPrevadzka(p);
+        zalozPrevadzku(p);
 
 
         System.out.println("Ulozena prevadzka:"+p.getNazov());
@@ -100,7 +119,7 @@ public class PrevadzkaNastroje {
         //hladame firmu podla ica
         Firma firma =FirmaNastroje.firmaPodlaICO(ico);
         if (firma!=null) {
-            prevadzka = ulozPrvuPrevadzku(firma);
+            prevadzka = ulozPrvuPrevadzku(firma,nazovFirmy);
             return prevadzka;
         }
         //zaklada sa firma
@@ -111,7 +130,7 @@ public class PrevadzkaNastroje {
         if (novaFirma==null)
             return null;
         //zaklada sa prevadzka
-        prevadzka = ulozPrvuPrevadzku(firma);
+        prevadzka = ulozPrvuPrevadzku(firma,nazovFirmy);
         return prevadzka;
 
     }
