@@ -21,6 +21,7 @@ import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 import sk.zpn.zaklad.view.produkty.ProduktyView;
+import sk.zpn.zaklad.view.statistiky.StatPoberatelView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
 
 
@@ -97,6 +98,11 @@ public class VitajteView extends MojView {
                         UI.getCurrent().getNavigator().addView(MostikView.NAME, mostikView);
                         n.navigateTo(MostikView.NAME);
                     }
+                    else if (selectedItem.getDescription().equals("body")) {
+                        StatPoberatelView statPoberatelView = new StatPoberatelView();
+                        UI.getCurrent().getNavigator().addView(StatPoberatelView.NAME, statPoberatelView);
+                        n.navigateTo(statPoberatelView.NAME);
+                    }
                 }
             };
             MenuBar.Command odhlasenie = new MenuBar.Command() {
@@ -130,8 +136,6 @@ public class VitajteView extends MojView {
             menuMostik.setDescription("mostik");
             MenuItem menuOdosli = menuPredajcu.addItem("Odošli", VaadinIcons.UPLOAD, mycommand);
             menuOdosli.setDescription("odosli");
-            MenuItem menuStav = menuPredajcu.addItem("Stav bodov", VaadinIcons.PIGGY_BANK_COIN, mycommand);
-            menuStav.setDescription("stavbodov");
 
             menuSpravcu = barmenu.addItem("Spravca ZPN", null, null);
             MenuItem menuFirmy = menuSpravcu.addItem("Firmy", VaadinIcons.BUILDING, mycommand);
