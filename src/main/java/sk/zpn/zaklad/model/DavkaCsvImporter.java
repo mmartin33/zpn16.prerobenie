@@ -32,7 +32,7 @@ public class DavkaCsvImporter {
         reader.readNext();
         while ((nextLine = reader.readNext()) != null) {
             ZaznamCsv zaznam=new ZaznamCsv();
-            progressBarZPN.posun(new BigDecimal(100),new BigDecimal(500));
+            progressBarZPN.posun(new BigDecimal(500),new BigDecimal(250));
             try {
                 if (!nextLine[0].isEmpty() && nextLine[0]!=null && nextLine!=null) {
 

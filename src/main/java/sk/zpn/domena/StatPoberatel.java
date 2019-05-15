@@ -1,47 +1,36 @@
 package sk.zpn.domena;
 
+import com.vaadin.server.VaadinSession;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-@SqlResultSetMapping(name="MapovanieVysledku",
-        classes={
-                @ConstructorResult(
-                        targetClass= StatPoberatel.class,
-                        columns={
-
-                                @ColumnResult(name="poberatelNazov", type=String.class),
-                                @ColumnResult(name="pociatocnyStav", type=BigDecimal.class),
-                                @ColumnResult(name="bodyZaPredaj", type= BigDecimal.class),
-                                @ColumnResult(name="bodyIne", type=BigDecimal.class),
-                                @ColumnResult(name="konecnyStav", type=BigDecimal.class)
-
-                        }
-                )
-        }
+@SqlResultSetMapping(name="mapovanieVysledku",
+        entities={
+                @EntityResult(entityClass=StatPoberatel.class, fields={
+                        @FieldResult(name="poberatelNazov", column="poberatel_nazov"),
+                        @FieldResult(name="pociatocnyStav", column="pociatocny_stav"),
+                        @FieldResult(name="bodyZaPredaj", column="body_za_predaj"),
+                        @FieldResult(name="bodyIne", column="body_ine"),
+                        @FieldResult(name="konecnyStav", column="konecny_stav"),
+                        })}
 )
 
-public class StatPoberatel implements Serializable {
-
-
-        @Id
-        @Column(name = "poberatelNazov")
+@Entity
+public class StatPoberatel  {
         private String poberatelNazov;
-        @Column(name = "pociatocnyStav")
         private BigDecimal pociatocnyStav;
-        @Column(name = "bodyZaPredaj")
         private BigDecimal bodyZaPredaj;
-        @Column(name = "bodyIne")
         private BigDecimal bodyIne;
-        @Column(name = "konecnyStav")
         private BigDecimal konecnyStav;
 
-        private StatPoberatel(String poberatelNazov,
-                              BigDecimal pociatocnyStav,
-                              BigDecimal bodyZaPredaj,
-                              BigDecimal bodyIne,
-                              BigDecimal konecnyStav)
+        public StatPoberatel(String poberatelNazov,
+                             BigDecimal pociatocnyStav,
+                             BigDecimal bodyZaPredaj,
+                             BigDecimal bodyIne,
+                             BigDecimal konecnyStav)
         {
             this.poberatelNazov=poberatelNazov;
             this.pociatocnyStav=pociatocnyStav;
@@ -49,6 +38,11 @@ public class StatPoberatel implements Serializable {
             this.bodyIne=bodyIne;
             this.konecnyStav=konecnyStav;
         }
+
+    public StatPoberatel()
+    {
+
+    }
 
     public String getPoberatelNazov() {
         return poberatelNazov;

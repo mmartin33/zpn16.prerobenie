@@ -26,6 +26,8 @@ import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
+import javax.swing.*;
+
 
 public class UploadCSV extends CustomComponent  {
     private static final long serialVersionUID = -4292553844521293140L;
@@ -34,6 +36,8 @@ public class UploadCSV extends CustomComponent  {
     Button btnSpat;
     Panel panel;
     ProgressBarZPN progressBarZPN;
+
+    Button btnzmaz;
     VerticalLayout layout;
     String adresar="/c:/zpn/upload/";
     VysledokImportu vysledokSpracovania;
@@ -81,6 +85,12 @@ public class UploadCSV extends CustomComponent  {
         layout = new VerticalLayout();
         FileReceiver receiver = new FileReceiver();
         progressBarZPN= new ProgressBarZPN("");
+
+        btnzmaz=new Button("AAAA", click -> {
+            float current = progressBarZPN.getProgresBarValue();
+            if (current < 1.0f)
+                progressBarZPN.setProgresBarValue(current + 0.10f);
+        });
         String ico= UzivatelNastroje.getIcoVlastnejFirmyPrihlasenehoUzivala();
         this.adresar=this.adresar+ico+"/";
 
@@ -137,6 +147,8 @@ public class UploadCSV extends CustomComponent  {
         panel.setWidth("-1");
         layout.addComponent(panel);
         layout.addComponents(progressBarZPN);
+
+        layout.addComponents(btnzmaz);
         setCompositionRoot(layout);
     }
 
@@ -161,7 +173,7 @@ public class UploadCSV extends CustomComponent  {
         try {
             zaznam= DavkaCsvImporter.nacitajCsvDavku(file,progressBarZPN);
             //this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
-            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file,progressBarZPN);
+            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file,progressBarZPN,btnzmaz);
             nacitanieView.setVysledokImportu(vi);
             System.out.println(zaznam.size());
         } catch (IOException e) {
@@ -173,108 +185,4 @@ public class UploadCSV extends CustomComponent  {
     public void setVysledokSpracovania(VysledokImportu vysledokSpracovania) {
         this.vysledokSpracovania = vysledokSpracovania;
     }
-
-    public VysledokImportu getVysledokSpracovania() {
-        return vysledokSpracovania;
-    }
-//    void advanced(VerticalLayout layout) {
-//        // BEGIN-EXAMPLE: component.upload.advanced
-//        class UploadBox extends CustomComponent
-//                implements Receiver, ProgressListener,
-//                FailedListener, SucceededListener {
-//            private static final long serialVersionUID = -46336015006190050L;
-//
-//            // Put upload in this memory buffer that grows automatically
-//            ByteArrayOutputStream os =
-//                    new ByteArrayOutputStream(10240);
-//
-//            // Name of the uploaded file
-//            String filename;
-//
-//            ProgressBar progress = new ProgressBar(0.0f);
-//
-//            // Show uploaded file in this placeholder
-//            Image image = new Image("Uploaded Image");
-//
-//            public UploadBox() {
-//                // Create the upload component and handle all its events
-//                Upload upload = new Upload("Upload the image here", null);
-//                upload.setReceiver(this);
-//                upload.addProgressListener(this);
-//                upload.addFailedListener(this);
-//                upload.addSucceededListener(this);
-//
-//                // Put the upload and image display in a panel
-//                Panel panel = new Panel("Cool Image Storage");
-//                panel.setWidth("400px");
-//                VerticalLayout panelContent = new VerticalLayout();
-//                panelContent.setSpacing(true);
-//                panel.setContent(panelContent);
-//                panelContent.addComponent(upload);
-//                panelContent.addComponent(progress);
-//                panelContent.addComponent(image);
-//
-//                progress.setVisible(false);
-//                image.setVisible(false);
-//
-//                setCompositionRoot(panel);
-//            }
-//
-//            public OutputStream receiveUpload(String filename, String mimeType) {
-//                this.filename = filename;
-//                os.reset(); // Needed to allow re-uploading
-//                return os;
-//            }
-//
-//            @Override
-//            public void updateProgress(long readBytes, long contentLength) {
-//                progress.setVisible(true);
-//                if (contentLength == -1)
-//                    progress.setIndeterminate(true);
-//                else {
-//                    progress.setIndeterminate(false);
-//                    progress.setValue(((float)readBytes) /
-//                            ((float)contentLength));
-//                }
-//            }
-//
-//            public void uploadSucceeded(SucceededEvent event) {
-//                image.setVisible(true);
-//                image.setCaption("Uploaded Image " + filename +
-//                        " has length " + os.toByteArray().length);
-//
-//                // Display the image as a stream resource from
-//                // the memory buffer
-//                StreamSource source = new StreamSource() {
-//                    private static final long serialVersionUID = -4905654404647215809L;
-//
-//                    public InputStream getStream() {
-//                        return new ByteArrayInputStream(os.toByteArray());
-//                    }
-//                };
-//
-//                if (image.getSource() == null)
-//                    // Create a new stream resource
-//                    image.setSource(new StreamResource(source, filename));
-//                else { // Reuse the old resource
-//                    StreamResource resource =
-//                            (StreamResource) image.getSource();
-//                    resource.setStreamSource(source);
-//                    resource.setFilename(filename);
-//                }
-//
-//                image.markAsDirty();
-//            }
-//
-//            @Override
-//            public void uploadFailed(FailedEvent event) {
-//                Notification.show("Upload failed",
-//                        Notification.Type.ERROR_MESSAGE);
-//            }
-//        }
-//
-//        UploadBox uploadbox = new UploadBox();
-//        layout.addComponent(uploadbox);
-//        // END-EXAMPLE: component.upload.advanced
-//    }
 }

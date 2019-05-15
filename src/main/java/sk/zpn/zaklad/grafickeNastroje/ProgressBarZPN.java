@@ -8,8 +8,16 @@ import java.math.BigDecimal;
 
 public class ProgressBarZPN extends VerticalLayout implements IProgresBarZPN{
     Label lblNadpis;
-    ProgressBar progresBar;
+    public ProgressBar progresBar;
     Button btnStorno;
+
+    public Float getProgresBarValue() {
+        return progresBar.getValue();
+    }
+
+    public void setProgresBarValue(Float value) {
+        this.progresBar.setValue(value);
+    }
 
     public ProgressBarZPN(String nadpis) {
         lblNadpis=new Label(nadpis);
@@ -42,6 +50,7 @@ public class ProgressBarZPN extends VerticalLayout implements IProgresBarZPN{
     @Override
     public void posun(BigDecimal max, BigDecimal increment) {
         this.progresBar.setValue(increment.divide(max,2,BigDecimal.ROUND_HALF_UP).floatValue());
+        this.markAsDirtyRecursive();
 
 
 

@@ -29,6 +29,7 @@ public class StatPoberatelView extends HorizontalLayout implements View {
         gr.setRowExpandRatio(2,0.95f);
         gr.setRowExpandRatio(3,0.05f);
         statList = new  StatPoberatelNastroje().load();
+        //statList = new  StatPoberatel().load();
         grid = new FilterGrid<>();
         grid.setItems(statList);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
