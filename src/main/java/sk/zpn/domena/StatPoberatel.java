@@ -3,9 +3,7 @@ package sk.zpn.domena;
 import com.vaadin.server.VaadinSession;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 @SqlResultSetMapping(name="mapovanieVysledku",
         entities={
@@ -20,11 +18,12 @@ import java.util.List;
 
 @Entity
 public class StatPoberatel  {
-        private String poberatelNazov;
-        private BigDecimal pociatocnyStav;
-        private BigDecimal bodyZaPredaj;
-        private BigDecimal bodyIne;
-        private BigDecimal konecnyStav;
+    @Id
+    private String poberatelNazov;
+    private BigDecimal pociatocnyStav;
+    private BigDecimal bodyZaPredaj;
+    private BigDecimal bodyIne;
+    private BigDecimal konecnyStav;
 
         public StatPoberatel(String poberatelNazov,
                              BigDecimal pociatocnyStav,
@@ -46,5 +45,21 @@ public class StatPoberatel  {
 
     public String getPoberatelNazov() {
         return poberatelNazov;
+    }
+
+    public BigDecimal getPociatocnyStav() {
+        return pociatocnyStav;
+    }
+
+    public BigDecimal getBodyZaPredaj() {
+        return bodyZaPredaj;
+    }
+
+    public BigDecimal getBodyIne() {
+        return bodyIne;
+    }
+
+    public BigDecimal getKonecnyStav() {
+        return konecnyStav;
     }
 }
