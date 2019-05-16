@@ -5,7 +5,6 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
-import jdk.nashorn.internal.objects.NativeDate;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import sk.zpn.domena.StatPoberatel;
@@ -13,42 +12,39 @@ import sk.zpn.zaklad.model.StatPoberatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class StatPoberatelView extends VerticalLayout implements View {
     // ContactForm is an example of a custom component class
     public static final String NAME = "statPoberatelView";
-    private final Button btnAktivujFilter;
+    private Button btnAktivujFilter;
     private FilterGrid<StatPoberatel> grid;
     private Button btnSpat;
     private List<StatPoberatel> statList =null;
     DateField dfOd;
     DateField dfDo;
-    Label lblOd;
-    Label lblDo;
     public StatPoberatelView() {
 
         HorizontalLayout hornyFilter =new HorizontalLayout();
-        lblOd=new Label("Dátum od:");
-        lblDo=new Label("Dátum do:");
 
-        Calendar calDate = null;
-        calDate.set(Calendar.DAY_OF_YEAR, 1);
-        Date yearStartDate = calDate.getTime();
-        dfOd=new DateField().setValue();
-        dfDo=new DateField();
-        lblOd.setWidth(10, Sizeable.Unit.PERCENTAGE);
-        lblDo.setWidth(10, Sizeable.Unit.PERCENTAGE);
-        dfOd.setWidth(10, Sizeable.Unit.PERCENTAGE);
-        dfDo.setWidth(10,Sizeable.Unit.PERCENTAGE);
+
+
+        LocalDate dod = LocalDate.of(LocalDate.now().getYear(),1,1);
+        LocalDate ddo = LocalDate.of(LocalDate.now().getYear(),12,31);
+        dfOd=new DateField("Od:");
+        dfDo=new DateField("do:");
+        dfOd.setValue(dod);
+        dfDo.setValue(ddo);
+        dfOd.setWidth(15, Sizeable.Unit.PERCENTAGE);
+        dfDo.setWidth(15,Sizeable.Unit.PERCENTAGE);
         btnAktivujFilter=new Button("Prezobraz");
         btnAktivujFilter.setWidth(10,Sizeable.Unit.PERCENTAGE);
-        hornyFilter.addComponent(lblOd);
+        btnAktivujFilter.setHeight(80,Sizeable.Unit.PERCENTAGE);
+        btnAktivujFilter.addClickListener(this::aktivujFilter);
         hornyFilter.addComponent(dfOd);
-        hornyFilter.addComponent(lblDo);
         hornyFilter.addComponent(dfDo);
+        hornyFilter.addComponent(btnAktivujFilter);
 
 
         GridLayout gl =new GridLayout(1,1);
@@ -125,6 +121,10 @@ public class StatPoberatelView extends VerticalLayout implements View {
         configureComponents();
 
 
+
+    }
+
+    private void aktivujFilter(Button.ClickEvent clickEvent) {
 
     }
 
