@@ -57,7 +57,7 @@ public class FirmaProdukt extends  Vseobecne{
 
     public FirmaProdukt(String rok, Produkt produkt, Firma firma){
         this.kit = "";
-        this.koeficient = new BigDecimal(0);
+        this.koeficient = new BigDecimal(1);
         this.rok =  rok;
         this.produkt = produkt;
         this.firma = firma;

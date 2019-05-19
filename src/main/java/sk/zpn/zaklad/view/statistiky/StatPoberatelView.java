@@ -24,14 +24,16 @@ public class StatPoberatelView extends VerticalLayout implements View {
     private List<StatPoberatel> statList =null;
     DateField dfOd;
     DateField dfDo;
+    LocalDate dod;
+    LocalDate ddo;
     public StatPoberatelView() {
 
         HorizontalLayout hornyFilter =new HorizontalLayout();
 
 
 
-        LocalDate dod = LocalDate.of(LocalDate.now().getYear(),1,1);
-        LocalDate ddo = LocalDate.of(LocalDate.now().getYear(),12,31);
+        dod = LocalDate.of(LocalDate.now().getYear(),1,1);
+        ddo = LocalDate.of(LocalDate.now().getYear(),12,31);
         dfOd=new DateField("Od:");
         dfDo=new DateField("do:");
         dfOd.setValue(dod);
@@ -53,10 +55,10 @@ public class StatPoberatelView extends VerticalLayout implements View {
         gl.setColumnExpandRatio(0,1f);
         gl.setRowExpandRatio(0, 1f);
 
-        statList = new  StatPoberatelNastroje().load();
+
 
         grid = new FilterGrid<>();
-        grid.setItems(statList);
+
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 
@@ -125,12 +127,22 @@ public class StatPoberatelView extends VerticalLayout implements View {
     }
 
     private void aktivujFilter(Button.ClickEvent clickEvent) {
+        aktivujFilter();
+        btnAktivujFilter.setEnabled(false);
+        }
 
+    private void aktivujFilter(){
+//        statList.clear();
+        statList = StatPoberatelNastroje.load(dfDo.getValue(), dfDo.getValue());
+        grid.setItems(statList);
     }
 
 
+
     private void configureComponents() {
-        grid.getDataProvider().refreshAll();
+//        aktivujFilter();
+//        grid.setItems(statList);
+//        grid.getDataProvider().refreshAll();
     }
 
 
