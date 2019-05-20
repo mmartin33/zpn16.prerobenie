@@ -43,7 +43,7 @@ public class StatPoberatelNastroje {
 
                 "(select sum(p.body) from polozkydokladu as p " +
                 "join doklady as d on d.id=p.doklad_id" +
-                "    where d.datum=date('"+ddo+"') and p.poberatel_id=pob.id AND d.stavdokladu='POTVRDENY') as konecny_stav " +
+                "    where d.datum=date('"+ddo+"') and p.poberatel_id<pob.id AND d.stavdokladu='POTVRDENY') as konecny_stav " +
                 " from poberatelia as pob";
 //            String sql = "select pob.id,pob.meno as poberatel_nazov, 1 as pociatocny_stav, 0  as body_za_predaj, 0 as body_ine, 0 as konecny_stav  from  poberatelia as pob" ;
             result1  = em1.createNativeQuery(sql,  "mapovanieVysledku").getResultList();
