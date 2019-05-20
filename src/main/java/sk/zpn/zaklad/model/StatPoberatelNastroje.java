@@ -18,76 +18,39 @@ public class StatPoberatelNastroje {
 
     public static List<StatPoberatel> load(LocalDate dod, LocalDate ddo) {
         List<StatPoberatel> result1=null;
-        EntityManager em1=null;
-        em1 = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        EntityManager em1;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        em1 = emf.createEntityManager();
 
-        String sql="select pob.meno as poberatel_nazov," +
+
+
+        String sql="select pob.id, pob.meno as poberatel_nazov," +
                 "(select sum(p.body) from polozkydokladu as p " +
                 "join doklady as d on d.id=p.doklad_id" +
-                "    where date(d.datum)<'"+dod+"' and p.poberatel_id=pob.id) as pociatocny_stav," +
+                "    where date(d.datum)<date('"+dod+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY') as pociatocny_stav," +
 
                 "(select sum(p.body) from polozkydokladu as p " +
                 "join doklady as d on d.id=p.doklad_id" +
                 "    where d.datum>=date('"+dod+"') and d.datum<=date('"+ddo+"') and p.poberatel_id=pob.id" +
-                "    and d.typdokladu='DAVKA') " +
+                "    and d.typdokladu='DAVKA' " +
+                "    and d.stavdokladu='POTVRDENY') " +
                 " as body_za_predaj,"+
                 "(select sum(p.body) from polozkydokladu as p " +
                 "join doklady as d on d.id=p.doklad_id" +
-                "    where d.datum>=date('"+dod+"') and d.datum<=date('"+ddo+"') and p.poberatel_id=pob.id" +
+                "    where d.datum>=date('"+dod+"') and d.datum<=date('"+ddo+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY'" +
                 "    and d.typdokladu<>'DAVKA')" +
                 " as body_ine,"+
 
                 "(select sum(p.body) from polozkydokladu as p " +
                 "join doklady as d on d.id=p.doklad_id" +
-                "    where d.datum=date('"+ddo+"') and p.poberatel_id=pob.id) as konecny_stav" +
+                "    where d.datum=date('"+ddo+"') and p.poberatel_id=pob.id AND d.stavdokladu='POTVRDENY') as konecny_stav " +
                 " from poberatelia as pob";
-//            String sql = "select pob.meno as poberatel_nazov, 0 as pociatocny_stav, 0  as body_za_predaj, 0 as body_ine, 0 as konecny_stav  from  poberatelia as pob" ;
-
-
+//            String sql = "select pob.id,pob.meno as poberatel_nazov, 1 as pociatocny_stav, 0  as body_za_predaj, 0 as body_ine, 0 as konecny_stav  from  poberatelia as pob" ;
             result1  = em1.createNativeQuery(sql,  "mapovanieVysledku").getResultList();
-
-//        List result  = em.createNativeQuery(sql  ).getResultList();
-
-
+            em1.close();
+            emf.close();
 
         return result1;
 
-
     }
-
-
-    public  List<StatPoberatel> load() {
-            EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-
-            String sql="select pob.meno as poberatel_nazov," +
-                    "(select sum(p.body) from polozkydokladu as p " +
-                    "join doklady as d on d.id=p.doklad_id" +
-                    "    where date(d.datum)<date('01.01.2019') and p.poberatel_id=pob.id) as pociatocny_stav," +
-
-                    "(select sum(p.body) from polozkydokladu as p " +
-                    "join doklady as d on d.id=p.doklad_id" +
-                    "    where date(d.datum)>=date('01.01.2019') and date(d.datum)<=date('01.01.2020') and p.poberatel_id=pob.id" +
-                    "    and d.typdokladu='DAVKA') " +
-                    " as body_za_predaj,"+
-                    "(select sum(p.body) from polozkydokladu as p " +
-                    "join doklady as d on d.id=p.doklad_id" +
-                    "    where date(d.datum)>=date('01.01.2019') and date(d.datum)<=date('01.01.2020') and p.poberatel_id=pob.id" +
-                    "    and d.typdokladu<>'DAVKA')" +
-                    " as body_ine,"+
-
-                    "(select sum(p.body) from polozkydokladu as p " +
-                    "join doklady as d on d.id=p.doklad_id" +
-                    "    where date(d.datum)<=date('31.12.2020') and p.poberatel_id=pob.id) as konecny_stav" +
-                    " from poberatelia as pob";
-//            String sql = "select pob.meno as poberatel_nazov, 0 as pociatocny_stav, 0  as body_za_predaj, 0 as body_ine, 0 as konecny_stav  from  poberatelia as pob" ;
-
-
-            List<StatPoberatel> result  = em.createNativeQuery(sql,  "mapovanieVysledku").getResultList();
-
-
-
-            return result;
-        }
-
-
 }

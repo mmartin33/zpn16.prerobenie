@@ -17,7 +17,7 @@ import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
-import sk.zpn.domena.Doklad;
+import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.VysledokImportu;
 import sk.zpn.domena.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
@@ -25,8 +25,6 @@ import sk.zpn.zaklad.model.DavkaCsvImporter;
 import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
-
-import javax.swing.*;
 
 
 public class UploadCSV extends CustomComponent  {
@@ -39,7 +37,7 @@ public class UploadCSV extends CustomComponent  {
 
     Button btnzmaz;
     VerticalLayout layout;
-    String adresar="/c:/zpn/upload/";
+    String adresar= SystemoveParametre.getUplodAdresar()  ;
     VysledokImportu vysledokSpracovania;
     private NacitanieCSVView nacitanieView;
 

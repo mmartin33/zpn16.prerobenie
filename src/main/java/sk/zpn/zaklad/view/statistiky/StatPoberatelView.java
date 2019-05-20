@@ -8,10 +8,12 @@ import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import sk.zpn.domena.StatPoberatel;
+import sk.zpn.nastroje.XlsStatPoberatel;
 import sk.zpn.zaklad.model.StatPoberatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -98,8 +100,15 @@ public class StatPoberatelView extends VerticalLayout implements View {
                 UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
         );
         Button btnXLS = new Button("Do Excelu", VaadinIcons.TABLE);
-        btnSpat.addClickListener(clickEvent ->
-                StatPoberatelNastroje.exportDoXLS(statList)
+        btnXLS.addClickListener(clickEvent ->
+                {
+                    SimpleDateFormat formatter= new SimpleDateFormat("dd.MM.yyyy");
+
+
+                    String nadpis="Vyhodnotenie poberatelov od: "+(dfOd.getValue())+" dp: "+ (dfDo.getValue());
+                    XlsStatPoberatel.vytvorXLS(statList,nadpis);
+
+                }
         );
 
 
@@ -128,12 +137,13 @@ public class StatPoberatelView extends VerticalLayout implements View {
 
     private void aktivujFilter(Button.ClickEvent clickEvent) {
         aktivujFilter();
-        btnAktivujFilter.setEnabled(false);
+        //btnAktivujFilter.setEnabled(false);
         }
 
     private void aktivujFilter(){
-//        statList.clear();
-        statList = StatPoberatelNastroje.load(dfDo.getValue(), dfDo.getValue());
+        if (statList!=null)
+            statList.clear();
+        statList = StatPoberatelNastroje.load(dfOd.getValue(), dfDo.getValue());
         grid.setItems(statList);
     }
 
