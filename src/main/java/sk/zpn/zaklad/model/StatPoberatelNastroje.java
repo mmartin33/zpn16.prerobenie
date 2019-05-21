@@ -31,20 +31,29 @@ public class StatPoberatelNastroje {
 
                 "(select sum(p.body) from polozkydokladu as p " +
                 "join doklady as d on d.id=p.doklad_id" +
-                "    where d.datum>=date('"+dod+"') and d.datum<=date('"+ddo+"') and p.poberatel_id=pob.id" +
+                "    where date(d.datum)>=date('"+dod+"') and date(d.datum)<=date('"+ddo+"') and p.poberatel_id=pob.id" +
                 "    and d.typdokladu='DAVKA' " +
                 "    and d.stavdokladu='POTVRDENY') " +
                 " as body_za_predaj,"+
                 "(select sum(p.body) from polozkydokladu as p " +
                 "join doklady as d on d.id=p.doklad_id" +
-                "    where d.datum>=date('"+dod+"') and d.datum<=date('"+ddo+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY'" +
-                "    and d.typdokladu<>'DAVKA')" +
+                "    where date(d.datum)>=date('"+dod+"') and date(d.datum)<=date('"+ddo+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY'" +
+                "    and d.typdokladu='INTERNY_DOKLAD')" +
                 " as body_ine,"+
 
                 "(select sum(p.body) from polozkydokladu as p " +
                 "join doklady as d on d.id=p.doklad_id" +
-                "    where d.datum=date('"+ddo+"') and p.poberatel_id<pob.id AND d.stavdokladu='POTVRDENY') as konecny_stav " +
-                " from poberatelia as pob";
+                "    where date(d.datum)<=date('"+ddo+"') and p.poberatel_id=pob.id AND d.stavdokladu='POTVRDENY') as konecny_stav " +
+                " from poberatelia as pob " +
+                " group by  pob.id, pob.meno"+
+                " having "+
+                "(coalesce((select sum(p.body) from polozkydokladu as p " +
+                "                join doklady as d on d.id=p.doklad_id " +
+                "                    where date(d.datum)>=date('"+dod+"') and date(d.datum)<=date('"+ddo+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY'),0)<> 0 or" +
+                " coalesce((select sum(abs(p.body)) from polozkydokladu as p " +
+                "                join doklady as d on d.id=p.doklad_id " +
+                "                    where  date(d.datum)<=date('"+dod+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY'),0)<>0)";
+
 //            String sql = "select pob.id,pob.meno as poberatel_nazov, 1 as pociatocny_stav, 0  as body_za_predaj, 0 as body_ine, 0 as konecny_stav  from  poberatelia as pob" ;
             result1  = em1.createNativeQuery(sql,  "mapovanieVysledku").getResultList();
             em1.close();

@@ -17,7 +17,7 @@ public class SaveToExcelLink extends Link {
 
         super();
         this.namefile=namefile;
-        setCaption("Stahnutie súboru");
+        setCaption("Kliknutim preberete zostavu");
         setDescription("Stiahnute súboru do PC");
         setTargetName("_blank");
     }

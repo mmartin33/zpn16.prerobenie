@@ -15,6 +15,7 @@ import sk.zpn.zaklad.view.VitajteView;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatPoberatelView extends VerticalLayout implements View {
@@ -62,7 +63,7 @@ public class StatPoberatelView extends VerticalLayout implements View {
         grid = new FilterGrid<>();
 
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-
+        //grid.setSelectionMode(Grid.SelectionMode.MULTI);
 
         FilterGrid.Column<StatPoberatel, String> colPoberatel= grid.addColumn(StatPoberatel::getPoberatelNazov).setCaption("Poberatel").setId("poberatel");
         FilterGrid.Column<StatPoberatel, BigDecimal> colPS= grid.addColumn(StatPoberatel::getPociatocnyStav).setCaption("Počiatočný stav").setId("ps");
@@ -106,7 +107,20 @@ public class StatPoberatelView extends VerticalLayout implements View {
 
 
                     String nadpis="Vyhodnotenie poberatelov od: "+(dfOd.getValue())+" dp: "+ (dfDo.getValue());
-                    XlsStatPoberatel.vytvorXLS(statList,nadpis);
+
+
+                    if (grid.getSelectedItems().size()<=0)
+                        XlsStatPoberatel.vytvorXLS(statList,nadpis);
+                    else {
+                        List<StatPoberatel> vybrane =new ArrayList<StatPoberatel>(  );
+                        vybrane.addAll(grid.getSelectedItems());
+                        XlsStatPoberatel.vytvorXLS(vybrane, nadpis);
+                    }
+
+
+
+
+
 
                 }
         );
