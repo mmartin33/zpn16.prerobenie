@@ -119,7 +119,12 @@ public class PrevadzkaNastroje {
         //hladame firmu podla ica
         Firma firma =FirmaNastroje.firmaPodlaICO(ico);
         if (firma!=null) {
-            prevadzka = ulozPrvuPrevadzku(firma,nazovFirmy);
+            //todo tu mozno zobrat prvu prevadzku aj s poberatelom
+            prevadzka=zoberPrvuPrevadzku(firma);
+            if (prevadzka.getPoberatel()==null)
+                prevadzka.setPoberatel(PoberatelNastroje.ulozPrvehoPoberatela(prevadzka));
+            if (prevadzka==null)
+                prevadzka = ulozPrvuPrevadzku(firma,nazovFirmy);
             return prevadzka;
         }
         //zaklada sa firma
@@ -135,11 +140,22 @@ public class PrevadzkaNastroje {
 
     }
 
+    private static Prevadzka zoberPrvuPrevadzku(Firma firma) {
+        if (firma==null)
+            return null;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Prevadzka> q = em.createNamedQuery("Prevadzka.getPrevadzkaPodlaICO", Prevadzka.class)
+                .setParameter("ico", firma.getIco());
+        List results = q.getResultList();
+        if (results.isEmpty()) return null;
+        return (Prevadzka) results.get(0);
+    }
+
 
     public static Prevadzka prevadzkaPodlaICOaNazvu(String ico, String nazov){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Prevadzka> q = em.createNamedQuery("Prevadzka.getPodlaICAaNazvu", Prevadzka.class)
-                .setParameter("nazov", nazov)
+                .setParameter("nazov", nazov.toUpperCase())
                 .setParameter("ico", ico);
 
         List results = q.getResultList();

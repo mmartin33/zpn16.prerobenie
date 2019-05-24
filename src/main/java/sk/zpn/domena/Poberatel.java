@@ -44,7 +44,7 @@ public class Poberatel extends Vseobecne {
         if (this == null)
             return "";
         else
-            return this.getMeno()+" "+this.getMesto()+" "+this.getPsc()+" "+this.getUlica();
+            return this.getMeno()+" "+this.getMesto().toString()+" "+this.getPsc().toString()+" "+this.getUlica().toString();
     }
 
 

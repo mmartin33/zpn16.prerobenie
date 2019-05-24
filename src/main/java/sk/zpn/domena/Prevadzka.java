@@ -11,7 +11,10 @@ import static javax.persistence.CascadeType.PERSIST;
         @NamedQuery(name = "Prevadzka.getPodlaICAaNazvu", query = "SELECT p FROM prevadzky p " +
                 "JOIN p.firma f " +
                 "WHERE f.ico =:ico " +
-                    " and p.nazov =:nazov"),
+                    " and upper(p.nazov) =:nazov"),
+        @NamedQuery(name = "Prevadzka.getPrevadzkaPodlaICO", query = "SELECT p FROM prevadzky p " +
+                "JOIN p.firma f " +
+                "WHERE f.ico =:ico "),
         @NamedQuery(name = "Prevadzka.getPrevadzkyFirmy", query = "SELECT p FROM prevadzky p WHERE  p.firma=:firma"),
         @NamedQuery(name = "Prevadzka.getAll", query = "SELECT p FROM prevadzky p")})
 
