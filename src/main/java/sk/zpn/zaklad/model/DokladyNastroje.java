@@ -80,6 +80,10 @@ public class DokladyNastroje {
     }
 
     public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam, String file, ProgressBarZPN progressBarZPN, Button btnzmaz) {
+
+
+
+
         List <ChybaImportu> chyby = new ArrayList<>();;
         VysledokImportu vysledok=new VysledokImportu();
         progressBarZPN.nadstavNadpis("Zhranie dokladu");
@@ -114,21 +118,25 @@ public class DokladyNastroje {
 
 
         int i=0;
+
         for (ZaznamCsv z: zaznam){
             i++;
            // progressBarZPN.posun(new BigDecimal(zaznam.size()),new BigDecimal(i));
             progressBarZPN.setProgresBarValue(new BigDecimal(i).divide(new BigDecimal(zaznam.size()),2,BigDecimal.ROUND_HALF_UP).floatValue());
             btnzmaz.click();
 
-            PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
-            if (pd!=null)
-                polozkyDokladu.add(pd);
+            NavratovaHodnota navratovahodnota=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
+
+            //PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
+            if (navratovahodnota.getPolozkaDokladu()!=null)
+                polozkyDokladu.add(navratovahodnota.getPolozkaDokladu());
             else
+                if (navratovahodnota.getChyba()==NavratovaHodnota.NENAJEDENA_FIRMA)
                 chyby.add(new ChybaImportu(
                     z.getNazvFirmy(),
                     z.getIco(),
                     z.getKit(),
-                    "Nepodarilo sa zalozit polozku dokladu"));
+                    "Nepodarilo sa zalozit polozku dokladu (firma)"));
 
         }
         progressBarZPN.koniec();

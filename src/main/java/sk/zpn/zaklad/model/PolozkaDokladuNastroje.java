@@ -75,7 +75,7 @@ public class PolozkaDokladuNastroje {
         return q.getResultList();
     }
 
-    public static PolozkaDokladu vytvorPolozkuZoZaznamuCSV(ZaznamCsv zaznam, Doklad doklad) {
+    public static NavratovaHodnota vytvorPolozkuZoZaznamuCSV(ZaznamCsv zaznam, Doklad doklad) {
         PolozkaDokladu pd = new PolozkaDokladu();
         FirmaProdukt fp = new FirmaProdukt();
 
@@ -84,7 +84,7 @@ public class PolozkaDokladuNastroje {
                                                                                zaznam.getKit());
 
         if (fp==null)
-            return null;
+            return new NavratovaHodnota(null,NavratovaHodnota.NENAJEDENY_KIT);
         pd.setDoklad(doklad);
 
 
@@ -101,7 +101,7 @@ public class PolozkaDokladuNastroje {
 
         Prevadzka prevadzka=PrevadzkaNastroje.najdiAleboZaloz(zaznam.getIco(), zaznam.getNazvFirmy());
         if (prevadzka==null)
-            return null;
+            return new NavratovaHodnota(null,NavratovaHodnota.NENAJEDENA_FIRMA);;
         pd.setPrevadzka(prevadzka);
         pd.setPoberatel(prevadzka.getPoberatel());
 
@@ -110,7 +110,7 @@ public class PolozkaDokladuNastroje {
         pd.setPoznamka(zaznam.getMtzDoklad());
 
 
-        return pd;
+        return new NavratovaHodnota(pd,NavratovaHodnota.NIC);
     }
 
 }

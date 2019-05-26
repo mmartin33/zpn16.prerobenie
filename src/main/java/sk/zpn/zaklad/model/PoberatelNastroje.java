@@ -46,13 +46,15 @@ public class PoberatelNastroje {
 
     public static Poberatel ulozPoberatela(Poberatel f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.getTransaction().begin();
         if (f.isNew()) {
             f.setId((long) 0);
             f.setKedy(new Date());
             f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
+            em.persist(f);
         }
-        em.getTransaction().begin();
-        em.merge(f);
+        else
+            em.merge(f);
         em.getTransaction().commit();
 
         return f;

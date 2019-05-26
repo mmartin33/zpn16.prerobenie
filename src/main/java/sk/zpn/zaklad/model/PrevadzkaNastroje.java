@@ -61,6 +61,7 @@ public class PrevadzkaNastroje {
     public static Prevadzka zalozPrevadzku(Prevadzka p){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         if (p.isNew()) {
+
             p.setId(null);
             p.setKedy(new Date());
             p.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
@@ -92,6 +93,7 @@ public class PrevadzkaNastroje {
         p.setUlica(firma.getUlica());
         p.setPsc(firma.getPsc());
         p.setFirma(firma);
+
         p.setPoberatel(PoberatelNastroje.ulozPrvehoPoberatela(p));
         zalozPrevadzku(p);
 
