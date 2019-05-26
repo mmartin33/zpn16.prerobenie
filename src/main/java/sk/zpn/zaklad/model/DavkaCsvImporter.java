@@ -1,11 +1,10 @@
 package sk.zpn.zaklad.model;
 
 import au.com.bytecode.opencsv.CSVReader;
-import sk.zpn.domena.ZaznamCsv;
+import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;

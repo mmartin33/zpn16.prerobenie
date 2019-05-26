@@ -1,4 +1,4 @@
-package sk.zpn.domena;
+package sk.zpn.domena.importy;
 
 public class ChybaImportu {
     String nazovFirmy;

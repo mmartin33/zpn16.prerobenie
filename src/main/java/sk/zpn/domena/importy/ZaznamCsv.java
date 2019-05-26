@@ -1,6 +1,7 @@
-package sk.zpn.domena;
+package sk.zpn.domena.importy;
 
 import org.apache.log4j.Logger;
+import sk.zpn.domena.Doklad;
 
 import java.math.BigDecimal;
 import java.util.Date;

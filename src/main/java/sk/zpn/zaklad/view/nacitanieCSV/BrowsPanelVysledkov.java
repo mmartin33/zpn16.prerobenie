@@ -4,15 +4,9 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
-import sk.zpn.domena.ChybaImportu;
-import sk.zpn.domena.Poberatel;
-import sk.zpn.domena.VysledokImportu;
+import sk.zpn.domena.importy.ChybaImportu;
+import sk.zpn.domena.importy.VysledokImportu;
 import sk.zpn.zaklad.view.VitajteView;
-import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
-import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 public class BrowsPanelVysledkov extends VerticalLayout {
 

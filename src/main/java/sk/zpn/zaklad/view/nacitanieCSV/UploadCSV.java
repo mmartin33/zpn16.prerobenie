@@ -18,8 +18,9 @@ import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
 import sk.zpn.SystemoveParametre;
-import sk.zpn.domena.VysledokImportu;
-import sk.zpn.domena.ZaznamCsv;
+import sk.zpn.domena.importy.ParametreImportu;
+import sk.zpn.domena.importy.VysledokImportu;
+import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 import sk.zpn.zaklad.model.DavkaCsvImporter;
 import sk.zpn.zaklad.model.DokladyNastroje;
@@ -29,6 +30,7 @@ import sk.zpn.zaklad.view.VitajteView;
 
 public class UploadCSV extends CustomComponent  {
     private static final long serialVersionUID = -4292553844521293140L;
+    public ParametreImportu parametreImportu=null;
     Upload upload;
     Label label;
     Button btnSpat;
@@ -39,6 +41,7 @@ public class UploadCSV extends CustomComponent  {
     VerticalLayout layout;
     String adresar= SystemoveParametre.getUplodAdresar()  ;
     VysledokImportu vysledokSpracovania;
+
     private NacitanieCSVView nacitanieView;
 
 
@@ -89,8 +92,9 @@ public class UploadCSV extends CustomComponent  {
             if (current < 1.0f)
                 progressBarZPN.setProgresBarValue(current + 0.10f);
         });
-        String ico= UzivatelNastroje.getIcoVlastnejFirmyPrihlasenehoUzivala();
-        this.adresar=this.adresar+ico+"/";
+//        String ico= UzivatelNastroje.getIcoVlastnejFirmyPrihlasenehoUzivala();
+
+
 
 
         // Create the upload with a caption and set receiver later
@@ -146,6 +150,7 @@ public class UploadCSV extends CustomComponent  {
         layout.addComponent(panel);
         layout.addComponents(progressBarZPN);
 
+
         layout.addComponents(btnzmaz);
         setCompositionRoot(layout);
     }
@@ -171,7 +176,7 @@ public class UploadCSV extends CustomComponent  {
         try {
             zaznam= DavkaCsvImporter.nacitajCsvDavku(file,progressBarZPN);
             //this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
-            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file,progressBarZPN,btnzmaz);
+            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file,parametreImportu,progressBarZPN,btnzmaz);
             nacitanieView.setVysledokImportu(vi);
             System.out.println(zaznam.size());
         } catch (IOException e) {
@@ -180,6 +185,9 @@ public class UploadCSV extends CustomComponent  {
 
     }
 
+    public void nastavAdresar(String ico){
+        this.adresar=this.adresar+ico+"/";
+    }
     public void setVysledokSpracovania(VysledokImportu vysledokSpracovania) {
         this.vysledokSpracovania = vysledokSpracovania;
     }

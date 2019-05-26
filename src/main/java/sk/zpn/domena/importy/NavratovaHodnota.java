@@ -1,6 +1,7 @@
-package sk.zpn.domena;
+package sk.zpn.domena.importy;
 
 import com.sun.org.apache.bcel.internal.classfile.Constant;
+import sk.zpn.domena.PolozkaDokladu;
 
 public class NavratovaHodnota{
     PolozkaDokladu polozkaDokladu;

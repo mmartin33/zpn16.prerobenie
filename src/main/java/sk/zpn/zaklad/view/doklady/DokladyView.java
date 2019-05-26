@@ -48,7 +48,7 @@ public class DokladyView extends HorizontalLayout implements View {
             deselect();
             Doklad d=new Doklad();
             d.setStavDokladu(StavDokladu.POTVRDENY);
-            d.setCisloDokladu(DokladyNastroje.noveCisloDokladu());
+            d.setCisloDokladu(DokladyNastroje.noveCisloDokladu(null));
             editacnyForm.edit(d);
         });
         browsPanel.addSelectionListener(editacnyForm::edit);

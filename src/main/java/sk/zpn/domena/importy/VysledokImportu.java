@@ -1,4 +1,8 @@
-package sk.zpn.domena;
+package sk.zpn.domena.importy;
+
+import sk.zpn.domena.Doklad;
+import sk.zpn.domena.PolozkaDokladu;
+import sk.zpn.domena.importy.ChybaImportu;
 
 import java.util.List;
 

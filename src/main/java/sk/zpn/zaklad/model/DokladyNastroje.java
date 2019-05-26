@@ -2,20 +2,19 @@ package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ProgressBar;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import sk.zpn.domena.*;
+import sk.zpn.domena.importy.*;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 public class DokladyNastroje {
 
@@ -67,19 +66,34 @@ public class DokladyNastroje {
         TypedQuery<Doklad> q = em.createNamedQuery("Doklad.getAll", Doklad.class);
         return q.getResultList();
     }
-    public static String noveCisloDokladu(){
+    public static String noveCisloDokladu(Date datum){
         boolean prazdny=true;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        Query query = em.createNativeQuery("SELECT  max(cisloDokladu) FROM  doklady");
+        String sql ;
+        String obdobie = null;
+        if (datum==null)
+            sql="SELECT  max(cisloDokladu) FROM  doklady";
+        else {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(datum);
+            Integer rok =calendar.get(Calendar.YEAR);
+            Integer mesiac =calendar.get(Calendar.MONTH);;
+            obdobie=(rok.toString()+ StringUtils.leftPad(mesiac.toString(),2,'0'));
+            sql = "SELECT  max(cisloDokladu) FROM  doklady where substr(cislodokladu,1,6)='"+obdobie+"'";
+
+        }
+
+        Query query = em.createNativeQuery(sql);
+
         String result = (String)query.getSingleResult();
 
         if (result !=null)
             return Long.toString(Long.parseLong(result)+1);
         else
-            return null;
+            return obdobie+"001";
     }
 
-    public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam, String file, ProgressBarZPN progressBarZPN, Button btnzmaz) {
+    public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam, String file, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN, Button btnzmaz) {
 
 
 
@@ -90,7 +104,7 @@ public class DokladyNastroje {
         progressBarZPN.zobraz();
         Doklad hlavickaDokladu=new Doklad();
 
-        String noveCisloDokladu = noveCisloDokladu();
+        String noveCisloDokladu = noveCisloDokladu(parametreImportu.getDatum());
 
 
         if   (noveCisloDokladu==null || noveCisloDokladu.isEmpty()){
@@ -104,16 +118,23 @@ public class DokladyNastroje {
 
         hlavickaDokladu.setCisloDokladu(noveCisloDokladu);
         hlavickaDokladu.setTypDokladu(TypDokladu.DAVKA);
-        hlavickaDokladu.setDatum(new Date());
+        hlavickaDokladu.setDatum(parametreImportu.getDatum());
         hlavickaDokladu.setPoznamka(file);
         hlavickaDokladu.setStavDokladu(StavDokladu.NEPOTVRDENY);
 
 
-        hlavickaDokladu.setFirma(UzivatelNastroje.getVlastnuFirmuPrihlasenehoUzivala());
+        //hlavickaDokladu.setFirma(UzivatelNastroje.getVlastnuFirmuPrihlasenehoUzivala());
+        hlavickaDokladu.setFirma(parametreImportu.getFirma());
 
 
 
         List<PolozkaDokladu> polozkyDokladu = new ArrayList<>();;
+
+
+
+
+
+
 
 
 
@@ -124,6 +145,7 @@ public class DokladyNastroje {
            // progressBarZPN.posun(new BigDecimal(zaznam.size()),new BigDecimal(i));
             progressBarZPN.setProgresBarValue(new BigDecimal(i).divide(new BigDecimal(zaznam.size()),2,BigDecimal.ROUND_HALF_UP).floatValue());
             btnzmaz.click();
+
 
             NavratovaHodnota navratovahodnota=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
 
@@ -153,6 +175,7 @@ public class DokladyNastroje {
 
 
     }
+
 
     private static void ulozDokladDavky(Doklad hlavickaDokladu, List<PolozkaDokladu> polozkyDokladu, ProgressBarZPN progressBarZPN) {
         if (polozkyDokladu.size()==0)
