@@ -256,7 +256,7 @@ public class EditacnyForm extends VerticalLayout {
      * Co sa zobraziv textfielde, ked sa uz hodnota vyberie
      * */
     private String transformujPoberatelaNaMeno(Poberatel poberatel) {
-        logger.info("Vybraty poberate aaaaa"+ poberatel.getPoberatelMenoAdresa()+ poberatel.getId());
+        logger.info("Vybraty poberate "+ poberatel.getPoberatelMenoAdresa()+ poberatel.getId());
         return poberatel.getMeno();
 
     }

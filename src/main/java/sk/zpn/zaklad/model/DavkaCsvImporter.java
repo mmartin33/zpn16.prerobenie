@@ -28,6 +28,8 @@ public class DavkaCsvImporter {
         List<ZaznamCsv> davka =new ArrayList<ZaznamCsv>();;
         progressBarZPN.zobraz();
         progressBarZPN.nadstavNadpis("Načítanie súboru");
+        progressBarZPN.nadstavspustenie(true);
+
         reader.readNext();
         while ((nextLine = reader.readNext()) != null) {
             ZaznamCsv zaznam=new ZaznamCsv();

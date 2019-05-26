@@ -23,8 +23,13 @@ public class ProgressBarZPN extends VerticalLayout implements IProgresBarZPN{
         lblNadpis=new Label(nadpis);
         this.addComponent(lblNadpis);
         progresBar=new ProgressBar();
+        progresBar.setIndeterminate(false);
+
+        progresBar.setWidth("400");
         this.addComponentsAndExpand(progresBar);
+
         btnStorno= new Button("Koniec");
+        btnStorno.setVisible(false);
         this.addComponent(btnStorno);
         btnStorno.addClickListener(clickEvent -> {
             koniec();
@@ -36,10 +41,16 @@ public class ProgressBarZPN extends VerticalLayout implements IProgresBarZPN{
         this.lblNadpis.setValue(nadpis);
 
     }
+    public void nadstavspustenie(Boolean spustit) {
+        progresBar.setIndeterminate(spustit);
+
+    }
+
 
     @Override
     public void koniec() {
         this.setVisible(false);
+        progresBar.setIndeterminate(false);
     }
 
     @Override

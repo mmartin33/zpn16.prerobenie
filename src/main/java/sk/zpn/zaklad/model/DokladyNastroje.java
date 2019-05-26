@@ -93,7 +93,7 @@ public class DokladyNastroje {
             return obdobie+"001";
     }
 
-    public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam, String file, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN, Button btnzmaz) {
+    public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam, String file, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) {
 
 
 
@@ -101,6 +101,7 @@ public class DokladyNastroje {
         List <ChybaImportu> chyby = new ArrayList<>();;
         VysledokImportu vysledok=new VysledokImportu();
         progressBarZPN.nadstavNadpis("Zhranie dokladu");
+        progressBarZPN.nadstavspustenie(true);
         progressBarZPN.zobraz();
         Doklad hlavickaDokladu=new Doklad();
 
@@ -144,7 +145,7 @@ public class DokladyNastroje {
             i++;
            // progressBarZPN.posun(new BigDecimal(zaznam.size()),new BigDecimal(i));
             progressBarZPN.setProgresBarValue(new BigDecimal(i).divide(new BigDecimal(zaznam.size()),2,BigDecimal.ROUND_HALF_UP).floatValue());
-            btnzmaz.click();
+
 
 
             NavratovaHodnota navratovahodnota=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
@@ -182,6 +183,7 @@ public class DokladyNastroje {
             return;
         Doklad ulozenyDoklad;
         progressBarZPN.nadstavNadpis("ukladanie položiek dokladu");
+        progressBarZPN.nadstavspustenie(true);
         progressBarZPN.zobraz();
         ulozenyDoklad=vytvorDoklad(hlavickaDokladu);
         int i=0;

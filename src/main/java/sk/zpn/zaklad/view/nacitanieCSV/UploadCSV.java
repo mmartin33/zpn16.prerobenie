@@ -37,7 +37,7 @@ public class UploadCSV extends CustomComponent  {
     Panel panel;
     ProgressBarZPN progressBarZPN;
 
-    Button btnzmaz;
+
     VerticalLayout layout;
     String adresar= SystemoveParametre.getUplodAdresar()  ;
     VysledokImportu vysledokSpracovania;
@@ -87,11 +87,7 @@ public class UploadCSV extends CustomComponent  {
         FileReceiver receiver = new FileReceiver();
         progressBarZPN= new ProgressBarZPN("");
 
-        btnzmaz=new Button("AAAA", click -> {
-            float current = progressBarZPN.getProgresBarValue();
-            if (current < 1.0f)
-                progressBarZPN.setProgresBarValue(current + 0.10f);
-        });
+
 //        String ico= UzivatelNastroje.getIcoVlastnejFirmyPrihlasenehoUzivala();
 
 
@@ -151,7 +147,7 @@ public class UploadCSV extends CustomComponent  {
         layout.addComponents(progressBarZPN);
 
 
-        layout.addComponents(btnzmaz);
+
         setCompositionRoot(layout);
     }
 
@@ -176,7 +172,7 @@ public class UploadCSV extends CustomComponent  {
         try {
             zaznam= DavkaCsvImporter.nacitajCsvDavku(file,progressBarZPN);
             //this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
-            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file,parametreImportu,progressBarZPN,btnzmaz);
+            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file,parametreImportu,progressBarZPN);
             nacitanieView.setVysledokImportu(vi);
             System.out.println(zaznam.size());
         } catch (IOException e) {
