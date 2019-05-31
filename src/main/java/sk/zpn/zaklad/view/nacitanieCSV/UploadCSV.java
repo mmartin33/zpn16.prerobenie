@@ -17,14 +17,16 @@ import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
+import org.apache.commons.lang.StringUtils;
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.importy.ParametreImportu;
 import sk.zpn.domena.importy.VysledokImportu;
 import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
-import sk.zpn.zaklad.model.DavkaCsvImporter;
+import sk.zpn.zaklad.model.util.importeryDavky.DavkaCsvImporter;
+import sk.zpn.zaklad.model.util.importeryDavky.DavkaDbfImporter;
 import sk.zpn.zaklad.model.DokladyNastroje;
-import sk.zpn.zaklad.model.UzivatelNastroje;
+import sk.zpn.zaklad.model.util.importeryDavky.DavkaTxtImporter;
 import sk.zpn.zaklad.view.VitajteView;
 
 
@@ -170,7 +172,13 @@ public class UploadCSV extends CustomComponent  {
     void zhrajDavku(String file){
         List <ZaznamCsv> zaznam;
         try {
-            zaznam= DavkaCsvImporter.nacitajCsvDavku(file,progressBarZPN);
+            if (StringUtils.upperCase(StringUtils.right(file,3)).equals("DBF"))
+                zaznam= DavkaDbfImporter.nacitajDbfDavku(file,progressBarZPN);
+            else if (StringUtils.upperCase(StringUtils.right(file,3)).equals("TXT"))
+                zaznam= DavkaTxtImporter.nacitajTxtDavku(file,progressBarZPN);
+            else
+                zaznam= DavkaCsvImporter.nacitajCsvDavku(file,progressBarZPN);
+
             //this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
             VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file,parametreImportu,progressBarZPN);
             nacitanieView.setVysledokImportu(vi);

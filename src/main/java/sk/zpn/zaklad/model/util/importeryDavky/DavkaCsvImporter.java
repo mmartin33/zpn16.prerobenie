@@ -1,4 +1,4 @@
-package sk.zpn.zaklad.model;
+package sk.zpn.zaklad.model.util.importeryDavky;
 
 import au.com.bytecode.opencsv.CSVReader;
 import sk.zpn.domena.importy.ZaznamCsv;

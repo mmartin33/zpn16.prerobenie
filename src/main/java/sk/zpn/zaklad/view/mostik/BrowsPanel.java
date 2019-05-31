@@ -19,6 +19,7 @@ public class BrowsPanel extends VerticalLayout {
     private FilterGrid<FirmaProdukt> grid;
     private List<FirmaProdukt> firmaProduktList;
     public Button btnNovy;
+    public Button btnDoplnKitKat;
     private FirmaProdukt oznacenyFirmaProdukt;
     private HorizontalLayout upperFilterHorizontalLayout = new HorizontalLayout();
     private CheckBox cbFilerInvalid = new CheckBox("Zobraz len nevalidné zaznamy");
@@ -211,6 +212,11 @@ public class BrowsPanel extends VerticalLayout {
     public void refresh(String nazovFirmy) {
         this.nazovFirmy=nazovFirmy;
         this.refresh();
+    }
+
+    public void setFirmaProduktList(List<FirmaProdukt> firmaProduktList) {
+        this.firmaProduktList = firmaProduktList;
+        grid.setItems(this.firmaProduktList);
     }
 }
 

@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.FirmaProdukt;
@@ -118,6 +119,24 @@ public class FirmaProduktNastroje {
 
         em.getTransaction().commit();
         return firmaProdukt;
+
+    }
+
+    public static void prepisKATdoKIT(List<FirmaProdukt> firmaProdukt) {
+        if (firmaProdukt==null)
+            return;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+
+        for (FirmaProdukt fp : firmaProdukt) {
+
+                em.getTransaction().begin();
+                fp.setKit(fp.getProdukt().getKat());
+                em.merge(fp);
+                em.getTransaction().commit();
+
+        }
+
+
 
     }
 }

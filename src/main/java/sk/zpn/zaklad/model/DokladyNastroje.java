@@ -196,7 +196,7 @@ public class DokladyNastroje {
         progressBarZPN.koniec();
     }
 
-    private static Doklad vytvorDoklad(Doklad d) {
+    public static Doklad vytvorDoklad(Doklad d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         if (d.isNew()) {
             if (d.getStavDokladu()==null)
