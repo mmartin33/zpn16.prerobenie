@@ -20,11 +20,11 @@ public class FirmaNastroje {
 
         return u;
     }
-    public static List<Firma> zoznamVelkoskladov(){
+    public static List<Firma> zoznamFiriemIbaVelkosklady(){
         List<Firma> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
-        TypedQuery<Firma> q = em.createNamedQuery("Firma.getAll", Firma.class);
+        TypedQuery<Firma> q = em.createNamedQuery("Firma.getVelkosklady", Firma.class);
 
         u =  q.getResultList();
 

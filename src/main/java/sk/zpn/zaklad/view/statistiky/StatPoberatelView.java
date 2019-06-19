@@ -5,6 +5,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
+import com.vaadin.ui.renderers.NumberRenderer;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import sk.zpn.domena.StatPoberatel;
@@ -13,6 +14,7 @@ import sk.zpn.zaklad.model.StatPoberatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -59,6 +61,7 @@ public class StatPoberatelView extends VerticalLayout implements View {
         gl.setRowExpandRatio(0, 1f);
 
 
+        DecimalFormat df = new DecimalFormat("#,###.00");
 
         grid = new FilterGrid<>();
 
@@ -74,12 +77,15 @@ public class StatPoberatelView extends VerticalLayout implements View {
 
         // filters
 
-
         colPoberatel.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         colPS.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        colPS.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
         colbodyPredaj.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        colbodyPredaj.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
         colbodyIne.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        colbodyIne.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
         colKS.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        colKS.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
 
 
 
@@ -109,13 +115,13 @@ public class StatPoberatelView extends VerticalLayout implements View {
                     String nadpis="Vyhodnotenie poberatelov od: "+(dfOd.getValue())+" dp: "+ (dfDo.getValue());
 
 
-                    if (grid.getSelectedItems().size()<=0)
+//                    if (grid.getSelectedItems().size()<=0)
                         XlsStatPoberatel.vytvorXLS(statList,nadpis);
-                    else {
-                        List<StatPoberatel> vybrane =new ArrayList<StatPoberatel>(  );
-                        vybrane.addAll(grid.getSelectedItems());
-                        XlsStatPoberatel.vytvorXLS(vybrane, nadpis);
-                    }
+//                    else {
+//                        List<StatPoberatel> vybrane =new ArrayList<StatPoberatel>(  );
+//                        vybrane.addAll(grid.getSelectedItems());
+//                        XlsStatPoberatel.vytvorXLS(vybrane, nadpis);
+//                    }
 
 
 

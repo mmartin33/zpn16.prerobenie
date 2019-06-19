@@ -24,8 +24,9 @@ public class BrowsPanel extends VerticalLayout {
 
 
     private FilterGrid<PolozkaDokladu> grid;
+    private HorizontalLayout infoPanel;
     private List<PolozkaDokladu> polozkyDokladuList;
-
+    private Label lblInfopanelu;
     private PolozkyDokladuView polozkyDokladuView;
     public Button btnNovy;
 
@@ -34,11 +35,15 @@ public class BrowsPanel extends VerticalLayout {
 
     public BrowsPanel(List<PolozkaDokladu> polozkyDokladuList, PolozkyDokladuView pdv) {
 
-        GridLayout gl =new GridLayout(1,3);
+        GridLayout gl =new GridLayout(1,4);
         gl.setSizeFull();
-        gl.setRowExpandRatio(0, 0.05f);
+        gl.setRowExpandRatio(0, 0.02f);
         gl.setRowExpandRatio(1, 0.90f);
-
+        gl.setRowExpandRatio(2, 0.02f);
+        gl.setRowExpandRatio(3, 0.02f);
+        infoPanel=new HorizontalLayout();
+        lblInfopanelu= new Label();
+        infoPanel.addComponent(lblInfopanelu);
 
         this.polozkyDokladuView=pdv;
         this.polozkyDokladuList = polozkyDokladuList;
@@ -104,10 +109,12 @@ public class BrowsPanel extends VerticalLayout {
 
         gl.addComponents(grid);
         gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
-
+        gl.addComponent(infoPanel);
+        //gl.setComponentAlignment(infoPanel,Alignment.BOTTOM_LEFT);
         gl.addComponent(tlacitkovy);
         gl.setComponentAlignment(tlacitkovy,Alignment.BOTTOM_LEFT);
         gl.setVisible(true);
+        aktualizujInfoPanle(0);
         grid.setSizeFull();
         this.setSizeFull();
         this.addComponentsAndExpand(gl);
@@ -115,6 +122,10 @@ public class BrowsPanel extends VerticalLayout {
 
 
 
+    }
+
+    private void aktualizujInfoPanle(int pocet){
+        lblInfopanelu.setValue("Počet všetkých položiek: "+polozkyDokladuList.size());
     }
 
     private void zmaz() {

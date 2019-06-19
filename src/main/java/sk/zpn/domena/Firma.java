@@ -13,8 +13,14 @@ import java.util.List;
                 " and f.nazov =:nazov"),
         @NamedQuery(name = "Firma.getPodlaICO", query = "SELECT f FROM firmy f " +
                 "WHERE f.ico =:ico " ),
+        @NamedQuery(name = "Firma.getVelkosklady", query = "SELECT f FROM uzivatelia u " +
+                "JOIN u.firma f "),
+
         @NamedQuery(name = "Firma.getPodlaID", query = "SELECT f FROM firmy f WHERE f.id =:id"),
         @NamedQuery(name = "Firma.getAll", query = "SELECT f FROM firmy f")})
+
+
+
 
 public class Firma extends Vseobecne {
 

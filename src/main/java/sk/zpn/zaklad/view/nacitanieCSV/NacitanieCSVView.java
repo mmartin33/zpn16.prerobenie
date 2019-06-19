@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.nacitanieCSV;
 
 import com.vaadin.data.Binder;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Sizeable;
@@ -43,16 +44,17 @@ public class NacitanieCSVView extends VerticalLayout implements View {
         frmVstupneUdaje=new FormLayout();
 
         tfFirma=new TextField("Velkosklad");
-        tfFirma.setWidth(350, Sizeable.Unit.PIXELS);
+        tfFirma.setWidth(450, Sizeable.Unit.PIXELS);
         tfobdobie=new DateField("Dátum dokladu:");
         btnOK =new Button("Pokračuj", VaadinIcons.CHECK_CIRCLE);
         btnSpat =new Button("Späť",VaadinIcons.CLOSE_CIRCLE);
         HorizontalLayout lBtn=new HorizontalLayout();
         lBtn.addComponent(btnOK);
         lBtn.addComponent(btnSpat);
+
         btnOK.addClickListener(this::pokracujNaVyberSuboru);
         btnSpat.addClickListener(this::spat);
-
+        btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         frmVstupneUdaje.addComponent(new Label("Údaje pre doklad dávky. Ich potvrdením sa dostanete k výberu súboru"));
         frmVstupneUdaje.addComponent(tfFirma);
         frmVstupneUdaje.addComponent(tfobdobie);
@@ -117,7 +119,7 @@ public class NacitanieCSVView extends VerticalLayout implements View {
     }
 
             private List<Firma> navrhniFirmu(String query, int cap) {
-                return  FirmaNastroje.zoznamFiriem().stream()
+                return  FirmaNastroje.zoznamFiriemIbaVelkosklady().stream()
                         .filter(firma -> firma.getNazov().toLowerCase().contains(query.toLowerCase()))
                         .limit(cap).collect(Collectors.toList());
             }

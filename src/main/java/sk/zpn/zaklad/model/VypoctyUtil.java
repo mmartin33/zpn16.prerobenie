@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.model;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 
 public class VypoctyUtil {
@@ -18,7 +19,8 @@ public class VypoctyUtil {
         return mnozstvo
                 .multiply(koeficient)
                 .divide(kusy,2,  RoundingMode.HALF_UP)
-                .multiply(body);
+                .multiply(body)
+                .round(new MathContext(2,RoundingMode.HALF_UP));
     }
 
 

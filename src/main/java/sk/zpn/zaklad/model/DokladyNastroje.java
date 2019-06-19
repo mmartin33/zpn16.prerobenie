@@ -145,9 +145,8 @@ public class DokladyNastroje {
             i++;
            // progressBarZPN.posun(new BigDecimal(zaznam.size()),new BigDecimal(i));
             progressBarZPN.setProgresBarValue(new BigDecimal(i).divide(new BigDecimal(zaznam.size()),2,BigDecimal.ROUND_HALF_UP).floatValue());
-
-
-
+            if (new BigDecimal(i).remainder(new BigDecimal(100)).compareTo(BigDecimal.ZERO)==0)
+                System.out.println("Vytvaranie zaznamov"+i);
             NavratovaHodnota navratovahodnota=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
 
             //PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
@@ -162,6 +161,7 @@ public class DokladyNastroje {
                     "Nepodarilo sa zalozit polozku dokladu (firma)"));
 
         }
+        System.out.println("Koniec vytvarania zaznamov"+i);
         progressBarZPN.koniec();
         DokladyNastroje.ulozDokladDavky(hlavickaDokladu,polozkyDokladu,progressBarZPN);
 
@@ -182,17 +182,23 @@ public class DokladyNastroje {
         if (polozkyDokladu.size()==0)
             return;
         Doklad ulozenyDoklad;
-        progressBarZPN.nadstavNadpis("ukladanie položiek dokladu");
+        progressBarZPN.nadstavNadpis("ZPN - ukladanie položiek dokladu");
         progressBarZPN.nadstavspustenie(true);
         progressBarZPN.zobraz();
         ulozenyDoklad=vytvorDoklad(hlavickaDokladu);
         int i=0;
         for (PolozkaDokladu polozka: polozkyDokladu){
             i++;
+            if (new BigDecimal(i).remainder(new BigDecimal(100)).compareTo(BigDecimal.ZERO)==0)
+                System.out.println("ZPN- Vytvaranie poloziek dokladov"+i);
+
             progressBarZPN.posun(new BigDecimal(polozkyDokladu.size()),new BigDecimal(i));
             polozka.setDoklad(ulozenyDoklad);
             PolozkaDokladuNastroje.vytvorPolozkuDokladu(polozka);
         }
+
+        System.out.println("ZPN - Koniec vytvaranie dokladov"+i);
+
         progressBarZPN.koniec();
     }
 
