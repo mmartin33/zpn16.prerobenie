@@ -29,6 +29,8 @@ public class BrowsPanel extends VerticalLayout {
     private Label lblInfopanelu;
     private PolozkyDokladuView polozkyDokladuView;
     public Button btnNovy;
+    public Button btnPanelovy;
+
 
 
 
@@ -74,9 +76,7 @@ public class BrowsPanel extends VerticalLayout {
         btnSpat.addClickListener(clickEvent ->
                 UI.getCurrent().getNavigator().navigateTo(DokladyView.NAME)
         );
-
-
-
+        btnPanelovy=new Button("Zobraz/schovaj detail ", VaadinIcons.ARROWS_CROSS);
 
         Button btnZmaz=new Button("Zmaž", VaadinIcons.CLOSE_CIRCLE);
         btnZmaz.addClickListener(clickEvent ->
@@ -123,6 +123,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
     }
+
 
     private void aktualizujInfoPanle(int pocet){
         lblInfopanelu.setValue("Počet všetkých položiek: "+polozkyDokladuList.size());

@@ -58,7 +58,7 @@ public class MyUI extends UI {
         navigator.addView(LoginView.NAME, login);
         navigator.addView(ParametreView.NAME, parametre);
 
-        boolean testRezim=false;
+        boolean testRezim=true;
 
         if (testRezim){
 //            String name = "nkovacik";

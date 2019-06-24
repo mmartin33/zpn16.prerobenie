@@ -51,6 +51,14 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
         browsPanel.btnNovy.addClickListener(clickEvent -> {
   //          deselect();
             editacnyForm.edit(new PolozkaDokladu()); });
+
+        browsPanel.btnPanelovy.addClickListener(clickEvent -> {
+            if (editacnyForm.isVisible())
+                editacnyForm.setVisible(false);
+            else
+                editacnyForm.setVisible(true);
+                    ; });
+
         browsPanel.addSelectionListener(editacnyForm::edit);
         refreshPoloziekDokladov();
     }
