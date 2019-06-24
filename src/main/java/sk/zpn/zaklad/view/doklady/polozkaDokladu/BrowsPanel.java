@@ -98,6 +98,7 @@ public class BrowsPanel extends VerticalLayout {
         tlacitkovy.addComponent(btnNovy);
         tlacitkovy.addComponent(btnZmaz);
         tlacitkovy.addComponent(btnSpat);//666
+        tlacitkovy.addComponent(btnPanelovy);//666
 
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);

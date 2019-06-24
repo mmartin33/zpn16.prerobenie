@@ -14,14 +14,14 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     public static final String NAME = "polozkyDokladyView";
 
     private EditacnyForm editacnyForm;
-
+    private GridLayout gr;
     private BrowsPanel browsPanel;
 
     private List<PolozkaDokladu> polozkyDokladuList;
     private Doklad doklad;
 
     public PolozkyDokladuView(Doklad doklad) {
-        GridLayout gr=new GridLayout(2,2);
+        gr=new GridLayout(2,2);
         gr.setSpacing(false);
         gr.setSizeFull();
         gr.setColumnExpandRatio(0, 0.60f);
@@ -47,19 +47,27 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
 
     private void configureComponents() {
 
-        editacnyForm.setDokladyView(this);
-        browsPanel.btnNovy.addClickListener(clickEvent -> {
-  //          deselect();
-            editacnyForm.edit(new PolozkaDokladu()); });
 
         browsPanel.btnPanelovy.addClickListener(clickEvent -> {
-            if (editacnyForm.isVisible())
+            if (editacnyForm.isVisible()) {
                 editacnyForm.setVisible(false);
-            else
+                gr.setColumnExpandRatio(0, 0.100f);
+                gr.setColumnExpandRatio(1, 0.00f);
+
+            }
+            else {
                 editacnyForm.setVisible(true);
+                gr.setColumnExpandRatio(0, 0.60f);
+                gr.setColumnExpandRatio(1, 0.40f);
+
+            }
                     ; });
 
+        editacnyForm.setDokladyView(this);
+        browsPanel.btnNovy.addClickListener(clickEvent -> {
+        editacnyForm.edit(new PolozkaDokladu()); });
         browsPanel.addSelectionListener(editacnyForm::edit);
+
         refreshPoloziekDokladov();
     }
 

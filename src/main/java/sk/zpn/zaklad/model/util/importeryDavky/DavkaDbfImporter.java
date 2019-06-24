@@ -42,6 +42,7 @@ public class DavkaDbfImporter {
         for (int i = 0; i < dbfReader.getRecordCount(); i++) {
             ZaznamCsv zaznam = new ZaznamCsv();
             progressBarZPN.posun(new BigDecimal(500), new BigDecimal(250));
+
             Object[] dbfZaznam = dbfReader.nextRecord();
 
             zaznam.setDatumVydaja((Date)dbfZaznam[0]);
