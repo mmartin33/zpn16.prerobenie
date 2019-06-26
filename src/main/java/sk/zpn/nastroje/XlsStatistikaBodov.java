@@ -10,20 +10,20 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import sk.zpn.SystemoveParametre;
-import sk.zpn.domena.StatPoberatel;
+import sk.zpn.domena.StatistikaBodov;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class XlsStatPoberatel {
+public class XlsStatistikaBodov {
 
 
     private static String FILE_NAME = SystemoveParametre.getResourcesAdresar()+"statistika-poberatelov.xlsx";
 
 
 
-    public static String vytvorXLS(List<StatPoberatel> zoznam,String nadpis) {
+    public static String vytvorXLS(List<StatistikaBodov> zoznam, String nadpis) {
         SimpleDateFormat formatter= new SimpleDateFormat("dd.MM.yyyy ' ' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
 
@@ -57,11 +57,11 @@ public class XlsStatPoberatel {
         Cell cel3;
         Cell cel4;
 
-        for (StatPoberatel z : zoznam) {
+        for (StatistikaBodov z : zoznam) {
             row = sheet.createRow(rowNum++);
             int colNum = 1;
             cel1 = row.createCell(colNum++);
-            cel1.setCellValue((String) z.getPoberatelNazov());
+            cel1.setCellValue((String) z.getNazov());
             cel2 = row.createCell(colNum++);
             cel2.setCellValue((z.getPociatocnyStav()==null)?0:z.getPociatocnyStav().doubleValue());
             cel3 = row.createCell(colNum++);

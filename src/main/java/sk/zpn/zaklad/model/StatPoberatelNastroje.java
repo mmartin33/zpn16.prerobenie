@@ -1,30 +1,25 @@
 package sk.zpn.zaklad.model;
 
-import com.vaadin.server.VaadinSession;
-import sk.zpn.domena.StatPoberatel;
-
+import sk.zpn.domena.StatistikaBodov;
 import javax.persistence.*;
-import java.math.BigDecimal;
-
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public class StatPoberatelNastroje {
 
-    public static void exportDoXLS(List<StatPoberatel> statList) {
+    public static void exportDoXLS(List<StatistikaBodov> statList) {
 
     }
 
-    public static List<StatPoberatel> load(LocalDate dod, LocalDate ddo) {
-        List<StatPoberatel> result1=null;
+    public static List<StatistikaBodov> load(LocalDate dod, LocalDate ddo) {
+        List<StatistikaBodov> result1=null;
         EntityManager em1;
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
         em1 = emf.createEntityManager();
 
 
 
-        String sql="select pob.id, pob.meno as poberatel_nazov," +
+        String sql="select pob.id, pob.meno as nazov," +
                 "(select sum(p.body) from polozkydokladu as p " +
                 "join doklady as d on d.id=p.doklad_id" +
                 "    where date(d.datum)<date('"+dod+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY') as pociatocny_stav," +

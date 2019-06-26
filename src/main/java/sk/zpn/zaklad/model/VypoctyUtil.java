@@ -20,7 +20,7 @@ public class VypoctyUtil {
                 .multiply(koeficient)
                 .divide(kusy,2,  RoundingMode.HALF_UP)
                 .multiply(body)
-                .round(new MathContext(2,RoundingMode.HALF_UP));
+                .round(new MathContext(0,RoundingMode.HALF_DOWN));
     }
 
 

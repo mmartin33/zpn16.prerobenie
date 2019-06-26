@@ -1,4 +1,5 @@
 package sk.zpn.zaklad.model.util.importeryDavky;
+import com.google.common.collect.Maps;
 import com.linuxense.javadbf.DBFReader;
 import org.apache.commons.lang.StringUtils;
 import sk.zpn.domena.importy.ZaznamCsv;
@@ -6,11 +7,10 @@ import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 import java.io.*;
 import java.math.BigDecimal;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class DavkaDbfImporter {
 
@@ -20,7 +20,7 @@ public class DavkaDbfImporter {
     public DavkaDbfImporter() {
 
     }
-    public static List<ZaznamCsv> nacitajDbfDavku(String suborDBF, ProgressBarZPN progressBarZPN) throws IOException {
+    public static Map<String, ZaznamCsv> nacitajDbfDavku(String suborDBF, ProgressBarZPN progressBarZPN) throws IOException {
         File dbfFile = new File(suborDBF);
 
         DBFReader dbfReader = null;
@@ -28,9 +28,7 @@ public class DavkaDbfImporter {
 
         //todo kontrola ci subor extuje
         //tuto
-
-        List<ZaznamCsv> davka = new ArrayList<ZaznamCsv>();
-        ;
+        Map<String, ZaznamCsv> polozky = Maps.newHashMap();
         progressBarZPN.zobraz();
         progressBarZPN.nadstavNadpis("Načítanie súboru");
         progressBarZPN.nadstavspustenie(true);
@@ -53,11 +51,17 @@ public class DavkaDbfImporter {
             zaznam.setNazvFirmy(StringUtils.trim((String) dbfZaznam[6]));
             zaznam.setMalopredaj(StringUtils.trim((String) dbfZaznam[2]).contains("A"));
 
-            if ((zaznam != null) && (zaznam.getKit() != null))
-                davka.add(zaznam);
+            if ((zaznam != null) && (zaznam.getKit() != null)) {
+
+                ZaznamCsv existujuci = polozky.get(zaznam.getKit() + zaznam.getMtzDoklad());
+                if (existujuci == null)
+                    polozky.put(zaznam.getKit() + zaznam.getMtzDoklad(), zaznam);
+                else
+                    existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
+            }
             //zaznam=null;
         }
         in.close();
-        return davka;
+        return polozky;
     }
 }

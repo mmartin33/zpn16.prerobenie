@@ -21,6 +21,7 @@ import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 import sk.zpn.zaklad.view.produkty.ProduktyView;
+import sk.zpn.zaklad.view.statistiky.StatDodavatelView;
 import sk.zpn.zaklad.view.statistiky.StatPoberatelView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
 
@@ -98,6 +99,11 @@ public class VitajteView extends MojView {
                         UI.getCurrent().getNavigator().addView(MostikView.NAME, mostikView);
                         n.navigateTo(MostikView.NAME);
                     }
+                    else if (selectedItem.getDescription().equals("bodyDodavatelov")) {
+                        StatDodavatelView statDodavatelView = new StatDodavatelView();
+                        UI.getCurrent().getNavigator().addView(StatDodavatelView.NAME, statDodavatelView);
+                        n.navigateTo(statDodavatelView.NAME);
+                    }
                     else if (selectedItem.getDescription().equals("body")) {
                         StatPoberatelView statPoberatelView = new StatPoberatelView();
                         UI.getCurrent().getNavigator().addView(StatPoberatelView.NAME, statPoberatelView);
@@ -150,8 +156,13 @@ public class VitajteView extends MojView {
             menuProdukty.setDescription("produkty");
             MenuItem menuDoklad = menuSpravcu.addItem("Doklady", VaadinIcons.RECORDS, mycommand);
             menuDoklad.setDescription("doklad");
-            MenuItem menuBody = menuSpravcu.addItem("Stav bodov", VaadinIcons.PIGGY_BANK, mycommand);
+
+            MenuItem menuBody = menuSpravcu.addItem("Stav bodov - poberateľov" , VaadinIcons.PIGGY_BANK, mycommand);
             menuBody.setDescription("body");
+
+            MenuItem menuBodyDodavatelov = menuSpravcu.addItem("Stav bodov - dodávateľov" , VaadinIcons.PIGGY_BANK, mycommand);
+            menuBodyDodavatelov.setDescription("bodyDodavatelov");
+
             MenuItem menuParametre = menuSpravcu.addItem("Parametre", VaadinIcons.COG_O, mycommand);
             menuParametre.setDescription("parametre");
 
@@ -180,7 +191,7 @@ public class VitajteView extends MojView {
     @Override
         protected void init() {
             addStyleName("welcome");
-            setTitle("Vitajte", "Ste prihlásený ako " +VaadinSession.getCurrent().getAttribute("meno")+" >>verzia;190524<<");
+            setTitle("Vitajte", "Ste prihlásený ako " +VaadinSession.getCurrent().getAttribute("meno")+" >>verzia;190626<<");
             if  (!UzivatelNastroje.TypUzivatela().isPresent()) {
                 menuAdmin.setVisible(false);
                 menuSpravcu.setVisible(false);

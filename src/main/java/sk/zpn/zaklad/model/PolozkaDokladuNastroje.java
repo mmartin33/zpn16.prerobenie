@@ -57,9 +57,12 @@ public class PolozkaDokladuNastroje {
 
     }
 
+
+
+
     public static void zmazPolozkyDoklady(PolozkaDokladu d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        System.out.println("Vymazaná položka");
+
         em.getTransaction().begin();
         em.remove(d);
         em.getTransaction().commit();
@@ -113,5 +116,7 @@ public class PolozkaDokladuNastroje {
 
         return new NavratovaHodnota(pd,NavratovaHodnota.NIC);
     }
+
+
 
 }

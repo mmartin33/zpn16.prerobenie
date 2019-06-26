@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 
 import com.vaadin.icons.VaadinIcons;
@@ -170,7 +171,7 @@ public class UploadCSV extends CustomComponent  {
     }
 
     void zhrajDavku(String file){
-        List <ZaznamCsv> zaznam;
+        Map<String, ZaznamCsv> zaznam;
         try {
             if (StringUtils.upperCase(StringUtils.right(file,3)).equals("DBF"))
                 zaznam= DavkaDbfImporter.nacitajDbfDavku(file,progressBarZPN);

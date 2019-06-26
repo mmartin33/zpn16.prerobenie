@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.model.util.importeryDavky;
 
 import au.com.bytecode.opencsv.CSVReader;
+import com.google.common.collect.Maps;
 import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 
@@ -12,20 +13,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DavkaCsvImporter {
 
     public DavkaCsvImporter() {
 
     }
-    public static List<ZaznamCsv> nacitajCsvDavku(String suborCsv, ProgressBarZPN progressBarZPN) throws IOException {
-        //todo kontrola ci subor extuje
-        //tuto
+    public static Map<String, ZaznamCsv> nacitajCsvDavku(String suborCsv, ProgressBarZPN progressBarZPN) throws IOException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(suborCsv), "windows-1250"),';');
 
         String [] nextLine;
-        List<ZaznamCsv> davka =new ArrayList<ZaznamCsv>();;
+        Map<String, ZaznamCsv> polozky = Maps.newHashMap();
         progressBarZPN.zobraz();
         progressBarZPN.nadstavNadpis("Načítanie súboru");
         progressBarZPN.nadstavspustenie(true);
@@ -50,12 +50,18 @@ public class DavkaCsvImporter {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if ((zaznam !=null) && (zaznam.getKit()!=null))
-                davka.add(zaznam);
+            if ((zaznam !=null) && (zaznam.getKit()!=null)) {
+                ZaznamCsv existujuci = polozky.get(zaznam.getKit() + zaznam.getMtzDoklad());
+                if (existujuci ==null)
+                    polozky.put(zaznam.getKit()+zaznam.getMtzDoklad(),zaznam );
+                else
+                    existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
+            }
+
             //zaznam=null;
         }
         progressBarZPN.koniec();
 
-        return davka;
+        return polozky;
     }
 }

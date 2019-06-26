@@ -3,13 +3,15 @@ package sk.zpn.zaklad.view.statistiky;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
-import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.NumberRenderer;
+import org.apache.commons.lang.StringUtils;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import sk.zpn.domena.StatistikaBodov;
 import sk.zpn.nastroje.XlsStatistikaBodov;
+import sk.zpn.zaklad.model.ParametreNastroje;
+import sk.zpn.zaklad.model.StatDodavatelNastroje;
 import sk.zpn.zaklad.model.StatPoberatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
@@ -19,37 +21,44 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 
-public class StatPoberatelView extends VerticalLayout implements View {
+public class StatDodavatelView extends VerticalLayout implements View {
     // ContactForm is an example of a custom component class
-    public static final String NAME = "statPoberatelView";
+    public static final String NAME = "statDodavatelView";
     private Button btnAktivujFilter;
     private FilterGrid<StatistikaBodov> grid;
     private Button btnSpat;
     private List<StatistikaBodov> statList =null;
     DateField dfOd;
     DateField dfDo;
+    TextField txtRok;
     LocalDate dod;
     LocalDate ddo;
-    public StatPoberatelView() {
+    String rok;
+    public StatDodavatelView() {
 
         HorizontalLayout hornyFilter =new HorizontalLayout();
 
 
-
+        rok= ParametreNastroje.nacitajParametre().getRok();
         dod = LocalDate.of(LocalDate.now().getYear(),1,1);
         ddo = LocalDate.of(LocalDate.now().getYear(),12,31);
         dfOd=new DateField("Od:");
         dfDo=new DateField("do:");
+        txtRok=new TextField("Rok:");
+        txtRok.setValue(rok);
         dfOd.setValue(dod);
         dfDo.setValue(ddo);
-        dfOd.setWidth(15, Sizeable.Unit.PERCENTAGE);
-        dfDo.setWidth(15,Sizeable.Unit.PERCENTAGE);
+        dfOd.setWidth(15, Unit.PERCENTAGE);
+        dfDo.setWidth(15, Unit.PERCENTAGE);
+        txtRok.setWidth(15, Unit.PERCENTAGE);
+
         btnAktivujFilter=new Button("Prezobraz");
-        btnAktivujFilter.setWidth(10,Sizeable.Unit.PERCENTAGE);
-        btnAktivujFilter.setHeight(80,Sizeable.Unit.PERCENTAGE);
+        btnAktivujFilter.setWidth(10, Unit.PERCENTAGE);
+        btnAktivujFilter.setHeight(80, Unit.PERCENTAGE);
         btnAktivujFilter.addClickListener(this::aktivujFilter);
         hornyFilter.addComponent(dfOd);
         hornyFilter.addComponent(dfDo);
+        hornyFilter.addComponent(txtRok);
         hornyFilter.addComponent(btnAktivujFilter);
 
 
@@ -67,32 +76,29 @@ public class StatPoberatelView extends VerticalLayout implements View {
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         //grid.setSelectionMode(Grid.SelectionMode.MULTI);
 
-        FilterGrid.Column<StatistikaBodov, String> colPoberatel= grid.addColumn(StatistikaBodov::getNazov).setCaption("Poberatel").setId("poberatel");
+        FilterGrid.Column<StatistikaBodov, String> colDodavatel= grid.addColumn(StatistikaBodov::getNazov).setCaption("Dodávateľ").setId("nazov");
         FilterGrid.Column<StatistikaBodov, BigDecimal> colPS= grid.addColumn(StatistikaBodov::getPociatocnyStav).setCaption("Počiatočný stav").setId("ps");
         FilterGrid.Column<StatistikaBodov, BigDecimal> colbodyPredaj= grid.addColumn(StatistikaBodov::getBodyZaPredaj).setCaption("Body za predaj").setId("predaj");
-        FilterGrid.Column<StatistikaBodov, BigDecimal> colbodyIne= grid.addColumn(StatistikaBodov::getBodyIne).setCaption("Body ine").setId("ine");
-        FilterGrid.Column<StatistikaBodov, BigDecimal> colKS= grid.addColumn(StatistikaBodov::getKonecnyStav).setCaption("Konečný stav").setId("ks");
+                FilterGrid.Column<StatistikaBodov, BigDecimal> colKS= grid.addColumn(StatistikaBodov::getKonecnyStav).setCaption("Konečný stav").setId("ks");
 
 
         // filters
 
-        colPoberatel.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        colDodavatel.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         colPS.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         colPS.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
         colbodyPredaj.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         colbodyPredaj.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
-        colbodyIne.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        colbodyIne.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
         colKS.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         colKS.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
 
 
 
-        grid.setColumnOrder(colPoberatel,colPS,colbodyPredaj,colbodyIne,colKS);
+        grid.setColumnOrder(colDodavatel,colPS,colbodyPredaj,colKS);
 
 
 
-        this.addComponent(new Label("Poberatelia "));
+        this.addComponent(new Label("Dodávatelia "));
         this.addComponent(hornyFilter);
         gl.addComponents(grid);
         gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
@@ -111,7 +117,7 @@ public class StatPoberatelView extends VerticalLayout implements View {
                     SimpleDateFormat formatter= new SimpleDateFormat("dd.MM.yyyy");
 
 
-                    String nadpis="Vyhodnotenie poberatelov od: "+(dfOd.getValue())+" do: "+ (dfDo.getValue());
+                    String nadpis="Vyhodnotenie dodavateľov od: "+(dfOd.getValue())+" dp: "+ (dfDo.getValue());
 
 
 //                    if (grid.getSelectedItems().size()<=0)
@@ -162,7 +168,7 @@ public class StatPoberatelView extends VerticalLayout implements View {
     private void aktivujFilter(){
         if (statList!=null)
             statList.clear();
-        statList = StatPoberatelNastroje.load(dfOd.getValue(), dfDo.getValue());
+        statList = StatDodavatelNastroje.load(dfOd.getValue(), dfDo.getValue(),Integer.parseInt(txtRok.getValue()));
         grid.setItems(statList);
     }
 

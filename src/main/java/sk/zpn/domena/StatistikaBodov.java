@@ -8,9 +8,9 @@ import java.math.BigDecimal;
 
 @SqlResultSetMapping(name="mapovanieVysledku",
         entities={
-                @EntityResult(entityClass=StatPoberatel.class, fields={
+                @EntityResult(entityClass=StatistikaBodov.class, fields={
                         @FieldResult(name="id", column="id"),
-                        @FieldResult(name="poberatelNazov", column="poberatel_nazov"),
+                        @FieldResult(name="nazov", column="nazov"),
                         @FieldResult(name="pociatocnyStav", column="pociatocny_stav"),
                         @FieldResult(name="bodyZaPredaj", column="body_za_predaj"),
                         @FieldResult(name="bodyIne", column="body_ine"),
@@ -20,12 +20,12 @@ import java.math.BigDecimal;
 
 @Entity
 
-public class StatPoberatel  {
+public class StatistikaBodov  {
     @Id
     @Column(name = "id")
     private Long id;
-    @Column(name = "poberatel_nazov")
-    private String poberatelNazov;
+    @Column(name = "nazov")
+    private String nazov;
     @Column(name = "pociatocny_stav")
     private BigDecimal pociatocnyStav;
     @Column(name = "body_za_predaj")
@@ -35,27 +35,27 @@ public class StatPoberatel  {
     @Column(name = "konecny_stav")
     private BigDecimal konecnyStav;
 
-        public StatPoberatel(Long id,
-                             String poberatelNazov,
+        public StatistikaBodov(Long id,
+                             String nazov,
                              BigDecimal pociatocnyStav,
                              BigDecimal bodyZaPredaj,
                              BigDecimal bodyIne,
                              BigDecimal konecnyStav)
         {
-            this.poberatelNazov=poberatelNazov;
+            this.nazov = nazov;
             this.pociatocnyStav=pociatocnyStav;
             this.bodyZaPredaj=bodyZaPredaj;
             this.bodyIne=bodyIne;
             this.konecnyStav=konecnyStav;
         }
 
-    public StatPoberatel()
+    public StatistikaBodov()
     {
 
     }
 
-    public String getPoberatelNazov() {
-        return poberatelNazov;
+    public String getNazov() {
+        return nazov;
     }
 
     public BigDecimal getPociatocnyStav() {   return pociatocnyStav;

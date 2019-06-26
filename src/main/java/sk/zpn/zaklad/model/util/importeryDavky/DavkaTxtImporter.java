@@ -1,6 +1,6 @@
 package sk.zpn.zaklad.model.util.importeryDavky;
 
-import au.com.bytecode.opencsv.CSVReader;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
@@ -14,13 +14,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DavkaTxtImporter {
 
     public DavkaTxtImporter() {
 
     }
-    public static List<ZaznamCsv> nacitajTxtDavku(String suborTxt, ProgressBarZPN progressBarZPN) throws IOException {
+    public static Map<String, ZaznamCsv> nacitajTxtDavku(String suborTxt, ProgressBarZPN progressBarZPN) throws IOException {
         //todo kontrola ci subor extuje
         //tuto
 
@@ -29,7 +30,7 @@ public class DavkaTxtImporter {
         BufferedReader br = new BufferedReader(ir);
 
         String [] nextLine;
-        List<ZaznamCsv> davka =new ArrayList<ZaznamCsv>();;
+        Map<String, ZaznamCsv> polozky = Maps.newHashMap();
         progressBarZPN.zobraz();
         progressBarZPN.nadstavNadpis("Načítanie súboru");
         progressBarZPN.nadstavspustenie(true);
@@ -52,13 +53,18 @@ public class DavkaTxtImporter {
                 }
                 zaznam.setMtzDoklad(StringUtils.trim(StringUtils.substring(strLine,87,98)));
                 zaznam.setIco(StringUtils.trim(StringUtils.substring(strLine,99,107)));
-                if ((zaznam != null) && (zaznam.getKit() != null))
-                    davka.add(zaznam);
+                if ((zaznam != null) && (zaznam.getKit() != null)) {
+                    ZaznamCsv existujuci = polozky.get(zaznam.getKit() + zaznam.getMtzDoklad());
+                    if (existujuci == null)
+                        polozky.put(zaznam.getKit() + zaznam.getMtzDoklad(), zaznam);
+                    else
+                        existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
+                }
             }
         }
         br.close();
         ir.close();
         progressBarZPN.koniec();
-        return davka;
+        return polozky;
     }
 }

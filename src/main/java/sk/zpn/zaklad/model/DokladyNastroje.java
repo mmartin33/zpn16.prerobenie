@@ -77,7 +77,7 @@ public class DokladyNastroje {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(datum);
             Integer rok =calendar.get(Calendar.YEAR);
-            Integer mesiac =calendar.get(Calendar.MONTH);;
+            Integer mesiac =calendar.get(Calendar.MONTH)+1;
             obdobie=(rok.toString()+ StringUtils.leftPad(mesiac.toString(),2,'0'));
             sql = "SELECT  max(cisloDokladu) FROM  doklady where substr(cislodokladu,1,6)='"+obdobie+"'";
 
@@ -93,7 +93,7 @@ public class DokladyNastroje {
             return obdobie+"001";
     }
 
-    public static VysledokImportu zalozDokladovuDavku(List<ZaznamCsv> zaznam, String file, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) {
+    public static VysledokImportu zalozDokladovuDavku(Map<String, ZaznamCsv> zaznam, String file, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) {
 
 
 
@@ -140,8 +140,8 @@ public class DokladyNastroje {
 
 
         int i=0;
-
-        for (ZaznamCsv z: zaznam){
+        for (Map.Entry<String, ZaznamCsv> entry : zaznam.entrySet()) {
+            ZaznamCsv z= entry.getValue();
             i++;
            // progressBarZPN.posun(new BigDecimal(zaznam.size()),new BigDecimal(i));
             progressBarZPN.setProgresBarValue(new BigDecimal(i).divide(new BigDecimal(zaznam.size()),2,BigDecimal.ROUND_HALF_UP).floatValue());
