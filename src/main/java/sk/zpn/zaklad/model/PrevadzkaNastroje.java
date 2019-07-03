@@ -113,7 +113,7 @@ public class PrevadzkaNastroje {
         if (ico==null ||ico.isEmpty())
             return null;
         if (nazovFirmy==null ||nazovFirmy.isEmpty())
-            return null;
+            nazovFirmy=ico;
         //hladame prevadzku podla ica a nazvu
         Prevadzka prevadzka =prevadzkaPodlaICOaNazvu(ico, nazovFirmy);
         if (prevadzka!=null)

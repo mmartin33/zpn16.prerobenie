@@ -78,7 +78,7 @@ public class MyUI extends UI {
                 System.out.println("uzivatel overeny"+VaadinSession.getCurrent().getAttribute("meno")+VaadinSession.getCurrent().getAttribute("id_uzivatela"));
                 new LogPrihlaseniaNastroje().uloz();
 
-                navigator.navigateTo(VitajteView.NAME);
+                    navigator.navigateTo(VitajteView.NAME);
             }
             else
                 Notification.show("Nepodarilo sa !");
