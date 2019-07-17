@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import sk.zpn.domena.*;
 import sk.zpn.domena.importy.NavratovaHodnota;
@@ -89,6 +90,8 @@ public class PolozkaDokladuNastroje {
 
         if (fp==null)
             return new NavratovaHodnota(null,NavratovaHodnota.NENAJEDENY_KIT);
+        if (!StringUtils.isNotBlank(zaznam.getIco()))
+            return new NavratovaHodnota(null,NavratovaHodnota.PRAZDNE_ICO);
         pd.setDoklad(doklad);
 
 

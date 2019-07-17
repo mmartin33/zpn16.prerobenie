@@ -113,7 +113,8 @@ public class DokladyNastroje {
                     "",
                     "",
                     "",
-                    "Nepodarilo sa vygenerovat cislo dokladu"));
+                    "Nepodarilo sa vygenerovat cislo dokladu",
+                    ""));
             return vysledok;
         }
 
@@ -154,11 +155,20 @@ public class DokladyNastroje {
                 polozkyDokladu.add(navratovahodnota.getPolozkaDokladu());
             else
                 if (navratovahodnota.getChyba()==NavratovaHodnota.NENAJEDENA_FIRMA)
+
                 chyby.add(new ChybaImportu(
                     z.getNazvFirmy(),
                     z.getIco(),
                     z.getKit(),
-                    "Nepodarilo sa zalozit polozku dokladu (firma)"));
+                    "Nepodarilo sa zalozit polozku dokladu (firma)",
+                    z.getMtzDoklad()));
+                else if  (navratovahodnota.getChyba()==NavratovaHodnota.PRAZDNE_ICO)
+                    chyby.add(new ChybaImportu(
+                        z.getNazvFirmy(),
+                        z.getIco(),
+                        z.getKit(),
+                        "Nepodarilo sa zalozit polozku dokladu (firma-prazdne ICO)",
+                            z.getMtzDoklad()));
 
         }
         System.out.println("Koniec vytvarania zaznamov"+i);

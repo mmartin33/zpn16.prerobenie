@@ -2,6 +2,7 @@ package sk.zpn.domena.importy;
 
 public class ChybaImportu {
     String nazovFirmy;
+    String doklad;
     String icoFirmy;
     String kit;
     String chyba;
@@ -9,11 +10,21 @@ public class ChybaImportu {
     public ChybaImportu() {
     }
 
-    public ChybaImportu(String nazovFirmy, String icoFirmy, String kit, String chyba) {
+    public ChybaImportu(String nazovFirmy, String icoFirmy, String kit, String chyba,String doklad) {
         this.nazovFirmy = nazovFirmy;
         this.icoFirmy = icoFirmy;
         this.kit = kit;
         this.chyba = chyba;
+        this.doklad = doklad;
+
+    }
+
+    public String getDoklad() {
+        return doklad;
+    }
+
+    public void setDoklad(String doklad) {
+        this.doklad = doklad;
     }
 
     public String getNazovFirmy() {

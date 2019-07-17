@@ -27,12 +27,14 @@ public class BrowsPanelVysledkov extends VerticalLayout {
 
             grid.addStyleName("test");
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-            grid.setWidth(1000, Unit.PIXELS);
+            grid.setWidth(1400, Unit.PIXELS);
             grid.setHeight(700, Unit.PIXELS);
 
             // definitionn of columns
             FilterGrid.Column<ChybaImportu, String> colNazovFirmy = grid.addColumn(ChybaImportu::getNazovFirmy).setCaption("Názov firmy").setId("firma");
             FilterGrid.Column<ChybaImportu, String> colKit = grid.addColumn(ChybaImportu::getKit).setCaption("KIT").setId("kit");
+            FilterGrid.Column<ChybaImportu, String> colDoklad = grid.addColumn(ChybaImportu::getDoklad).setCaption("Doklad").setId("doklad");
+            FilterGrid.Column<ChybaImportu, String> colICo = grid.addColumn(ChybaImportu::getIcoFirmy).setCaption("IČO").setId("ico");
             FilterGrid.Column<ChybaImportu, String> colChyba = grid.addColumn(ChybaImportu::getChyba).setCaption("Chyba").setId("chyba");
 
             // filters
@@ -40,6 +42,8 @@ public class BrowsPanelVysledkov extends VerticalLayout {
 
             colKit.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colChyba.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+            colDoklad.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+            colICo.setFilter(new TextField(), StringComparator.containsIgnoreCase());
 
             Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
             btnSpat.addClickListener(clickEvent ->

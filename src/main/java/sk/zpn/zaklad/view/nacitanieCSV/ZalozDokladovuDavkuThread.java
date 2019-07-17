@@ -54,7 +54,8 @@ class ZalozDokladovuDavkuThread extends Thread {
                     "",
                     "",
                     "",
-                    "Nepodarilo sa vygenerovat cislo dokladu"));
+                    "Nepodarilo sa vygenerovat cislo dokladu",
+                    ""));
             koniecListener.actionPerformed(null);
             return;
         }
@@ -92,7 +93,8 @@ class ZalozDokladovuDavkuThread extends Thread {
                     z.getNazvFirmy(),
                     z.getIco(),
                     z.getKit(),
-                    "Nepodarilo sa zalozit polozku dokladu (firma)"));
+                    "Nepodarilo sa zalozit polozku dokladu (firma)",
+                        z.getMtzDoklad()));
 
         }
         progressBarZPN.koniec();

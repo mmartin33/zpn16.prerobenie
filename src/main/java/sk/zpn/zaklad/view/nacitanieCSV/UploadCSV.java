@@ -176,7 +176,11 @@ public class UploadCSV extends CustomComponent  {
             if (StringUtils.upperCase(StringUtils.right(file,3)).equals("DBF"))
                 zaznam= DavkaDbfImporter.nacitajDbfDavku(file,progressBarZPN);
             else if (StringUtils.upperCase(StringUtils.right(file,3)).equals("TXT"))
-                zaznam= DavkaTxtImporter.nacitajTxtDavku(file,progressBarZPN);
+                if (parametreImportu.getFirma().getIco().equals("30997666")) //spodos format
+                    zaznam= DavkaCsvImporter.nacitajCsvSpodosDavku(file,progressBarZPN);
+                else
+                    zaznam= DavkaTxtImporter.nacitajTxtDavku(file,progressBarZPN);
+
             else
                 zaznam= DavkaCsvImporter.nacitajCsvDavku(file,progressBarZPN);
 
