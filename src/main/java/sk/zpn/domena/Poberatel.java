@@ -10,6 +10,7 @@ import java.util.Date;
 @NamedQueries(value = {
         @NamedQuery(name = "Poberatel.getPodlaMena", query = "SELECT p FROM poberatelia p WHERE p.meno =:meno"),
         @NamedQuery(name = "Poberatel.get", query = "SELECT p FROM poberatelia p WHERE p.id =:id"),
+        @NamedQuery(name = "Poberatel.getPodlaKodu", query = "SELECT p FROM poberatelia p WHERE trim(p.kod) =:kod"),
         @NamedQuery(name = "Poberatel.getAll", query = "SELECT p FROM poberatelia p")})
 
 public class Poberatel extends Vseobecne {

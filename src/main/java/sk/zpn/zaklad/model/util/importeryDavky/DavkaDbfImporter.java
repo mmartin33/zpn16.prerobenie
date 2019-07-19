@@ -53,9 +53,9 @@ public class DavkaDbfImporter {
 
             if ((zaznam != null) && (zaznam.getKit() != null)) {
 
-                ZaznamCsv existujuci = polozky.get(zaznam.getKit() + zaznam.getMtzDoklad());
+                ZaznamCsv existujuci = polozky.get(zaznam.getKit() + zaznam.getMtzDoklad()+zaznam.getIco());
                 if (existujuci == null)
-                    polozky.put(zaznam.getKit() + zaznam.getMtzDoklad(), zaznam);
+                    polozky.put(zaznam.getKit() + zaznam.getMtzDoklad()+zaznam.getIco(), zaznam);
                 else
                     existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
             }

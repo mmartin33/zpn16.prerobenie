@@ -4,6 +4,7 @@ import com.vaadin.server.VaadinSession;
 import org.apache.log4j.Logger;
 import sk.zpn.authentification.HesloNastroje;
 import sk.zpn.domena.Firma;
+import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
 
@@ -21,19 +22,23 @@ public class UzivatelNastroje {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.getPodlaMena", Uzivatel.class);
         q.setParameter("meno", meno);
-        Optional<Uzivatel> uzivatel = Optional.ofNullable(q.getSingleResult());
+        //Optional<Uzivatel> uzivatel = Optional.ofNullable(q.getSingleResult());
+        List<Uzivatel> uzivatel = q.getResultList();
+        if (uzivatel.size()==1){
+            Uzivatel najdenyUzivatel=uzivatel.get(0);
+            try {
+                if  (HesloNastroje.check(heslo, najdenyUzivatel.getHeslo())){
+                    VaadinSession.getCurrent().setAttribute("id_uzivatela", najdenyUzivatel.getId());
+                    VaadinSession.getCurrent().setAttribute("meno", najdenyUzivatel.getMeno());
+                    logger.info(String.format("Uzivatel %s bol overeny", najdenyUzivatel.getMeno()));
+                    return true;
 
-        try {
-            if  (uzivatel.isPresent()  && HesloNastroje.check(heslo, uzivatel.get().getHeslo())){
-                VaadinSession.getCurrent().setAttribute("id_uzivatela", uzivatel.get().getId());
-                VaadinSession.getCurrent().setAttribute("meno", uzivatel.get().getMeno());
-                logger.info(String.format("Uzivatel %s bol overeny", uzivatel.get().getMeno()));
-                return true;
-
+                }
+            } catch (Exception e) {
+                logger.error("Heslo nebolo mozne overit", e);
             }
-        } catch (Exception e) {
-            logger.error("Heslo nebolo mozne overit", e);
         }
+
         return false;
     }
 
@@ -85,6 +90,16 @@ public class UzivatelNastroje {
 
 
     }
+    public static boolean prihlasenyUzivatelJePoberatel(){
+        TypUzivatela typUzivatela=getPrihlasenehoUzivatela().getTypUzivatela();
+        if ((typUzivatela==TypUzivatela.ADMIN)||
+             (typUzivatela==TypUzivatela.SPRAVCA_ZPN)||
+             (typUzivatela==TypUzivatela.PREDAJCA))
+            return false;
+        else
+            return true;
+    }
+
     public static void zmazUzivatela(Uzivatel u){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         System.out.println("Vymazany uzivate:"+u.getMeno());

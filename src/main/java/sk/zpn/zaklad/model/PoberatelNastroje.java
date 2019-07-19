@@ -70,6 +70,20 @@ public class PoberatelNastroje {
         return poberatel.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
     }
 
+    public static Poberatel overPoberatela(String kod){
+        logger.info("Poberatel query by kod" + kod);
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Poberatel> q = em.createNamedQuery("Poberatel.getPodlaKodu", Poberatel.class);
+        q.setParameter("kod", kod);
+        List<Poberatel> poberatel = q.getResultList();
+        if (poberatel.size()==1){
+            VaadinSession.getCurrent().setAttribute("id_uzivatela", poberatel.get(0).getId());
+            VaadinSession.getCurrent().setAttribute("meno", poberatel.get(0).getMeno());
+            logger.info(String.format("Poberate %s bol overeny", poberatel.get(0).getKod()));
+        }
+        return poberatel.size() > 0 ? poberatel.get(0) : null;
+}
+
     public static Optional<Poberatel> poberatelPodlaId(Long id){
         logger.info("Poberatel query by id" + id.toString());
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");

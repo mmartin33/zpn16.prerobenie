@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 public enum TypUzivatela {
     ADMIN("Administrátor"),
     SPRAVCA_ZPN("Správca ZPN"),
-    PREDAJCA("Predajca");
+    PREDAJCA("Predajca"),
+    POBERATEL("Poberatel");
 
     private String displayValue;
 
