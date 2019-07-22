@@ -18,8 +18,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 
-public class StatPrePoberatelovView extends VerticalLayout implements View {
-    // ContactForm is an example of a custom component class
+public class StatPrePoberatelovView extends VerticalLayout implements View {// ContactForm is an example of a custom component class
     public static final String NAME = "StatPrePoberatelovView";
     private Button btnAktivujFilter;
     private List<StatistikaBodov> statList =null;

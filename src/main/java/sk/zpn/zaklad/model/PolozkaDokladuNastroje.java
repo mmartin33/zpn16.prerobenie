@@ -9,6 +9,7 @@ import sk.zpn.domena.importy.ZaznamCsv;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -98,14 +99,14 @@ public class PolozkaDokladuNastroje {
         pd.setMnozstvo(zaznam.getMnozstvo().multiply(fp.getKoeficient()));
 
         pd.setMnozstvo(zaznam.getMnozstvo());
-        pd.setBody(VypoctyUtil.vypocitajBody(
+        int body=VypoctyUtil.vypocitajBody(
                 pd.getMnozstvo(),
                 fp.getKoeficient(),
                 fp.getProdukt().getKusy(),
-                fp.getProdukt().getBody()
-        ));
-                //pd.getMnozstvo().multiply(fp.getKoeficient().divide(fp.getProdukt().getKusy()).multiply(fp.getProdukt().getBody())));
-
+                fp.getProdukt().getBody());
+        if (body==0)
+            return new NavratovaHodnota(null,NavratovaHodnota.NENAJEDENY_KIT);
+        pd.setBody(new BigDecimal(body));
         Prevadzka prevadzka=PrevadzkaNastroje.najdiAleboZaloz(zaznam.getIco(), zaznam.getNazvFirmy());
         if (prevadzka==null)
             return new NavratovaHodnota(null,NavratovaHodnota.NENAJEDENA_FIRMA);;

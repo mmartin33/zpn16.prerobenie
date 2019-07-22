@@ -5,22 +5,24 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 public class VypoctyUtil {
-    public static BigDecimal vypocitajBody(BigDecimal mnozstvo, BigDecimal koeficient, BigDecimal kusy, BigDecimal body) {
+    public static int vypocitajBody(BigDecimal mnozstvo, BigDecimal koeficient, BigDecimal kusy, BigDecimal body) {
         //System.out.println( "1"+mnozstvo+"2"+  koeficient+"3"+ kusy+ "4"+  body);
         if ((mnozstvo==null)  || (mnozstvo.signum()==0))
-            return new BigDecimal(0);
+            return 0;
         if ((koeficient==null)  || (koeficient.signum()==0))
-            return new BigDecimal(0);
+            return 0;
         if ((kusy==null)  || (kusy.signum()==0))
-            return new BigDecimal(0);
+            return 0;
         if ((body==null)  || (body.signum()==0))
-            return new BigDecimal(0);
+            return 0;
 
-        return mnozstvo
+        int  upraveneMnozstvo=mnozstvo
                 .multiply(koeficient)
                 .divide(kusy,2,  RoundingMode.HALF_UP)
-                .multiply(body)
-                .round(new MathContext(0,RoundingMode.HALF_DOWN));
+                .intValue();
+
+        return upraveneMnozstvo*body.intValue();
+
     }
 
 
