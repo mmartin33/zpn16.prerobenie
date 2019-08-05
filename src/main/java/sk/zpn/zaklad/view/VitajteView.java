@@ -21,6 +21,7 @@ import sk.zpn.zaklad.view.parametre.ParametreView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 import sk.zpn.zaklad.view.produkty.ProduktyView;
+import sk.zpn.zaklad.view.statistiky.StatDodavatelProduktView;
 import sk.zpn.zaklad.view.statistiky.StatDodavatelView;
 import sk.zpn.zaklad.view.statistiky.StatPoberatelView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
@@ -104,6 +105,11 @@ public class VitajteView extends MojView {
                         UI.getCurrent().getNavigator().addView(StatDodavatelView.NAME, statDodavatelView);
                         n.navigateTo(statDodavatelView.NAME);
                     }
+                    else if (selectedItem.getDescription().equals("bodyDodavatelovAProduktov")) {
+                        StatDodavatelProduktView statDodavatelProduktView = new StatDodavatelProduktView();
+                        UI.getCurrent().getNavigator().addView(StatDodavatelProduktView.NAME, statDodavatelProduktView);
+                        n.navigateTo(statDodavatelProduktView.NAME);
+                    }
                     else if (selectedItem.getDescription().equals("body")) {
                         StatPoberatelView statPoberatelView = new StatPoberatelView();
                         UI.getCurrent().getNavigator().addView(StatPoberatelView.NAME, statPoberatelView);
@@ -162,6 +168,9 @@ public class VitajteView extends MojView {
 
             MenuItem menuBodyDodavatelov = menuSpravcu.addItem("Stav bodov - dodávateľov" , VaadinIcons.PIGGY_BANK, mycommand);
             menuBodyDodavatelov.setDescription("bodyDodavatelov");
+
+            MenuItem menuBodyDodavatelovProduktov = menuSpravcu.addItem("Stav bodov - dodávateľov a produktov" , VaadinIcons.PIGGY_BANK, mycommand);
+            menuBodyDodavatelovProduktov.setDescription("bodyDodavatelovProduktov");
 
             MenuItem menuParametre = menuSpravcu.addItem("Parametre", VaadinIcons.COG_O, mycommand);
             menuParametre.setDescription("parametre");
