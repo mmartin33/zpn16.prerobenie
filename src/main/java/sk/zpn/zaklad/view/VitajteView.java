@@ -170,7 +170,7 @@ public class VitajteView extends MojView {
             menuBodyDodavatelov.setDescription("bodyDodavatelov");
 
             MenuItem menuBodyDodavatelovProduktov = menuSpravcu.addItem("Stav bodov - dodávateľov a produktov" , VaadinIcons.PIGGY_BANK, mycommand);
-            menuBodyDodavatelovProduktov.setDescription("bodyDodavatelovProduktov");
+            menuBodyDodavatelovProduktov.setDescription("bodyDodavatelovAProduktov");
 
             MenuItem menuParametre = menuSpravcu.addItem("Parametre", VaadinIcons.COG_O, mycommand);
             menuParametre.setDescription("parametre");

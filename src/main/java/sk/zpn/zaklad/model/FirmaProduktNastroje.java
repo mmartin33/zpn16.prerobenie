@@ -61,7 +61,7 @@ public class FirmaProduktNastroje {
 
     public static boolean generateMissingFirmaProductItems(String nazovFirmy) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        List<Produkt> produkty = ProduktyNastroje.zoznamProduktovZaRok();
+        List<Produkt> produkty = ProduktyNastroje.zoznamProduktovZaRok(null);
         Optional<Firma> firma = FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy);
         List<FirmaProdukt> existujuceFirmaProduktZaznamy = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
         produkty = filterNonYetAssignedProducts(produkty, existujuceFirmaProduktZaznamy);

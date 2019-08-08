@@ -29,7 +29,7 @@ public class ProduktyView extends HorizontalLayout implements View {
         gr.setSizeFull();
         gr.setColumnExpandRatio(0, 0.60f);
         gr.setColumnExpandRatio(1, 0.40f);
-        produktList = ProduktyNastroje.zoznamProduktovZaRok();
+        produktList = ProduktyNastroje.zoznamProduktovZaRok(null);
         browsPanel=new BrowsPanel(produktList);
         editacnyForm=new EditacnyForm();
         editacnyForm.setProduktyView(this);

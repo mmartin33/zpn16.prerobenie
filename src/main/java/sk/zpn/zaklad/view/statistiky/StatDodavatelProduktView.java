@@ -16,6 +16,7 @@ import sk.zpn.nastroje.XlsStatistikaBodov;
 import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.model.StatDodavatelNastroje;
+import sk.zpn.zaklad.model.StatDodavatelProdukt;
 import sk.zpn.zaklad.view.VitajteView;
 
 import java.math.BigDecimal;
@@ -35,7 +36,7 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
     private Map <String, Firma> zoznamDodavatelov;
     private final Binder<Firma> binderHF = new Binder<>();
     private TextField tfFirma;
-    private List<StatistikaBodov> statList =null;
+
     private String nazovFirmy = "";
     DateField dfOd;
     DateField dfDo;
@@ -66,12 +67,13 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
         btnAktivujFilter=new Button("Prezobraz");
 
         Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
+        btnSpat.setHeight(100, Unit.PERCENTAGE);
         btnSpat.addClickListener(clickEvent ->
                 UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
         );
 
         btnAktivujFilter.setWidth(10, Unit.PERCENTAGE);
-        btnAktivujFilter.setHeight(80, Unit.PERCENTAGE);
+        btnAktivujFilter.setHeight(100, Unit.PERCENTAGE);
         btnAktivujFilter.addClickListener(this::aktivujFilter);
         hornyFilter.addComponent(dfOd);
         hornyFilter.addComponent(dfDo);
@@ -100,26 +102,21 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
 
         this.addComponentsAndExpand(gl);
         configureComponents();
+        this.init();
 
 
 
     }
 
     private void aktivujFilter(Button.ClickEvent clickEvent) {
-        aktivujFilter();
+        Firma firma=FirmaNastroje.prvaFirmaPodlaNazvu(tfFirma.getValue()).get();
+        StatDodavatelProdukt.load(dfOd.getValue(), dfDo.getValue(),Integer.parseInt(txtRok.getValue()),firma);
         }
 
-    private void aktivujFilter(){
-        if (statList!=null)
-            statList.clear();
-        statList = StatDodavatelNastroje.load(dfOd.getValue(), dfDo.getValue(),Integer.parseInt(txtRok.getValue()));
 
-    }
-
-
-
-    private void configureComponents() {
-
+    private void init(){
+        nazovFirmy=FirmaNastroje.zoznamFiriemIbaDodavatelia().get(0).getNazov();
+        tfFirma.setValue(nazovFirmy);
         binderHF.readBean(FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).get());
         Binder.Binding<Firma, String> nazovBinding = binderHF.forField(tfFirma)
                 .withValidator(v -> !tfFirma.getValue().trim().isEmpty(),
@@ -131,6 +128,14 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
                 this::transformujFirmuNaNazov,
                 this::transformujFirmuNaNazovSoZvyraznenymQuery);
 
+    }
+
+
+
+    private void configureComponents() {
+
+
+
 
 
     }
@@ -140,7 +145,7 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
 
 
     private List<Firma> navrhniFirmu(String query, int cap) {
-        return  FirmaNastroje.zoznamFiriemIbaVelkosklady().stream()
+        return  FirmaNastroje.zoznamFiriemIbaDodavatelia().stream()
                 .filter(firma -> firma.getNazov().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
     }

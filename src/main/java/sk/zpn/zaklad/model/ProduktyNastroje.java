@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
+import org.apache.commons.lang.StringUtils;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Produkt;
@@ -20,10 +21,22 @@ public class ProduktyNastroje {
         return q.getResultList();
     }
 
-    public static List<Produkt> zoznamProduktovZaRok(){
+    public static List<Produkt> zoznamProduktovZaRok(String rok){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getZaRok", Produkt.class);
-        q.setParameter("rok", ParametreNastroje.nacitajParametre().getRok());
+        if (StringUtils.isEmpty(rok))
+            q.setParameter("rok", ParametreNastroje.nacitajParametre().getRok());
+        else
+            q.setParameter("rok", rok);
+        return q.getResultList();
+    }
+
+    public static List<Produkt> zoznamProduktovZaRokZaDodavatela(String rok,Firma f){
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getZaRokZaDodavatela", Produkt.class);
+
+        q.setParameter("rok", rok);
+        q.setParameter("id", f.getId());
         return q.getResultList();
     }
 

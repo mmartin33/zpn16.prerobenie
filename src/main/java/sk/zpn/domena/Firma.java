@@ -13,9 +13,12 @@ import java.util.List;
                 " and f.nazov =:nazov"),
         @NamedQuery(name = "Firma.getPodlaICO", query = "SELECT f FROM firmy f " +
                 "WHERE f.ico =:ico " ),
-        @NamedQuery(name = "Firma.getVelkosklady", query = "SELECT f FROM uzivatelia u " +
-                "JOIN u.firma f "),
-
+        @NamedQuery(name = "Firma.getVelkosklady", query = "SELECT distinct f FROM uzivatelia u " +
+                " JOIN u.firma f  " +
+                " where u.typUzivatela=sk.zpn.domena.TypUzivatela.PREDAJCA" +
+                " order by f.nazov "),
+        @NamedQuery(name = "Firma.getDodavatelia", query = "SELECT DISTINCT f FROM produkty p " +
+                "JOIN p.firma f  order by f.nazov"),
         @NamedQuery(name = "Firma.getPodlaID", query = "SELECT f FROM firmy f WHERE f.id =:id"),
         @NamedQuery(name = "Firma.getAll", query = "SELECT f FROM firmy f")})
 

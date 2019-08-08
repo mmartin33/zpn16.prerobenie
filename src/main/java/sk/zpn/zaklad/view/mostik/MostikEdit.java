@@ -159,7 +159,7 @@ public class MostikEdit {
     }
 
     private List<Produkt> navrhniProdukt(String query, int cap) {
-        return ProduktyNastroje.zoznamProduktovZaRok().stream()
+        return ProduktyNastroje.zoznamProduktovZaRok(null).stream()
                 .filter(produkt -> produkt.getKat().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
     }

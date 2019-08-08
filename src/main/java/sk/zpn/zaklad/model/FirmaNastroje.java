@@ -30,6 +30,16 @@ public class FirmaNastroje {
 
         return u;
     }
+    public static List<Firma> zoznamFiriemIbaDodavatelia(){
+        List<Firma> u = null;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
+        TypedQuery<Firma> q = em.createNamedQuery("Firma.getDodavatelia", Firma.class);
+
+        u =  q.getResultList();
+
+        return u;
+    }
 
     public static Optional<Firma> prvaFirmaPodlaNazvu(String nazov){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");

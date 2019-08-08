@@ -11,7 +11,12 @@ import java.util.List;
 
 @Entity(name = "produkty")
 @NamedQueries(value = {
-        @NamedQuery(name = "Produkt.getZaRok", query = "SELECT p FROM produkty p WHERE p.rok =:rok"),
+        @NamedQuery(name = "Produkt.getZaRok", query = "SELECT p FROM produkty p WHERE p.rok =:rok order by p.nazov"),
+        @NamedQuery(name = "Produkt.getZaRokZaDodavatela", query = "SELECT p FROM produkty p " +
+                " join p.firma as f" +
+                " where f.id=:id " +
+                " and p.rok =:rok " +
+                " order by p.nazov"),
         @NamedQuery(name = "Produkt.getPodlaNazvu", query = "SELECT p FROM produkty p WHERE p.nazov =:nazov"),
         @NamedQuery(name = "Produkt.getPodlaKodu", query = "SELECT p FROM produkty p WHERE p.kat =:kat"),
 
