@@ -61,7 +61,7 @@ public class StatDodavatelNastroje {
 
 
 
-            result1  = em1.createNativeQuery(sql,  "mapovanieVysledku").getResultList();
+            result1  = em1.createNativeQuery(sql,  "mapovanieVysledkuBodov").getResultList();
             em1.close();
             emf.close();
 

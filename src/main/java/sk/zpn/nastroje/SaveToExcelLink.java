@@ -39,7 +39,7 @@ public class SaveToExcelLink extends Link {
         StreamResource resource = new StreamResource(source, namefile );
 
         resource.getStream().setParameter("Content-Disposition", "attachment;filename=\"" + namefile + "\"");
-        resource.setMIMEType("application/xls");
+        resource.setMIMEType("application/xlsx");
         resource.setCacheTime(0);
 
         setResource(resource);

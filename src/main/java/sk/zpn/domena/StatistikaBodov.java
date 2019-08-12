@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 
-@SqlResultSetMapping(name="mapovanieVysledku",
+@SqlResultSetMapping(name="mapovanieVysledkuBodov",
         entities={
                 @EntityResult(entityClass=StatistikaBodov.class, fields={
                         @FieldResult(name="id", column="id"),

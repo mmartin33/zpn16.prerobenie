@@ -64,7 +64,7 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
         tfFirma=new TextField("Velkosklad");
         tfFirma.setWidth(450, Sizeable.Unit.PIXELS);
 
-        btnAktivujFilter=new Button("Prezobraz");
+        btnAktivujFilter=new Button("Vytvor XLS");
 
         Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
         btnSpat.setHeight(100, Unit.PERCENTAGE);

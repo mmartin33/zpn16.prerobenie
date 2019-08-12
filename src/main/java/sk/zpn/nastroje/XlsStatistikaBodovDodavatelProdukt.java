@@ -5,8 +5,9 @@ import com.vaadin.server.Sizeable;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import org.apache.commons.lang.math.NumberUtils;
-import org.apache.poi.hssf.usermodel.HSSFFont;
+
+
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import sk.zpn.SystemoveParametre;
@@ -16,6 +17,7 @@ import sk.zpn.domena.Produkt;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -24,10 +26,10 @@ import java.util.Map;
 public class XlsStatistikaBodovDodavatelProdukt {
 
 
-    private static String FILE_NAME_SABLONY = SystemoveParametre.getResourcesAdresar() + "statistika-dodavatelov-a-produktov.xlsx";
-    private static String FILE_NAME = "StatistikaBodovVelkoskladAProdukty.xlsx";
+    private static String FILE_NAME_SABLONY = SystemoveParametre.getResourcesAdresar() + "statistikaDAP.xls";
+    private static String FILE_NAME = "StatistikaBodovVelkoskladAProdukty.xls";
     private static CellStyle stylBunky;
-    private static XSSFWorkbook workbook;
+    private static HSSFWorkbook workbook;
 
 
     CellType stylNadpis;
@@ -49,7 +51,7 @@ public class XlsStatistikaBodovDodavatelProdukt {
         try {
             excelFile = new FileInputStream(new File(FILE_NAME_SABLONY));
 
-            workbook = new XSSFWorkbook(excelFile);
+            workbook = new HSSFWorkbook(excelFile);
 
 
         } catch (FileNotFoundException e) {
@@ -57,9 +59,9 @@ public class XlsStatistikaBodovDodavatelProdukt {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        XSSFSheet sheet = workbook.getSheet("zoznam");
-        XSSFRow  row;
-        XSSFCell cel;
+        HSSFSheet sheet = workbook.getSheet("zoznam");
+        HSSFRow row;
+        HSSFCell cel;
         row = sheet.createRow(0);
         cel = row.createCell(0);
         cel.setCellValue("Vytvorené:" + formatter.format(date));
@@ -81,11 +83,13 @@ public class XlsStatistikaBodovDodavatelProdukt {
 
 
         int rowNum = 4;
-        XSSFCell  bunka;
+        HSSFCell  bunka;
 
 
         int colNum = 1;
         row = sheet.createRow(rowNum);
+        row.setHeight((short)-1);
+        row.setHeight((short)700);
         cel = row.createCell(1);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("Názov produktu"));
@@ -163,6 +167,21 @@ public class XlsStatistikaBodovDodavatelProdukt {
         bunka.setCellStyle(oramovanieBold());
         bunka.setCellValue(sumaCelkom);
 
+
+        rowNum++;
+        row = sheet.createRow(rowNum);
+        bunka = row.createCell(1);
+
+        bunka.setCellStyle(oramovanieBold());
+        bunka.setCellValue("Spolu EUR (0.01b)");
+
+        bunka = row.createCell(colNum+2);
+        bunka.setCellStyle(oramovanieBold());
+        bunka.setCellValue((new BigDecimal(sumaCelkom)
+                .multiply(new BigDecimal(0.01)))
+                .setScale(2, RoundingMode.HALF_UP)
+                .toString());
+
         try {
 
             FileOutputStream outputStream = new FileOutputStream(SystemoveParametre.getTmpAdresar() + FILE_NAME);
@@ -212,18 +231,18 @@ public class XlsStatistikaBodovDodavatelProdukt {
         return bunka;
     }
 
-    private static XSSFCellStyle nadpisovyformat(){
-        XSSFCellStyle cs;
-        XSSFFont font = workbook.createFont();
+    private static HSSFCellStyle nadpisovyformat(){
+        HSSFCellStyle cs;
+        HSSFFont font = workbook.createFont();
         cs = workbook.createCellStyle();
         font.setBold(true);
         cs.setBorderRight(BorderStyle.MEDIUM);
         cs.setFont(font);
         return cs;
     }
-    private static XSSFCellStyle oramovanieBold(){
-        XSSFCellStyle cs;
-        XSSFFont font = workbook.createFont();
+    private static HSSFCellStyle oramovanieBold(){
+        HSSFCellStyle cs;
+        HSSFFont font = workbook.createFont();
         cs = workbook.createCellStyle();
         font.setBold(true);
         cs.setBorderRight(BorderStyle.MEDIUM);
@@ -236,9 +255,9 @@ public class XlsStatistikaBodovDodavatelProdukt {
         return cs;
     }
 
-    private static XSSFCellStyle oramovanieBoldZalomenie(){
-        XSSFCellStyle cs;
-        XSSFFont font = workbook.createFont();
+    private static HSSFCellStyle oramovanieBoldZalomenie(){
+        HSSFCellStyle cs;
+        HSSFFont font = workbook.createFont();
         cs = workbook.createCellStyle();
         font.setBold(true);
         cs.setWrapText(true);
@@ -253,9 +272,9 @@ public class XlsStatistikaBodovDodavatelProdukt {
         return cs;
     }
 
-    private static XSSFCellStyle oramovane(){
-        XSSFCellStyle cs;
-        XSSFFont font = workbook.createFont();
+    private static HSSFCellStyle oramovane(){
+        HSSFCellStyle cs;
+        HSSFFont font = workbook.createFont();
         cs = workbook.createCellStyle();
         cs.setBorderBottom(BorderStyle.THIN);
         cs.setBorderLeft(BorderStyle.THIN);

@@ -50,7 +50,7 @@ public class StatPoberatelNastroje {
                 "                    where  date(d.datum)<=date('"+dod+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY'),0)<>0)";
 
 //            String sql = "select pob.id,pob.meno as poberatel_nazov, 1 as pociatocny_stav, 0  as body_za_predaj, 0 as body_ine, 0 as konecny_stav  from  poberatelia as pob" ;
-            result1  = em1.createNativeQuery(sql,  "mapovanieVysledku").getResultList();
+            result1  = em1.createNativeQuery(sql,  "mapovanieVysledkuBodov").getResultList();
             em1.close();
             emf.close();
 
