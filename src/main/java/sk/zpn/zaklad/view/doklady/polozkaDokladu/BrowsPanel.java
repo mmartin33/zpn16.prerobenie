@@ -29,6 +29,7 @@ public class BrowsPanel extends VerticalLayout {
     private Label lblInfopanelu;
     private PolozkyDokladuView polozkyDokladuView;
     public Button btnNovy;
+    public Button btnNovyKopia;
     public Button btnPanelovy;
 
 
@@ -86,6 +87,7 @@ public class BrowsPanel extends VerticalLayout {
 
         HorizontalLayout tlacitkovy=new HorizontalLayout();
         btnNovy=new Button("Novy",VaadinIcons.FILE_O);
+        btnNovyKopia=new Button("Novy kópia",VaadinIcons.FILE_O);
 
 
 
@@ -96,6 +98,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
         tlacitkovy.addComponent(btnNovy);
+        tlacitkovy.addComponent(btnNovyKopia);
         tlacitkovy.addComponent(btnZmaz);
         tlacitkovy.addComponent(btnSpat);//666
         tlacitkovy.addComponent(btnPanelovy);//666

@@ -18,6 +18,7 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     private BrowsPanel browsPanel;
 
     private List<PolozkaDokladu> polozkyDokladuList;
+    public PolozkaDokladu povodnaPolozka;
     private Doklad doklad;
 
     public PolozkyDokladuView(Doklad doklad) {
@@ -69,6 +70,20 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
             gr.setColumnExpandRatio(0, 0.60f);
             gr.setColumnExpandRatio(1, 0.40f);
             editacnyForm.edit(new PolozkaDokladu()); });
+        browsPanel.btnNovyKopia.addClickListener(clickEvent -> {
+            PolozkaDokladu novaPolozka=new PolozkaDokladu();
+            novaPolozka.setDoklad(povodnaPolozka.getDoklad());
+            novaPolozka.setPrevadzka(povodnaPolozka.getPrevadzka());
+            novaPolozka.setPoberatel(povodnaPolozka.getPoberatel());
+            novaPolozka.setMnozstvo(povodnaPolozka.getMnozstvo());
+            novaPolozka.setBody(povodnaPolozka.getBody());
+
+
+
+            editacnyForm.setVisible(true);
+            gr.setColumnExpandRatio(0, 0.60f);
+            gr.setColumnExpandRatio(1, 0.40f);
+            editacnyForm.edit(novaPolozka); });
 
         browsPanel.addSelectionListener(editacnyForm::edit);
 

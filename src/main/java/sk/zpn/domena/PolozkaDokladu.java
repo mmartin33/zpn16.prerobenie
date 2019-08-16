@@ -36,6 +36,8 @@ public class PolozkaDokladu extends Vseobecne {
 
     private BigDecimal body;
     private BigDecimal  mnozstvo;
+    private BigDecimal  mnozstvoPovodne;
+    private String kit;
 
     private String poznamka;
 
@@ -46,7 +48,13 @@ public class PolozkaDokladu extends Vseobecne {
     }
 
 
+    public String getKit() {
+        return kit;
+    }
 
+    public void setKit(String kit) {
+        this.kit = kit;
+    }
 
     public Prevadzka getPrevadzka() {
         return prevadzka;
@@ -65,6 +73,15 @@ public class PolozkaDokladu extends Vseobecne {
             return prevadzka.getId();
     }
 
+    public BigDecimal getMnozstvoPovodne() {
+        return mnozstvoPovodne;
+    }
+
+    public void setMnozstvoPovodne(BigDecimal mnozstvoPovodne) {
+        if (mnozstvoPovodne==null)
+            mnozstvoPovodne=this.mnozstvo;
+        this.mnozstvoPovodne = mnozstvoPovodne;
+    }
 
     public Doklad getDoklad() {
         return doklad;

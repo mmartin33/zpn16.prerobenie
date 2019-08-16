@@ -96,7 +96,7 @@ public class XlsStatistikaBodovDodavatelProdukt {
         cel = row.createCell(2);
         cel.setCellStyle(stylBunky);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("Kat produktu"));
+        cel.setCellValue(("Body/za MN"));
 
         for (Firma f : velkosklady) {
             cel = row.createCell(2+colNum++);
@@ -108,19 +108,36 @@ public class XlsStatistikaBodovDodavatelProdukt {
 
 
         }
-        cel = row.createCell(2+colNum++);
+        cel = row.createCell(2+colNum);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue("Spolu");
+        cel.setCellValue("Spolu MN");
 
+        cel = row.createCell(3+colNum);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue("Spolu body");
 
-        int sumaRiadku=1;
-        int sumaCelkom=0;
+        cel = row.createCell(4+colNum);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue("Spolu Eur");
+
+        int sumaRiadkuMN=1;
+        int sumaRiadkuBody=0;
+        BigDecimal sumaRiadkuEur;
+        int sumaCelkomMn=0;
+        int sumaCelkomBody=0;
+        int mnozstvo=0;
+        BigDecimal sumaCelkomEur=BigDecimal.ZERO;
         for (Produkt p : produkty) {
 
-            if (sumaRiadku!=0) {
+            if (sumaRiadkuMN!=0) {
                 rowNum++;
             }
-            sumaRiadku=0;
+            sumaRiadkuMN=0;
+            sumaRiadkuBody=0;
+
+            sumaRiadkuEur=BigDecimal.ZERO;
+
+
             row = sheet.createRow(rowNum);
             colNum = 1;
             bunka = row.createCell(colNum++);
@@ -128,19 +145,39 @@ public class XlsStatistikaBodovDodavatelProdukt {
             bunka.setCellValue((String) p.getNazov());
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
-            bunka.setCellValue((String) p.getKat());
+            bunka.setCellValue(p.getBody().toString()+"/"+p.getKusy().toString());
             for (Firma f : velkosklady) {
                 String kluc=f.getIco()+"*"+p.getKat();
                 bunka = row.createCell(colNum++);
                 bunka.setCellStyle(oramovane());
 //                bunka=nastavFormatBunky(bunka,true,false);
                 bunka.setCellValue((predaje.get(kluc) == null) ? 0 : predaje.get(kluc).doubleValue());
-                sumaRiadku = sumaRiadku+((predaje.get(kluc) == null) ? 0 : predaje.get(kluc).intValue());
-                sumaCelkom = sumaCelkom+((predaje.get(kluc) == null) ? 0 : predaje.get(kluc).intValue());
+                mnozstvo=((predaje.get(kluc) == null) ? 0 : predaje.get(kluc).intValue());
+                sumaRiadkuMN = sumaRiadkuMN+mnozstvo;
+                sumaRiadkuBody = sumaRiadkuBody+(mnozstvo*p.getBody().intValue());
+                sumaRiadkuEur = sumaRiadkuEur.add((predaje.get(kluc) == null) ?
+                        (new BigDecimal(0)) :
+                        (new BigDecimal(mnozstvo*p.getBody().intValue()))
+                                .multiply(new BigDecimal(0.01))
+                                .setScale(2, RoundingMode.HALF_UP));
+
+
             }
+            sumaCelkomMn = sumaCelkomMn+sumaRiadkuMN;
+            sumaCelkomBody = sumaCelkomBody+sumaRiadkuBody;
+            sumaCelkomEur = sumaCelkomEur.add(sumaRiadkuEur);
+
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
-            bunka.setCellValue(sumaRiadku);
+            bunka.setCellValue(sumaRiadkuMN);
+
+            bunka = row.createCell(colNum);
+            bunka.setCellStyle(oramovanieBold());
+            bunka.setCellValue(sumaRiadkuBody);
+
+            bunka = row.createCell(colNum+1);
+            bunka.setCellStyle(oramovanieBold());
+            bunka.setCellValue(sumaRiadkuEur.toString());
 
         }
         rowNum++;
@@ -165,22 +202,18 @@ public class XlsStatistikaBodovDodavatelProdukt {
 
         bunka = row.createCell(colNum+2);
         bunka.setCellStyle(oramovanieBold());
-        bunka.setCellValue(sumaCelkom);
+        bunka.setCellValue(sumaCelkomMn);
 
 
-        rowNum++;
-        row = sheet.createRow(rowNum);
-        bunka = row.createCell(1);
-
+        bunka = row.createCell(colNum+3);
         bunka.setCellStyle(oramovanieBold());
-        bunka.setCellValue("Spolu EUR (0.01b)");
+        bunka.setCellValue(sumaCelkomBody);
 
-        bunka = row.createCell(colNum+2);
+        bunka = row.createCell(colNum+4);
         bunka.setCellStyle(oramovanieBold());
-        bunka.setCellValue((new BigDecimal(sumaCelkom)
-                .multiply(new BigDecimal(0.01)))
-                .setScale(2, RoundingMode.HALF_UP)
-                .toString());
+        bunka.setCellValue(sumaCelkomEur.toString());
+
+
 
         try {
 

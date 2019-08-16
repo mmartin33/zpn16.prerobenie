@@ -98,7 +98,9 @@ public class PolozkaDokladuNastroje {
 
         pd.setMnozstvo(zaznam.getMnozstvo().multiply(fp.getKoeficient()));
 
-        pd.setMnozstvo(zaznam.getMnozstvo());
+        //pd.setMnozstvo(zaznam.getMnozstvo());
+        pd.setMnozstvoPovodne(zaznam.getMnozstvo());
+        pd.setKit(zaznam.getKit());
         int body=VypoctyUtil.vypocitajBody(
                 pd.getMnozstvo(),
                 fp.getKoeficient(),

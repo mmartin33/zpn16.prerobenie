@@ -1,5 +1,7 @@
 package sk.zpn.domena;
 
+import org.apache.commons.lang.StringUtils;
+
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -45,7 +47,11 @@ public class Poberatel extends Vseobecne {
         if (this == null)
             return "";
         else
-            return this.getMeno()+" "+this.getMesto().toString()+" "+this.getPsc().toString()+" "+this.getUlica().toString();
+            return this.getMeno()+" "+
+                    (StringUtils.isEmpty(this.getMesto())?"":this.getMesto().toString())+" "+
+                    (StringUtils.isEmpty(this.getPsc())?"":this.getPsc().toString())+" "+
+                    (StringUtils.isEmpty(this.getUlica())?"":this.getUlica().toString());
+
     }
 
 

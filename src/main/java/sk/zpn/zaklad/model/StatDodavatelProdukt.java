@@ -43,7 +43,7 @@ public class StatDodavatelProdukt {
         EntityManager em1;
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
         em1 = emf.createEntityManager();
-        String sql="select f.ico||'*'||prod.kat as kluc,sum(p.body) as hodnota from polozkydokladu as p " +
+        String sql="select f.ico||'*'||prod.kat as kluc,sum(p.mnozstvo) as hodnota from polozkydokladu as p " +
                 "join doklady as d on d.id=p.doklad_id " +
                 "    join firmy as f on f.id=d.firma_id " +
                 "    join produkty as prod on prod.id=p.produkt_id " +

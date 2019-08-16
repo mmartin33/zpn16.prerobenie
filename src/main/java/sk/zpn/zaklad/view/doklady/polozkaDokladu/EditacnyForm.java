@@ -6,14 +6,11 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
-import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.*;
 import sk.zpn.zaklad.model.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class EditacnyForm extends VerticalLayout {
@@ -77,6 +74,13 @@ public class EditacnyForm extends VerticalLayout {
             this::transformujPrevadzkuNaNazov,
             this::transformujPrevádzkuNaNazovSoZvyraznenymQuery);
 
+//        dokladAutocompleteExtension.addSuggestionSelectListener(event -> {
+//            event.getSelectedItem().ifPresent(prevadzka -> naplnPoberatela(prevadzka));
+//        });
+
+//        dokladAutocompleteExtension.addSuggestionSelectListener(event ->{naplnPoberatela(event.getSelectedItem().ifPresent(prevadzka))});
+
+
         AutocompleteExtension<Produkt> dokladAutocompleteExtensionProdukt = new AutocompleteExtension<>(tProdukt);
         dokladAutocompleteExtensionProdukt.setSuggestionGenerator(
             this::navrhniProdukt,
@@ -96,7 +100,14 @@ public class EditacnyForm extends VerticalLayout {
 
 
     }
+
+
+    private void naplnPoberatela (Prevadzka prevadzka){
+        this.aktualnyPoberatel=prevadzka.getPoberatel();
+        tPoberatel.setValue(this.aktualnyPoberatel.getMeno());
+    }
     private void nastavComponnenty(){
+
 
 
 
@@ -120,6 +131,9 @@ public class EditacnyForm extends VerticalLayout {
                 .withValidator(nazovPoberatel -> this.aktualnyPoberatel != null, "Poberateľ musi byť vyplnený")
                 .withValidator(nazovPoberatela -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId()).isPresent(),
                         "Poberateľ musi byt existujuci")
+//                .withValidator(nazovPoberatela -> PoberatelNastroje.prvyPoberatelPodlaMena(nazovPoberatela).isPresent(),
+//                        "Poberate musi byt existujuci")
+
                 .bind(polozkaDokladu -> polozkaDokladu.getPoberatel() == null ? "" : polozkaDokladu.getPoberatel().getMeno(),
                         (polozkaDokladu, s) -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId()).ifPresent(polozkaDokladu::setPoberatel));
 
@@ -151,9 +165,17 @@ public class EditacnyForm extends VerticalLayout {
     void edit(PolozkaDokladu polozkaDokladu) {
         staraEditovana=polozkaEditovana;
         polozkaEditovana = polozkaDokladu;
-        aktualnyPoberatel=polozkaDokladu.getPoberatel();
+
+
         if (polozkaDokladu != null) {
             binder.readBean(polozkaDokladu);
+            aktualnyPoberatel=polozkaDokladu.getPoberatel();
+            if (polozkaDokladu.getId()==null){
+                polozkaDokladu.setProdukt(null);
+                polozkaDokladu.setMnozstvo(new BigDecimal(1));
+
+            }
+
         }
         else{
             binder.readBean(polozkaDokladu);}
@@ -169,6 +191,7 @@ public class EditacnyForm extends VerticalLayout {
             Notification.show(msg, Notification.Type.TRAY_NOTIFICATION);
             if (jeDokladNovy){
                 polozkyDokladyView.pridajNovuPolozkuDokladu(ulozenaPolozka);
+                polozkyDokladyView.povodnaPolozka =ulozenaPolozka;
             }
             polozkyDokladyView.refreshPoloziekDokladov();
             polozkyDokladyView.selectPolozkuDokladu(ulozenaPolozka);
@@ -185,12 +208,14 @@ public class EditacnyForm extends VerticalLayout {
     private List<Prevadzka> navrhniPrevadzku(String query, int cap) {
         return  PrevadzkaNastroje.zoznamPrevadzka().stream()
                 .filter(prevadzka -> prevadzka.getNazov().toLowerCase().contains(query.toLowerCase()))
-                .limit(cap).collect(Collectors.toList());
+                .limit(30).collect(Collectors.toList());
     }
     /**
      * Co sa zobraziv textfielde, ked sa uz hodnota vyberie
      * */
     private String transformujPrevadzkuNaNazov(Prevadzka prevadzka) {
+//        tPoberatel.setValue(prevadzka.getPoberatel().getMeno());
+//        this.aktualnyPoberatel=prevadzka.getPoberatel();
         return prevadzka.getNazov();
     }
     /**
