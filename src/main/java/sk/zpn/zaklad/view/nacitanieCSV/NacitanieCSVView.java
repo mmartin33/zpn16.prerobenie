@@ -111,6 +111,7 @@ public class NacitanieCSVView extends VerticalLayout implements View {
 
 
             AutocompleteExtension<Firma> dokladAutocompleteExtension = new AutocompleteExtension<>(tfFirma);
+            dokladAutocompleteExtension.setSuggestionListSize(50);
             dokladAutocompleteExtension.setSuggestionGenerator(
                     this::navrhniFirmu,
                     this::transformujFirmuNaNazov,

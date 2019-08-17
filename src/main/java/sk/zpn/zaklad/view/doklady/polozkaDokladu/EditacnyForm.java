@@ -69,6 +69,7 @@ public class EditacnyForm extends VerticalLayout {
          this.addComponent(lBtn);
 
         AutocompleteExtension<Prevadzka> dokladAutocompleteExtension = new AutocompleteExtension<>(tPrevadzka);
+        dokladAutocompleteExtension.setSuggestionListSize(50);
         dokladAutocompleteExtension.setSuggestionGenerator(
             this::navrhniPrevadzku,
             this::transformujPrevadzkuNaNazov,
@@ -82,12 +83,14 @@ public class EditacnyForm extends VerticalLayout {
 
 
         AutocompleteExtension<Produkt> dokladAutocompleteExtensionProdukt = new AutocompleteExtension<>(tProdukt);
+        dokladAutocompleteExtensionProdukt.setSuggestionListSize(50);
         dokladAutocompleteExtensionProdukt.setSuggestionGenerator(
             this::navrhniProdukt,
             this::transformujProduktNaNazov,
             this::transformujProduktNaNazovSoZvyraznenymQuery);
 
         AutocompleteExtension<Poberatel> dokladAutocompleteExtensionProberatel = new AutocompleteExtension<>(tPoberatel);
+        dokladAutocompleteExtensionProberatel.setSuggestionListSize(50);
         dokladAutocompleteExtensionProberatel.setSuggestionGenerator(
             this::navrhniPoberatela,
             this::transformujPoberatelaNaNazov,

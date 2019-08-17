@@ -123,11 +123,19 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
                         "Názov je poviný")
                 .bind(Firma::getNazov, Firma::setNazov);
         AutocompleteExtension<Firma> dokladAutocompleteExtension = new AutocompleteExtension<>(tfFirma);
+        dokladAutocompleteExtension.setSuggestionListSize(50);
+        dokladAutocompleteExtension.addSuggestionSelectListener(event -> {
+            event.getSelectedItem().ifPresent(this::vybratyDodavtel);;
+        });
         dokladAutocompleteExtension.setSuggestionGenerator(
                 this::navrhniFirmu,
                 this::transformujFirmuNaNazov,
                 this::transformujFirmuNaNazovSoZvyraznenymQuery);
 
+    }
+
+    private void vybratyDodavtel(Firma firma) {
+        System.out.println(firma.getNazov());
     }
 
 
@@ -147,7 +155,12 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
     private List<Firma> navrhniFirmu(String query, int cap) {
         return  FirmaNastroje.zoznamFiriemIbaDodavatelia().stream()
                 .filter(firma -> firma.getNazov().toLowerCase().contains(query.toLowerCase()))
-                .limit(cap).collect(Collectors.toList());
+                .onClose(() -> {
+                    System.out.println("-- closing stream --");
+                })
+                .limit(100).collect(Collectors.toList());
+
+//                .limit(cap).collect(Collectors.toList());
     }
     /**
      * Co sa zobraziv textfielde, ked sa uz hodnota vyberie

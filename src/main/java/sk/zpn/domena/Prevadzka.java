@@ -7,7 +7,7 @@ import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "prevadzky")
 @NamedQueries(value = {
-        @NamedQuery(name = "Prevadzka.getPodlaNazvu", query = "SELECT p FROM prevadzky p WHERE p.nazov =:nazov"),
+        @NamedQuery(name = "Prevadzka.getPodlaNazvu", query = "SELECT p FROM prevadzky p WHERE p.nazov =:nazov order by p.nazov"),
         @NamedQuery(name = "Prevadzka.getPodlaICAaNazvu", query = "SELECT p FROM prevadzky p " +
                 "JOIN p.firma f " +
                 "WHERE f.ico =:ico " +
@@ -15,8 +15,8 @@ import static javax.persistence.CascadeType.PERSIST;
         @NamedQuery(name = "Prevadzka.getPrevadzkaPodlaICO", query = "SELECT p FROM prevadzky p " +
                 "JOIN p.firma f " +
                 "WHERE f.ico =:ico "),
-        @NamedQuery(name = "Prevadzka.getPrevadzkyFirmy", query = "SELECT p FROM prevadzky p WHERE  p.firma=:firma"),
-        @NamedQuery(name = "Prevadzka.getAll", query = "SELECT p FROM prevadzky p")})
+        @NamedQuery(name = "Prevadzka.getPrevadzkyFirmy", query = "SELECT p FROM prevadzky p WHERE  p.firma=:firma order by p.nazov"),
+        @NamedQuery(name = "Prevadzka.getAll", query = "SELECT p FROM prevadzky p order by p.nazov")})
 
 public class Prevadzka extends Vseobecne {
 

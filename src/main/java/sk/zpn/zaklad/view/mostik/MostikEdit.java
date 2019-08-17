@@ -120,6 +120,7 @@ public class MostikEdit {
         // tCislo.addValueChangeListener(event -> cisloDokladuBinding.validate());
 
         AutocompleteExtension<Produkt> firmaProduktAutocompleteExtensionProdukt = new AutocompleteExtension<>(tKat);
+        firmaProduktAutocompleteExtensionProdukt.setSuggestionListSize(50);
         firmaProduktAutocompleteExtensionProdukt.setSuggestionGenerator(
                 this::navrhniProdukt,
                 this::transformujProduktNaKat,

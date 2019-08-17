@@ -166,7 +166,6 @@ public class XlsStatistikaBodovDodavatelProdukt {
             sumaCelkomMn = sumaCelkomMn+sumaRiadkuMN;
             sumaCelkomBody = sumaCelkomBody+sumaRiadkuBody;
             sumaCelkomEur = sumaCelkomEur.add(sumaRiadkuEur);
-
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
             bunka.setCellValue(sumaRiadkuMN);

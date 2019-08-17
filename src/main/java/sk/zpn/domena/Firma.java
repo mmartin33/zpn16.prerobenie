@@ -6,11 +6,11 @@ import java.util.List;
 
 @Entity(name = "firmy")
 @NamedQueries(value = {
-        @NamedQuery(name = "Firma.getPodlaIca", query = "SELECT f FROM firmy f WHERE f.ico =:ico"),
-        @NamedQuery(name = "Firma.getPodlaNazvu", query = "SELECT f FROM firmy f WHERE f.nazov =:nazov"),
+        @NamedQuery(name = "Firma.getPodlaIca", query = "SELECT f FROM firmy f WHERE f.ico =:ico order by f.nazov"),
+        @NamedQuery(name = "Firma.getPodlaNazvu", query = "SELECT f FROM firmy f WHERE f.nazov =:nazov order by f.nazov"),
         @NamedQuery(name = "Firma.getPodlaICOaNazvu", query = "SELECT f FROM firmy f " +
                 "WHERE f.ico =:ico " +
-                " and f.nazov =:nazov"),
+                " and f.nazov =:nazov order by f.nazov"),
         @NamedQuery(name = "Firma.getPodlaICO", query = "SELECT f FROM firmy f " +
                 "WHERE f.ico =:ico " ),
         @NamedQuery(name = "Firma.getVelkosklady", query = "SELECT distinct f FROM uzivatelia u " +
@@ -20,7 +20,7 @@ import java.util.List;
         @NamedQuery(name = "Firma.getDodavatelia", query = "SELECT DISTINCT f FROM produkty p " +
                 "JOIN p.firma f  order by f.nazov"),
         @NamedQuery(name = "Firma.getPodlaID", query = "SELECT f FROM firmy f WHERE f.id =:id"),
-        @NamedQuery(name = "Firma.getAll", query = "SELECT f FROM firmy f")})
+        @NamedQuery(name = "Firma.getAll", query = "SELECT f FROM firmy f order by f.nazov")})
 
 
 

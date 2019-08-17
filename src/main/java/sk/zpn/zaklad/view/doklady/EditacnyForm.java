@@ -81,6 +81,7 @@ public class EditacnyForm extends VerticalLayout {
          this.addComponent(lBtn);
 
         AutocompleteExtension<Firma> dokladAutocompleteExtension = new AutocompleteExtension<>(tFirma);
+        dokladAutocompleteExtension.setSuggestionListSize(50);
         dokladAutocompleteExtension.setSuggestionGenerator(
             this::navrhniFirmu,
             this::transformujFirmuNaNazov,
