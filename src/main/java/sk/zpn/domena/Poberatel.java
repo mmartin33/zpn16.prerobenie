@@ -10,10 +10,10 @@ import java.util.Date;
 
 @Entity(name = "poberatelia")
 @NamedQueries(value = {
-        @NamedQuery(name = "Poberatel.getPodlaMena", query = "SELECT p FROM poberatelia p WHERE p.meno =:meno"),
+        @NamedQuery(name = "Poberatel.getPodlaMena", query = "SELECT p FROM poberatelia p WHERE p.meno =:meno order by p.meno"),
         @NamedQuery(name = "Poberatel.get", query = "SELECT p FROM poberatelia p WHERE p.id =:id"),
         @NamedQuery(name = "Poberatel.getPodlaKodu", query = "SELECT p FROM poberatelia p WHERE trim(p.kod) =:kod"),
-        @NamedQuery(name = "Poberatel.getAll", query = "SELECT p FROM poberatelia p")})
+        @NamedQuery(name = "Poberatel.getAll", query = "SELECT p FROM poberatelia p order by p.meno")})
 
 public class Poberatel extends Vseobecne {
 

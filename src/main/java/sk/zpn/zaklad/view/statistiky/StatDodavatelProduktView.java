@@ -139,7 +139,6 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
     }
 
 
-
     private void configureComponents() {
 
 

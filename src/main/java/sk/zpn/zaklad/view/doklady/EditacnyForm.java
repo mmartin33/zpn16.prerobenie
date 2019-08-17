@@ -187,7 +187,7 @@ public class EditacnyForm extends VerticalLayout {
     }
 
     private List<Firma> navrhniFirmu(String query, int cap) {
-        return  FirmaNastroje.zoznamFiriem().stream()
+        return  FirmaNastroje.zoznamFiriemIbaVelkosklady().stream()
                 .filter(firma -> firma.getNazov().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
     }

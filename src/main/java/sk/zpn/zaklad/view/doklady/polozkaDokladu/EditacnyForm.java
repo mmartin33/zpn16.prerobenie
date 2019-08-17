@@ -75,6 +75,12 @@ public class EditacnyForm extends VerticalLayout {
             this::transformujPrevadzkuNaNazov,
             this::transformujPrevádzkuNaNazovSoZvyraznenymQuery);
 
+
+        dokladAutocompleteExtension.addSuggestionSelectListener(event -> {
+            event.getSelectedItem().ifPresent(this::vybrataPrevadzka);;
+        });
+
+
 //        dokladAutocompleteExtension.addSuggestionSelectListener(event -> {
 //            event.getSelectedItem().ifPresent(prevadzka -> naplnPoberatela(prevadzka));
 //        });
@@ -84,6 +90,12 @@ public class EditacnyForm extends VerticalLayout {
 
         AutocompleteExtension<Produkt> dokladAutocompleteExtensionProdukt = new AutocompleteExtension<>(tProdukt);
         dokladAutocompleteExtensionProdukt.setSuggestionListSize(50);
+
+        dokladAutocompleteExtensionProdukt.addSuggestionSelectListener(event -> {
+            event.getSelectedItem().ifPresent(this::vybratyProdukt);;
+        });
+
+
         dokladAutocompleteExtensionProdukt.setSuggestionGenerator(
             this::navrhniProdukt,
             this::transformujProduktNaNazov,
@@ -101,6 +113,19 @@ public class EditacnyForm extends VerticalLayout {
         });
 
 
+
+    }
+
+    private void vybratyProdukt(Produkt produkt) {
+        tBody.setValue(produkt.getBody().toString());
+
+
+    }
+
+    private void vybrataPrevadzka(Prevadzka prevadzka) {
+        tPoberatel.setValue(prevadzka.getPoberatel().getMeno());
+        aktualnyPoberatel=prevadzka.getPoberatel();
+        polozkaEditovana.setPoberatel(aktualnyPoberatel);
 
     }
 
@@ -132,7 +157,7 @@ public class EditacnyForm extends VerticalLayout {
 
         Binder.Binding<PolozkaDokladu, String> poberatelBinding = binder.forField(tPoberatel)
                 .withValidator(nazovPoberatel -> this.aktualnyPoberatel != null, "Poberateľ musi byť vyplnený")
-                .withValidator(nazovPoberatela -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId()).isPresent(),
+                .withValidator(nazovPoberatela -> PoberatelNastroje.poberatelPodlaId(this.aktualnyPoberatel.getId())!=null,
                         "Poberateľ musi byt existujuci")
 //                .withValidator(nazovPoberatela -> PoberatelNastroje.prvyPoberatelPodlaMena(nazovPoberatela).isPresent(),
 //                        "Poberate musi byt existujuci")
