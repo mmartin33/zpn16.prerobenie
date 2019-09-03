@@ -51,6 +51,8 @@ public class EditacnyForm extends VerticalLayout {
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
+        //todo
+        btnZmaz.setVisible(false);
 
         nastavComponnenty();
         FormLayout lEdit=new FormLayout();
@@ -155,6 +157,7 @@ public class EditacnyForm extends VerticalLayout {
             }
             dokladyView.refreshDokladov();
             dokladyView.selectDoklad(ulozenyDoklad);
+
 
         }
 

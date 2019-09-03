@@ -5,6 +5,7 @@ import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
@@ -104,7 +105,7 @@ public class BrowsPanel extends VerticalLayout {
         // filters
         colKit.setFilter(colKitFilter, StringComparator.containsIgnoreCase());
         colKat.setFilter(colKatFilter, StringComparator.containsIgnoreCase());
-        colNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+        colNazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         colKusy.setFilter(colKusyFilter, StringComparator.containsIgnoreCase());
         colBody.setFilter(colBodyFilter, StringComparator.containsIgnoreCase());
         colKoeficient.setFilter(colKoeficientFilter, StringComparator.containsIgnoreCase());

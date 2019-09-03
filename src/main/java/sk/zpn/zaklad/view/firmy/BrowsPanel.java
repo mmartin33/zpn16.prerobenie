@@ -4,6 +4,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Firma;
 
@@ -52,7 +53,7 @@ public class BrowsPanel extends VerticalLayout {
 
             // filters
             colIco.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-            colNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+            colNazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
             colIcDPH.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colDic.setFilter(new TextField(), StringComparator.containsIgnoreCase());
 

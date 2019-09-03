@@ -34,10 +34,13 @@ public class PolozkaDokladuNastroje {
             d.setId((long) 0);
             d.setKedy(new Date());
             d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
+            em.getTransaction().begin();
+            em.persist(d);
         }
-
-        em.getTransaction().begin();
-        em.merge(d);
+        else{
+            em.getTransaction().begin();
+            em.merge(d);
+        }
         em.getTransaction().commit();
         return d;
 
@@ -78,6 +81,7 @@ public class PolozkaDokladuNastroje {
         em.clear();
         TypedQuery<PolozkaDokladu> q = em.createNamedQuery("PolozkaDokladu.getPolozkyJednehoDokladu", PolozkaDokladu.class);
         q.setParameter("doklad", d);
+        em.clear();
         return q.getResultList();
     }
 

@@ -6,6 +6,7 @@ import com.vaadin.ui.*;
 
 import com.vaadin.ui.renderers.HtmlRenderer;
 import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.*;
 import sk.zpn.zaklad.view.VitajteView;
@@ -63,7 +64,7 @@ public class BrowsPanel extends VerticalLayout {
         colPoznamka.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colTypDokladu.setFilter(new ComboBox<>("", TypDokladu.getListOfDisplayValues()),
                 (cValue, fValue) -> fValue == null || fValue.equals(cValue));
-        colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+        colFirmaNazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         colStavDokladu.setFilter(new ComboBox<>("",StavDokladu.getListOfDisplayValues()),
                 (cValue, fValue) -> fValue == null || fValue.equals(cValue));
 
@@ -80,7 +81,10 @@ public class BrowsPanel extends VerticalLayout {
         btnPolozky = new Button("Položky", VaadinIcons.BOOK);
         btnPolozky.addClickListener(clickEvent -> {
                     if (grid.getSelectedItems() != null) {
-                        polozkyDokladuView = new PolozkyDokladuView((Doklad) grid.getSelectedItems().iterator().next());
+                        //polozkyDokladuView = new PolozkyDokladuView((Doklad) grid.getSelectedItems().iterator().next());
+                        Doklad otvorenyDoklad=new Doklad();
+                        otvorenyDoklad=(Doklad) grid.getSelectedItems().iterator().next();
+                        polozkyDokladuView = new PolozkyDokladuView(otvorenyDoklad);
 
                         UI.getCurrent().getNavigator().addView(PolozkyDokladuView.NAME, polozkyDokladuView);
                         UI.getCurrent().getNavigator().navigateTo(PolozkyDokladuView.NAME);
@@ -115,7 +119,12 @@ public class BrowsPanel extends VerticalLayout {
         grid.setSizeFull();
         this.setSizeFull();
         this.addComponentsAndExpand(gl);
-
+//        if (dokladyList.size()>0)
+//            grid.select(dokladyList.get(0));
+//        grid.scrollToStart();
+        //List items = grid.getDataCommunicator().fetchItemsWithRange(0, Integer.MAX_VALUE);
+        grid.select(dokladyList.get(dokladyList.size()-1));
+        grid.scrollTo(dokladyList.indexOf(dokladyList.get(dokladyList.size()-1)));
 
     }
 
@@ -148,6 +157,8 @@ public class BrowsPanel extends VerticalLayout {
 
     void selectDoklad(Doklad doklad) {
         Optional.ofNullable(doklad).ifPresent(grid.asSingleSelect()::select);
+        grid.scrollTo(dokladyList.indexOf(doklad));
+
     }
 
     public void refresh(Doklad d) {

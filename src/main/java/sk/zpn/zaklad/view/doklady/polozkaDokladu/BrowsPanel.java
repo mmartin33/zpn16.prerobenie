@@ -13,6 +13,7 @@ import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 
 import java.util.List;
@@ -63,8 +64,9 @@ public class BrowsPanel extends VerticalLayout {
         FilterGrid.Column<PolozkaDokladu, String> colProduktNazov = grid.addColumn(PolozkaDokladu::getProduktNazov).setCaption("Názov produktu").setId("nazovProduktu");
         FilterGrid.Column<PolozkaDokladu, String> colPrevadzkaNazov = grid.addColumn(PolozkaDokladu::getPrevadzkaNazov).setCaption("Prevádzka").setId("nazovPrevadzky");
         FilterGrid.Column<PolozkaDokladu, String> colPoberatel = grid.addColumn(PolozkaDokladu::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
-        FilterGrid.Column<PolozkaDokladu, BigDecimal> colBody = grid.addColumn(PolozkaDokladu::getBody).setCaption("Body").setId("body");
-        FilterGrid.Column<PolozkaDokladu, BigDecimal> colMnozstvo = grid.addColumn(PolozkaDokladu::getMnozstvo).setCaption("Množstvo").setId("mnozstvo");
+        FilterGrid.Column<PolozkaDokladu, BigInteger> colBody = grid.addColumn(PolozkaDokladu::getBodyBigInteger).setCaption("Body za predaj").setId("body");
+        FilterGrid.Column<PolozkaDokladu, String> colBodyZaProdukt = grid.addColumn(PolozkaDokladu::getBodyZaProdukt).setCaption("Body/za MN").setId("bodyNaProdukte");
+        FilterGrid.Column<PolozkaDokladu, BigInteger> colMnozstvo = grid.addColumn(PolozkaDokladu::getMnozstvoBigInteger).setCaption("Množstvo").setId("mnozstvo");
         FilterGrid.Column<PolozkaDokladu, String> colPoznamka = grid.addColumn(PolozkaDokladu::getPoznamka).setCaption("Poznámka").setId("poznamka");
 
         // filters
@@ -122,6 +124,8 @@ public class BrowsPanel extends VerticalLayout {
         grid.setSizeFull();
         this.setSizeFull();
         this.addComponentsAndExpand(gl);
+
+        //grid.scrollToEnd();
 
 
 

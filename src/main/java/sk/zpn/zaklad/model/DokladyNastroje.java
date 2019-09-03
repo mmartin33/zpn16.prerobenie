@@ -35,11 +35,16 @@ public class DokladyNastroje {
             d.setId(null);
             d.setKedy(new Date());
             d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
+            em.getTransaction().begin();
+            em.persist(d);
         }
-        System.out.println("Ulozeny dokald"+d.getCisloDokladu());
-        em.getTransaction().begin();
-        em.merge(d);
+        else{
+            em.getTransaction().begin();
+            em.merge(d);
+        }
         em.getTransaction().commit();
+
+        System.out.println("Ulozeny dokald"+d.getCisloDokladu());
         return d;
 
 
@@ -48,6 +53,7 @@ public class DokladyNastroje {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         System.out.println("Vymazany doklad:"+d.getCisloDokladu());
         em.getTransaction().begin();
+        em.merge(d);
         em.remove(d);
         em.getTransaction().commit();
 

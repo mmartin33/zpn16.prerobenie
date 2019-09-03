@@ -1,5 +1,7 @@
 package sk.zpn.domena.statistiky;
 
+import org.eclipse.persistence.config.CacheType;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -12,7 +14,10 @@ import java.math.BigDecimal;
                 })}
 )
 
+
 @Entity
+
+
 public class Zaznam {
 
     @Id

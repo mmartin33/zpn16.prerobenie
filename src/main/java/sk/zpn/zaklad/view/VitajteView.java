@@ -105,11 +105,11 @@ public class VitajteView extends MojView {
                         UI.getCurrent().getNavigator().addView(StatDodavatelView.NAME, statDodavatelView);
                         n.navigateTo(statDodavatelView.NAME);
                     }
-                    else if (selectedItem.getDescription().equals("bodyDodavatelovAProduktov")) {
-                        StatDodavatelProduktView statDodavatelProduktView = new StatDodavatelProduktView();
-                        UI.getCurrent().getNavigator().addView(StatDodavatelProduktView.NAME, statDodavatelProduktView);
-                        n.navigateTo(statDodavatelProduktView.NAME);
-                    }
+//                    else if (selectedItem.getDescription().equals("bodyDodavatelovAProduktov")) {
+//                        StatDodavatelProduktView statDodavatelProduktView = new StatDodavatelProduktView();
+//                        UI.getCurrent().getNavigator().addView(StatDodavatelProduktView.NAME, statDodavatelProduktView);
+//                        n.navigateTo(statDodavatelProduktView.NAME);
+//                    }
                     else if (selectedItem.getDescription().equals("body")) {
                         StatPoberatelView statPoberatelView = new StatPoberatelView();
                         UI.getCurrent().getNavigator().addView(StatPoberatelView.NAME, statPoberatelView);
@@ -166,8 +166,8 @@ public class VitajteView extends MojView {
             MenuItem menuBody = menuSpravcu.addItem("Stav bodov - poberateľov" , VaadinIcons.PIGGY_BANK, mycommand);
             menuBody.setDescription("body");
 
-            MenuItem menuBodyDodavatelov = menuSpravcu.addItem("Stav bodov - dodávateľov" , VaadinIcons.PIGGY_BANK, mycommand);
-            menuBodyDodavatelov.setDescription("bodyDodavatelov");
+//            MenuItem menuBodyDodavatelov = menuSpravcu.addItem("Stav bodov - dodávateľov" , VaadinIcons.PIGGY_BANK, mycommand);
+//            menuBodyDodavatelov.setDescription("bodyDodavatelov");
 
             MenuItem menuBodyDodavatelovProduktov = menuSpravcu.addItem("Stav bodov - dodávateľov a produktov" , VaadinIcons.PIGGY_BANK, mycommand);
             menuBodyDodavatelovProduktov.setDescription("bodyDodavatelovAProduktov");

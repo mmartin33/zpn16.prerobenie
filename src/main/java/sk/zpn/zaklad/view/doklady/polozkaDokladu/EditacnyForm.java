@@ -2,9 +2,11 @@ package sk.zpn.zaklad.view.doklady.polozkaDokladu;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.apache.commons.lang.StringUtils;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import sk.zpn.domena.*;
 import sk.zpn.zaklad.model.*;
@@ -31,6 +33,7 @@ public class EditacnyForm extends VerticalLayout {
     private PolozkaDokladu polozkaEditovana;
     private PolozkyDokladuView polozkyDokladyView;
     private Poberatel aktualnyPoberatel;
+    private Produkt aktualnyProdukt;
 
     public EditacnyForm(){
         this.setSpacing(true);
@@ -42,6 +45,13 @@ public class EditacnyForm extends VerticalLayout {
         tPoberatel.setWidth("400");
         tBody = new TextField("Body");
         tMnozstvo = new TextField("Množstvo");
+        tMnozstvo.addBlurListener(new FieldEvents.BlurListener() {
+
+            @Override
+            public void blur(FieldEvents.BlurEvent event) {
+                prepocitajBody();
+            }
+        });
         tPoznamka = new TextField("Poznamka");
         tPoznamka.setWidth("400");
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
@@ -117,7 +127,8 @@ public class EditacnyForm extends VerticalLayout {
     }
 
     private void vybratyProdukt(Produkt produkt) {
-        tBody.setValue(produkt.getBody().toString());
+        tBody.setValue(produkt.getBodyBigInteger().toString());
+        aktualnyProdukt=produkt;
 
 
     }
@@ -126,7 +137,6 @@ public class EditacnyForm extends VerticalLayout {
         tPoberatel.setValue(prevadzka.getPoberatel().getMeno());
         aktualnyPoberatel=prevadzka.getPoberatel();
         polozkaEditovana.setPoberatel(aktualnyPoberatel);
-
     }
 
 
@@ -176,6 +186,8 @@ public class EditacnyForm extends VerticalLayout {
                 .bind(PolozkaDokladu::getBody, PolozkaDokladu::setBody);
 
         Binder.Binding<PolozkaDokladu, BigDecimal> mnozstvoBinding = binder.forField(tMnozstvo)
+                .withValidator(mnozstvo -> this.prepocitajBody(),
+                        "OK")
                 .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
                 .bind(PolozkaDokladu::getMnozstvo, PolozkaDokladu::setMnozstvo);
 
@@ -190,6 +202,21 @@ public class EditacnyForm extends VerticalLayout {
 
 
 }
+
+    private boolean prepocitajBody() {
+        if (aktualnyProdukt==null)
+            return true;
+        if (polozkaEditovana.getBody()==null  )
+            return true;
+
+        polozkaEditovana.setBody(new BigDecimal(VypoctyUtil.vypocitajBody(new BigDecimal(tMnozstvo.getValue()),
+                BigDecimal.ONE,
+                aktualnyProdukt.getKusy(),
+                aktualnyProdukt.getBody())));
+        tBody.setValue(polozkaEditovana.getBody().toBigInteger().toString());
+        return true;
+    }
+
     void edit(PolozkaDokladu polozkaDokladu) {
         staraEditovana=polozkaEditovana;
         polozkaEditovana = polozkaDokladu;

@@ -1,9 +1,22 @@
 package sk.zpn.zaklad.model;
 
+import com.google.common.collect.Maps;
+import sk.zpn.domena.Firma;
+import sk.zpn.domena.Poberatel;
+import sk.zpn.domena.Produkt;
 import sk.zpn.domena.StatistikaBodov;
+import sk.zpn.domena.statistiky.Zaznam;
+import sk.zpn.nastroje.NastrojePoli;
+import sk.zpn.nastroje.XlsStatistikaBodov;
+import sk.zpn.nastroje.XlsStatistikaBodovDodavatelProdukt;
+
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class StatPoberatelNastroje {
 
@@ -55,6 +68,127 @@ public class StatPoberatelNastroje {
             emf.close();
 
         return result1;
+
+    }
+
+    public static void load2(LocalDate dod, LocalDate ddo) {
+        String pattern = "dd.MM.yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+
+
+        Map<String, Double> pociatocnyStav = Maps.newHashMap();
+        Map<String, Double> bodyZaPredaj = Maps.newHashMap();
+        Map<String, Double> bodyIne = Maps.newHashMap();
+        Map<String, Double> konecnyStav = Maps.newHashMap();
+        pociatocnyStav=vratPociatocnyStav(dod,ddo);
+        bodyZaPredaj=vratBodyZaPredaj(dod,ddo);
+        bodyIne=vratBodyIne(dod,ddo);
+        konecnyStav=vratKonecnyStav(dod,ddo);
+        List <Poberatel> poberatelia=PoberatelNastroje.zoznamPoberatelov();
+        String nadpis="Vyhodnotenie poberatelov  od: "+simpleDateFormat.format(Date.valueOf(dod))+" dp: "+ simpleDateFormat.format(Date.valueOf(ddo));
+        XlsStatistikaBodov.vytvorXLS2(poberatelia,pociatocnyStav,bodyZaPredaj,bodyIne,konecnyStav,nadpis);
+
+    }
+
+    private static Map<String, Double> vratKonecnyStav(LocalDate dod, LocalDate ddo) {
+        EntityManager em1;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        em1 = emf.createEntityManager();
+        String sql="select CAST(p.poberatel_id as text) as kluc ,sum(p.body) as hodnota from polozkydokladu as p " +
+                " join doklady as d on d.id=p.doklad_id " +
+                " where date(d.datum)<=date('"+ddo+"') AND d.stavdokladu='POTVRDENY'" +
+                "    group by CAST(p.poberatel_id as text) " +
+                "    having sum(p.body)>0 ";
+
+        Query query = em1.createNativeQuery(sql);
+
+//        result1= em1.createNativeQuery(sql,Zaznam.class).getResultList();
+        List result1 = query.getResultList();
+        Map<String, Double> vysledok = NastrojePoli.<String, Double>prerobListNaMapu2(result1);
+        emf.close();
+
+
+
+        return vysledok;
+
+    }
+
+    private static Map<String, Double> vratBodyIne(LocalDate dod, LocalDate ddo) {
+        EntityManager em1;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        em1 = emf.createEntityManager();
+        String sql="select CAST(p.poberatel_id as text) as kluc,sum(p.body) as hodnota from polozkydokladu as p " +
+                " join doklady as d on d.id=p.doklad_id " +
+                " where date(d.datum)>=date('"+dod+"') and date(d.datum)<=date('"+ddo+"') " +
+                " and d.typdokladu='INTERNY_DOKLAD' " +
+                " and d.stavdokladu='POTVRDENY' " +
+                " group by CAST(p.poberatel_id as text) " +
+                " having sum(p.body)>0";
+
+        Query query = em1.createNativeQuery(sql);
+
+//        result1= em1.createNativeQuery(sql,Zaznam.class).getResultList();
+        List result1 = query.getResultList();
+        Map<String, Double> vysledok = NastrojePoli.<String, Double>prerobListNaMapu2(result1);
+        emf.close();
+
+        return vysledok;
+
+
+    }
+
+    private static Map<String, Double> vratBodyZaPredaj(LocalDate dod, LocalDate ddo) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql="select CAST(p.poberatel_id as text) as kluc ,sum(p.body) as hodnota from polozkydokladu as p " +
+                " join doklady as d on d.id=p.doklad_id " +
+                " where d.datum>=? and d.datum<=? " +
+                " and d.typdokladu='DAVKA' " +
+                " and d.stavdokladu='POTVRDENY' " +
+                " group by CAST(p.poberatel_id as text)  " +
+                " having sum(p.body)>0";
+//        String sql="select CAST(p.poberatel_id as text)as kluc ,sum(p.body) as hodnota from polozkydokladu as p " +
+//                " join doklady as d on d.id=p.doklad_id " +
+//                " where date(d.datum)>=date('"+dod+"') and date(d.datum)<=date('"+ddo+"') " +
+//                " and d.typdokladu='DAVKA' " +
+//                " and d.stavdokladu='POTVRDENY' " +
+//                " group by p.poberatel_id " +
+//                " having sum(p.body)>0";
+
+        //Query query = em1.createNativeQuery(sql, Zaznam.class);
+        Query query = em1.createNativeQuery(sql);
+        query.setParameter(1,dod);
+        query.setParameter(2,ddo);
+
+//        result1= em1.createNativeQuery(sql,Zaznam.class).getResultList();
+        List result1 = query.getResultList();
+        Map<String, Double> vysledok = NastrojePoli.<String, Double>prerobListNaMapu2(result1);
+        emf.close();
+        return vysledok;
+
+    }
+
+    private static Map<String, Double> vratPociatocnyStav(LocalDate dod, LocalDate ddo) {
+        EntityManager em1;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        em1 = emf.createEntityManager();
+        String sql="select CAST(p.poberatel_id as text) as kluc,sum(p.body) as hodnota from polozkydokladu as p " +
+                " join doklady as d on d.id=p.doklad_id " +
+                " where date(d.datum)<date('"+dod+"') AND d.stavdokladu='POTVRDENY'" +
+                "    group by CAST(p.poberatel_id as text) " +
+                "    having sum(p.body)>0 ";
+
+//        result1= em1.createNativeQuery(sql,Zaznam.class).getResultList();
+//        vysledok= NastrojePoli.prerobListNaMapu(result1);
+        Query query = em1.createNativeQuery(sql);
+        List result1 = query.getResultList();
+        Map<String, Double> vysledok = NastrojePoli.<String, Double>prerobListNaMapu2(result1);
+
+        emf.close();
+        return vysledok;
+
 
     }
 }

@@ -5,12 +5,14 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
+import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Produkt;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -51,17 +53,17 @@ public class BrowsPanel extends VerticalLayout {
                     .setId("kat")
                     .setDescriptionGenerator(Produkt::getToolTip);
             FilterGrid.Column<Produkt, String> colNazov = grid.addColumn(Produkt::getNazov).setCaption("Názov").setId("nazov");
-            FilterGrid.Column<Produkt, BigDecimal> colKusy = grid.addColumn(Produkt::getKusy).setCaption("kusy").setId("kusy");
-            FilterGrid.Column<Produkt, BigDecimal> colBody = grid.addColumn(Produkt::getBody).setCaption("Body").setId("body");
+            FilterGrid.Column<Produkt, BigInteger> colKusy = grid.addColumn(Produkt::getKusyBigInteger).setCaption("kusy").setId("kusy");
+            FilterGrid.Column<Produkt, BigInteger> colBody = grid.addColumn(Produkt::getBodyBigInteger).setCaption("Body").setId("body");
             FilterGrid.Column<Produkt, String> colFirmaNazov = grid.addColumn(Produkt::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
 
             // filters
             colRok.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-            colKat.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-            colNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+            colKat.setFilter(new TextField(),  InMemoryFilter.StringComparator.containsIgnoreCase());
+            colNazov.setFilter(new TextField(),  InMemoryFilter.StringComparator.containsIgnoreCase());
             colKusy.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colBody.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-            colFirmaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+            colFirmaNazov.setFilter(new TextField(),  InMemoryFilter.StringComparator.containsIgnoreCase());
 
 //
             grid.setColumnOrder(colKat,colNazov,colKusy,colBody);

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import javax.persistence.*;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import static javax.persistence.CascadeType.PERSIST;
 
@@ -174,7 +175,11 @@ public class PolozkaDokladu extends Vseobecne {
 
     public void setBody(BigDecimal body) {this.body = body;}
 
+    public BigInteger getBodyBigInteger() {return body.toBigInteger();}
+
+
     public BigDecimal getMnozstvo() {return mnozstvo;}
+    public BigInteger getMnozstvoBigInteger() {return mnozstvo.toBigInteger();}
 
     public void setMnozstvo(BigDecimal mnozstvo) {this.mnozstvo = mnozstvo;}
 
@@ -185,6 +190,17 @@ public class PolozkaDokladu extends Vseobecne {
     public String getPoznamka() {return poznamka;}
 
     public void setPoznamka(String poznamka) {this.poznamka = poznamka;}
+
+    public static  BigInteger getBodyZaProduktBigInteger(PolozkaDokladu polozkaDokladu) {
+        return polozkaDokladu.getProdukt().getBodyBigInteger();
+    }
+
+    public static String getBodyZaProdukt(PolozkaDokladu polozkaDokladu) {
+        return polozkaDokladu.getProdukt().getBodyBigInteger().toString()+
+                "/"+
+                polozkaDokladu.getProdukt().getKusyBigInteger().toString();
+
+    }
 }
 
 

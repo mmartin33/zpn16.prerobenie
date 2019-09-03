@@ -5,6 +5,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
                 " join p.firma as f" +
                 " where f.id=:id " +
                 " and p.rok =:rok " +
-                " order by p.nazov"),
+                " order by p.kat"),
         @NamedQuery(name = "Produkt.getPodlaNazvu", query = "SELECT p FROM produkty p WHERE p.nazov =:nazov"),
         @NamedQuery(name = "Produkt.getPodlaKodu", query = "SELECT p FROM produkty p WHERE p.kat =:kat"),
 
@@ -59,12 +60,16 @@ public class Produkt extends Vseobecne {
 
     public BigDecimal getKusy() {return kusy;}
 
+    public BigInteger getKusyBigInteger() {return kusy.toBigInteger();}
+
     public Produkt setKusy(BigDecimal kusy) {
         this.kusy = kusy;
         return this;
     }
 
     public BigDecimal getBody() {return body;}
+
+    public BigInteger getBodyBigInteger() {return body.toBigInteger();}
 
     public Produkt setBody(BigDecimal body) {
         this.body = body;

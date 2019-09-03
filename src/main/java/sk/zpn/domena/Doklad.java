@@ -12,7 +12,7 @@ import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "doklady")
 @NamedQueries(value = {
-        @NamedQuery(name = "Doklad.getAll", query = "SELECT d FROM doklady d"),
+        @NamedQuery(name = "Doklad.getAll", query = "SELECT d FROM doklady d "),//order by d.kedy DESC
 
         @NamedQuery(name = "Doklad.get", query = "SELECT d FROM doklady d WHERE d.id =:id")})
 

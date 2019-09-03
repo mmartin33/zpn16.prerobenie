@@ -23,7 +23,7 @@ public class StatPoberatelView extends VerticalLayout implements View {
     // ContactForm is an example of a custom component class
     public static final String NAME = "statPoberatelView";
     private Button btnAktivujFilter;
-    private FilterGrid<StatistikaBodov> grid;
+
     private Button btnSpat;
     private List<StatistikaBodov> statList =null;
     DateField dfOd;
@@ -44,13 +44,23 @@ public class StatPoberatelView extends VerticalLayout implements View {
         dfDo.setValue(ddo);
         dfOd.setWidth(15, Sizeable.Unit.PERCENTAGE);
         dfDo.setWidth(15,Sizeable.Unit.PERCENTAGE);
-        btnAktivujFilter=new Button("Prezobraz");
+        btnAktivujFilter=new Button("Do Excelu");
         btnAktivujFilter.setWidth(10,Sizeable.Unit.PERCENTAGE);
         btnAktivujFilter.setHeight(80,Sizeable.Unit.PERCENTAGE);
+
+        btnSpat=new Button("Späť");
+        btnSpat.addClickListener(clickEvent ->
+                UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
+        );
+
+        btnSpat.setWidth(10,Sizeable.Unit.PERCENTAGE);
+        btnSpat.setHeight(80,Sizeable.Unit.PERCENTAGE);
+
         btnAktivujFilter.addClickListener(this::aktivujFilter);
         hornyFilter.addComponent(dfOd);
         hornyFilter.addComponent(dfDo);
         hornyFilter.addComponent(btnAktivujFilter);
+        hornyFilter.addComponent(btnSpat);
 
 
         GridLayout gl =new GridLayout(1,1);
@@ -59,120 +69,38 @@ public class StatPoberatelView extends VerticalLayout implements View {
         gl.setColumnExpandRatio(0,1f);
         gl.setRowExpandRatio(0, 1f);
 
-
-        DecimalFormat df = new DecimalFormat("#,###.00");
-
-        grid = new FilterGrid<>();
-
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        //grid.setSelectionMode(Grid.SelectionMode.MULTI);
-
-        FilterGrid.Column<StatistikaBodov, String> colPoberatel= grid.addColumn(StatistikaBodov::getNazov).setCaption("Poberatel").setId("poberatel");
-        FilterGrid.Column<StatistikaBodov, BigDecimal> colPS= grid.addColumn(StatistikaBodov::getPociatocnyStav).setCaption("Počiatočný stav").setId("ps");
-        FilterGrid.Column<StatistikaBodov, BigDecimal> colbodyPredaj= grid.addColumn(StatistikaBodov::getBodyZaPredaj).setCaption("Body za predaj").setId("predaj");
-        FilterGrid.Column<StatistikaBodov, BigDecimal> colbodyIne= grid.addColumn(StatistikaBodov::getBodyIne).setCaption("Body ine").setId("ine");
-        FilterGrid.Column<StatistikaBodov, BigDecimal> colKS= grid.addColumn(StatistikaBodov::getKonecnyStav).setCaption("Konečný stav").setId("ks");
-
-
-        // filters
-
-        colPoberatel.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        colPS.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        colPS.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
-        colbodyPredaj.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        colbodyPredaj.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
-        colbodyIne.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        colbodyIne.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
-        colKS.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        colKS.setRenderer(new NumberRenderer(new DecimalFormat("#,###")));
-
-
-
-        grid.setColumnOrder(colPoberatel,colPS,colbodyPredaj,colbodyIne,colKS);
-
-
-
         this.addComponent(new Label("Poberatelia "));
         this.addComponent(hornyFilter);
-        gl.addComponents(grid);
-        gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
 
 
-
-
-
-        Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
-        btnSpat.addClickListener(clickEvent ->
-                UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
-        );
-        Button btnXLS = new Button("Do Excelu", VaadinIcons.TABLE);
-        btnXLS.addClickListener(clickEvent ->
-                {
-                    SimpleDateFormat formatter= new SimpleDateFormat("dd.MM.yyyy");
-
-
-                    String nadpis="Vyhodnotenie poberatelov od: "+(dfOd.getValue())+" do: "+ (dfDo.getValue());
-
-
-//                    if (grid.getSelectedItems().size()<=0)
-                        XlsStatistikaBodov.vytvorXLS(statList,nadpis);
-//                    else {
-//                        List<StatPoberatel> vybrane =new ArrayList<StatPoberatel>(  );
-//                        vybrane.addAll(grid.getSelectedItems());
-//                        XlsStatPoberatel.vytvorXLS(vybrane, nadpis);
-//                    }
-
-
-
-
-
-
-                }
-        );
-
-
-        HorizontalLayout tlacitkovy = new HorizontalLayout();
-        btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
-        tlacitkovy.addComponent(btnSpat);
-        tlacitkovy.addComponent(btnXLS);
-
-
-
-        grid.setSizeFull();
         this.setSizeFull();
         this.addComponentsAndExpand(gl);
 
 
-        this.addComponent(tlacitkovy);
-        this.setComponentAlignment(tlacitkovy, Alignment.BOTTOM_LEFT);
         gl.setVisible(true);
 
         this.addComponentsAndExpand(gl);
-        configureComponents();
-
-
 
     }
 
     private void aktivujFilter(Button.ClickEvent clickEvent) {
-        aktivujFilter();
+        aktivujFilter2();
         //btnAktivujFilter.setEnabled(false);
         }
 
     private void aktivujFilter(){
+        //povodne
         if (statList!=null)
             statList.clear();
         statList = StatPoberatelNastroje.load(dfOd.getValue(), dfDo.getValue());
-        grid.setItems(statList);
+
+    }
+
+    private void aktivujFilter2(){
+        StatPoberatelNastroje.load2(dfOd.getValue(), dfDo.getValue());
     }
 
 
-
-    private void configureComponents() {
-//        aktivujFilter();
-//        grid.setItems(statList);
-//        grid.getDataProvider().refreshAll();
-    }
 
 
 

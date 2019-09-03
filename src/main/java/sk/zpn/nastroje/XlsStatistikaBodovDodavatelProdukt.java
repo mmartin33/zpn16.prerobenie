@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.Firma;
+import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Produkt;
 
 import java.io.*;
@@ -34,7 +35,7 @@ public class XlsStatistikaBodovDodavatelProdukt {
 
     CellType stylNadpis;
 
-    public static String vytvorXLS(List<Firma> velkosklady,
+    public static void vytvorXLS(List<Firma> velkosklady,
                                    List<Produkt> produkty,
                                    Map<String, BigDecimal> predaje,
                                    String nadpis,
@@ -45,7 +46,7 @@ public class XlsStatistikaBodovDodavatelProdukt {
 
 
         if ((velkosklady == null) || (produkty == null) || (predaje == null))
-            return null;
+            return ;
         workbook = null;
         FileInputStream excelFile = null;
         try {
@@ -70,16 +71,6 @@ public class XlsStatistikaBodovDodavatelProdukt {
         cel = row.createCell(2);
         cel.setCellStyle(nadpisovyformat());
         cel.setCellValue(nadpis);
-
-        row = sheet.createRow(2);
-
-        cel = row.createCell(2);
-        cel.setCellStyle(nadpisovyformat());
-        cel.setCellValue(dodavatel.getIco()+" "+ dodavatel.getNazov());
-
-
-
-
 
 
         int rowNum = 4;
@@ -121,19 +112,20 @@ public class XlsStatistikaBodovDodavatelProdukt {
         cel.setCellValue("Spolu Eur");
 
         int sumaRiadkuMN=1;
-        int sumaRiadkuBody=0;
+        BigDecimal sumaRiadkuBody;
         BigDecimal sumaRiadkuEur;
         int sumaCelkomMn=0;
-        int sumaCelkomBody=0;
+        BigDecimal sumaCelkomBody=BigDecimal.ZERO;
         int mnozstvo=0;
+        BigDecimal body=BigDecimal.ZERO;
         BigDecimal sumaCelkomEur=BigDecimal.ZERO;
         for (Produkt p : produkty) {
 
-            if (sumaRiadkuMN!=0) {
+//            if (sumaRiadkuMN!=0) {  vynechanie bez predaja
                 rowNum++;
-            }
+//            }
             sumaRiadkuMN=0;
-            sumaRiadkuBody=0;
+            sumaRiadkuBody=BigDecimal.ZERO;;
 
             sumaRiadkuEur=BigDecimal.ZERO;
 
@@ -153,18 +145,21 @@ public class XlsStatistikaBodovDodavatelProdukt {
 //                bunka=nastavFormatBunky(bunka,true,false);
                 bunka.setCellValue((predaje.get(kluc) == null) ? 0 : predaje.get(kluc).doubleValue());
                 mnozstvo=((predaje.get(kluc) == null) ? 0 : predaje.get(kluc).intValue());
+                body=new BigDecimal(mnozstvo)
+                        .multiply(p.getBody())
+                        .divide(p.getKusy(),0,RoundingMode.HALF_UP);
+
                 sumaRiadkuMN = sumaRiadkuMN+mnozstvo;
-                sumaRiadkuBody = sumaRiadkuBody+(mnozstvo*p.getBody().intValue());
-                sumaRiadkuEur = sumaRiadkuEur.add((predaje.get(kluc) == null) ?
-                        (new BigDecimal(0)) :
-                        (new BigDecimal(mnozstvo*p.getBody().intValue()))
+                sumaRiadkuBody = sumaRiadkuBody.add(body);
+                        //(mnozstvo*p.getBody()/p.getKusy().intValue());
+                sumaRiadkuEur = sumaRiadkuEur.add(body
                                 .multiply(new BigDecimal(0.01))
                                 .setScale(2, RoundingMode.HALF_UP));
 
 
             }
             sumaCelkomMn = sumaCelkomMn+sumaRiadkuMN;
-            sumaCelkomBody = sumaCelkomBody+sumaRiadkuBody;
+            sumaCelkomBody = sumaCelkomBody.add(sumaRiadkuBody);
             sumaCelkomEur = sumaCelkomEur.add(sumaRiadkuEur);
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
@@ -172,15 +167,16 @@ public class XlsStatistikaBodovDodavatelProdukt {
 
             bunka = row.createCell(colNum);
             bunka.setCellStyle(oramovanieBold());
-            bunka.setCellValue(sumaRiadkuBody);
+            bunka.setCellValue(sumaRiadkuBody.toString());
 
             bunka = row.createCell(colNum+1);
             bunka.setCellStyle(oramovanieBold());
             bunka.setCellValue(sumaRiadkuEur.toString());
 
         }
-        rowNum++;
 
+        rowNum++;
+        row = sheet.createRow(rowNum);
         //inicializacia zaverecneho riadku
         cel = row.createCell(rowNum);
         cel = row.createCell(0);
@@ -206,7 +202,7 @@ public class XlsStatistikaBodovDodavatelProdukt {
 
         bunka = row.createCell(colNum+3);
         bunka.setCellStyle(oramovanieBold());
-        bunka.setCellValue(sumaCelkomBody);
+        bunka.setCellValue(sumaCelkomBody.toString());
 
         bunka = row.createCell(colNum+4);
         bunka.setCellStyle(oramovanieBold());
@@ -241,27 +237,9 @@ public class XlsStatistikaBodovDodavatelProdukt {
         subWindow.setModal(true);
         UI.getCurrent().addWindow(subWindow);
 
-        return null;
+        return ;
     }
 
-    private static Cell nastavFormatBunky(Cell bunka, boolean oramovat,boolean hrubym) {
-        CellStyle mojformat=null;
-
-        if (oramovat){
-            mojformat.setBorderBottom(BorderStyle.THIN);
-            mojformat.setBorderLeft(BorderStyle.THIN);
-            mojformat.setBorderRight(BorderStyle.THIN);
-            mojformat.setBorderTop(BorderStyle.THIN);
-        }
-        if (hrubym){
-            Font font = null;
-            font.setBold(true);
-            mojformat.setFont(font);
-        }
-
-        bunka.setCellStyle(mojformat);
-        return bunka;
-    }
 
     private static HSSFCellStyle nadpisovyformat(){
         HSSFCellStyle cs;
@@ -314,5 +292,6 @@ public class XlsStatistikaBodovDodavatelProdukt {
         cs.setBorderTop(BorderStyle.THIN);
         return cs;
     }
+
 }
 
