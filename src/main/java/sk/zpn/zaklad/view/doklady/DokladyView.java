@@ -1,9 +1,11 @@
 package sk.zpn.zaklad.view.doklady;
 
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Doklad;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.StavDokladu;
 import sk.zpn.zaklad.model.DokladyNastroje;
 
@@ -14,20 +16,21 @@ public class DokladyView extends HorizontalLayout implements View {
     public static final String NAME = "dokladyView";
 
     private EditacnyForm editacnyForm;
-
+    private Firma velkosklad;
     private BrowsPanel browsPanel;
 
     private List<Doklad> dokladyList=null;
 
-    public DokladyView() {
+    public DokladyView(Firma velkosklad) {
+        this.velkosklad=velkosklad;
         GridLayout gr=new GridLayout(2,2);
         gr.setSpacing(false);
         gr.setSizeFull();
         gr.setColumnExpandRatio(0, 0.60f);
         gr.setColumnExpandRatio(1, 0.40f);
 
-        dokladyList = DokladyNastroje.zoznamDokladov();
-        browsPanel=new BrowsPanel(dokladyList);
+        dokladyList = DokladyNastroje.zoznamDokladov(getVelkosklad());
+        browsPanel=new BrowsPanel(dokladyList,getVelkosklad());
         editacnyForm=new EditacnyForm();
         editacnyForm.setDokladyView(this);
         configureComponents();
@@ -44,6 +47,7 @@ public class DokladyView extends HorizontalLayout implements View {
     private void configureComponents() {
 
         editacnyForm.setDokladyView(this);
+
         browsPanel.btnNovy.addClickListener(clickEvent -> {
             deselect();
             Doklad d=new Doklad();
@@ -105,5 +109,24 @@ public class DokladyView extends HorizontalLayout implements View {
         browsPanel.selectDoklad(doklad);
     }
 
+    public Firma getVelkosklad() {
+        return velkosklad;
+    }
+
+
+    public void setVelkosklad(Firma velkosklad) {
+        this.velkosklad = velkosklad;
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        rezimVelkoskladu();
+    }
+
+    public void rezimVelkoskladu() {
+        if (velkosklad!=null) {
+           this.editacnyForm.rezimVelkoskladu();
+        }
+    }
 }
 

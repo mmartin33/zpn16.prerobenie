@@ -8,6 +8,7 @@ import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import org.vaadin.dialogs.ConfirmDialog;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
@@ -32,13 +33,11 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnNovy;
     public Button btnNovyKopia;
     public Button btnPanelovy;
-
-
-
+    private Firma velkosklad;
 
 
     public BrowsPanel(List<PolozkaDokladu> polozkyDokladuList, PolozkyDokladuView pdv) {
-
+        this.velkosklad=pdv.getVelkosklad();
         GridLayout gl =new GridLayout(1,4);
         gl.setSizeFull();
         gl.setRowExpandRatio(0, 0.02f);
@@ -98,10 +97,11 @@ public class BrowsPanel extends VerticalLayout {
                 new int[] { ShortcutAction.ModifierKey.ALT });
 
 
-
-        tlacitkovy.addComponent(btnNovy);
-        tlacitkovy.addComponent(btnNovyKopia);
-        tlacitkovy.addComponent(btnZmaz);
+        if (!jeRezimVelkoskladu()) {
+            tlacitkovy.addComponent(btnNovy);
+            tlacitkovy.addComponent(btnNovyKopia);
+            tlacitkovy.addComponent(btnZmaz);
+        }
         tlacitkovy.addComponent(btnSpat);//666
         tlacitkovy.addComponent(btnPanelovy);//666
 
@@ -200,6 +200,9 @@ public class BrowsPanel extends VerticalLayout {
         grid.getDataProvider().refreshAll();
         grid.select(p);
 
+    }
+    public boolean jeRezimVelkoskladu() {
+        return this.velkosklad==null?false:true;
     }
 }
 

@@ -7,6 +7,7 @@ import com.vaadin.server.ExternalResource;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 import com.vaadin.ui.MenuBar.MenuItem;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
@@ -86,8 +87,16 @@ public class VitajteView extends MojView {
                         n.navigateTo(PrevadzkyView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("doklad")) {
-                        DokladyView dokladyView = new DokladyView();
+                        DokladyView dokladyView = new DokladyView(null);
                         UI.getCurrent().getNavigator().addView(DokladyView.NAME, dokladyView);
+                        n.navigateTo(DokladyView.NAME);
+                    }
+                    else if (selectedItem.getDescription().equals("dokladyVelkoskladu")) {
+                        Firma velkosklad=UzivatelNastroje.getPrihlasenehoUzivatela().getFirma();
+                        DokladyView dokladyView = new DokladyView(velkosklad);
+
+                        UI.getCurrent().getNavigator().addView(DokladyView.NAME, dokladyView);
+
                         n.navigateTo(DokladyView.NAME);
                     }
                     else if (selectedItem.getDescription().equals("odosli")) {
@@ -148,6 +157,10 @@ public class VitajteView extends MojView {
             menuMostik.setDescription("mostik");
             MenuItem menuOdosli = menuPredajcu.addItem("Odošli", VaadinIcons.UPLOAD, mycommand);
             menuOdosli.setDescription("odosli");
+
+        MenuItem menuDokladyVelkoskladu = menuPredajcu.addItem("Doklady - veľkoskladu prihláseného užívateľa", VaadinIcons.RECORDS, mycommand);
+        menuDokladyVelkoskladu.setDescription("dokladyVelkoskladu");
+
 
             menuSpravcu = barmenu.addItem("Spravca ZPN", null, null);
             MenuItem menuFirmy = menuSpravcu.addItem("Firmy", VaadinIcons.BUILDING, mycommand);

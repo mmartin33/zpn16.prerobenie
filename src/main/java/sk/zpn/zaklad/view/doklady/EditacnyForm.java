@@ -66,8 +66,10 @@ public class EditacnyForm extends VerticalLayout {
 
 
         HorizontalLayout lBtn=new HorizontalLayout();
+
         lBtn.addComponent(btnUloz);
         lBtn.addComponent(btnZmaz);
+
 
         typDokladuComboBox.setItems(
             Arrays.stream(TypDokladu.values())
@@ -220,5 +222,12 @@ public class EditacnyForm extends VerticalLayout {
         typDokladuComboBox.clear();
         stavDokladuComboBox.clear();
         dDatum.clear();
+    }
+
+    public void rezimVelkoskladu() {
+            btnZmaz.setVisible(false);
+            btnUloz.setVisible(false);
+
+
     }
 }

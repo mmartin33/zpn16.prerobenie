@@ -27,11 +27,13 @@ public class BrowsPanel extends VerticalLayout {
 
 
     PolozkyDokladuView polozkyDokladuView;
+    private Firma velkosklad;
     public Button btnNovy;
     public Button btnPolozky;
 
 
-    public BrowsPanel(List<Doklad> dokladyList) {
+    public BrowsPanel(List<Doklad> dokladyList, Firma velkosklad) {
+        this.velkosklad=velkosklad;
         GridLayout gl = new GridLayout(1, 3);
         gl.setSizeFull();
         gl.setRowExpandRatio(0, 0.05f);
@@ -84,7 +86,7 @@ public class BrowsPanel extends VerticalLayout {
                         //polozkyDokladuView = new PolozkyDokladuView((Doklad) grid.getSelectedItems().iterator().next());
                         Doklad otvorenyDoklad=new Doklad();
                         otvorenyDoklad=(Doklad) grid.getSelectedItems().iterator().next();
-                        polozkyDokladuView = new PolozkyDokladuView(otvorenyDoklad);
+                        polozkyDokladuView = new PolozkyDokladuView(otvorenyDoklad,velkosklad);
 
                         UI.getCurrent().getNavigator().addView(PolozkyDokladuView.NAME, polozkyDokladuView);
                         UI.getCurrent().getNavigator().navigateTo(PolozkyDokladuView.NAME);
@@ -100,8 +102,8 @@ public class BrowsPanel extends VerticalLayout {
         btnNovy.setClickShortcut(ShortcutAction.KeyCode.N,
                 new int[]{ShortcutAction.ModifierKey.ALT});
 
-
-        tlacitkovy.addComponent(btnNovy);
+        if (!jeRezimVelkoskladu())
+            tlacitkovy.addComponent(btnNovy);
 
         tlacitkovy.addComponent(btnPolozky);
         tlacitkovy.addComponent(btnSpat);//666
@@ -166,6 +168,10 @@ public class BrowsPanel extends VerticalLayout {
         grid.select(d);
 
     }
+    public boolean jeRezimVelkoskladu() {
+        return this.velkosklad==null?false:true;
+    }
+
 }
 
 

@@ -339,4 +339,9 @@ public class EditacnyForm extends VerticalLayout {
         tMnozstvo.clear();
         tPoznamka.clear();
     }
+
+    public void rezimVelkoskladu() {
+        btnUloz.setVisible(false);
+
+    }
 }

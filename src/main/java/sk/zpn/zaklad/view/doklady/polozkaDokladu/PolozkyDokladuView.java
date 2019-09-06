@@ -1,9 +1,11 @@
 package sk.zpn.zaklad.view.doklady.polozkaDokladu;
 
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Doklad;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 
@@ -20,8 +22,10 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     private List<PolozkaDokladu> polozkyDokladuList;
     public PolozkaDokladu povodnaPolozka;
     private Doklad doklad;
+    private Firma velkosklad;
 
-    public PolozkyDokladuView(Doklad doklad) {
+    public PolozkyDokladuView(Doklad doklad,Firma velkosklad) {
+        this.velkosklad=velkosklad;
         gr=new GridLayout(2,2);
         gr.setSpacing(false);
         gr.setSizeFull();
@@ -38,8 +42,6 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
         gr.addComponent(editacnyForm,1,0,1,0);
         this.addComponent(gr);
         this.setSizeFull();
-    }
-    public PolozkyDokladuView() {
     }
 
 //    void deselect() {
@@ -141,6 +143,24 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
 
     public void setDoklad(Doklad doklad) {
         this.doklad = doklad;
+    }
+
+
+
+    public Firma getVelkosklad() {
+        return this.velkosklad ;
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        rezimVelkoskladu();
+    }
+
+    public void rezimVelkoskladu() {
+        if (velkosklad!=null) {
+
+            this.editacnyForm.rezimVelkoskladu();
+        }
     }
 }
 

@@ -66,10 +66,16 @@ public class DokladyNastroje {
     }
 
 
-    public static List<Doklad> zoznamDokladov(){
+    public static List<Doklad> zoznamDokladov(Firma velkosklad){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
-        TypedQuery<Doklad> q = em.createNamedQuery("Doklad.getAll", Doklad.class);
+        TypedQuery<Doklad> q;
+        if (velkosklad!=null) {
+            q = em.createNamedQuery("Doklad.getZaFirmu", Doklad.class);
+            q.setParameter("id", velkosklad.getId());
+            }
+        else
+            q = em.createNamedQuery("Doklad.getAll", Doklad.class);
         return q.getResultList();
     }
     public static String noveCisloDokladu(Date datum){
