@@ -14,6 +14,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.StatistikaBodov;
+import sk.zpn.domena.TypUzivatela;
+import sk.zpn.zaklad.model.UzivatelNastroje;
+
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -35,7 +38,8 @@ public class XlsStatistikaBodov {
                                   Map<String, Double> pociatocnyStav,
                                   Map<String, Double> bodyZaPredaj,
                                   Map<String, Double> bodyIne,
-                                  Map<String, Double> konecnyStav, String nadpis) {
+                                  Map<String, Double> konecnyStav, String nadpis,
+                                  Map<String, Double> poberateliaVelkoskladu) {
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy ' ' HH:mm:ss z");
@@ -106,8 +110,10 @@ public class XlsStatistikaBodov {
         BigDecimal riadkovaHodnota=BigDecimal.ONE;
         for (Poberatel p : poberatelia) {
             colNum = 1;
-
-
+            String kluc=p.getId().toString();
+            if (UzivatelNastroje.getPrihlasenehoUzivatela().getTypUzivatela() == TypUzivatela.PREDAJCA)
+                if (poberateliaVelkoskladu.get(kluc)==null)
+                    continue;
             //cel.setCellStyle(oramovanieBoldZalomenie());
 
 
@@ -115,7 +121,6 @@ public class XlsStatistikaBodov {
                 rowNum++;
 
             row = sheet.createRow(rowNum);
-
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
@@ -126,7 +131,7 @@ public class XlsStatistikaBodov {
 
             Double hodnotaD= Double.valueOf(0);
 
-            String kluc=p.getId().toString();
+
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());

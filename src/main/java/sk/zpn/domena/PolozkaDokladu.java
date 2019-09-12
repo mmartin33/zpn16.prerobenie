@@ -179,7 +179,12 @@ public class PolozkaDokladu extends Vseobecne {
 
 
     public BigDecimal getMnozstvo() {return mnozstvo;}
-    public BigInteger getMnozstvoBigInteger() {return mnozstvo.toBigInteger();}
+    public BigInteger getMnozstvoBigInteger() {
+        if (mnozstvo==null)
+            return BigInteger.ZERO;
+        else
+            return mnozstvo.toBigInteger();
+    }
 
     public void setMnozstvo(BigDecimal mnozstvo) {this.mnozstvo = mnozstvo;}
 
@@ -196,7 +201,10 @@ public class PolozkaDokladu extends Vseobecne {
     }
 
     public static String getBodyZaProdukt(PolozkaDokladu polozkaDokladu) {
-        return polozkaDokladu.getProdukt().getBodyBigInteger().toString()+
+        if  (polozkaDokladu.getProdukt() == null)
+            return "-/-";
+        else
+            return polozkaDokladu.getProdukt().getBodyBigInteger().toString()+
                 "/"+
                 polozkaDokladu.getProdukt().getKusyBigInteger().toString();
 

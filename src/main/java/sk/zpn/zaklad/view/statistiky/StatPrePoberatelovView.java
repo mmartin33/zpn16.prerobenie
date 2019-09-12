@@ -2,110 +2,107 @@ package sk.zpn.zaklad.view.statistiky;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
+import com.vaadin.ui.renderers.HtmlRenderer;
 import com.vaadin.ui.renderers.NumberRenderer;
 import org.vaadin.addons.filteringgrid.FilterGrid;
-import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
-import sk.zpn.domena.StatistikaBodov;
-import sk.zpn.nastroje.XlsStatistikaBodov;
+import sk.zpn.domena.statistiky.ZoznamBodov;
 import sk.zpn.zaklad.model.StatPoberatelNastroje;
-import sk.zpn.zaklad.view.VitajteView;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.List;
 
 public class StatPrePoberatelovView extends VerticalLayout implements View {// ContactForm is an example of a custom component class
     public static final String NAME = "StatPrePoberatelovView";
+    private  List<ZoznamBodov >statistika;
     private Button btnAktivujFilter;
-    private List<StatistikaBodov> statList =null;
-    public StatPrePoberatelovView() {
+    private FilterGrid<ZoznamBodov> grid;
+    private List<ZoznamBodov> statList =null;
+    private GridLayout gl;
+    private HorizontalLayout hl;
+    public StatPrePoberatelovView(Navigator navigator) {
 
-        HorizontalLayout hornyFilter =new HorizontalLayout();
-
-
-
-//        dod = LocalDate.of(LocalDate.now().getYear(),1,1);
-//        ddo = LocalDate.of(LocalDate.now().getYear(),12,31);
-        btnAktivujFilter=new Button("Prezobraz");
-        btnAktivujFilter.setWidth(10, Unit.PERCENTAGE);
-        btnAktivujFilter.setHeight(80, Unit.PERCENTAGE);
-//        hornyFilter.addComponent(dfOd);
-//        hornyFilter.addComponent(dfDo);
-        hornyFilter.addComponent(btnAktivujFilter);
-
-
-        GridLayout gl =new GridLayout(1,1);
+        gl =new GridLayout(1,2);
+        hl =new HorizontalLayout();
         gl.setSpacing(false);
         gl.setSizeFull();
         gl.setColumnExpandRatio(0,1f);
-        gl.setRowExpandRatio(0, 1f);
 
+        gl.setSpacing(false);
 
-        DecimalFormat df = new DecimalFormat("#,###.00");
+        gl.setRowExpandRatio(0, 0.10f);
+        gl.setRowExpandRatio(1, 0.90f);
+//        btnAktivujFilter=new Button("Zobraz detail");
+//        btnAktivujFilter.setHeight(100, Unit.PERCENTAGE);
+//        btnAktivujFilter.addClickListener(this::aktivujFilter);
 
-        //grid.setSelectionMode(Grid.SelectionMode.MULTI);
-
-
-        // filters
-
-
-
-
+        grid = new FilterGrid<>();
 
 
 
-        this.addComponent(new Label("Poberatelia "));
-        this.addComponent(hornyFilter);
+    }
 
+//    private void aktivujFilter(Button.ClickEvent clickEvent) {
+//        grid.setItems(this.statistika);
+//        this.statistika= StatPoberatelNastroje.bodyZaPoberatela((Long)VaadinSession.getCurrent().getAttribute("id_uzivatela"));
+//
+//
+//    }
 
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        Double celkovyPocetBodov=StatPoberatelNastroje.bodyZaPoberatela((Long)VaadinSession.getCurrent().getAttribute("id_uzivatela"));
+        this.statistika= StatPoberatelNastroje.zoznamBodovZaPoberatela((Long)VaadinSession.getCurrent().getAttribute("id_uzivatela"));
+        String text;
+        String meno=VaadinSession.getCurrent().getAttribute("meno").toString();
+        text="<font size=\"4\" color=\"blue\">Poberateľ:</font> <br>";
+        text=text+"<font size=\"4\" color=\"green\"> <b> "+meno+" <b> </font> <br>";
+        text=text+"<font size=\"4\" color=\"blue\"> <b> konečný stav bodov:  <b> </font> ";
+        text=text+"<font size=\"6\" color=\"green\"> <b> "+celkovyPocetBodov+" <b> </font>";
 
+        Label popis=new Label(text,ContentMode.HTML);
+        hl.addComponent(popis);
+        //hl.addComponent(btnAktivujFilter);
 
+        FilterGrid.Column<ZoznamBodov, String > colDatum = grid.addColumn(ZoznamBodov::getFormatovanyDatum).setCaption("Dátum").setId("datum");
+        FilterGrid.Column<ZoznamBodov, String> colBody = grid.addColumn(ZoznamBodov::getHtmlBody).setCaption("Body").setId("body");
+        FilterGrid.Column<ZoznamBodov, String> colTypDokladu = grid.addColumn(ZoznamBodov::getTypDokladu).setCaption("Typ dokladu").setId("typDokladu");
+        FilterGrid.Column<ZoznamBodov, String> colPoznamka = grid.addColumn(ZoznamBodov::getPoznamka).setCaption("poznamka").setId("Poznamka");
+        colBody.setRenderer(new HtmlRenderer());
 
-        Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
-        btnSpat.addClickListener(clickEvent ->
-                UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
-        );
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setColumnOrder(colDatum,colBody,colTypDokladu,colPoznamka);
 
+        grid.setItems(this.statistika);
+        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setSizeFull();
 
-        HorizontalLayout tlacitkovy = new HorizontalLayout();
-        btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
-        tlacitkovy.addComponent(btnSpat);
-
-
+        gl.addComponent(hl);
+        gl.setComponentAlignment(hl,Alignment.TOP_LEFT);
+        gl.addComponent(grid);
+        gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
 
         this.setSizeFull();
         this.addComponentsAndExpand(gl);
 
 
-        this.addComponent(tlacitkovy);
-        this.setComponentAlignment(tlacitkovy, Alignment.BOTTOM_LEFT);
+        //this.addComponent(tlacitkovy);
+        //this.setComponentAlignment(tlacitkovy, Alignment.BOTTOM_LEFT);
         gl.setVisible(true);
 
         this.addComponentsAndExpand(gl);
-        configureComponents();
-
-
-
-    }
-
-    private void aktivujFilter(Button.ClickEvent clickEvent) {
-        aktivujFilter();
-        //btnAktivujFilter.setEnabled(false);
-        }
-
-    private void aktivujFilter(){
-        if (statList!=null)
-            statList.clear();
     }
 
 
 
-    private void configureComponents() {
-    }
+
 
 
 

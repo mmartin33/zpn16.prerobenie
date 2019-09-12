@@ -24,7 +24,7 @@ public abstract class NastrojePoli {
         int hodnota;
         BigDecimal bgHodnota;
         for (Object[] i : list) {
-            hodnota= ((Double) i[1]).intValue();
+            //hodnota= ((V) i[1]);
 
             map.put((K) i[0], (V) i[1]);
 

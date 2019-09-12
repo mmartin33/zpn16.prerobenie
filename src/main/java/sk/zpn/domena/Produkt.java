@@ -69,7 +69,11 @@ public class Produkt extends Vseobecne {
 
     public BigDecimal getBody() {return body;}
 
-    public BigInteger getBodyBigInteger() {return body.toBigInteger();}
+    public BigInteger getBodyBigInteger() {
+        if (body==null)
+            return BigInteger.ZERO;
+        else
+            return body.toBigInteger();}
 
     public Produkt setBody(BigDecimal body) {
         this.body = body;

@@ -1,27 +1,16 @@
 package sk.zpn.zaklad.view.statistiky;
 
 import com.vaadin.data.Binder;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
-import com.vaadin.ui.renderers.NumberRenderer;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
-import org.vaadin.addons.filteringgrid.FilterGrid;
-import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import sk.zpn.domena.Firma;
-import sk.zpn.domena.StatistikaBodov;
-import sk.zpn.nastroje.XlsStatistikaBodov;
 import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.ParametreNastroje;
-import sk.zpn.zaklad.model.StatDodavatelNastroje;
 import sk.zpn.zaklad.model.StatDodavatelProdukt;
 import sk.zpn.zaklad.view.VitajteView;
-
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;

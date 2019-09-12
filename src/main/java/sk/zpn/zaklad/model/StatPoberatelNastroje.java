@@ -6,6 +6,7 @@ import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Produkt;
 import sk.zpn.domena.StatistikaBodov;
 import sk.zpn.domena.statistiky.Zaznam;
+import sk.zpn.domena.statistiky.ZoznamBodov;
 import sk.zpn.nastroje.NastrojePoli;
 import sk.zpn.nastroje.XlsStatistikaBodov;
 import sk.zpn.nastroje.XlsStatistikaBodovDodavatelProdukt;
@@ -24,54 +25,56 @@ public class StatPoberatelNastroje {
 
     }
 
-    public static List<StatistikaBodov> load(LocalDate dod, LocalDate ddo) {
-        List<StatistikaBodov> result1=null;
-        EntityManager em1;
+    public static List<ZoznamBodov> zoznamBodovZaPoberatela(Long id_poberatela) {
+        List<ZoznamBodov> result1=null;
+
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
-        em1 = emf.createEntityManager();
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql="select d.datum||d.typdokladu||d.poznamka as kluc,d.datum as datum,d.typdokladu as typ_dokladu,d.poznamka as poznamka,sum(p.body)as body " +
+                "from polozkydokladu as p " +
+                "join doklady as d on d.id=p.doklad_id " +
+                "join poberatelia as pob on pob.id=p.poberatel_id " +
+                "where pob.id=? "+
+                "group by d.datum||d.typdokladu||d.poznamka  ,d.datum,d.typdokladu,d.poznamka " +
+                "order by d.datum ";
+
+        Query query = em1.createNativeQuery(sql, "mapovanieZoznamuBodov");
+
+        query.setParameter(1,id_poberatela);
 
 
-
-        String sql="select pob.id, pob.meno as nazov," +
-                "(select sum(p.body) from polozkydokladu as p " +
-                "join doklady as d on d.id=p.doklad_id" +
-                "    where date(d.datum)<date('"+dod+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY') as pociatocny_stav," +
-
-                "(select sum(p.body) from polozkydokladu as p " +
-                "join doklady as d on d.id=p.doklad_id" +
-                "    where date(d.datum)>=date('"+dod+"') and date(d.datum)<=date('"+ddo+"') and p.poberatel_id=pob.id" +
-                "    and d.typdokladu='DAVKA' " +
-                "    and d.stavdokladu='POTVRDENY') " +
-                " as body_za_predaj,"+
-                "(select sum(p.body) from polozkydokladu as p " +
-                "join doklady as d on d.id=p.doklad_id" +
-                "    where date(d.datum)>=date('"+dod+"') and date(d.datum)<=date('"+ddo+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY'" +
-                "    and d.typdokladu='INTERNY_DOKLAD')" +
-                " as body_ine,"+
-
-                "(select sum(p.body) from polozkydokladu as p " +
-                "join doklady as d on d.id=p.doklad_id" +
-                "    where date(d.datum)<=date('"+ddo+"') and p.poberatel_id=pob.id AND d.stavdokladu='POTVRDENY') as konecny_stav " +
-                " from poberatelia as pob " +
-                " group by  pob.id, pob.meno"+
-                " having "+
-                "(coalesce((select sum(p.body) from polozkydokladu as p " +
-                "                join doklady as d on d.id=p.doklad_id " +
-                "                    where date(d.datum)>=date('"+dod+"') and date(d.datum)<=date('"+ddo+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY'),0)<> 0 or" +
-                " coalesce((select sum(abs(p.body)) from polozkydokladu as p " +
-                "                join doklady as d on d.id=p.doklad_id " +
-                "                    where  date(d.datum)<=date('"+dod+"') and p.poberatel_id=pob.id  AND d.stavdokladu='POTVRDENY'),0)<>0)";
-
-//            String sql = "select pob.id,pob.meno as poberatel_nazov, 1 as pociatocny_stav, 0  as body_za_predaj, 0 as body_ine, 0 as konecny_stav  from  poberatelia as pob" ;
-            result1  = em1.createNativeQuery(sql,  "mapovanieVysledkuBodov").getResultList();
+            result1  = query.getResultList();
             em1.close();
             emf.close();
 
         return result1;
 
     }
+    public static Double bodyZaPoberatela(Long id_poberatela) {
+        Double result1=null;
 
-    public static void load2(LocalDate dod, LocalDate ddo) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql="select sum(p.body)as body " +
+                "from polozkydokladu as p " +
+                "join doklady as d on d.id=p.doklad_id " +
+                "join poberatelia as pob on pob.id=p.poberatel_id " +
+                "where pob.id=? ";
+
+        Query query = em1.createNativeQuery(sql);
+
+        query.setParameter(1,id_poberatela);
+        result1  = (Double) query.getSingleResult();
+        em1.close();
+       emf.close();
+
+        return result1;
+
+    }
+
+    public static void bilanciaPoberatelov(LocalDate dod, LocalDate ddo, Firma velkosklad) {
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
@@ -81,13 +84,17 @@ public class StatPoberatelNastroje {
         Map<String, Double> bodyZaPredaj = Maps.newHashMap();
         Map<String, Double> bodyIne = Maps.newHashMap();
         Map<String, Double> konecnyStav = Maps.newHashMap();
+        Map<String, Double> poberateliaVelkoskladu = Maps.newHashMap();
         pociatocnyStav=vratPociatocnyStav(dod,ddo);
         bodyZaPredaj=vratBodyZaPredaj(dod,ddo);
         bodyIne=vratBodyIne(dod,ddo);
         konecnyStav=vratKonecnyStav(dod,ddo);
+        if (velkosklad!=null)
+            poberateliaVelkoskladu=PoberatelNastroje.vratPoberatelovVelkoskladu(velkosklad);
+
         List <Poberatel> poberatelia=PoberatelNastroje.zoznamPoberatelov();
         String nadpis="Vyhodnotenie poberatelov  od: "+simpleDateFormat.format(Date.valueOf(dod))+" dp: "+ simpleDateFormat.format(Date.valueOf(ddo));
-        XlsStatistikaBodov.vytvorXLS2(poberatelia,pociatocnyStav,bodyZaPredaj,bodyIne,konecnyStav,nadpis);
+        XlsStatistikaBodov.vytvorXLS2(poberatelia,pociatocnyStav,bodyZaPredaj,bodyIne,konecnyStav,nadpis,poberateliaVelkoskladu);
 
     }
 

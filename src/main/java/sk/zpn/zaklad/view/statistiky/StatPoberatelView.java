@@ -1,21 +1,13 @@
 package sk.zpn.zaklad.view.statistiky;
 
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
-import com.vaadin.ui.renderers.NumberRenderer;
-import org.vaadin.addons.filteringgrid.FilterGrid;
-import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.StatistikaBodov;
-import sk.zpn.nastroje.XlsStatistikaBodov;
 import sk.zpn.zaklad.model.StatPoberatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,8 +22,9 @@ public class StatPoberatelView extends VerticalLayout implements View {
     DateField dfDo;
     LocalDate dod;
     LocalDate ddo;
-    public StatPoberatelView() {
-
+    Firma velkosklad;
+    public StatPoberatelView(Firma velkosklad) {
+        this.velkosklad=velkosklad;
         HorizontalLayout hornyFilter =new HorizontalLayout();
 
 
@@ -84,23 +77,9 @@ public class StatPoberatelView extends VerticalLayout implements View {
     }
 
     private void aktivujFilter(Button.ClickEvent clickEvent) {
-        aktivujFilter2();
-        //btnAktivujFilter.setEnabled(false);
+        StatPoberatelNastroje.bilanciaPoberatelov(dfOd.getValue(), dfDo.getValue(),velkosklad);
+
         }
-
-    private void aktivujFilter(){
-        //povodne
-        if (statList!=null)
-            statList.clear();
-        statList = StatPoberatelNastroje.load(dfOd.getValue(), dfDo.getValue());
-
-    }
-
-    private void aktivujFilter2(){
-        StatPoberatelNastroje.load2(dfOd.getValue(), dfDo.getValue());
-    }
-
-
 
 
 

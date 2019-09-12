@@ -1,15 +1,19 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.jsoup.helper.StringUtil;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
+import sk.zpn.nastroje.NastrojePoli;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class PoberatelNastroje {
@@ -70,11 +74,20 @@ public class PoberatelNastroje {
         return poberatel.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
     }
 
-    public static Poberatel overPoberatela(String kod){
+    public static Poberatel overPoberatela(String kod, String pass){
         logger.info("Poberatel query by kod" + kod);
-        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        TypedQuery<Poberatel> q = em.createNamedQuery("Poberatel.getPodlaKodu", Poberatel.class);
-        q.setParameter("kod", kod);
+
+        TypedQuery<Poberatel> q;
+        if (StringUtils.contains(kod,'@')) {
+            EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+             q = em.createNamedQuery("Poberatel.getPodlaEmailuAhesla", Poberatel.class);
+        }
+        else {
+            EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+            q = em.createNamedQuery("Poberatel.getPodlaKoduAhesla", Poberatel.class);
+        }
+        q.setParameter("kod", StringUtils.trim(kod));
+        q.setParameter("heslo", StringUtils.trim(pass));
         List<Poberatel> poberatel = q.getResultList();
         if (poberatel.size()==1){
             VaadinSession.getCurrent().setAttribute("id_uzivatela", poberatel.get(0).getId());
@@ -113,5 +126,27 @@ public class PoberatelNastroje {
     }
 
 
+    public static Map<String, Double> vratPoberatelovVelkoskladu(Firma velkosklad) {
+        EntityManager em1;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        em1 = emf.createEntityManager();
+        String sql="select CAST(p.poberatel_id as text)as kluc ,0 as hodnota from polozkydokladu as p  " +
+                "join doklady as d on d.id=p.doklad_id  " +
+                "join firmy as f on f.id=d.firma_id " +
+                "where  f.id=? " +
+                "group by p.poberatel_id ";
 
+
+        Query query = em1.createNativeQuery(sql);
+
+        query.setParameter(1,velkosklad.getId());
+
+        List result1 = query.getResultList();
+        Map<String, Double> vysledok = NastrojePoli.<String, Double>prerobListNaMapu2(result1);
+        emf.close();
+
+        return vysledok;
+
+
+    }
 }

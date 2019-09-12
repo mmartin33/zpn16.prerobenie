@@ -42,6 +42,7 @@ public class MyUI extends UI {
     public boolean jeSpravca;
     LoginView login;
     VitajteView  vitajteView;
+    StatPrePoberatelovView  statPrePoberatelovView;
     UzivateliaView uzivateliaView;
     ProduktyView produktyView;
     Pripojenie p;
@@ -54,10 +55,12 @@ public class MyUI extends UI {
 
         login = new LoginView();
         vitajteView = new VitajteView(navigator);
+        statPrePoberatelovView = new StatPrePoberatelovView(navigator);
         uzivateliaView=new UzivateliaView();
         parametre=new ParametreView();
 
         navigator.addView(VitajteView.NAME, vitajteView);
+        navigator.addView(StatPrePoberatelovView.NAME, statPrePoberatelovView);
         navigator.addView(UzivateliaView.NAME, uzivateliaView);
         navigator.addView(LoginView.NAME, login);
         navigator.addView(ParametreView.NAME, parametre);
@@ -89,7 +92,7 @@ public class MyUI extends UI {
 
             }
             else {
-                Poberatel poberatel = PoberatelNastroje.overPoberatela(name);
+                Poberatel poberatel = PoberatelNastroje.overPoberatela(name,pass);
                 if (poberatel != null)
                     navigator.navigateTo(StatPrePoberatelovView.NAME);
                 else
