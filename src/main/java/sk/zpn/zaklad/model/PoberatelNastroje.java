@@ -8,6 +8,7 @@ import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
 import sk.zpn.nastroje.NastrojePoli;
+import sk.zpn.nastroje.RandomString;
 
 import javax.persistence.*;
 import java.math.BigInteger;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PoberatelNastroje {
 
@@ -51,9 +53,14 @@ public class PoberatelNastroje {
     public static Poberatel ulozPoberatela(Poberatel f){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
+        RandomString gen =new RandomString(8, ThreadLocalRandom.current());
         if (f.isNew()) {
             f.setId((long) 0);
             f.setKedy(new Date());
+            if (StringUtils.isEmpty(f.getKod()))
+                    f.setKod(gen.nextString());
+            if (StringUtils.isEmpty(f.getHeslo()))
+                    f.setHeslo(gen.nextString());
             f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
             em.persist(f);
         }

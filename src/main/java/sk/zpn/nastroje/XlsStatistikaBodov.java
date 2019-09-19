@@ -89,19 +89,33 @@ public class XlsStatistikaBodov {
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("Poberateľ"));
 
+
         cel = row.createCell(2);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("počiatočný stav"));
+        cel.setCellValue(("prihlasovací kód"));
 
         cel = row.createCell(3);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("Body za predaj"));
+        cel.setCellValue(("prihlasovací email"));
 
         cel = row.createCell(4);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("Body iné"));
+        cel.setCellValue(("Heslo"));
+
 
         cel = row.createCell(5);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("počiatočný stav"));
+
+        cel = row.createCell(6);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("Body za predaj"));
+
+        cel = row.createCell(7);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("Body iné"));
+
+        cel = row.createCell(8);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("Konečný stav"));
 
@@ -126,6 +140,17 @@ public class XlsStatistikaBodov {
             bunka.setCellStyle(oramovanieBold());
             bunka.setCellValue((String) p.getMeno());
 
+            bunka = row.createCell(colNum++);
+            bunka.setCellStyle(oramovanieBold());
+            bunka.setCellValue((String) p.getKod());
+
+            bunka = row.createCell(colNum++);
+            bunka.setCellStyle(oramovanieBold());
+            bunka.setCellValue((String) p.getEmail());
+
+            bunka = row.createCell(colNum++);
+            bunka.setCellStyle(oramovanieBold());
+            bunka.setCellValue((String) p.getHeslo());
 
             riadkovaHodnota= BigDecimal.ZERO;
 

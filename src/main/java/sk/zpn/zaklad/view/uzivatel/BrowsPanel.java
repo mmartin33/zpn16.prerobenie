@@ -8,6 +8,7 @@ import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.StatusUzivatela;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
+import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
     public Button btnNovy;
+
 
 
     public BrowsPanel(List<Uzivatel> uzivatelList) {
@@ -60,15 +62,25 @@ public class BrowsPanel extends VerticalLayout {
         btnSpat.addClickListener(clickEvent ->
                 UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
         );
+
+        Button btnGenerujMenaAHesla=new Button("Generuj prístupy a heslá", VaadinIcons.ARROW_BACKWARD);
+        btnGenerujMenaAHesla.addClickListener(clickEvent ->
+                generujMenaAHesla()
+        );
         HorizontalLayout tlacitkovy=new HorizontalLayout();
         btnNovy=new Button("Novy",VaadinIcons.FILE_O);
 
         tlacitkovy.addComponent(btnNovy);
+        tlacitkovy.addComponent(btnGenerujMenaAHesla);
         tlacitkovy.addComponent(btnSpat);//666
 
         this.addComponent(new Label("Prehľad užívateľov"));
         this.addComponents(grid);
         this.addComponent(tlacitkovy);
+    }
+
+    private void generujMenaAHesla() {
+        UzivatelNastroje.generujNoveMenaAHesla();
     }
 
 
