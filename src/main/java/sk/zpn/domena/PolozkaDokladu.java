@@ -32,7 +32,7 @@ public class PolozkaDokladu extends Vseobecne {
     private Prevadzka prevadzka;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = true)
     private Produkt produkt;
 
     private BigDecimal body;

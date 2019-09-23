@@ -157,6 +157,7 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     }
 
     public void rezimVelkoskladu() {
+        this.editacnyForm.zakazNepotrebne();
         if (velkosklad!=null) {
 
             this.editacnyForm.rezimVelkoskladu();

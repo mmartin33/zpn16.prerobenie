@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 
 public enum TypDokladu {
     DAVKA("Dávka"),
-    VYDAJ_BONUSU("Výdaj bonusu"),
+    ODMENY("Odmeny"),
+    PREVOD("Prevod"),
+    REGISTRACIA("Registrácia"),
     INTERNY_DOKLAD("Interný doklad");
 
     private String displayValue;
@@ -22,7 +24,9 @@ public enum TypDokladu {
     public static TypDokladu fromDisplayName(String displayName) {
         switch (displayName) {
             case "Dávka": return DAVKA;
-            case "Výdaj bonusu": return VYDAJ_BONUSU;
+            case "Odmeny": return ODMENY;
+            case "Prevod": return PREVOD;
+            case "Registrácia": return REGISTRACIA;
             case "Interný doklad": return INTERNY_DOKLAD;
             default: throw new IllegalArgumentException(
                     String.format("Typ dokladu je nepodporovany: %s", displayName));

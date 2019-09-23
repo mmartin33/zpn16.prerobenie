@@ -32,10 +32,21 @@ public class PoberatelNastroje {
 
         return u;
     }
+    public static List<Poberatel> zoznamPoberatelovPodlaMena(String meno){
+        List<Poberatel> u = null;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
+        TypedQuery<Poberatel> q = em.createNamedQuery("Poberatel.getPodlaMenaLike", Poberatel.class).
+                setParameter("meno","%"+meno+"%");
+
+        u =  q.getResultList();
+
+        return u;
+    }
 
     public static Poberatel ulozPrvehoPoberatela(Prevadzka prevadzka) {
         Poberatel poberatel=new Poberatel();
-        poberatel.setMeno(prevadzka.getNazov());
+        poberatel.setMeno("NR "+prevadzka.getNazov());
 
         ulozPoberatela(poberatel);
 //        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
@@ -156,4 +167,5 @@ public class PoberatelNastroje {
 
 
     }
+
 }

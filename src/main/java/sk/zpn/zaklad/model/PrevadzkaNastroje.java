@@ -2,10 +2,12 @@ package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
 import sk.zpn.domena.Firma;
+import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -165,6 +167,29 @@ public class PrevadzkaNastroje {
         return (Prevadzka) results.get(0);
 
     }
+    public static Prevadzka prvaPrevadzkaPoberatela(Poberatel poberatel) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Prevadzka> q = em.createNamedQuery("Prevadzka.getPodlaMenaPoberatela", Prevadzka.class)
+                .setParameter("meno", poberatel.getMeno());
 
 
+        List results = q.getResultList();
+        if (results.isEmpty()) return null;
+        return (Prevadzka) results.get(0);
+
+
+    }
+
+
+    public static List<Prevadzka> zoznamPrevadzokPodlaMena(String query) {
+        List<Prevadzka> u = null;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Prevadzka> q = em.createNamedQuery("Prevadzka.getPodlaNazvuLike", Prevadzka.class).
+                setParameter("nazov","%"+query+"%");
+
+        u =  q.getResultList();
+
+        return u;
+
+    }
 }

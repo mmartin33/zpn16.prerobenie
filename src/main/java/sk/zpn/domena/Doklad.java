@@ -106,6 +106,14 @@ public class Doklad extends Vseobecne {
 
     public void setDatum(Date datum) {this.datum = datum; }
 
+    public boolean jeDokladDavka(){
+        if (this.getTypDokladu()==TypDokladu.DAVKA || this.getTypDokladu()==TypDokladu.INTERNY_DOKLAD)
+            return true;
+        else
+            return false;
+
+    }
+
     public String getPoznamka() {return poznamka;}
 
     public void setPoznamka(String poznamka) {this.poznamka = poznamka;}

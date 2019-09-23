@@ -38,8 +38,12 @@ public class XlsStatistikaBodov {
                                   Map<String, Double> pociatocnyStav,
                                   Map<String, Double> bodyZaPredaj,
                                   Map<String, Double> bodyIne,
-                                  Map<String, Double> konecnyStav, String nadpis,
-                                  Map<String, Double> poberateliaVelkoskladu) {
+                                  Map<String, Double> konecnyStav,
+                                  String nadpis,
+                                  Map<String, Double> poberateliaVelkoskladu,
+                                  Map<String, Double> bodyRegistracia,
+                                  Map<String, Double> bodyOdmeny,
+                                  Map<String, Double> bodyPrevod) {
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy ' ' HH:mm:ss z");
@@ -105,19 +109,33 @@ public class XlsStatistikaBodov {
 
         cel = row.createCell(5);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("počiatočný stav"));
+        cel.setCellValue(("počiatočný \r\n stav"));
 
         cel = row.createCell(6);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("Body za predaj"));
+        cel.setCellValue(("body za \r\n predaj"));
 
         cel = row.createCell(7);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("Body iné"));
+        cel.setCellValue(("iné"));
 
         cel = row.createCell(8);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("Konečný stav"));
+        cel.setCellValue(("odpočty \n bodov za \n odmeny"));
+
+        cel = row.createCell(9);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("prevody \n bodov"));
+
+
+        cel = row.createCell(10);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("body za \n registraciu"));
+
+
+        cel = row.createCell(11);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("Konečný \r\n stav"));
 
 
         Poberatel poberatel=null;
@@ -157,32 +175,55 @@ public class XlsStatistikaBodov {
             Double hodnotaD= Double.valueOf(0);
 
 
-
+            //PS
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
             hodnotaD=(((pociatocnyStav.get(kluc) == null) ? Double.valueOf(0): pociatocnyStav.get(kluc)));
             bunka.setCellValue(hodnotaD);
             riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
 
+            //predaj
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
-            //hodnota= new BigDecimal(1);
             hodnotaD=(((bodyZaPredaj.get(kluc) == null) ? Double.valueOf(0) : bodyZaPredaj.get(kluc)));
-
             bunka.setCellValue(hodnotaD);
             riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
 
+            //ine
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
             hodnotaD=(((bodyIne.get(kluc) == null) ? Double.valueOf(0) : bodyIne.get(kluc)));
-            //hodnota= new BigDecimal(2);
             bunka.setCellValue(hodnotaD);
             riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
+
+            //odmeny
+            bunka = row.createCell(colNum++);
+            bunka.setCellStyle(oramovane());
+            hodnotaD=(((bodyOdmeny.get(kluc) == null) ? Double.valueOf(0) : bodyOdmeny.get(kluc)));
+            bunka.setCellValue(hodnotaD);
+            riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
+
+            //prevod
+            bunka = row.createCell(colNum++);
+            bunka.setCellStyle(oramovane());
+            hodnotaD=(((bodyPrevod.get(kluc) == null) ? Double.valueOf(0) : bodyPrevod.get(kluc)));
+            bunka.setCellValue(hodnotaD);
+            riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
+
+            //registracia
+
+
+            bunka = row.createCell(colNum++);
+            bunka.setCellStyle(oramovane());
+            hodnotaD=(((bodyRegistracia.get(kluc) == null) ? Double.valueOf(0) : bodyRegistracia.get(kluc)));
+            bunka.setCellValue(hodnotaD);
+            riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
+
+
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
             hodnotaD=(((konecnyStav.get(kluc) == null) ? Double.valueOf(0) : konecnyStav.get(kluc)));
-            //hodnota= new BigDecimal(3);
             bunka.setCellValue(hodnotaD);
             riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
 

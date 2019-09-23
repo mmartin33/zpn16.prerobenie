@@ -112,9 +112,9 @@ public class VitajteView extends MojView {
         };
         MenuBar.Command odhlasenie = new MenuBar.Command() {
             public void menuSelected(MenuItem selectedItem) {
-                UI.getCurrent().getNavigator().navigateTo(LoginView.NAME);
                 VaadinSession.getCurrent().setAttribute("id_uzivatela", null);
                 VaadinSession.getCurrent().setAttribute("meno", null);
+                UI.getCurrent().getNavigator().navigateTo(LoginView.NAME);
             }
         };
         MenuBar.Command sp_admin = new MenuBar.Command() {
@@ -193,7 +193,7 @@ public class VitajteView extends MojView {
     @Override
     protected void init() {
         addStyleName("welcome");
-        setTitle("Vitajte", "Ste prihlásený ako " + VaadinSession.getCurrent().getAttribute("meno") + " >>verzia;190626<<");
+        setTitle("Vitajte", "Ste prihlásený ako " + VaadinSession.getCurrent().getAttribute("meno") + " >>verzia;190923<<");
         if (!UzivatelNastroje.TypUzivatela().isPresent()) {
             menuAdmin.setVisible(false);
             menuSpravcu.setVisible(false);
