@@ -29,6 +29,7 @@ public class BrowsPanel extends VerticalLayout {
     PolozkyDokladuView polozkyDokladuView;
     private Firma velkosklad;
     public Button btnNovy;
+    protected Button btnZmaz;
     public Button btnPolozky;
 
 
@@ -98,12 +99,20 @@ public class BrowsPanel extends VerticalLayout {
         HorizontalLayout tlacitkovy = new HorizontalLayout();
         btnNovy = new Button("Novy", VaadinIcons.FILE_O);
 
-        btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         btnNovy.setClickShortcut(ShortcutAction.KeyCode.N,
                 new int[]{ShortcutAction.ModifierKey.ALT});
 
-        if (!jeRezimVelkoskladu())
+        btnZmaz = new Button("Zmaž",  VaadinIcons.CLOSE_CIRCLE);
+
+        btnZmaz.setClickShortcut(ShortcutAction.KeyCode.Z,
+                new int[]{ShortcutAction.ModifierKey.ALT});
+
+        btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+        if (!jeRezimVelkoskladu()) {
             tlacitkovy.addComponent(btnNovy);
+            tlacitkovy.addComponent(btnZmaz);
+
+        }
 
         tlacitkovy.addComponent(btnPolozky);
         tlacitkovy.addComponent(btnSpat);//666

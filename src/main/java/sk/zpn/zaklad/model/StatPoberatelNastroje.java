@@ -106,7 +106,7 @@ public class StatPoberatelNastroje {
                 " join doklady as d on d.id=p.doklad_id " +
                 " where date(d.datum)<=date('"+ddo+"') AND d.stavdokladu='POTVRDENY'" +
                 "    group by CAST(p.poberatel_id as text) " +
-                "    having sum(p.body)>0 ";
+                "    having sum(p.body)<>0 ";
 
         Query query = em1.createNativeQuery(sql);
 
@@ -131,7 +131,7 @@ public class StatPoberatelNastroje {
                 " and d.typdokladu='INTERNY_DOKLAD' " +
                 " and d.stavdokladu='POTVRDENY' " +
                 " group by CAST(p.poberatel_id as text) " +
-                " having sum(p.body)>0";
+                " having sum(p.body)<>0";
 
         Query query = em1.createNativeQuery(sql);
 
@@ -155,7 +155,7 @@ public class StatPoberatelNastroje {
                 " and d.typdokladu='DAVKA' " +
                 " and d.stavdokladu='POTVRDENY' " +
                 " group by CAST(p.poberatel_id as text)  " +
-                " having sum(p.body)>0";
+                " having sum(p.body)<>0";
 //        String sql="select CAST(p.poberatel_id as text)as kluc ,sum(p.body) as hodnota from polozkydokladu as p " +
 //                " join doklady as d on d.id=p.doklad_id " +
 //                " where date(d.datum)>=date('"+dod+"') and date(d.datum)<=date('"+ddo+"') " +
@@ -185,7 +185,7 @@ public class StatPoberatelNastroje {
                 " join doklady as d on d.id=p.doklad_id " +
                 " where date(d.datum)<date('"+dod+"') AND d.stavdokladu='POTVRDENY'" +
                 "    group by CAST(p.poberatel_id as text) " +
-                "    having sum(p.body)>0 ";
+                "    having sum(p.body)<>0 ";
 
 //        result1= em1.createNativeQuery(sql,Zaznam.class).getResultList();
 //        vysledok= NastrojePoli.prerobListNaMapu(result1);

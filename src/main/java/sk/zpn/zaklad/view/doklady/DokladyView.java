@@ -2,6 +2,7 @@ package sk.zpn.zaklad.view.doklady;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Doklad;
@@ -47,7 +48,7 @@ public class DokladyView extends HorizontalLayout implements View {
     private void configureComponents() {
 
         editacnyForm.setDokladyView(this);
-
+        browsPanel.btnZmaz.addClickListener(this::delete);
         browsPanel.btnNovy.addClickListener(clickEvent -> {
             deselect();
             Doklad d=new Doklad();
@@ -60,6 +61,11 @@ public class DokladyView extends HorizontalLayout implements View {
         browsPanel.addSelectionListener(editacnyForm::edit);
         refreshDokladov();
     }
+
+    private void delete(Button.ClickEvent clickEvent) {
+        editacnyForm.delete();
+    }
+
 
     public void refreshDokladov() {
             browsPanel.refresh();

@@ -131,7 +131,7 @@ public class EditacnyForm extends VerticalLayout {
     btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
     btnUloz.addClickListener(this::save);
 
-    btnZmaz.addClickListener(this::delete);
+//    btnZmaz.addClickListener(this::delete);
 
 
 }
@@ -165,12 +165,16 @@ public class EditacnyForm extends VerticalLayout {
 
     }
 
-    public void delete(Button.ClickEvent event) {
+    public void delete() {
+
         if (!Optional.ofNullable(dokladEditovany).isPresent()) {
             return;
         }
 
-        ConfirmDialog.show(UI.getCurrent(), "Odstránenie dokladu", "Naozaj si prajete odstrániť doklad "+dokladEditovany.getCisloDokladu()+"?",
+        int pocetPoloziek=DokladyNastroje.pocetPoloziek(dokladEditovany);
+
+        ConfirmDialog.show(UI.getCurrent(), "Odstránenie dokladu", "Naozaj si prajete odstrániť doklad "+dokladEditovany.getCisloDokladu()+ "?"+
+                        (pocetPoloziek==0?"":"POZOR doklad obsahuje položky!!!!!!!"),
                 "Áno", "Nie", new ConfirmDialog.Listener() {
 
                     public void onClose(ConfirmDialog dialog) {

@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.doklady.polozkaDokladu;
 
+
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
