@@ -39,7 +39,7 @@ public class Html {
     }
 
     public static String pc(String content, String clazz) {
-        // TODO Auto-generated method stub
+
         return "<p class='" + clazz + "'>" + content + "</p>";
     }
 

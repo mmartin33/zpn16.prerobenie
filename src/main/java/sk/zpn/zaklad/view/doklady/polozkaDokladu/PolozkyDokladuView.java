@@ -7,6 +7,7 @@ import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Doklad;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.PolozkaDokladu;
+import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 
 import java.util.List;
@@ -154,6 +155,7 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         rezimVelkoskladu();
+        browsPanel.aktualizujInfoPanle(DokladyNastroje.sumaBodov(this.doklad));
     }
 
     public void rezimVelkoskladu() {
@@ -162,6 +164,10 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
 
             this.editacnyForm.rezimVelkoskladu();
         }
+    }
+
+    public void aktualizujInfo() {
+        browsPanel.aktualizujInfoPanle(DokladyNastroje.sumaBodov(this.doklad));
     }
 }
 

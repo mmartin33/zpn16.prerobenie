@@ -43,7 +43,8 @@ public class XlsStatistikaBodov {
                                   Map<String, Double> poberateliaVelkoskladu,
                                   Map<String, Double> bodyRegistracia,
                                   Map<String, Double> bodyOdmeny,
-                                  Map<String, Double> bodyPrevod) {
+                                  Map<String, Double> bodyPrevod,
+                                  Map<String, String> icaFiriem) {
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy ' ' HH:mm:ss z");
@@ -88,52 +89,56 @@ public class XlsStatistikaBodov {
         row.setHeight((short)-1);
         row.setHeight((short)700);
 
-
-        cel = row.createCell(1);
+        colNum=1;
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("Poberateľ"));
 
 
-        cel = row.createCell(2);
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("prihlasovací kód"));
+        cel.setCellValue(("IČO+názov"));
 
-        cel = row.createCell(3);
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("prihlasovací email"));
+        cel.setCellValue(("prihlasovací \r\n kód"));
 
-        cel = row.createCell(4);
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("prihlasovací \r\n email"));
+
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("Heslo"));
 
 
-        cel = row.createCell(5);
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("počiatočný \r\n stav"));
 
-        cel = row.createCell(6);
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("body za \r\n predaj"));
 
-        cel = row.createCell(7);
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("iné"));
 
-        cel = row.createCell(8);
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("odpočty \n bodov za \n odmeny"));
 
-        cel = row.createCell(9);
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("prevody \n bodov"));
 
 
-        cel = row.createCell(10);
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("body za \n registraciu"));
 
 
-        cel = row.createCell(11);
+        cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("Konečný \r\n stav"));
 
@@ -154,9 +159,19 @@ public class XlsStatistikaBodov {
 
             row = sheet.createRow(rowNum);
 
+
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
             bunka.setCellValue((String) p.getMeno());
+
+
+            bunka = row.createCell(colNum++);
+            bunka.setCellStyle(oramovanieBold());
+
+            bunka.setCellValue((((icaFiriem.get(kluc) == null) ? Double.valueOf(0): icaFiriem.get(kluc))).toString());
+
+
+
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());

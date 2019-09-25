@@ -3,6 +3,7 @@ package sk.zpn.zaklad.view.doklady.polozkaDokladu;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.MultiSelectionModel;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
@@ -11,6 +12,7 @@ import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.PolozkaDokladu;
+import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
 
@@ -46,7 +48,7 @@ public class BrowsPanel extends VerticalLayout {
         gl.setRowExpandRatio(2, 0.02f);
         gl.setRowExpandRatio(3, 0.02f);
         infoPanel=new HorizontalLayout();
-        lblInfopanelu= new Label();
+        lblInfopanelu= new Label("", ContentMode.HTML);
         infoPanel.addComponent(lblInfopanelu);
 
         this.polozkyDokladuView=pdv;
@@ -121,7 +123,7 @@ public class BrowsPanel extends VerticalLayout {
         gl.addComponent(tlacitkovy);
         gl.setComponentAlignment(tlacitkovy,Alignment.BOTTOM_LEFT);
         gl.setVisible(true);
-        aktualizujInfoPanle(0);
+//        aktualizujInfoPanle(0);
         grid.setSizeFull();
         this.setSizeFull();
         this.addComponentsAndExpand(gl);
@@ -134,8 +136,14 @@ public class BrowsPanel extends VerticalLayout {
     }
 
 
-    private void aktualizujInfoPanle(int pocet){
-        lblInfopanelu.setValue("Počet všetkých položiek: "+polozkyDokladuList.size());
+    public void aktualizujInfoPanle(int pocetBodov){
+
+        String text="<font size=\"3\" color=\"blue\">Počet všetkých položiek: </font> ";
+        text=text+"<font size=\"3\" color=\"green\">"+ polozkyDokladuList.size()+ "</font> ";
+        text=text+"<font size=\"3\" color=\"blue\">  súčet bodov: ";
+        text=text+"<font size=\"3\" color=\"green\">"+ pocetBodov+ "</font> ";
+
+        lblInfopanelu.setValue(text);
     }
 
     private void zmaz() {
@@ -156,6 +164,7 @@ public class BrowsPanel extends VerticalLayout {
                                 polozkyDokladuList.remove(o);
                             }
                             grid.getDataProvider().refreshAll();
+                            aktualizujInfoPanle(DokladyNastroje.sumaBodov(polozkyDokladuView.getDoklad()));
 
                         }
                     }

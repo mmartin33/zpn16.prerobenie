@@ -147,6 +147,23 @@ public class DokladyNastroje {
         else
             return 0;
     }
+    public static int sumaBodov(Doklad doklad) {
+
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        String sql;
+
+        if (doklad == null)
+            return 0;
+        sql = "SELECT  sum(body) FROM  polozkydokladu where doklad_id=?";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter(1, doklad.getId());
+        Integer result = ((Double) query.getSingleResult()).intValue();
+
+        if (result != null)
+            return result;
+        else
+            return 0;
+    }
 
     public static boolean vymazVsetkyPolozky(Doklad doklad) {
 

@@ -249,6 +249,8 @@ public class EditacnyForm extends VerticalLayout {
             }
             polozkyDokladyView.refreshPoloziekDokladov();
             polozkyDokladyView.selectPolozkuDokladu(ulozenaPolozka);
+            polozkyDokladyView.aktualizujInfo();
+
 
         }
 

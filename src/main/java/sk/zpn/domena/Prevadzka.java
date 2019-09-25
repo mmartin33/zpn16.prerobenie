@@ -1,5 +1,7 @@
 package sk.zpn.domena;
 
+import org.apache.commons.lang.StringUtils;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -92,6 +94,15 @@ public class Prevadzka extends Vseobecne {
             return "";
         else
             return firma.getNazov();
+    }
+    public String getPrevadzkaPopisne() {
+        String text=new String();
+        if (firma != null)
+            text=text+" "+(StringUtils.isEmpty(firma.getIco())?"":firma.getIco());
+        text=text+" "+(StringUtils.isEmpty(this.getNazov())?"":this.getNazov());
+        text=text+" "+(StringUtils.isEmpty(this.getMesto())?"":firma.getMesto());
+        text=text+" "+(StringUtils.isEmpty(this.getUlica())?"":firma.getUlica());
+        return text;
     }
     public Long getFirmaID() {
         if (firma == null)

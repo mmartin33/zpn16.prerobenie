@@ -11,7 +11,7 @@ public final class FirmySlovenskoDigital {
         public List<FirmaRegistra> nacitanieDat(String nazovFirmy, String ico, boolean firmaObsahuje)  {
 
             if(!((nazovFirmy!=null&&nazovFirmy.length()>2)||ico!=null))
-                //todo sem nejaky dialog
+
                 System.out.println("Nie sú zadané dostatočné vyhľadávacie kritériá. Zadajte IČO alebo časť názvu firmy");
 
             List<FirmaRegistra> firmy=new ArrayList<FirmaRegistra>();

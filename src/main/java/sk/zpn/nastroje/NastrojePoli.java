@@ -19,6 +19,17 @@ public abstract class NastrojePoli {
         }
         return map;
     }
+    public static Map<String, String> prerobListNaMapu3(List<Object[]> list) {
+        Map<String, String> map = Maps.newHashMap();
+        String text;
+        for (Object[] i : list) {
+                text=(map.get((String) i[0])!=null?map.get((String) i[0]):"");
+
+                map.put((String) i[0], text+"\r\n"+(String) i[1]);
+
+        }
+        return map;
+    }
     public static <K, V> Map<K, V> prerobListNaMapu2(List<Object[]> list) {
         Map<K, V> map = Maps.newHashMap();
         int hodnota;

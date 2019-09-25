@@ -7,6 +7,7 @@ import sk.zpn.domena.Produkt;
 import sk.zpn.domena.StatistikaBodov;
 import sk.zpn.domena.statistiky.Zaznam;
 import sk.zpn.domena.statistiky.ZoznamBodov;
+import sk.zpn.domena.statistiky.ZoznamPohybov;
 import sk.zpn.nastroje.NastrojePoli;
 import sk.zpn.nastroje.XlsStatistikaBodov;
 import sk.zpn.nastroje.XlsStatistikaBodovDodavatelProdukt;
@@ -87,6 +88,7 @@ public class StatPoberatelNastroje {
         Map<String, Double> bodyOdmeny = Maps.newHashMap();
         Map<String, Double> bodyPrevod = Maps.newHashMap();
         Map<String, Double> konecnyStav = Maps.newHashMap();
+        Map<String, String> icaFiriem = Maps.newHashMap();
         Map<String, Double> poberateliaVelkoskladu = Maps.newHashMap();
         pociatocnyStav = vratPociatocnyStav(dod, ddo);
         bodyZaPredaj = vratBodyZaPredaj(dod, ddo);
@@ -95,6 +97,7 @@ public class StatPoberatelNastroje {
         bodyOdmeny = vratBodyOdmeny(dod, ddo);
         bodyPrevod = vratBodyPrevod(dod, ddo);
         konecnyStav = vratKonecnyStav(dod, ddo);
+        icaFiriem = vratIcaFiriem(dod, ddo);
         if (velkosklad != null)
             poberateliaVelkoskladu = PoberatelNastroje.vratPoberatelovVelkoskladu(velkosklad);
 
@@ -109,7 +112,32 @@ public class StatPoberatelNastroje {
                                     poberateliaVelkoskladu,
                                     bodyRegistracia,
                                     bodyOdmeny,
-                                    bodyPrevod);
+                                    bodyPrevod,
+                                    icaFiriem);
+
+    }
+
+    private static Map<String, String> vratIcaFiriem(LocalDate dod, LocalDate ddo) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql = "select CAST(p.poberatel_id as text) as kluc ,firm.ico ||' '||firm.nazov    as hodnota from polozkydokladu as p " +
+                " join doklady as d on d.id=p.doklad_id " +
+                " join prevadzky as prev on prev.id=p.prevadzka_id " +
+                " join firmy as firm on firm.id=prev.firma_id " +
+                " where d.datum>=? and d.datum<=? " +
+                " and d.typdokladu='DAVKA' " +
+                " and d.stavdokladu='POTVRDENY' " +
+                " group by CAST(p.poberatel_id as text),firm.ico ||' '||firm.nazov  " ;
+
+        Query query = em1.createNativeQuery(sql);
+        query.setParameter(1, dod);
+        query.setParameter(2, ddo);
+
+        List result1 = query.getResultList();
+        Map<String, String> vysledok = NastrojePoli.<String, Double>prerobListNaMapu3(result1);
+        emf.close();
+        return vysledok;
 
     }
 
@@ -279,5 +307,12 @@ public class StatPoberatelNastroje {
         return vysledok;
 
 
+    }
+
+    public static List<ZoznamPohybov> zoznamPohybovZaPoberatela(Long id) {
+
+
+        //todo  dopisa cele telo
+        return null;
     }
 }
