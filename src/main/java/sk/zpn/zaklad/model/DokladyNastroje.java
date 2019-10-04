@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.model;
 
+import com.google.common.collect.Maps;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
 import org.apache.commons.codec.language.bm.Lang;
@@ -181,11 +182,17 @@ public class DokladyNastroje {
         return true;
     }
 
-    public static VysledokImportu zalozDokladovuDavku(Map<String, ZaznamCsv> zaznam, String file, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) {
+    public static VysledokImportu zalozDokladovuDavku(Davka davka, String file, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) {
 
-
+        Map<String, ZaznamCsv> zaznam;
+        Map<String, Integer> bodyNaIco ;
+        Integer mesacnySucetBodov;
+        boolean zalozitFirmu;
+        zaznam=davka.getPolozky();
+        bodyNaIco=davka.getBodyNaIco();
         List<ChybaImportu> chyby = new ArrayList<>();
-        ;
+        Integer bodovaHranicaPreZakladanieNovejFirmy=ParametreNastroje.nacitajParametre().getMesacnaHranicaBodovImportu();
+
         VysledokImportu vysledok = new VysledokImportu();
         progressBarZPN.nadstavNadpis("Zhranie dokladu");
         progressBarZPN.nadstavspustenie(true);
@@ -228,7 +235,10 @@ public class DokladyNastroje {
             progressBarZPN.setProgresBarValue(new BigDecimal(i).divide(new BigDecimal(zaznam.size()), 2, BigDecimal.ROUND_HALF_UP).floatValue());
             if (new BigDecimal(i).remainder(new BigDecimal(100)).compareTo(BigDecimal.ZERO) == 0)
                 System.out.println("Vytvaranie zaznamov" + i);
-            NavratovaHodnota navratovahodnota = PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z, hlavickaDokladu);
+
+            mesacnySucetBodov = bodyNaIco.get(z.getIco());
+            zalozitFirmu = (mesacnySucetBodov >= bodovaHranicaPreZakladanieNovejFirmy ? true : false);
+            NavratovaHodnota navratovahodnota = PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z, hlavickaDokladu,zalozitFirmu);
 
             //PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
             if (navratovahodnota.getPolozkaDokladu() != null)
@@ -248,17 +258,28 @@ public class DokladyNastroje {
                         z.getKit(),
                         "Nepodarilo sa zalozit polozku dokladu (firma-prazdne ICO)",
                         z.getMtzDoklad()));
+            else if (navratovahodnota.getChyba() == NavratovaHodnota.MALO_BODOV)
+                chyby.add(new ChybaImportu(
+                        z.getNazvFirmy(),
+                        z.getIco(),
+                        z.getKit(),
+                        "Nepodarilo sa zalozit polozku dokladu (firma-odobrala malo bodov pre registraciu)",
+                        z.getMtzDoklad()));
 
         }
         System.out.println("Koniec vytvarania zaznamov" + i);
         progressBarZPN.koniec();
         DokladyNastroje.ulozDokladDavky(hlavickaDokladu, polozkyDokladu, progressBarZPN);
-
+        DokladyNastroje.vymazPodHranicou(hlavickaDokladu,ParametreNastroje.nacitajParametre().getMesacnaHranicaBodovImportu());
         vysledok.setDoklad(hlavickaDokladu);
         vysledok.setPolozky(polozkyDokladu);
         vysledok.setChyby(chyby);
         return vysledok;
 
+
+    }
+
+    private static void vymazPodHranicou(Doklad hlavickaDokladu, Integer mesacnaHranicaBodovImportu) {
 
     }
 

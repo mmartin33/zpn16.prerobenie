@@ -168,7 +168,7 @@ public class XlsStatistikaBodov {
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
 
-            bunka.setCellValue((((icaFiriem.get(kluc) == null) ? Double.valueOf(0): icaFiriem.get(kluc))).toString());
+            bunka.setCellValue((((icaFiriem.get(kluc) == null) ? "": icaFiriem.get(kluc))).toString());
 
 
 

@@ -1,6 +1,5 @@
 package sk.zpn.zaklad.view.nacitanieCSV;
 
-import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
 import sk.zpn.domena.*;
 import sk.zpn.domena.importy.ChybaImportu;
@@ -16,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.EventListener;
 import java.util.List;
 
 class ZalozDokladovuDavkuThread extends Thread {
@@ -45,7 +43,7 @@ class ZalozDokladovuDavkuThread extends Thread {
         progressBarZPN.zobraz();
         //ui.access()
         Doklad hlavickaDokladu=new Doklad();
-
+        boolean zalozitFirmu=false;
         String noveCisloDokladu = DokladyNastroje.noveCisloDokladu(null);
 
 
@@ -82,7 +80,8 @@ class ZalozDokladovuDavkuThread extends Thread {
            // progressBarZPN.posun(new BigDecimal(zaznam.size()),new BigDecimal(i));
             progressBarZPN.setProgresBarValue(new BigDecimal(i).divide(new BigDecimal(zaznam.size()),2,BigDecimal.ROUND_HALF_UP).floatValue());
 
-            NavratovaHodnota navratovahodnota=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
+
+            NavratovaHodnota navratovahodnota=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu, zalozitFirmu);
 
             //PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
             if (navratovahodnota.getPolozkaDokladu()!=null)

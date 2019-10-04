@@ -2,6 +2,8 @@ package sk.zpn.zaklad.model.util.importeryDavky;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.Maps;
+import sk.zpn.domena.importy.Davka;
+import sk.zpn.domena.importy.ParametreImportu;
 import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 
@@ -20,11 +22,17 @@ public class DavkaCsvImporter {
     public DavkaCsvImporter() {
 
     }
-    public static Map<String, ZaznamCsv> nacitajCsvDavku(String suborCsv, ProgressBarZPN progressBarZPN) throws IOException {
+    public static Davka nacitajCsvDavku(String suborCsv, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) throws IOException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(suborCsv), "windows-1250"),';');
 
         String [] nextLine;
+
+
+        Davka davka=new Davka();
+        Map<String, Integer> bodyNaIco = Maps.newHashMap();;
+
+
         Map<String, ZaznamCsv> polozky = Maps.newHashMap();
         progressBarZPN.zobraz();
         progressBarZPN.nadstavNadpis("Načítanie súboru");
@@ -56,15 +64,23 @@ public class DavkaCsvImporter {
                     polozky.put(zaznam.getKit()+zaznam.getMtzDoklad(),zaznam );
                 else
                     existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
+                bodyNaIco.put(zaznam.getIco(), ImporterNastroje.vratBodyZaIcoAKit(zaznam.getIco(),
+                        zaznam.getKit(),
+                        zaznam.getMnozstvo(),
+                        parametreImportu.getFirma()));
+
+
             }
 
             //zaznam=null;
         }
         progressBarZPN.koniec();
+        davka.setPolozky(polozky);
+        davka.setBodyNaIco(bodyNaIco);
+        return davka;
 
-        return polozky;
     }
-    public static Map<String, ZaznamCsv> nacitajCsvSpodosDavku(String suborCsv, ProgressBarZPN progressBarZPN) throws IOException {
+    public static Davka nacitajCsvSpodosDavku(String suborCsv, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) throws IOException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(suborCsv), "windows-1250"),'\t');
 
@@ -73,6 +89,10 @@ public class DavkaCsvImporter {
         progressBarZPN.zobraz();
         progressBarZPN.nadstavNadpis("Načítanie súboru");
         progressBarZPN.nadstavspustenie(true);
+
+        Davka davka=new Davka();
+        Map<String, Integer> bodyNaIco = Maps.newHashMap();;
+
 
         reader.readNext();
         ZaznamCsv hlavicka=new ZaznamCsv();
@@ -107,6 +127,12 @@ public class DavkaCsvImporter {
                                 existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
                         }
 
+                        bodyNaIco.put(zaznam.getIco(), ImporterNastroje.vratBodyZaIcoAKit(zaznam.getIco(),
+                                zaznam.getKit(),
+                                zaznam.getMnozstvo(),
+                                parametreImportu.getFirma()));
+
+
                     }
 
                     //zaznam.setMalopredaj(nextLine[7].contains("A"));
@@ -119,7 +145,9 @@ public class DavkaCsvImporter {
             //zaznam=null;
         }
         progressBarZPN.koniec();
+        davka.setPolozky(polozky);
+        davka.setBodyNaIco(bodyNaIco);
+        return davka;
 
-        return polozky;
     }
 }

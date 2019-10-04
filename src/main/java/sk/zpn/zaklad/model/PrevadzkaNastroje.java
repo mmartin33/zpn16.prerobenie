@@ -110,7 +110,7 @@ public class PrevadzkaNastroje {
 
     }
 
-    public static Prevadzka najdiAleboZaloz(String ico, String nazovFirmy) {
+    public static Prevadzka najdiAleboZaloz(String ico, String nazovFirmy, boolean zalozitFirmu) {
 
         if (ico==null ||ico.isEmpty())
             return null;
@@ -131,6 +131,8 @@ public class PrevadzkaNastroje {
                 prevadzka = ulozPrvuPrevadzku(firma,nazovFirmy);
             return prevadzka;
         }
+        if (!zalozitFirmu)
+            return null;
         //zaklada sa firma
         firma=new Firma();
         firma.setIco(ico);

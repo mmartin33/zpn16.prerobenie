@@ -2,6 +2,8 @@ package sk.zpn.zaklad.model.util.importeryDavky;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
+import sk.zpn.domena.importy.Davka;
+import sk.zpn.domena.importy.ParametreImportu;
 import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 
@@ -21,7 +23,7 @@ public class DavkaTxtImporter {
     public DavkaTxtImporter() {
 
     }
-    public static Map<String, ZaznamCsv> nacitajTxtDavku(String suborTxt, ProgressBarZPN progressBarZPN) throws IOException {
+    public static Davka nacitajTxtDavku(String suborTxt, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) throws IOException {
         //todo kontrola ci subor extuje
         //tuto
 
@@ -34,6 +36,11 @@ public class DavkaTxtImporter {
         progressBarZPN.zobraz();
         progressBarZPN.nadstavNadpis("Načítanie súboru");
         progressBarZPN.nadstavspustenie(true);
+
+        Davka davka=new Davka();
+        Map<String, Integer> bodyNaIco = Maps.newHashMap();;
+
+
 
         String strLine;
 
@@ -59,12 +66,19 @@ public class DavkaTxtImporter {
                         polozky.put(zaznam.getKit() + zaznam.getMtzDoklad(), zaznam);
                     else
                         existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
+                    bodyNaIco.put(zaznam.getIco(), ImporterNastroje.vratBodyZaIcoAKit(zaznam.getIco(),
+                            zaznam.getKit(),
+                            zaznam.getMnozstvo(),
+                            parametreImportu.getFirma()));
+
                 }
             }
         }
         br.close();
         ir.close();
         progressBarZPN.koniec();
-        return polozky;
+        davka.setPolozky(polozky);
+        davka.setBodyNaIco(bodyNaIco);
+        return davka;
     }
 }

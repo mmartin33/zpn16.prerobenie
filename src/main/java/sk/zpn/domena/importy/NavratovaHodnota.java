@@ -9,6 +9,7 @@ public class NavratovaHodnota{
     public static int NENAJEDENY_KIT=1;
     public static int NENAJEDENA_FIRMA=2;
     public static int PRAZDNE_ICO=3;
+    public static int MALO_BODOV=4;
     public static int NIC=0;
 
 

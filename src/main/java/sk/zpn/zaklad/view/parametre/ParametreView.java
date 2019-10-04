@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.parametre;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -16,13 +17,16 @@ public class ParametreView extends MojView {
     Button btnUloz;
     Button btnSpat;
     TextField tRok;
+    TextField tHranica;
     Parametre p;
     Binder<Parametre> binder = new Binder<>();
 
     public ParametreView() {
         tRok = new TextField("Rok:");
+        tHranica = new TextField("Minimálny mesačný počet bodov pre založenie firmy z dávky :");
         FormLayout lEdit = new FormLayout();
         lEdit.addComponent(tRok);
+        lEdit.addComponent(tHranica);
         HorizontalLayout lBtn = new HorizontalLayout();
         btnUloz = new Button("Ulož");
         btnSpat = new Button("Späť");
@@ -40,8 +44,14 @@ public class ParametreView extends MojView {
                         "Rok je povinny")
                 .bind(Parametre::getRok, Parametre::setRok);
 
+        Binder.Binding<Parametre, Integer> hranicaBinding = binder.forField(tHranica)
+                .withConverter(new StringToIntegerConverter("Nie je číslo"))
+                .bind(Parametre::getMesacnaHranicaBodovImportu, Parametre::setMesacnaHranicaBodovImportu);
+
+
 
         tRok.addValueChangeListener(event -> rokBinding.validate());
+        tRok.addValueChangeListener(event -> hranicaBinding.validate());
 
         btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
         btnUloz.setClickShortcut(ShortcutAction.KeyCode.ENTER);

@@ -152,6 +152,8 @@ public class PoberatelNastroje {
                 "join doklady as d on d.id=p.doklad_id  " +
                 "join firmy as f on f.id=d.firma_id " +
                 "where  f.id=? " +
+                " and d.typdokladu='DAVKA' " +
+                " and d.stavdokladu='POTVRDENY' " +
                 "group by p.poberatel_id ";
 
 

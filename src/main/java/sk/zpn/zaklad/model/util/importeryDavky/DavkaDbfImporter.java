@@ -2,8 +2,15 @@ package sk.zpn.zaklad.model.util.importeryDavky;
 import com.google.common.collect.Maps;
 import com.linuxense.javadbf.DBFReader;
 import org.apache.commons.lang.StringUtils;
+import sk.zpn.domena.FirmaProdukt;
+import sk.zpn.domena.importy.Davka;
+import sk.zpn.domena.importy.ParametreImportu;
 import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
+import sk.zpn.zaklad.model.FirmaProduktNastroje;
+import sk.zpn.zaklad.model.ParametreNastroje;
+import sk.zpn.zaklad.model.VypoctyUtil;
+
 import java.io.*;
 import java.math.BigDecimal;
 
@@ -20,7 +27,7 @@ public class DavkaDbfImporter {
     public DavkaDbfImporter() {
 
     }
-    public static Map<String, ZaznamCsv> nacitajDbfDavku(String suborDBF, ProgressBarZPN progressBarZPN) throws IOException {
+    public static Davka nacitajDbfDavku(String suborDBF, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) throws IOException {
         File dbfFile = new File(suborDBF);
 
         DBFReader dbfReader = null;
@@ -32,6 +39,10 @@ public class DavkaDbfImporter {
         progressBarZPN.zobraz();
         progressBarZPN.nadstavNadpis("Načítanie súboru");
         progressBarZPN.nadstavspustenie(true);
+
+
+        Davka davka=new Davka();
+        Map<String, Integer> bodyNaIco =  Maps.newHashMap();
 
 
         in = new BufferedInputStream(new FileInputStream(dbfFile));
@@ -58,10 +69,20 @@ public class DavkaDbfImporter {
                     polozky.put(zaznam.getKit() + zaznam.getMtzDoklad()+zaznam.getIco(), zaznam);
                 else
                     existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
+
+
+
+                bodyNaIco.put(zaznam.getIco(), ImporterNastroje.vratBodyZaIcoAKit(zaznam.getIco(),
+                                                                                    zaznam.getKit(),
+                                                                                    zaznam.getMnozstvo(),
+                                                                                    parametreImportu.getFirma()));
+
             }
             //zaznam=null;
         }
         in.close();
-        return polozky;
+        davka.setPolozky(polozky);
+        davka.setBodyNaIco(bodyNaIco);
+        return davka;
     }
 }

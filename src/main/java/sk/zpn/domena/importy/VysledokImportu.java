@@ -1,15 +1,18 @@
 package sk.zpn.domena.importy;
 
+import com.google.common.collect.Maps;
 import sk.zpn.domena.Doklad;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.domena.importy.ChybaImportu;
 
 import java.util.List;
+import java.util.Map;
 
 public class VysledokImportu {
     Doklad doklad;
     List<PolozkaDokladu> polozky;
     List<ChybaImportu> chyby;
+
 
     public VysledokImportu() {
 
@@ -38,4 +41,5 @@ public class VysledokImportu {
     public void setChyby(List<ChybaImportu> chyby) {
         this.chyby = chyby;
     }
+
 }

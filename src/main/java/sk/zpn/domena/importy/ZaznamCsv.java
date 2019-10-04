@@ -95,4 +95,8 @@ public class ZaznamCsv
     public void setKit(String kit) {
         this.kit = kit;
     }
+
+    public Double getFiktivneBody() {
+        return null;
+    }
 }

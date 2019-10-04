@@ -20,6 +20,7 @@ import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
 import org.apache.commons.lang.StringUtils;
 import sk.zpn.SystemoveParametre;
+import sk.zpn.domena.importy.Davka;
 import sk.zpn.domena.importy.ParametreImportu;
 import sk.zpn.domena.importy.VysledokImportu;
 import sk.zpn.domena.importy.ZaznamCsv;
@@ -171,23 +172,23 @@ public class UploadCSV extends CustomComponent  {
     }
 
     void zhrajDavku(String file){
-        Map<String, ZaznamCsv> zaznam;
+        Davka davka;
         try {
             if (StringUtils.upperCase(StringUtils.right(file,3)).equals("DBF"))
-                zaznam= DavkaDbfImporter.nacitajDbfDavku(file,progressBarZPN);
+                davka= DavkaDbfImporter.nacitajDbfDavku(file,parametreImportu,progressBarZPN);
             else if (StringUtils.upperCase(StringUtils.right(file,3)).equals("TXT"))
                 if (parametreImportu.getFirma().getIco().equals("30997666")) //spodos format
-                    zaznam= DavkaCsvImporter.nacitajCsvSpodosDavku(file,progressBarZPN);
+                    davka= DavkaCsvImporter.nacitajCsvSpodosDavku(file,parametreImportu,progressBarZPN);
                 else
-                    zaznam= DavkaTxtImporter.nacitajTxtDavku(file,progressBarZPN);
+                    davka= DavkaTxtImporter.nacitajTxtDavku(file,parametreImportu,progressBarZPN);
 
             else
-                zaznam= DavkaCsvImporter.nacitajCsvDavku(file,progressBarZPN);
+                davka= DavkaCsvImporter.nacitajCsvDavku(file,parametreImportu,progressBarZPN);
 
             //this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
-            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(zaznam,file,parametreImportu,progressBarZPN);
+            VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(davka,file,parametreImportu,progressBarZPN);
             nacitanieView.setVysledokImportu(vi);
-            System.out.println(zaznam.size());
+            System.out.println(davka.getPolozky().size());
         } catch (IOException e) {
             e.printStackTrace();
         }
