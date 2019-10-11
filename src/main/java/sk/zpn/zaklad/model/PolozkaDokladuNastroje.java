@@ -106,7 +106,7 @@ public class PolozkaDokladuNastroje {
         pd.setMnozstvoPovodne(zaznam.getMnozstvo());
         pd.setKit(zaznam.getKit());
         int body=VypoctyUtil.vypocitajBody(
-                pd.getMnozstvo(),
+                pd.getMnozstvoPovodne(),
                 fp.getKoeficient(),
                 fp.getProdukt().getKusy(),
                 fp.getProdukt().getBody());

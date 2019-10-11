@@ -24,6 +24,7 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     public PolozkaDokladu povodnaPolozka;
     private Doklad doklad;
     private Firma velkosklad;
+    private boolean rezimOdmien=false;
 
     public PolozkyDokladuView(Doklad doklad,Firma velkosklad) {
         this.velkosklad=velkosklad;
@@ -72,7 +73,11 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
             editacnyForm.setVisible(true);
             gr.setColumnExpandRatio(0, 0.60f);
             gr.setColumnExpandRatio(1, 0.40f);
-            editacnyForm.edit(new PolozkaDokladu()); });
+            PolozkaDokladu novaPolozka=new PolozkaDokladu();
+                if (this.rezimOdmien) {
+                    novaPolozka.setPoberatel(this.doklad.getPoberatel());
+                }
+            editacnyForm.edit(novaPolozka); });
         browsPanel.btnNovyKopia.addClickListener(clickEvent -> {
             PolozkaDokladu novaPolozka=new PolozkaDokladu();
             novaPolozka.setDoklad(povodnaPolozka.getDoklad());
@@ -168,6 +173,19 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
 
     public void aktualizujInfo() {
         browsPanel.aktualizujInfoPanle(DokladyNastroje.sumaBodov(this.doklad));
+    }
+
+    public void rezimOdmien() {
+        this.rezimOdmien = true;
+        browsPanel.rezimOdmien();
+        editacnyForm.rezimOdmien();
+
+    }
+
+    public void klasickyRezim() {
+        browsPanel.klasickyRezim();
+        editacnyForm.klasickyRezim();
+
     }
 }
 

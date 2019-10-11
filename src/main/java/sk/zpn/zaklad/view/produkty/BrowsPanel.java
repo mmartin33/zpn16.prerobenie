@@ -2,12 +2,14 @@ package sk.zpn.zaklad.view.produkty;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Produkt;
+import sk.zpn.domena.TypProduktov;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 
@@ -26,9 +28,10 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnNovy;
     public Button btnFirmy;
     private FirmyView firmyView;
+    private ProduktyView produktView;
+    FilterGrid.Column<Produkt, BigDecimal> colCena;
 
-
-        public BrowsPanel(List<Produkt> produktList) {
+    public BrowsPanel(List<Produkt> produktList) {
             GridLayout gl =new GridLayout(1,3);
             gl.setSizeFull();
             gl.setRowExpandRatio(0, 0.05f);
@@ -56,6 +59,7 @@ public class BrowsPanel extends VerticalLayout {
             FilterGrid.Column<Produkt, BigInteger> colKusy = grid.addColumn(Produkt::getKusyBigInteger).setCaption("kusy").setId("kusy");
             FilterGrid.Column<Produkt, BigInteger> colBody = grid.addColumn(Produkt::getBodyBigInteger).setCaption("Body").setId("body");
             FilterGrid.Column<Produkt, String> colFirmaNazov = grid.addColumn(Produkt::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
+            colCena = grid.addColumn(Produkt::getCena).setCaption("Cena").setId("cena");
 
             // filters
             colRok.setFilter(new TextField(), StringComparator.containsIgnoreCase());
@@ -73,8 +77,10 @@ public class BrowsPanel extends VerticalLayout {
             Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
             btnSpat.addClickListener(clickEvent ->
                     {
-
-                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME);}
+                   if (this.produktView.getRodicovskyView()!=null)
+                       UI.getCurrent().getNavigator().navigateTo(this.produktView.getRodicovskyView());
+                       else
+                        UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME);}
             );
 
             btnFirmy =new Button("Firmy", VaadinIcons.BUILDING);
@@ -113,6 +119,10 @@ public class BrowsPanel extends VerticalLayout {
             System.out.println("Refresh browsu all");
 
         }
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        if (produktView.getTypProduktov()==TypProduktov.BODOVACI)
+            grid.removeColumn("cena");
+    }
 
     void addEditListener(Runnable editListener) {
         btnNovy.addClickListener(e -> editListener.run());
@@ -135,6 +145,10 @@ public class BrowsPanel extends VerticalLayout {
         grid.getDataProvider().refreshAll();
         grid.select(p);
 
+    }
+
+    public void setProduktyView(ProduktyView produktyView) {
+        this.produktView=produktyView;
     }
 }
 

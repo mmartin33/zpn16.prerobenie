@@ -11,6 +11,7 @@ import sk.zpn.nastroje.NastrojePoli;
 import sk.zpn.nastroje.RandomString;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
@@ -170,4 +171,30 @@ public class PoberatelNastroje {
 
     }
 
+    public static Firma getPrvyVelkosklad(Poberatel poberatel) {
+        EntityManager em1;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        em1 = emf.createEntityManager();
+        String sql="select d.firma_id from polozkydokladu as pol " +
+                "join doklady as d on d.id=pol.doklad_id "  +
+                "where pol.poberatel_id=? " +
+                "group by d.firma_id,d.datum " +
+                "order by d.datum " +
+                "limit 1" ;
+
+
+        Query query = em1.createNativeQuery(sql);
+
+        query.setParameter(1,poberatel.getId());
+
+        Long result1 = (Long) query.getSingleResult();
+
+        emf.close();
+        if (result1==null)
+            return null;
+        else
+            return FirmaNastroje.firmaPodlaID(result1).get();
+
+
+    }
 }

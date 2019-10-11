@@ -12,9 +12,12 @@ import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.PolozkaDokladu;
+import sk.zpn.domena.TypProduktov;
+import sk.zpn.nastroje.XlsTlacProtokolu;
 import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
+import sk.zpn.zaklad.view.produkty.ProduktyView;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -36,7 +39,10 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnNovy;
     public Button btnNovyKopia;
     public Button btnPanelovy;
+    public Button btnKatalogOdmien;
+    public Button btnTlac;
     private Firma velkosklad;
+    private boolean rezimOdmien=false;
 
 
     public BrowsPanel(List<PolozkaDokladu> polozkyDokladuList, PolozkyDokladuView pdv) {
@@ -81,6 +87,11 @@ public class BrowsPanel extends VerticalLayout {
         btnSpat.addClickListener(clickEvent ->
                 UI.getCurrent().getNavigator().navigateTo(DokladyView.NAME)
         );
+        btnKatalogOdmien=new Button("Katalog odmien", VaadinIcons.LIST);
+
+        btnKatalogOdmien.addClickListener(clickEvent ->
+                spustiKatalog()
+        );
         btnPanelovy=new Button("Zobraz/schovaj detail ", VaadinIcons.ARROWS_CROSS);
 
         Button btnZmaz=new Button("Zmaž", VaadinIcons.CLOSE_CIRCLE);
@@ -91,6 +102,11 @@ public class BrowsPanel extends VerticalLayout {
 
         HorizontalLayout tlacitkovy=new HorizontalLayout();
         btnNovy=new Button("Novy",VaadinIcons.FILE_O);
+        btnTlac=new Button("Tlač",VaadinIcons.FILE_O);
+        btnZmaz.addClickListener(clickEvent ->
+                tlac()
+        );
+
         btnNovyKopia=new Button("Novy kópia",VaadinIcons.FILE_O);
 
 
@@ -103,7 +119,9 @@ public class BrowsPanel extends VerticalLayout {
         if (!jeRezimVelkoskladu()) {
             tlacitkovy.addComponent(btnNovy);
             tlacitkovy.addComponent(btnNovyKopia);
+            tlacitkovy.addComponent(btnTlac);
             tlacitkovy.addComponent(btnZmaz);
+            tlacitkovy.addComponent(btnKatalogOdmien);
         }
         tlacitkovy.addComponent(btnSpat);//666
         tlacitkovy.addComponent(btnPanelovy);//666
@@ -133,6 +151,23 @@ public class BrowsPanel extends VerticalLayout {
 
 
 
+    }
+
+    private void spustiKatalog() {
+
+        ProduktyView produktyView = new ProduktyView();
+        produktyView.setTypProduktov(TypProduktov.BODOVACI);
+        produktyView.setRodicovskyView(polozkyDokladuView.NAME);
+        produktyView.setTypProduktov(TypProduktov.ODMENA);
+        UI.getCurrent().getNavigator().addView(ProduktyView.NAME, produktyView);
+        UI.getCurrent().getNavigator().navigateTo(ProduktyView.NAME);
+
+    }
+
+    private void tlac() {
+        if (grid.getSelectedItems().size()<=0)
+            return;
+        XlsTlacProtokolu.tlac(polozkyDokladuView.getDoklad());
     }
 
 
@@ -213,6 +248,19 @@ public class BrowsPanel extends VerticalLayout {
     }
     public boolean jeRezimVelkoskladu() {
         return this.velkosklad==null?false:true;
+    }
+
+    public void rezimOdmien() {
+        this.rezimOdmien=true;
+        grid.removeColumn("nazovPrevadzky");
+    }
+
+    public void klasickyRezim()
+    {
+        this.rezimOdmien=false;
+        btnKatalogOdmien.setVisible(false);
+        btnTlac.setVisible(false);
+
     }
 }
 

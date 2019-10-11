@@ -8,6 +8,7 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 import com.vaadin.ui.MenuBar.MenuItem;
 import sk.zpn.domena.Firma;
+import sk.zpn.domena.TypProduktov;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
@@ -71,8 +72,15 @@ public class VitajteView extends MojView {
                     n.navigateTo(PoberateliaView.NAME);
                 } else if (selectedItem.getDescription().equals("produkty")) {
                     ProduktyView produktyView = new ProduktyView();
+                    produktyView.setTypProduktov(TypProduktov.BODOVACI);
                     UI.getCurrent().getNavigator().addView(ProduktyView.NAME, produktyView);
                     n.navigateTo(ProduktyView.NAME);
+                } else if (selectedItem.getDescription().equals("odmeny")) {
+                    ProduktyView produktyView = new ProduktyView();
+                    produktyView.setTypProduktov(TypProduktov.ODMENA);
+                    UI.getCurrent().getNavigator().addView(ProduktyView.NAME, produktyView);
+                    n.navigateTo(ProduktyView.NAME);
+
                 } else if (selectedItem.getDescription().equals("prevadzky")) {
                     PrevadzkyView prevadzkyView = new PrevadzkyView(null);
                     UI.getCurrent().getNavigator().addView(PrevadzkyView.NAME, prevadzkyView);
@@ -84,6 +92,11 @@ public class VitajteView extends MojView {
                 } else if (selectedItem.getDescription().equals("dokladyVelkoskladu")) {
                     Firma velkosklad = UzivatelNastroje.getPrihlasenehoUzivatela().getFirma();
                     DokladyView dokladyView = new DokladyView(velkosklad);
+                    UI.getCurrent().getNavigator().addView(DokladyView.NAME, dokladyView);
+                    n.navigateTo(DokladyView.NAME);
+                } else if (selectedItem.getDescription().equals("dokladyOdmien")) {
+                    DokladyView dokladyView = new DokladyView(null);
+                    dokladyView.setRezimOdmien();
                     UI.getCurrent().getNavigator().addView(DokladyView.NAME, dokladyView);
                     n.navigateTo(DokladyView.NAME);
                 } else if (selectedItem.getDescription().equals("odosli")) {
@@ -159,8 +172,15 @@ public class VitajteView extends MojView {
 
         MenuItem menuProdukty = menuSpravcu.addItem("Produkty", VaadinIcons.GLASS, mycommand);
         menuProdukty.setDescription("produkty");
+
+        MenuItem menuOdmeny = menuSpravcu.addItem("Odmeny", VaadinIcons.RASTER, mycommand);
+        menuOdmeny.setDescription("odmeny");
+
         MenuItem menuDoklad = menuSpravcu.addItem("Doklady", VaadinIcons.RECORDS, mycommand);
         menuDoklad.setDescription("doklad");
+
+        MenuItem menuDokladyOdmien = menuSpravcu.addItem("Doklady odmien", VaadinIcons.RANDOM, mycommand);
+        menuDokladyOdmien.setDescription("dokladyOdmien");
 
         MenuItem menuBody = menuSpravcu.addItem("Stav bodov - poberateľov", VaadinIcons.PIGGY_BANK, mycommand);
         menuBody.setDescription("body");

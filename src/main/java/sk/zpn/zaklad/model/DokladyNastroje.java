@@ -141,10 +141,11 @@ public class DokladyNastroje {
         sql = "SELECT  count(*) FROM  polozkydokladu where doklad_id=?";
         Query query = em.createNativeQuery(sql);
         query.setParameter(1, doklad.getId());
-        Integer result = ((Long) query.getSingleResult()).intValue();
-
-        if (result != null)
+        Object o =query.getSingleResult();
+        if (o!=null) {
+            Integer result = ((Long) o).intValue();
             return result;
+        }
         else
             return 0;
     }
@@ -158,10 +159,11 @@ public class DokladyNastroje {
         sql = "SELECT  sum(body) FROM  polozkydokladu where doklad_id=?";
         Query query = em.createNativeQuery(sql);
         query.setParameter(1, doklad.getId());
-        Integer result = ((Double) query.getSingleResult()).intValue();
-
-        if (result != null)
+        Object o=query.getSingleResult();
+        if (o!=null) {
+            Integer result = ((Double) o).intValue();
             return result;
+        }
         else
             return 0;
     }
@@ -322,5 +324,36 @@ public class DokladyNastroje {
         em.persist(d);
         em.getTransaction().commit();
         return d;
+    }
+
+    public static String noveCisloDokladuOdmien() {
+        boolean prazdny = true;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        String sql;
+        String obdobie = ParametreNastroje.nacitajParametre().getRok();
+        sql = "SELECT  max(cisloDokladuodmeny) FROM  doklady ";
+
+
+
+        Query query = em.createNativeQuery(sql);
+
+        String result = (String) query.getSingleResult();
+
+        if (result != null)
+            return Long.toString(Long.parseLong(result) + 1);
+        else
+            return obdobie + "001";
+
+    }
+
+    public static List<Doklad> zoznamDokladovOdmien() {
+
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
+        TypedQuery<Doklad> q;
+        q = em.createNamedQuery("Odmena.getAll", Doklad.class);
+        return q.getResultList();
+
+
     }
 }

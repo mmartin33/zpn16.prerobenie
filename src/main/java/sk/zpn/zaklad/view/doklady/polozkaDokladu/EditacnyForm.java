@@ -35,6 +35,7 @@ public class EditacnyForm extends VerticalLayout {
     private PolozkyDokladuView polozkyDokladyView;
     private Poberatel aktualnyPoberatel;
     private Produkt aktualnyProdukt;
+    private boolean rezimOdmien=false;
 
     public EditacnyForm(){
         this.setSpacing(true);
@@ -154,12 +155,12 @@ public class EditacnyForm extends VerticalLayout {
     }
     private void nastavComponnenty(){
 
+        Binder.Binding<PolozkaDokladu, BigDecimal> mnozstvoBinding = binder.forField(tMnozstvo)
+                .withValidator(mnozstvo -> this.prepocitajBody(),
+                        "OK")
+                .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
+                .bind(PolozkaDokladu::getMnozstvo, PolozkaDokladu::setMnozstvo);
 
-        Binder.Binding<PolozkaDokladu, String> prevadzkaBinding = binder.forField(tPrevadzka)
-                .withValidator(nazovPrevadzky -> PrevadzkaNastroje.prvaPrevadzkaPodlaNazvu(nazovPrevadzky).isPresent(),
-                    "Prevádzka musi byt existujuca")
-                .bind(polozkaDokladu -> polozkaDokladu.getPrevadzka() == null ? "" : polozkaDokladu.getPrevadzka().getNazov(),
-                    (polozkaDokladu, s) -> PrevadzkaNastroje.prvaPrevadzkaPodlaNazvu(tPrevadzka.getValue()).ifPresent(polozkaDokladu::setPrevadzka));
 
 
         Binder.Binding<PolozkaDokladu, String> poberatelBinding = binder.forField(tPoberatel)
@@ -189,6 +190,7 @@ public class EditacnyForm extends VerticalLayout {
 
 
 
+
    // tCislo.addValueChangeListener(event -> cisloDokladuBinding.validate());
 
     btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -203,7 +205,7 @@ public class EditacnyForm extends VerticalLayout {
     private boolean prepocitajBody() {
         if (aktualnyProdukt==null)
             return true;
-        if (polozkaEditovana.getBody()==null  )
+        if (this.polozkaEditovana.getBody()==null  )
             return true;
 
         polozkaEditovana.setBody(new BigDecimal(VypoctyUtil.vypocitajBody(new BigDecimal(tMnozstvo.getValue()),
@@ -216,28 +218,33 @@ public class EditacnyForm extends VerticalLayout {
 
     void edit(PolozkaDokladu polozkaDokladu) {
         staraEditovana=polozkaEditovana;
-        polozkaEditovana = polozkaDokladu;
+        this.polozkaEditovana = polozkaDokladu;
 
 
         if (polozkaDokladu != null) {
-            binder.readBean(polozkaDokladu);
+            if (this.rezimOdmien){
+                tMnozstvo.setValue(polozkaEditovana.getMnozstvo().multiply(new BigDecimal(-1)).toString());
+                tMnozstvo.setValue(polozkaEditovana.getBody().multiply(new BigDecimal(-1)).toString());
+            }
+            binder.readBean(this.polozkaEditovana);
             aktualnyPoberatel=polozkaDokladu.getPoberatel();
-            if (polozkaDokladu.getId()==null){
-                polozkaDokladu.setProdukt(null);
-                if (polozkyDokladyView.getDoklad().jeDokladDavka())
-                    polozkaDokladu.setMnozstvo(new BigDecimal(1));
-                else
-                    polozkaDokladu.setMnozstvo(null);
+            if (this.polozkaEditovana.getId()==null){
+                polozkaEditovana.setProdukt(null);
+                polozkaEditovana.setMnozstvo(new BigDecimal(1));
             }
 
         }
         else{
-            binder.readBean(polozkaDokladu);}
+            binder.readBean(polozkaEditovana);}
     }
 
     public void save(Button.ClickEvent event) {
         if (binder.writeBeanIfValid(polozkaEditovana)) {
             boolean jeDokladNovy = polozkaEditovana.isNew();
+            if (this.rezimOdmien) {
+                    polozkaEditovana.setBody(polozkaEditovana.getBody().multiply(new BigDecimal(-1)));
+                    polozkaEditovana.setMnozstvo(polozkaEditovana.getMnozstvo().multiply(new BigDecimal(-1)));
+            }
             polozkaEditovana.setDoklad(polozkyDokladyView.getDoklad());
             PolozkaDokladu ulozenaPolozka = PolozkaDokladuNastroje.ulozPolozkuDokladu(polozkaEditovana);
             String msg = String.format("Ulozeny .");
@@ -284,7 +291,10 @@ public class EditacnyForm extends VerticalLayout {
                 + "</div>";
     }
     private List<Produkt> navrhniProdukt(String query, int cap) {
-        return ProduktyNastroje.zoznamProduktovZaRok(null).stream()
+        TypProduktov typProduktov=((this.rezimOdmien)
+                ?TypProduktov.ODMENA
+                :TypProduktov.BODOVACI);
+        return ProduktyNastroje.zoznamProduktovZaRok(null,typProduktov).stream()
                 .filter(produkt -> produkt.getNazov().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
     }
@@ -343,30 +353,69 @@ public class EditacnyForm extends VerticalLayout {
 
     public void zakazNepotrebne(){
         if (polozkyDokladyView.getDoklad().jeDokladDavka()){
+
+
+
             tMnozstvo.setVisible(true);
+
+            Binder.Binding<PolozkaDokladu, String> prevadzkaBinding = binder.forField(tPrevadzka)
+                    .withValidator(nazovPrevadzky -> PrevadzkaNastroje.prvaPrevadzkaPodlaNazvu(nazovPrevadzky).isPresent(),
+                            "Prevádzka musi byt existujuca")
+                    .bind(polozkaDokladu -> polozkaDokladu.getPrevadzka() == null ? "" : polozkaDokladu.getPrevadzka().getNazov(),
+                            (polozkaDokladu, s) -> PrevadzkaNastroje.prvaPrevadzkaPodlaNazvu(tPrevadzka.getValue()).ifPresent(polozkaDokladu::setPrevadzka));
+
+
+
+            tProdukt.setVisible(true);
+            Binder.Binding<PolozkaDokladu, String> produktBinding = binder.forField(tProdukt)
+                    .withValidator(nazovProduktu -> ProduktyNastroje.prvyProduktPodlaNazvu(nazovProduktu,TypProduktov.BODOVACI).isPresent(),
+                            "Produkt musi byt existujuci")
+                    .bind(polozkaDokladu -> polozkaDokladu.getProdukt() == null ? "" : polozkaDokladu.getProdukt().getNazov(),
+                            (polozkaDokladu, s) -> ProduktyNastroje.prvyProduktPodlaNazvu(tProdukt.getValue(),TypProduktov.BODOVACI).ifPresent(polozkaDokladu::setProdukt));
+
+
+        }
+        else if (polozkyDokladyView.getDoklad().getTypDokladu()==TypDokladu.ODMENY) {
+            tMnozstvo.setVisible(true);
+
             Binder.Binding<PolozkaDokladu, BigDecimal> mnozstvoBinding = binder.forField(tMnozstvo)
                     .withValidator(mnozstvo -> this.prepocitajBody(),
                             "OK")
                     .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
                     .bind(PolozkaDokladu::getMnozstvo, PolozkaDokladu::setMnozstvo);
 
-            tProdukt.setVisible(true);
+
             Binder.Binding<PolozkaDokladu, String> produktBinding = binder.forField(tProdukt)
-                    .withValidator(nazovProduktu -> ProduktyNastroje.prvyProduktPodlaNazvu(nazovProduktu).isPresent(),
+                    .withValidator(nazovProduktu -> ProduktyNastroje.prvyProduktPodlaNazvu(nazovProduktu,TypProduktov.ODMENA).isPresent(),
                             "Produkt musi byt existujuci")
                     .bind(polozkaDokladu -> polozkaDokladu.getProdukt() == null ? "" : polozkaDokladu.getProdukt().getNazov(),
-                            (polozkaDokladu, s) -> ProduktyNastroje.prvyProduktPodlaNazvu(tProdukt.getValue()).ifPresent(polozkaDokladu::setProdukt));
+                            (polozkaDokladu, s) -> ProduktyNastroje.prvyProduktPodlaNazvu(tProdukt.getValue(),TypProduktov.ODMENA).ifPresent(polozkaDokladu::setProdukt));
+
+
 
 
         }
-        else{
+            else {
+            tProdukt.setVisible(false);
             tMnozstvo.setVisible(false);
-            tProdukt.setVisible(false);}
+        }
 
     }
 
     public void rezimVelkoskladu() {
         btnUloz.setVisible(false);
+
+    }
+
+    public void rezimOdmien() {
+        this.rezimOdmien=true;
+        tPrevadzka.setVisible(false);
+        tPoberatel.setEnabled(false);
+    }
+
+    public void klasickyRezim() {
+        tPrevadzka.setVisible(true);
+        tPoberatel.setEnabled(true);
 
     }
 }

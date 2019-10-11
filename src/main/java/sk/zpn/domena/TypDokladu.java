@@ -32,11 +32,29 @@ public enum TypDokladu {
                     String.format("Typ dokladu je nepodporovany: %s", displayName));
         }
     }
+    public static TypDokladu fromDisplayNameWitoutOdmeny(String displayName) {
+        switch (displayName) {
+            case "Dávka": return DAVKA;
+            case "Prevod": return PREVOD;
+            case "Registrácia": return REGISTRACIA;
+            case "Interný doklad": return INTERNY_DOKLAD;
+            default: throw new IllegalArgumentException(
+                    String.format("Typ dokladu je nepodporovany: %s", displayName));
+        }
+    }
 
     public static List<String> getListOfDisplayValues() {
         return Arrays.stream(TypDokladu.values())
                 .map(TypDokladu::getDisplayValue)
                 .collect(Collectors.toList());
+    }
+    public static List<String> getListOfDisplayValuesWithoutOdmeny() {
+
+        List<String> collect = Arrays.stream(TypDokladu.values())
+                .map(TypDokladu::getDisplayValue)
+                .collect(Collectors.toList());
+        collect.remove(1);
+        return collect;
     }
 
 }

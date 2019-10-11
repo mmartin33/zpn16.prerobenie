@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.domena.Produkt;
+import sk.zpn.domena.TypProduktov;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -61,7 +62,7 @@ public class FirmaProduktNastroje {
 
     public static boolean generateMissingFirmaProductItems(String nazovFirmy) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        List<Produkt> produkty = ProduktyNastroje.zoznamProduktovZaRok(null);
+        List<Produkt> produkty = ProduktyNastroje.zoznamProduktovZaRok(null, TypProduktov.BODOVACI);
         Optional<Firma> firma = FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy);
         List<FirmaProdukt> existujuceFirmaProduktZaznamy = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
         produkty = filterNonYetAssignedProducts(produkty, existujuceFirmaProduktZaznamy);

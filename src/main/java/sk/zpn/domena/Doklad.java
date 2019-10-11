@@ -1,6 +1,9 @@
 package sk.zpn.domena;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.util.StringUtil;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -12,7 +15,10 @@ import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "doklady")
 @NamedQueries(value = {
-        @NamedQuery(name = "Doklad.getAll", query = "SELECT d FROM doklady d "),//order by d.kedy DESC
+        @NamedQuery(name = "Doklad.getAll", query = "SELECT d FROM doklady d " +
+                " where d.typDokladu<>sk.zpn.domena.TypDokladu.ODMENY "),//order by d.kedy DESC
+        @NamedQuery(name = "Odmena.getAll", query = "SELECT d FROM doklady d " +
+                " where d.typDokladu=sk.zpn.domena.TypDokladu.ODMENY "),
         @NamedQuery(name = "Doklad.getZaFirmu", query = "SELECT d FROM doklady d join d.firma f where f.id=:id"),//order by d.kedy DESC
         @NamedQuery(name = "Doklad.get", query = "SELECT d FROM doklady d WHERE d.id =:id")})
 
@@ -34,6 +40,13 @@ public class Doklad extends Vseobecne {
     @Enumerated(EnumType.STRING)
     private TypDokladu typDokladu;
 
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
+    @JoinColumn(nullable = true)
+    private Poberatel poberatel;
+
+    @Column(name = "cislodokladuodmeny", nullable = true, unique = true)
+    private String cisloDokladuOdmeny;
 
     @Enumerated(EnumType.STRING)
     private StavDokladu stavDokladu;
@@ -125,6 +138,41 @@ public class Doklad extends Vseobecne {
     public void setStavDokladu(StavDokladu stavDokladu) {
         this.stavDokladu = stavDokladu;
     }
+
+    public String getCisloDokladuOdmeny() {
+        return cisloDokladuOdmeny;
+    }
+
+    public void setCisloDokladuOdmeny(String cisloDokladuOdmeny) {
+        if  (StringUtils.isEmpty(cisloDokladuOdmeny))
+            cisloDokladuOdmeny=null;
+        this.cisloDokladuOdmeny = cisloDokladuOdmeny;
+    }
+
+    public Poberatel getPoberatel() {
+        return poberatel;
+    }
+
+    public void setPoberatel(Poberatel poberatel) {
+        this.poberatel = poberatel;
+    }
+    public String getPoberatelMenoAdresa() {
+        if (poberatel == null)
+            return "";
+        else
+            return poberatel.getMeno()+
+
+                    " "+(poberatel.getMesto()==null?"":poberatel.getMesto())+
+                    " "+(poberatel.getPsc()==null?"":poberatel.getPsc())+
+                    " "+(poberatel.getUlica()==null?"":poberatel.getUlica()); }
+
+    public Long getPoberatelID() {
+        if (poberatel == null)
+            return new Long(0);
+        else
+            return poberatel.getId();
+    }
+
 }
 
 

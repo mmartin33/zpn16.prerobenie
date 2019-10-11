@@ -9,6 +9,7 @@ import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Produkt;
+import sk.zpn.domena.TypProduktov;
 import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.ProduktyNastroje;
 
@@ -25,6 +26,7 @@ public class EditacnyForm extends VerticalLayout {
     private TextField tKusy;
     private TextField tBody;
     private TextField tFirma;
+    public TextField tCena;
 
 
 
@@ -50,6 +52,8 @@ public class EditacnyForm extends VerticalLayout {
         tKusy.setWidth("100");
         tFirma = new TextField("Firma");
         tFirma.setWidth("400");
+        tCena = new TextField("Cena");
+        tCena.setWidth("100");
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
 
@@ -62,8 +66,9 @@ public class EditacnyForm extends VerticalLayout {
         lEdit.addComponent(tBody);
         lEdit.addComponent(tKusy);
         lEdit.addComponent(tFirma);
-
-
+        lEdit.addComponent(tFirma);
+        lEdit.addComponent(tCena);
+        tCena.setVisible(false);
         HorizontalLayout lBtn = new HorizontalLayout();
         lBtn.addComponent(btnUloz);
         lBtn.addComponent(btnZmaz);
@@ -89,8 +94,8 @@ public class EditacnyForm extends VerticalLayout {
         Binder.Binding<Produkt, String> kodBinding = binder.forField(tKod)
                 .withValidator(kod -> !tKod.getValue().trim().isEmpty(),
                 "Kod je povinny")
-                .withValidator(kod -> (!ProduktyNastroje.uzExistujeKat(tKod.getValue())||(!produktEditovany.isNew())),
-                        "Kod uz existuje")
+//                .withValidator(kod -> (!ProduktyNastroje.uzExistujeKat(tKod.getValue())||(!produktEditovany.isNew())),
+//                        "Kod uz existuje")
 
                 .bind(Produkt::getKat, Produkt::setKat);
         Binder.Binding<Produkt, String> nazovBinding = binder.forField(tNazov)
@@ -114,6 +119,13 @@ public class EditacnyForm extends VerticalLayout {
                         "Firma musi byt existujuca")
                 .bind(poberatel -> poberatel.getFirma() == null ? "" : poberatel.getFirma().getNazov(),
                         (poberatel, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(poberatel::setFirma));
+        Binder.Binding<Produkt, BigDecimal> cenaBinding = binder.forField(tCena)
+                .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
+                .withValidator(body -> !tCena.getValue().trim().isEmpty(),
+                        "Body su povinne")
+                .bind(Produkt::getCena, Produkt::setCena);
+
+
 
         tKod.addValueChangeListener(event -> kodBinding.validate());
         tNazov.addValueChangeListener(event -> nazovBinding.validate());
@@ -206,5 +218,6 @@ public class EditacnyForm extends VerticalLayout {
                 + "</span>"
                 + "</div>";
     }
+
 }
 

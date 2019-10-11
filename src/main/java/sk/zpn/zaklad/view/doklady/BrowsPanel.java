@@ -31,11 +31,22 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnNovy;
     protected Button btnZmaz;
     public Button btnPolozky;
+    GridLayout gl;
+    FilterGrid.Column<Doklad, String> colCisloDokladu ;
+    FilterGrid.Column<Doklad, String> colDokladuOdmeny ;
+    FilterGrid.Column<Doklad, String> colTypDokladu ;
+    FilterGrid.Column<Doklad, String> colDatum ;
+    FilterGrid.Column<Doklad, String> colPoberatel ;
+    FilterGrid.Column<Doklad, String> colFirmaNazov ;
+    FilterGrid.Column<Doklad, String> colPoznamka ;
+    FilterGrid.Column<Doklad, String> colStavDokladu ;
+    private boolean rezimOdmen;
 
 
     public BrowsPanel(List<Doklad> dokladyList, Firma velkosklad) {
+
         this.velkosklad=velkosklad;
-        GridLayout gl = new GridLayout(1, 3);
+        gl = new GridLayout(1, 3);
         gl.setSizeFull();
         gl.setRowExpandRatio(0, 0.05f);
         gl.setRowExpandRatio(1, 0.90f);
@@ -47,32 +58,32 @@ public class BrowsPanel extends VerticalLayout {
 
 
         // definitionn of columns
-        FilterGrid.Column<Doklad, String> colCisloDokladu = grid.addColumn(Doklad::getCisloDokladu).setCaption("Doklad").setId("doklad");
-        FilterGrid.Column<Doklad, String> colTypDokladu = grid.addColumn(doklad -> doklad.getTypDokladu().getDisplayValue()).setCaption("Typ dokladu").setId("typ");
-        FilterGrid.Column<Doklad, String> colDatum = grid.addColumn(Doklad::getFormatovanyDatum).setCaption("Dátum").setId("datum");
-        FilterGrid.Column<Doklad, String> colFirmaNazov = grid.addColumn(Doklad::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
-        FilterGrid.Column<Doklad, String> colPoznamka = grid.addColumn(Doklad::getPoznamka).setCaption("Poznámka").setId("poznmla");
-        FilterGrid.Column<Doklad, String> colStavDokladu = grid.addColumn(doklad -> doklad.getStavDokladu().getDisplayValue()).setCaption("Stav dokladu").setId("stavDokladu");
-//        FilterGrid.Column<Doklad, String> colStavDokladu = grid.addColumn(doklad -> doklad.getStavDokladu().getIconValue()).setCaption("Stav dokladu").setId("stavDokladu");
-//        colStavDokladu.setRenderer(new HtmlRenderer());
-
-        //colStavDokladu.setRenderer(new HtmlRenderer());
+        colCisloDokladu = grid.addColumn(Doklad::getCisloDokladu).setCaption("Doklad").setId("doklad");
+        colDokladuOdmeny = grid.addColumn(Doklad::getCisloDokladuOdmeny).setCaption("Číslo dokladu odmeny").setId("dokladOdmeny");
+        colTypDokladu = grid.addColumn(doklad -> doklad.getTypDokladu().getDisplayValue()).setCaption("Typ dokladu").setId("typ");
+        colDatum = grid.addColumn(Doklad::getFormatovanyDatum).setCaption("Dátum").setId("datum");
+        colPoberatel = grid.addColumn(Doklad::getPoberatelMenoAdresa).setCaption("Poberateľ").setId("menoPoberatela");
+        colFirmaNazov = grid.addColumn(Doklad::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
+        colPoznamka = grid.addColumn(Doklad::getPoznamka).setCaption("Poznámka").setId("poznamka");
+        colStavDokladu = grid.addColumn(doklad -> doklad.getStavDokladu().getDisplayValue()).setCaption("Stav dokladu").setId("stavDokladu");
 
         ComboBox<String> statusDokladuFilter = new ComboBox<>("", StavDokladu.getListOfDisplayValues());
         statusDokladuFilter.setWidth(120, Unit.PIXELS);
 
         // filters
         colCisloDokladu.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+        colDokladuOdmeny.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colDatum.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colPoznamka.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colTypDokladu.setFilter(new ComboBox<>("", TypDokladu.getListOfDisplayValues()),
                 (cValue, fValue) -> fValue == null || fValue.equals(cValue));
+        colPoberatel.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colFirmaNazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         colStavDokladu.setFilter(new ComboBox<>("",StavDokladu.getListOfDisplayValues()),
                 (cValue, fValue) -> fValue == null || fValue.equals(cValue));
 
 
-        grid.setColumnOrder(colCisloDokladu, colStavDokladu,colTypDokladu, colFirmaNazov, colDatum);
+        grid.setColumnOrder(colCisloDokladu, colStavDokladu,colTypDokladu, colFirmaNazov, colDatum,colDokladuOdmeny,colPoberatel);
 //        grid.setColumnOrder(colCisloDokladu, colTypDokladu, colFirmaNazov, colDatum);
         Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
 
@@ -88,7 +99,10 @@ public class BrowsPanel extends VerticalLayout {
                         Doklad otvorenyDoklad=new Doklad();
                         otvorenyDoklad=(Doklad) grid.getSelectedItems().iterator().next();
                         polozkyDokladuView = new PolozkyDokladuView(otvorenyDoklad,velkosklad);
-
+                        if (this.rezimOdmen)
+                            polozkyDokladuView.rezimOdmien();
+                        else
+                            polozkyDokladuView.klasickyRezim();
                         UI.getCurrent().getNavigator().addView(PolozkyDokladuView.NAME, polozkyDokladuView);
                         UI.getCurrent().getNavigator().navigateTo(PolozkyDokladuView.NAME);
                     }
@@ -181,6 +195,21 @@ public class BrowsPanel extends VerticalLayout {
         return this.velkosklad==null?false:true;
     }
 
+    public void rezimOdmien() {
+        this.rezimOdmen=true;
+        grid.removeColumn("typ");
+        grid.removeColumn("doklad");
+        grid.removeColumn("stavDokladu");
+        grid.setColumnOrder(colDokladuOdmeny, colPoberatel, colFirmaNazov, colDatum);
+    }
+
+    public void rezimBodovaci() {
+        grid.removeColumn("dokladOdmeny");
+        grid.removeColumn("menoPoberatela");
+        grid.setColumnOrder(colCisloDokladu, colStavDokladu,colTypDokladu, colFirmaNazov, colDatum);
+
+
+    }
 }
 
 

@@ -19,25 +19,25 @@ public class PolozkaDokladu extends Vseobecne {
 
     private static final Logger logger = Logger.getLogger(PolozkaDokladu.class);
 
-    @OneToOne(fetch = FetchType.LAZY, cascade=PERSIST)
+    @OneToOne(fetch = FetchType.LAZY, cascade = PERSIST)
     @JoinColumn(nullable = false)
     private Doklad doklad;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = PERSIST)
     @JoinColumn(nullable = false)
     private Poberatel poberatel;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = PERSIST)
     @JoinColumn(nullable = true)
     private Prevadzka prevadzka;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade=PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = PERSIST)
     @JoinColumn(nullable = true)
     private Produkt produkt;
 
     private BigDecimal body;
-    private BigDecimal  mnozstvo;
-    private BigDecimal  mnozstvoPovodne;
+    private BigDecimal mnozstvo;
+    private BigDecimal mnozstvoPovodne;
     private String kit;
 
     private String poznamka;
@@ -67,6 +67,7 @@ public class PolozkaDokladu extends Vseobecne {
         else
             return prevadzka.getNazov();
     }
+
     public Long getPrevadzkaID() {
         if (prevadzka == null)
             return new Long(0);
@@ -79,8 +80,8 @@ public class PolozkaDokladu extends Vseobecne {
     }
 
     public void setMnozstvoPovodne(BigDecimal mnozstvoPovodne) {
-        if (mnozstvoPovodne==null)
-            mnozstvoPovodne=this.mnozstvo;
+        if (mnozstvoPovodne == null)
+            mnozstvoPovodne = this.mnozstvo;
         this.mnozstvoPovodne = mnozstvoPovodne;
     }
 
@@ -98,6 +99,7 @@ public class PolozkaDokladu extends Vseobecne {
         else
             return doklad.getCisloDokladu();
     }
+
     public Long getDokladID() {
         if (doklad == null)
             return new Long(0);
@@ -108,6 +110,7 @@ public class PolozkaDokladu extends Vseobecne {
     public void setProdukt(Produkt produkt) {
         this.produkt = produkt;
     }
+
     public Produkt getProdukt() {
         return produkt;
     }
@@ -119,12 +122,14 @@ public class PolozkaDokladu extends Vseobecne {
         else
             return produkt.getNazov();
     }
+
     public String getProduktKod() {
         if (produkt == null)
             return "";
         else
             return produkt.getKat();
     }
+
     public Long getProduktID() {
         if (produkt == null)
             return new Long(0);
@@ -133,11 +138,10 @@ public class PolozkaDokladu extends Vseobecne {
     }
 
 
-
-
     public void setPoberatel(Poberatel poberatel) {
         this.poberatel = poberatel;
     }
+
     public Poberatel getPoberatel() {
         return poberatel;
     }
@@ -154,11 +158,12 @@ public class PolozkaDokladu extends Vseobecne {
         if (poberatel == null)
             return "";
         else
-            return poberatel.getMeno()+
+            return poberatel.getMeno() +
 
-                    " "+(poberatel.getMesto()==null?"":poberatel.getMesto())+
-                    " "+(poberatel.getPsc()==null?"":poberatel.getPsc())+
-                    " "+(poberatel.getUlica()==null?"":poberatel.getUlica()); }
+                    " " + (poberatel.getMesto() == null ? "" : poberatel.getMesto()) +
+                    " " + (poberatel.getPsc() == null ? "" : poberatel.getPsc()) +
+                    " " + (poberatel.getUlica() == null ? "" : poberatel.getUlica());
+    }
 
     public Long getPoberatelID() {
         if (poberatel == null)
@@ -171,42 +176,71 @@ public class PolozkaDokladu extends Vseobecne {
         this.prevadzka = prevadzka;
     }
 
-    public BigDecimal getBody() {return body;}
+    public BigDecimal getBody() {
+        return body;
+    }
 
-    public void setBody(BigDecimal body) {this.body = body;}
+    public void setBody(BigDecimal body) {
+        this.body = body;
+    }
 
-    public BigInteger getBodyBigInteger() {return body.toBigInteger();}
+    public BigInteger getBodyBigInteger() {
+        if (this != null) {
+            if (this.getProdukt().getTypProduktov() == TypProduktov.ODMENA)
+                return body.multiply(new BigDecimal(-1)).toBigInteger();
+            else
+                return body.toBigInteger();
+        }
+        return body.toBigInteger();
+    }
 
 
-    public BigDecimal getMnozstvo() {return mnozstvo;}
+    public BigDecimal getMnozstvo() {
+        return mnozstvo;
+    }
+
     public BigInteger getMnozstvoBigInteger() {
-        if (mnozstvo==null)
+        if (this != null) {
+            if (this.getProdukt().getTypProduktov() == TypProduktov.ODMENA)
+                return mnozstvo.multiply(new BigDecimal(-1)).toBigInteger();
+            else
+                return mnozstvo.toBigInteger();
+        }
+
+
+        if (mnozstvo == null)
             return BigInteger.ZERO;
         else
             return mnozstvo.toBigInteger();
     }
 
-    public void setMnozstvo(BigDecimal mnozstvo) {this.mnozstvo = mnozstvo;}
+    public void setMnozstvo(BigDecimal mnozstvo) {
+        this.mnozstvo = mnozstvo;
+    }
 
     public boolean isNew() {
         return this.getId() == null;
     }
 
-    public String getPoznamka() {return poznamka;}
+    public String getPoznamka() {
+        return poznamka;
+    }
 
-    public void setPoznamka(String poznamka) {this.poznamka = poznamka;}
+    public void setPoznamka(String poznamka) {
+        this.poznamka = poznamka;
+    }
 
-    public static  BigInteger getBodyZaProduktBigInteger(PolozkaDokladu polozkaDokladu) {
+    public static BigInteger getBodyZaProduktBigInteger(PolozkaDokladu polozkaDokladu) {
         return polozkaDokladu.getProdukt().getBodyBigInteger();
     }
 
     public static String getBodyZaProdukt(PolozkaDokladu polozkaDokladu) {
-        if  (polozkaDokladu.getProdukt() == null)
+        if (polozkaDokladu.getProdukt() == null)
             return "-/-";
         else
-            return polozkaDokladu.getProdukt().getBodyBigInteger().toString()+
-                "/"+
-                polozkaDokladu.getProdukt().getKusyBigInteger().toString();
+            return polozkaDokladu.getProdukt().getBodyBigInteger().toString() +
+                    "/" +
+                    polozkaDokladu.getProdukt().getKusyBigInteger().toString();
 
     }
 }

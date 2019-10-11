@@ -11,6 +11,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.domena.Produkt;
+import sk.zpn.domena.TypProduktov;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
 import sk.zpn.zaklad.model.ProduktyNastroje;
 
@@ -98,10 +99,10 @@ public class MostikEdit {
         tKat.setValue(fpEditovana.getProdukt().getKat());
 
         Binder.Binding<FirmaProdukt, String> produktBinding = binder.forField(tKat)
-                .withValidator(katProduktu -> ProduktyNastroje.prvyProduktPodlaKat(katProduktu).isPresent(),
+                .withValidator(katProduktu -> ProduktyNastroje.prvyProduktPodlaKat(katProduktu,TypProduktov.BODOVACI).isPresent(),
                         "Produkt musi byt existujuci")
                 .bind(firmaProdukt -> firmaProdukt.getProdukt() == null ? "" : firmaProdukt.getProdukt().getKat(),
-                        (firmaProdukt, s) -> ProduktyNastroje.prvyProduktPodlaKat(tKat.getValue()).ifPresent(firmaProdukt::setProdukt));
+                        (firmaProdukt, s) -> ProduktyNastroje.prvyProduktPodlaKat(tKat.getValue(),TypProduktov.BODOVACI).ifPresent(firmaProdukt::setProdukt));
 
 
 
@@ -160,7 +161,7 @@ public class MostikEdit {
     }
 
     private List<Produkt> navrhniProdukt(String query, int cap) {
-        return ProduktyNastroje.zoznamProduktovZaRok(null).stream()
+        return ProduktyNastroje.zoznamProduktovZaRok(null, TypProduktov.BODOVACI).stream()
                 .filter(produkt -> produkt.getKat().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
     }

@@ -4,15 +4,17 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.converter.LocalDateToDateConverter;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.*;
 import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.FirmaNastroje;
-import sk.zpn.zaklad.model.UzivatelNastroje;
-import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
+import sk.zpn.zaklad.model.PoberatelNastroje;
 
+import java.awt.*;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
@@ -24,8 +26,10 @@ public class EditacnyForm extends VerticalLayout {
 
 
     private TextField tCislo;
+    private TextField tCisloDokladuOdmeny;
     private DateField dDatum;
     private ComboBox<String> typDokladuComboBox;
+    private TextField tPoberatel;
     private TextField tPoznamka;
     private TextField tFirma;
     private ComboBox<String> stavDokladuComboBox;
@@ -37,13 +41,18 @@ public class EditacnyForm extends VerticalLayout {
     private Doklad staryDokladEditovany;
     private Doklad dokladEditovany;
     private DokladyView dokladyView;
+    private Poberatel aktualnyPoberatel;
+    private boolean rezimOdmien=false;
 
     public EditacnyForm(){
         tCislo = new TextField("Číslo");
+        tCisloDokladuOdmeny = new TextField("Číslo dokladu odmeny");
         dDatum = new DateField("Dátum");
         tFirma = new TextField("Firma");
+        tPoberatel = new TextField("Poberatel");
 
         tFirma.setWidth("400");
+        tPoberatel.setWidth("400");
         typDokladuComboBox = new ComboBox<>("Typ dokladu");
         tPoznamka = new TextField("Poznámka");
         tPoznamka.setWidth("400");
@@ -59,6 +68,8 @@ public class EditacnyForm extends VerticalLayout {
 
         lEdit.addComponent(dDatum);
         lEdit.addComponent(tCislo);
+        lEdit.addComponent(tCisloDokladuOdmeny);
+        lEdit.addComponent(tPoberatel);
         lEdit.addComponent(tFirma);
         lEdit.addComponent(typDokladuComboBox);
         lEdit.addComponent(tPoznamka);
@@ -91,19 +102,36 @@ public class EditacnyForm extends VerticalLayout {
             this::transformujFirmuNaNazov,
             this::transformujFirmuNaNazovSoZvyraznenymQuery);
 
+        AutocompleteExtension<Poberatel> dokladAutocompleteExtensionProberatel = new AutocompleteExtension<>(tPoberatel);
+        dokladAutocompleteExtensionProberatel.setSuggestionListSize(50);
+        dokladAutocompleteExtensionProberatel.setSuggestionGenerator(
+                this::navrhniPoberatela,
+                this::transformujPoberatelaNaNazov,
+                this::transformujPoberatelaNaNazovSoZvyraznenymQuery);
+
+        dokladAutocompleteExtensionProberatel.addSuggestionSelectListener(event -> {
+            event.getSelectedItem().ifPresent(this::vybratyPoberatel);
+        });
+
+
+
 
     }
     private void nastavComponnenty(){
 
-    Binder.Binding<Doklad, String> cisloDokladuBinding = binder.forField(tCislo)
-        .withValidator(v -> !tCislo.getValue().trim().isEmpty(),
+        Binder.Binding<Doklad, String> cisloDokladuBinding = binder.forField(tCislo)
+                .withValidator(v -> !tCislo.getValue().trim().isEmpty(),
         "Číslo je povinné")
         .bind(Doklad::getCisloDokladu, Doklad::setCisloDokladu);
 
+        Binder.Binding<Doklad, String> cisloDokladuOdmenyBinding = binder.forField(tCisloDokladuOdmeny)
+                .withValidator(v -> !tCislo.getValue().trim().isEmpty(),
+        "Číslo je povinné")
+        .bind(Doklad::getCisloDokladuOdmeny, Doklad::setCisloDokladuOdmeny);
+
         Binder.Binding<Doklad, String> typDokladuBinding = binder.forField(typDokladuComboBox)
         .bind(doklad -> doklad.getTypDokladu().getDisplayValue(),
-            (doklad, value) -> doklad.setTypDokladu(
-                TypDokladu.fromDisplayName(value)));
+            (doklad, value) -> doklad.setTypDokladu(TypDokladu.fromDisplayName(value)));
 
 
         Binder.Binding<Doklad, String> stavDokladuBinding = binder.forField(stavDokladuComboBox)
@@ -137,12 +165,12 @@ public class EditacnyForm extends VerticalLayout {
 }
     void edit(Doklad doklad) {
         staryDokladEditovany=dokladEditovany;
-        dokladEditovany = doklad;
+        this.dokladEditovany = doklad;
         if (doklad != null) {
-            binder.readBean(doklad);
+            binder.readBean(this.dokladEditovany);
         }
         else{
-            binder.readBean(doklad);}
+            binder.readBean(this.dokladEditovany);}
 
     }
 
@@ -168,6 +196,7 @@ public class EditacnyForm extends VerticalLayout {
     public void delete() {
 
         if (!Optional.ofNullable(dokladEditovany).isPresent()) {
+            Notification.show("Nebol vybrany doklad!!!", Notification.Type.WARNING_MESSAGE);
             return;
         }
 
@@ -233,5 +262,54 @@ public class EditacnyForm extends VerticalLayout {
             btnUloz.setVisible(false);
 
 
+    }
+
+    private List<Poberatel> navrhniPoberatela(String query, int cap) {
+        return PoberatelNastroje.zoznamPoberatelovPodlaMena(query).stream()
+                .filter(poberatel -> poberatel.getMeno().toLowerCase().contains(query.toLowerCase()))
+                .limit(cap).collect(Collectors.toList());
+    }
+    /**
+     * Co sa zobraziv textfielde, ked sa uz hodnota vyberie
+     * */
+    private String transformujPoberatelaNaNazov(Poberatel poberatel) {
+        return poberatel.getMeno();
+
+    }
+    /**
+     * Co sa zobrazi v dropdowne
+     * */
+    private String transformujPoberatelaNaNazovSoZvyraznenymQuery(Poberatel poberatel, String query) {
+        return "<div class='suggestion-container'>"
+                + "<span class='poberatel'>"
+                + poberatel.getMeno()
+//                + poberatel.getPoberatelMenoAdresa()
+                .replaceAll("(?i)(" + query + ")", "<b>$1</b>")
+                + "</span>"
+                + "</div>";
+    }
+
+    private void vybratyPoberatel(Poberatel poberatel) {
+        dokladEditovany.setPoberatel(poberatel);
+        Firma firma=PoberatelNastroje.getPrvyVelkosklad(poberatel);
+        if (firma!=null) {
+            dokladEditovany.setFirma(firma);
+            tFirma.setValue(firma.getNazov());
+        }
+        this.aktualnyPoberatel=poberatel;
+
+    }
+
+    public void rezimOdmien() {
+        tCislo.setEnabled(false);
+        stavDokladuComboBox.setVisible(false);
+        typDokladuComboBox.setVisible(false);
+        this.rezimOdmien=true;
+
+    }
+
+    public void rezimBodovaci() {
+        tCisloDokladuOdmeny.setVisible(false);
+        tPoberatel.setVisible(false);
     }
 }

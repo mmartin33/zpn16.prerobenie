@@ -5,15 +5,17 @@ import org.apache.commons.lang.StringUtils;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Produkt;
+import sk.zpn.domena.TypProduktov;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public class ProduktyNastroje {
-    public static List<Produkt> zoznamProduktov(){
+    public static List<Produkt> zoznamProduktov() {
         List<Produkt> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
@@ -21,17 +23,22 @@ public class ProduktyNastroje {
         return q.getResultList();
     }
 
-    public static List<Produkt> zoznamProduktovZaRok(String rok){
+    public static List<Produkt> zoznamProduktovZaRok(String rok, TypProduktov typ) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getZaRok", Produkt.class);
-        if (StringUtils.isEmpty(rok))
-            q.setParameter("rok", ParametreNastroje.nacitajParametre().getRok());
-        else
-            q.setParameter("rok", rok);
+        TypedQuery<Produkt> q;
+        if (typ == TypProduktov.BODOVACI) {
+            q = em.createNamedQuery("Produkt.getZaRok", Produkt.class);
+            if (StringUtils.isEmpty(rok))
+                q.setParameter("rok", ParametreNastroje.nacitajParametre().getRok());
+            else
+                q.setParameter("rok", rok);
+        } else
+            q = em.createNamedQuery("Odmena.getZoznam", Produkt.class);
+        //q.setParameter("typ",typ);
         return q.getResultList();
     }
 
-    public static List<Produkt> zoznamProduktovZaRokZaDodavatela(String rok,Firma f){
+    public static List<Produkt> zoznamProduktovZaRokZaDodavatela(String rok, Firma f) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getZaRokZaDodavatela", Produkt.class);
 
@@ -40,31 +47,45 @@ public class ProduktyNastroje {
         return q.getResultList();
     }
 
-    public static Optional<Produkt> prvyProduktPodlaNazvu(String nazov){
+    public static Optional<Produkt> prvyProduktPodlaNazvu(String nazov, TypProduktov typ) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getPodlaNazvu", Produkt.class)
-                .setParameter("nazov", nazov);
+        TypedQuery<Produkt> q;
+        if (typ == TypProduktov.BODOVACI)
+            q = em.createNamedQuery("Produkt.getPodlaNazvu", Produkt.class)
+                    .setParameter("nazov", nazov)
+                    .setParameter("rok", ParametreNastroje.nacitajParametre().getRok());
+        else
+            q = em.createNamedQuery("Odmena.getPodlaNazvu", Produkt.class)
+                    .setParameter("nazov", nazov);
+
         List<Produkt> produkty = q.getResultList();
         return produkty.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
     }
-    public static Optional<Produkt> prvyProduktPodlaKat(String kat){
+
+    public static Optional<Produkt> prvyProduktPodlaKat(String kat, TypProduktov typ) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Produkt> q;
+        if (typ == TypProduktov.BODOVACI)
+            q = em.createNamedQuery("Produkt.getPodlaKodu", Produkt.class)
+                    .setParameter("kat", kat)
+                    .setParameter("rok", ParametreNastroje.nacitajParametre().getRok());
+        else
+            q = em.createNamedQuery("Odmena.getPodlaKodu", Produkt.class)
+                    .setParameter("kat", kat);
+        List<Produkt> produkty = q.getResultList();
+        return produkty.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
+    }
+
+    public static boolean uzExistujeKat(String kat) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getPodlaKodu", Produkt.class)
                 .setParameter("kat", kat);
         List<Produkt> produkty = q.getResultList();
-        return produkty.size() > 0 ? Optional.of(q.getResultList().get(0)) : Optional.empty();
-    }
-    public static boolean uzExistujeKat(String kat){
-        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getPodlaKodu", Produkt.class)
-                .setParameter("kat", kat);
-        List<Produkt> produkty = q.getResultList();
-        return (produkty.size() > 0) ;
+        return (produkty.size() > 0);
     }
 
 
-
-    public static Produkt ulozProdukt(Produkt f){
+    public static Produkt ulozProdukt(Produkt f) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
         if (f.isNew()) {
@@ -78,13 +99,45 @@ public class ProduktyNastroje {
         return f;
     }
 
-    public static void zmazProdukt(Produkt f){
+    public static void zmazProdukt(Produkt f) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
         em.remove(f);
         em.getTransaction().commit();
     }
 
+
+    public static String getMaxKIT(TypProduktov typProduktov) {
+
+        boolean prazdny = true;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        String sql;
+        String obdobie = null;
+        Query query;
+        if (typProduktov==TypProduktov.BODOVACI) {
+            sql = "SELECT  max(kat) FROM  produkty where typproduktu=? and rok=?";
+            query = em.createNativeQuery(sql)
+                    .setParameter(1, "BODOVACI")
+                    .setParameter(2, ParametreNastroje.nacitajParametre().getRok());
+        }
+           else{
+                sql = "SELECT  max(kat) FROM  produkty where typproduktu=? ";
+                query = em.createNativeQuery(sql)
+                    .setParameter(1, "ODMENA");}
+
+        String result = (String) query.getSingleResult();
+
+        if (result != null)
+            if (typProduktov==TypProduktov.BODOVACI)
+                return Long.toString(Long.parseLong(result) + 1);
+            else
+                return Long.toString(Long.parseLong(result) + 10);
+        else
+        if (typProduktov==TypProduktov.BODOVACI)
+            return "00001";
+        else
+            return "000000010";
+    }
 
 
 }

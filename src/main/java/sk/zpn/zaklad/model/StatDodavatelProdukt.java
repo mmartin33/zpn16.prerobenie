@@ -49,9 +49,9 @@ public class StatDodavatelProdukt {
                 "    join produkty as prod on prod.id=p.produkt_id " +
                 "    join firmy as dod on dod.id=prod.firma_id " +
                 "    where " +
-                "    dod.id="+dodavatel.getId()+" and " +
+                "    dod.id="+dodavatel.getId()+
                 "    and d.stavdokladu='POTVRDENY' " +
-                "    d.datum>=Date('" + dod + "') and d.datum<=Date('" + ddo + "') " +
+                "    and d.datum>=Date('" + dod + "') and d.datum<=Date('" + ddo + "') " +
                 "    group by f.ico||'*'||prod.kat";
 
 
