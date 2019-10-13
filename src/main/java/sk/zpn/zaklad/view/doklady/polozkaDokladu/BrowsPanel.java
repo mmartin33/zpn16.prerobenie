@@ -72,7 +72,7 @@ public class BrowsPanel extends VerticalLayout {
         FilterGrid.Column<PolozkaDokladu, String> colProduktNazov = grid.addColumn(PolozkaDokladu::getProduktNazov).setCaption("Názov produktu").setId("nazovProduktu");
         FilterGrid.Column<PolozkaDokladu, String> colPrevadzkaNazov = grid.addColumn(PolozkaDokladu::getPrevadzkaNazov).setCaption("Prevádzka").setId("nazovPrevadzky");
         FilterGrid.Column<PolozkaDokladu, String> colPoberatel = grid.addColumn(PolozkaDokladu::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
-        FilterGrid.Column<PolozkaDokladu, BigInteger> colBody = grid.addColumn(PolozkaDokladu::getBodyBigInteger).setCaption("Body za predaj").setId("body");
+        FilterGrid.Column<PolozkaDokladu, BigInteger> colBody = grid.addColumn(PolozkaDokladu::getBodyBigInteger).setCaption("Body za pohyb").setId("body");
         FilterGrid.Column<PolozkaDokladu, String> colBodyZaProdukt = grid.addColumn(PolozkaDokladu::getBodyZaProdukt).setCaption("Body/za MN").setId("bodyNaProdukte");
         FilterGrid.Column<PolozkaDokladu, BigInteger> colMnozstvo = grid.addColumn(PolozkaDokladu::getMnozstvoBigInteger).setCaption("Množstvo").setId("mnozstvo");
         FilterGrid.Column<PolozkaDokladu, String> colPoznamka = grid.addColumn(PolozkaDokladu::getPoznamka).setCaption("Poznámka").setId("poznamka");
@@ -103,7 +103,7 @@ public class BrowsPanel extends VerticalLayout {
         HorizontalLayout tlacitkovy=new HorizontalLayout();
         btnNovy=new Button("Novy",VaadinIcons.FILE_O);
         btnTlac=new Button("Tlač",VaadinIcons.FILE_O);
-        btnZmaz.addClickListener(clickEvent ->
+        btnTlac.addClickListener(clickEvent ->
                 tlac()
         );
 
@@ -165,8 +165,6 @@ public class BrowsPanel extends VerticalLayout {
     }
 
     private void tlac() {
-        if (grid.getSelectedItems().size()<=0)
-            return;
         XlsTlacProtokolu.tlac(polozkyDokladuView.getDoklad());
     }
 
@@ -219,8 +217,11 @@ public class BrowsPanel extends VerticalLayout {
         grid.asMultiSelect()
                 .addValueChangeListener(e -> {
                     Set<PolozkaDokladu> polozkaDokladuSet = e.getValue();
-                    listener.accept(polozkaDokladuSet.iterator().next());
+                    if (polozkaDokladuSet.size()==1)
+                        listener.accept(polozkaDokladuSet.iterator().next());
+
                 });
+
     }
 
 //    void deselect() {
@@ -260,6 +261,22 @@ public class BrowsPanel extends VerticalLayout {
         this.rezimOdmien=false;
         btnKatalogOdmien.setVisible(false);
         btnTlac.setVisible(false);
+
+    }
+
+    public void rezimRegistracia() {
+        btnKatalogOdmien.setVisible(false);
+        btnTlac.setVisible(false);
+        btnNovyKopia.setVisible(false);
+        grid.removeColumn("nazovPrevadzky");
+        grid.removeColumn("kodProduktu");
+        grid.removeColumn("nazovProduktu");
+        grid.removeColumn("mnozstvo");
+        grid.removeColumn("bodyNaProdukte");
+
+
+
+
 
     }
 }

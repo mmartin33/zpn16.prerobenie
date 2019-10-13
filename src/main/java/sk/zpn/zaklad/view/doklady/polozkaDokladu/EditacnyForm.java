@@ -203,39 +203,41 @@ public class EditacnyForm extends VerticalLayout {
 }
 
     private boolean prepocitajBody() {
+
         if (aktualnyProdukt==null)
             return true;
         if (this.polozkaEditovana.getBody()==null  )
             return true;
-
-        polozkaEditovana.setBody(new BigDecimal(VypoctyUtil.vypocitajBody(new BigDecimal(tMnozstvo.getValue()),
+        BigDecimal body=(new BigDecimal(VypoctyUtil.vypocitajBody(new BigDecimal(tMnozstvo.getValue()),
                 BigDecimal.ONE,
                 aktualnyProdukt.getKusy(),
                 aktualnyProdukt.getBody())));
-        tBody.setValue(polozkaEditovana.getBody().toBigInteger().toString());
+        //polozkaEditovana.setBody(body);
+        tBody.setValue(body.toBigInteger().toString());
         return true;
     }
 
     void edit(PolozkaDokladu polozkaDokladu) {
         staraEditovana=polozkaEditovana;
         this.polozkaEditovana = polozkaDokladu;
+        binder.readBean(this.polozkaEditovana);
+//        if (polozkaDokladu != null) {
 
-
-        if (polozkaDokladu != null) {
-            if (this.rezimOdmien){
-                tMnozstvo.setValue(polozkaEditovana.getMnozstvo().multiply(new BigDecimal(-1)).toString());
-                tMnozstvo.setValue(polozkaEditovana.getBody().multiply(new BigDecimal(-1)).toString());
-            }
-            binder.readBean(this.polozkaEditovana);
             aktualnyPoberatel=polozkaDokladu.getPoberatel();
-            if (this.polozkaEditovana.getId()==null){
-                polozkaEditovana.setProdukt(null);
-                polozkaEditovana.setMnozstvo(new BigDecimal(1));
+            aktualnyProdukt=polozkaDokladu.getProdukt();
+//            if (this.polozkaEditovana.getId()==null){
+//                polozkaEditovana.setProdukt(null);
+//                polozkaEditovana.setMnozstvo(new BigDecimal(1));
+//            }
+//
+                if (this.rezimOdmien &&this.polozkaEditovana.getId()!=null){
+//                polozkaEditovana.setMnozstvo(polozkaEditovana.getMnozstvo().negate());
+//                polozkaEditovana.setBody(polozkaEditovana.getBody().negate());
+               tMnozstvo.setValue(polozkaEditovana.getMnozstvo().negate().toString());
+               tBody.setValue(polozkaEditovana.getBody().negate().toString());
             }
-
-        }
-        else{
-            binder.readBean(polozkaEditovana);}
+//
+//        }
     }
 
     public void save(Button.ClickEvent event) {
@@ -413,9 +415,19 @@ public class EditacnyForm extends VerticalLayout {
         tPoberatel.setEnabled(false);
     }
 
+
+
+
     public void klasickyRezim() {
         tPrevadzka.setVisible(true);
         tPoberatel.setEnabled(true);
+
+    }
+
+    public void rezimRegistracia() {
+        tPrevadzka.setVisible(false);
+        tProdukt.setVisible(false);
+        tMnozstvo.setVisible(false);
 
     }
 }

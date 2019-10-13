@@ -18,15 +18,18 @@ public class ParametreView extends MojView {
     Button btnSpat;
     TextField tRok;
     TextField tHranica;
+    TextField tBodyZaRegistraciu;
     Parametre p;
     Binder<Parametre> binder = new Binder<>();
 
     public ParametreView() {
         tRok = new TextField("Rok:");
         tHranica = new TextField("Minimálny mesačný počet bodov pre založenie firmy z dávky :");
+        tBodyZaRegistraciu = new TextField("Body za registraciu :");
         FormLayout lEdit = new FormLayout();
         lEdit.addComponent(tRok);
         lEdit.addComponent(tHranica);
+        lEdit.addComponent(tBodyZaRegistraciu);
         HorizontalLayout lBtn = new HorizontalLayout();
         btnUloz = new Button("Ulož");
         btnSpat = new Button("Späť");
@@ -48,10 +51,15 @@ public class ParametreView extends MojView {
                 .withConverter(new StringToIntegerConverter("Nie je číslo"))
                 .bind(Parametre::getMesacnaHranicaBodovImportu, Parametre::setMesacnaHranicaBodovImportu);
 
+        Binder.Binding<Parametre, Integer> bodyRegistracieBinding = binder.forField(tBodyZaRegistraciu)
+                .withConverter(new StringToIntegerConverter("Nie je číslo"))
+                .bind(Parametre::getBodyZaRegistraciu, Parametre::setBodyZaRegistraciu);
+
 
 
         tRok.addValueChangeListener(event -> rokBinding.validate());
         tRok.addValueChangeListener(event -> hranicaBinding.validate());
+        tRok.addValueChangeListener(event -> bodyRegistracieBinding.validate());
 
         btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
         btnUloz.setClickShortcut(ShortcutAction.KeyCode.ENTER);

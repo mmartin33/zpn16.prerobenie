@@ -22,6 +22,9 @@ public class Parametre extends Vseobecne {
     @Column(name = "mesacna_hranica_bodov", nullable = false)
     private Integer mesacnaHranicaBodovImportu;
 
+    @Column(name = "body_za_registraciu", nullable = false)
+    private Integer bodyZaRegistraciu;
+
     public Parametre() {
 
     }
@@ -38,5 +41,13 @@ public class Parametre extends Vseobecne {
 
     public void setMesacnaHranicaBodovImportu(Integer mesacnaHranicaBodovImportu) {
         this.mesacnaHranicaBodovImportu = mesacnaHranicaBodovImportu;
+    }
+
+    public Integer getBodyZaRegistraciu() {
+        return (bodyZaRegistraciu==null?0:bodyZaRegistraciu);
+    }
+
+    public void setBodyZaRegistraciu(Integer bodyZaRegistraciu) {
+        this.bodyZaRegistraciu = bodyZaRegistraciu;
     }
 }

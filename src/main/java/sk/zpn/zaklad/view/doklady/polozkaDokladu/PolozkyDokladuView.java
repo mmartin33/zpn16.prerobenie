@@ -7,9 +7,12 @@ import com.vaadin.ui.HorizontalLayout;
 import sk.zpn.domena.Doklad;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.PolozkaDokladu;
+import sk.zpn.domena.TypDokladu;
 import sk.zpn.zaklad.model.DokladyNastroje;
+import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class PolozkyDokladuView extends HorizontalLayout implements View {
@@ -25,6 +28,7 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     private Doklad doklad;
     private Firma velkosklad;
     private boolean rezimOdmien=false;
+    private boolean rezimRegistracia=false;
 
     public PolozkyDokladuView(Doklad doklad,Firma velkosklad) {
         this.velkosklad=velkosklad;
@@ -76,6 +80,9 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
             PolozkaDokladu novaPolozka=new PolozkaDokladu();
                 if (this.rezimOdmien) {
                     novaPolozka.setPoberatel(this.doklad.getPoberatel());
+                }
+                if (this.rezimRegistracia) {
+                    novaPolozka.setBody(new BigDecimal(ParametreNastroje.nacitajParametre().getBodyZaRegistraciu()));
                 }
             editacnyForm.edit(novaPolozka); });
         browsPanel.btnNovyKopia.addClickListener(clickEvent -> {
@@ -160,7 +167,16 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         rezimVelkoskladu();
+        if (doklad.getTypDokladu()== TypDokladu.REGISTRACIA) {
+            rezimRegistracia();
+        }
         browsPanel.aktualizujInfoPanle(DokladyNastroje.sumaBodov(this.doklad));
+    }
+
+    private void rezimRegistracia() {
+        this.rezimRegistracia=true;
+        browsPanel.rezimRegistracia();
+        editacnyForm.rezimRegistracia();
     }
 
     public void rezimVelkoskladu() {

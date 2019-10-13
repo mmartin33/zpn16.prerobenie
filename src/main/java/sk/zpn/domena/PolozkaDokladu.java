@@ -186,10 +186,13 @@ public class PolozkaDokladu extends Vseobecne {
 
     public BigInteger getBodyBigInteger() {
         if (this != null) {
-            if (this.getProdukt().getTypProduktov() == TypProduktov.ODMENA)
-                return body.multiply(new BigDecimal(-1)).toBigInteger();
-            else
-                return body.toBigInteger();
+                if (this.getProdukt() != null) {
+                if (this.getProdukt().getTypProduktov() == TypProduktov.ODMENA)
+                    return body.negate().toBigInteger();
+  //                  return body.toBigInteger();
+                else
+                    return body.toBigInteger();
+            }
         }
         return body.toBigInteger();
     }
@@ -202,7 +205,7 @@ public class PolozkaDokladu extends Vseobecne {
     public BigInteger getMnozstvoBigInteger() {
         if (this != null) {
             if (this.getProdukt().getTypProduktov() == TypProduktov.ODMENA)
-                return mnozstvo.multiply(new BigDecimal(-1)).toBigInteger();
+                return mnozstvo.negate().toBigInteger();
             else
                 return mnozstvo.toBigInteger();
         }

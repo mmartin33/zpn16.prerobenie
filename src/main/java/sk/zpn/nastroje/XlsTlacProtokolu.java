@@ -7,11 +7,17 @@ import com.vaadin.ui.Window;
 import org.apache.poi.hssf.usermodel.*;
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.Doklad;
+import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.domena.TypDokladu;
+import sk.zpn.zaklad.model.DokladyNastroje;
+import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class XlsTlacProtokolu {
     private static final String FILE_NAME_SABLONY =  SystemoveParametre.getResourcesAdresar()+"preberaci-protokol.xls";
@@ -24,12 +30,11 @@ public class XlsTlacProtokolu {
     public static void tlac(Doklad doklad) {
         if (doklad == null)
             return;
-        if (doklad.getTypDokladu()!= TypDokladu.INTERNY_DOKLAD) {
+        if (doklad.getTypDokladu()!= TypDokladu.ODMENY) {
             return;
         }
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy ' ' HH:mm:ss z");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         Date date = new Date(System.currentTimeMillis());
-
 
 
 
@@ -49,7 +54,7 @@ public class XlsTlacProtokolu {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        HSSFSheet sheet = workbook.getSheet("zoznam");
+        HSSFSheet sheet = workbook.getSheet("protokol");
         cs = workbook.createCellStyle();
         font = workbook.createFont();
         HSSFRow row;
@@ -57,13 +62,36 @@ public class XlsTlacProtokolu {
 
         //sem plnit
 
-        row=sheet.getRow(12);
-        cel=row.getCell(4);
-        //cel.setCellValue(doklad);
+        HSSFCell resultCell;
+        resultCell = (HSSFCell) sheet.getRow(11).getCell(3);
+        resultCell.setCellValue(doklad.getPoberatelMenoAdresa());
+        resultCell = (HSSFCell) sheet.getRow(12).getCell(3);
+        resultCell.setCellValue(doklad.getFirma().getIco());
+        resultCell = (HSSFCell) sheet.getRow(13).getCell(3);
+        resultCell.setCellValue(doklad.getFirma().getNazov());
+        resultCell = (HSSFCell) sheet.getRow(14).getCell(3);
+        resultCell.setCellValue(doklad.getCisloDokladuOdmeny());
+
+        resultCell = (HSSFCell) sheet.getRow(32).getCell(6);
+        resultCell.setCellValue(formatter.format(doklad.getDatum()));
 
 
-        ///////////
+        List<PolozkaDokladu> zoznamPoloziek=PolozkaDokladuNastroje.zoznamPoloziekDokladov(doklad);
+        int riadok=23;
+        for (PolozkaDokladu polozka : zoznamPoloziek){
 
+            resultCell = (HSSFCell) sheet.getRow(riadok).getCell(2);
+            resultCell.setCellValue(polozka.getProdukt().getKat().toString());
+            resultCell = (HSSFCell) sheet.getRow(riadok).getCell(3);
+            resultCell.setCellValue(polozka.getProdukt().getNazov().toString());
+            resultCell = (HSSFCell) sheet.getRow(riadok).getCell(4);
+            resultCell.setCellValue(polozka.getProdukt().getBody().intValue());
+            resultCell = (HSSFCell) sheet.getRow(riadok).getCell(5);
+            resultCell.setCellValue(polozka.getMnozstvo().multiply(new BigDecimal(-1)).intValue());
+            resultCell = (HSSFCell) sheet.getRow(riadok).getCell(6);
+            resultCell.setCellValue(polozka.getBody().multiply(new BigDecimal(-1)).intValue());
+            riadok++;
+        }
 
 
         try {
