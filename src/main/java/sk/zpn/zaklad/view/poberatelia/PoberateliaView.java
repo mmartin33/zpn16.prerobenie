@@ -1,8 +1,10 @@
 package sk.zpn.zaklad.view.poberatelia;
 
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
 import sk.zpn.zaklad.model.PoberatelNastroje;
@@ -15,14 +17,17 @@ public class PoberateliaView extends HorizontalLayout implements View {
     public static final String NAME = "poberateliaView";
 
     private EditacnyForm editacnyForm;
-
     private BrowsPanel browsPanel;
-
+    private Firma velkosklad;
     private Prevadzka prevadzka;
+    private String rodicovskyView;
+    private View zdrojovyView;
+    GridLayout gr;
 
     private List<Poberatel> poberatelList;
     public PoberateliaView(Prevadzka prevadzka) {
-        GridLayout gr=new GridLayout(2,2);
+
+        gr = new GridLayout(2,2);
         gr.setSpacing(false);
         gr.setSizeFull();
         gr.setColumnExpandRatio(0, 0.60f);
@@ -30,15 +35,8 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
 
         this.prevadzka=prevadzka;
-        poberatelList = PoberatelNastroje.zoznamPoberatelov();
-        browsPanel=new BrowsPanel(poberatelList,this);
         editacnyForm=new EditacnyForm();
         editacnyForm.setPoberatelView(this);
-        configureComponents();
-        gr.addComponent(browsPanel,0,0,0,1);
-        gr.addComponent(editacnyForm,1,0,1,0);
-
-        this.addComponent(gr);
         this.setSizeFull();
 
 
@@ -93,6 +91,52 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
     public Prevadzka getPrevadzka() {
         return prevadzka;
+    }
+
+    public EditacnyForm getEditacnyForm() {
+        return editacnyForm;
+    }
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+        if (this.velkosklad==null)
+            poberatelList = PoberatelNastroje.zoznamPoberatelov();
+        else
+            poberatelList = PoberatelNastroje.zoznamPoberatelovVelkoskladu(velkosklad);
+        browsPanel=new BrowsPanel(poberatelList,this);
+        configureComponents();
+        gr.addComponent(browsPanel,0,0,0,1);
+        gr.addComponent(editacnyForm,1,0,1,0);
+
+        this.addComponent(gr);
+        if (velkosklad!=null) {
+            editacnyForm.rezimVelkoskladu();
+            browsPanel.rezimVelkoskladu();
+        }
+
+    }
+
+    public Firma getVelkosklad() {
+        return velkosklad;
+    }
+
+    public void setVelkosklad(Firma velkosklad) {
+        this.velkosklad = velkosklad;
+    }
+    public void setRodicovskyView(String view) {
+        this.rodicovskyView = view;
+    }
+
+    public String getRodicovskyView() {
+        return rodicovskyView;
+    }
+
+    public View getZdrojovyView() {
+        return zdrojovyView;
+    }
+
+    public void setZdrojovyView(View zdrojovyView) {
+        this.zdrojovyView = zdrojovyView;
     }
 }
 

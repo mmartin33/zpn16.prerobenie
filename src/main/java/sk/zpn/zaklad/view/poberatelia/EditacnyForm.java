@@ -200,5 +200,27 @@ public class EditacnyForm extends VerticalLayout {
     public void setPoberatelView(PoberateliaView poberatelView) {
         this.poberateliaView = poberatelView;
     }
+
+
+    public Poberatel getPoberatelEditovany() {
+        return poberatelEditovany;
+    }
+
+    public void rezimVelkoskladu() {
+        btnUloz.setVisible(false);
+        btnZmaz.setVisible(false);
+        tMeno.setEnabled(false);
+        tTitul.setEnabled(false);;
+        dVyznamnyDatum.setEnabled(false);;
+        tMesto.setEnabled(false);;
+        tUlica.setEnabled(false);;
+        tPsc.setEnabled(false);;
+        tMobil.setEnabled(false);;
+        tTelefon.setEnabled(false);;
+        tEmail.setEnabled(false);;
+        tKod.setEnabled(false);;
+        tHeslo.setEnabled(false);;
+
+    }
 }
 

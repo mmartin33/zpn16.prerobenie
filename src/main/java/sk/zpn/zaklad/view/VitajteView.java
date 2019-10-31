@@ -94,6 +94,12 @@ public class VitajteView extends MojView {
                     DokladyView dokladyView = new DokladyView(velkosklad);
                     UI.getCurrent().getNavigator().addView(DokladyView.NAME, dokladyView);
                     n.navigateTo(DokladyView.NAME);
+                } else if (selectedItem.getDescription().equals("PoberateliaVelkoskladu")) {
+                    Firma velkosklad = UzivatelNastroje.getPrihlasenehoUzivatela().getFirma();
+                    PoberateliaView pobView = new PoberateliaView(null);
+                    pobView.setVelkosklad(velkosklad);
+                    UI.getCurrent().getNavigator().addView(PoberateliaView.NAME, pobView);
+                    n.navigateTo(PoberateliaView.NAME);
                 } else if (selectedItem.getDescription().equals("dokladyOdmien")) {
                     DokladyView dokladyView = new DokladyView(null);
                     dokladyView.setRezimOdmien();
@@ -157,8 +163,11 @@ public class VitajteView extends MojView {
         MenuItem menuDokladyVelkoskladu = menuPredajcu.addItem("Doklady - veľkoskladu prihláseného užívateľa", VaadinIcons.RECORDS, mycommand);
         menuDokladyVelkoskladu.setDescription("dokladyVelkoskladu");
 
-        MenuItem menuBodyPoberatelovVelkoskladu = menuPredajcu.addItem("Stav bodov - poberateľov", VaadinIcons.PIGGY_BANK, mycommand);
+        MenuItem menuBodyPoberatelovVelkoskladu = menuPredajcu.addItem("Stav bodov do XLS - poberateľov veľkoskladu prihláseného užívateľa", VaadinIcons.TABLE, mycommand);
         menuBodyPoberatelovVelkoskladu.setDescription("bodyPoberatelovVelkoskladu");
+
+        MenuItem menuPoberateliaVelkoskladu = menuPredajcu.addItem("Poberatelia - veľkoskladu prihláseného užívateľa", VaadinIcons.USER_CHECK, mycommand);
+        menuPoberateliaVelkoskladu.setDescription("PoberateliaVelkoskladu");
 
 
         menuSpravcu = barmenu.addItem("Spravca ZPN", null, null);

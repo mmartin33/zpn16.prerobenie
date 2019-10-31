@@ -66,7 +66,7 @@ public class XlsTlacProtokolu {
         resultCell = (HSSFCell) sheet.getRow(11).getCell(3);
         resultCell.setCellValue(doklad.getPoberatelMenoAdresa());
         resultCell = (HSSFCell) sheet.getRow(12).getCell(3);
-        resultCell.setCellValue(doklad.getFirma().getIco());
+        resultCell.setCellValue(doklad.getPoberatel().getKod());
         resultCell = (HSSFCell) sheet.getRow(13).getCell(3);
         resultCell.setCellValue(doklad.getFirma().getNazov());
         resultCell = (HSSFCell) sheet.getRow(14).getCell(3);

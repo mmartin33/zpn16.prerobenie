@@ -13,6 +13,7 @@ import sk.zpn.domena.*;
 import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.PoberatelNastroje;
+import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 
 import java.awt.*;
 import java.time.ZoneId;
@@ -36,6 +37,7 @@ public class EditacnyForm extends VerticalLayout {
 
 
     protected Button btnUloz;
+    protected Button btnVyberPoberatela;
     protected Button btnZmaz;
     private final Binder<Doklad> binder = new Binder<>();
     private Doklad staryDokladEditovany;
@@ -60,6 +62,9 @@ public class EditacnyForm extends VerticalLayout {
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
+        btnVyberPoberatela =new Button("Vyber poberateľa",VaadinIcons.USER_CHECK);
+        btnVyberPoberatela.setEnabled(false);
+        btnVyberPoberatela.setVisible(false);
 
         btnZmaz.setVisible(false);
 
@@ -79,6 +84,7 @@ public class EditacnyForm extends VerticalLayout {
         HorizontalLayout lBtn=new HorizontalLayout();
 
         lBtn.addComponent(btnUloz);
+        lBtn.addComponent(btnVyberPoberatela);
         lBtn.addComponent(btnZmaz);
 
 
@@ -145,6 +151,9 @@ public class EditacnyForm extends VerticalLayout {
                 .bind(doklad -> doklad.getFirma() == null ? "" : doklad.getFirma().getNazov(),
                     (doklad, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(doklad::setFirma));
 
+
+
+
         Binder.Binding<Doklad, Date> datumBinding = binder.forField(dDatum)
                 .withConverter(new LocalDateToDateConverter(ZoneId.systemDefault()))
                 .bind(Doklad::getDatum, Doklad::setDatum);
@@ -158,11 +167,25 @@ public class EditacnyForm extends VerticalLayout {
 
     btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
     btnUloz.addClickListener(this::save);
+    btnVyberPoberatela.addClickListener(this::vyberPoberatela);
 
 //    btnZmaz.addClickListener(this::delete);
 
 
 }
+
+    private void vyberPoberatela(Button.ClickEvent clickEvent) {
+        PoberateliaView sv = new PoberateliaView(null);
+        sv.setRodicovskyView(dokladyView.NAME);
+        sv.setZdrojovyView(this.dokladyView);
+        UI.getCurrent().getNavigator().addView(sv.NAME, sv);
+        UI.getCurrent().getNavigator().navigateTo(sv.NAME);
+
+
+
+
+    }
+
     void edit(Doklad doklad) {
         staryDokladEditovany=dokladEditovany;
         this.dokladEditovany = doklad;
@@ -187,6 +210,7 @@ public class EditacnyForm extends VerticalLayout {
             }
             dokladyView.refreshDokladov();
             dokladyView.selectDoklad(ulozenyDoklad);
+            //this.btnVyberPoberatela.setEnabled(false);
 
 
         }
@@ -260,7 +284,7 @@ public class EditacnyForm extends VerticalLayout {
     public void rezimVelkoskladu() {
             btnZmaz.setVisible(false);
             btnUloz.setVisible(false);
-
+            btnVyberPoberatela.setVisible(false);
 
     }
 
@@ -289,7 +313,7 @@ public class EditacnyForm extends VerticalLayout {
                 + "</div>";
     }
 
-    private void vybratyPoberatel(Poberatel poberatel) {
+    public void vybratyPoberatel(Poberatel poberatel) {
         dokladEditovany.setPoberatel(poberatel);
         Firma firma=PoberatelNastroje.getPrvyVelkosklad(poberatel);
         if (firma!=null) {
@@ -297,6 +321,7 @@ public class EditacnyForm extends VerticalLayout {
             tFirma.setValue(firma.getNazov());
         }
         this.aktualnyPoberatel=poberatel;
+        tPoberatel.setValue(poberatel.getMeno());
 
     }
 
@@ -304,12 +329,23 @@ public class EditacnyForm extends VerticalLayout {
         tCislo.setEnabled(false);
         stavDokladuComboBox.setVisible(false);
         typDokladuComboBox.setVisible(false);
+        btnVyberPoberatela.setVisible(true);
+        Binder.Binding<Doklad, String> poberatelBinding = binder.forField(tPoberatel)
+                .withValidator(nazovPoberatela -> PoberatelNastroje.prvyPoberatelPodlaMena(nazovPoberatela).isPresent(),
+                        "Poberatel musi byt existujuci")
+                .bind(doklad -> doklad.getPoberatel() == null ? "" : doklad.getPoberatel().getMeno(),
+                        (doklad, s) -> PoberatelNastroje.prvyPoberatelPodlaMena(tPoberatel.getValue()).ifPresent(doklad::setPoberatel));
+
         this.rezimOdmien=true;
 
     }
 
     public void rezimBodovaci() {
+
+
         tCisloDokladuOdmeny.setVisible(false);
         tPoberatel.setVisible(false);
+
     }
+
 }

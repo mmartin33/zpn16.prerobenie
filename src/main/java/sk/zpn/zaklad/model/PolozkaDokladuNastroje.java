@@ -136,5 +136,15 @@ public class PolozkaDokladuNastroje {
     }
 
 
+    public static List<Object[]> zoznamPohybovZaPoberatela(Long id) {
 
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
+        TypedQuery<Object[]> q = em.createNamedQuery("PolozkaDokladu.getPolozkyPoberatela", Object[].class);
+        q.setParameter("id", id);
+        em.clear();
+        return q.getResultList();
+
+
+    }
 }

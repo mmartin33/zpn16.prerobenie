@@ -104,14 +104,21 @@ public class Produkt extends Vseobecne {
         return this;
     }
 
-    public String getNazov() {return nazov;}
+    public String getNazov() {
+        if (this==null)
+            return "";
+        return nazov;}
 
     public Produkt setNazov(String nazov) {
         this.nazov = nazov;
         return this;
     }
 
-    public String getKat() {return kat;}
+    public String getKat() {
+        if (this==null)
+            return "";
+
+        return kat;}
 
     public Produkt setKat(String kat) {
         this.kat = kat;

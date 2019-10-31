@@ -167,7 +167,7 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         rezimVelkoskladu();
-        if (doklad.getTypDokladu()== TypDokladu.REGISTRACIA) {
+        if ((doklad.getTypDokladu()== TypDokladu.REGISTRACIA)|| (doklad.getTypDokladu()== TypDokladu.PREVOD)){
             rezimRegistracia();
         }
         browsPanel.aktualizujInfoPanle(DokladyNastroje.sumaBodov(this.doklad));
@@ -202,6 +202,10 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
         browsPanel.klasickyRezim();
         editacnyForm.klasickyRezim();
 
+    }
+
+    public EditacnyForm getEditacnyForm() {
+        return editacnyForm;
     }
 }
 

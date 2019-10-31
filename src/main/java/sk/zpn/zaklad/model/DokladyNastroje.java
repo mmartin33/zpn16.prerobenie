@@ -339,7 +339,7 @@ public class DokladyNastroje {
 
         String result = (String) query.getSingleResult();
 
-        if (result != null)
+        if (!StringUtils.isEmpty(result))
             return Long.toString(Long.parseLong(result) + 1);
         else
             return obdobie + "001";

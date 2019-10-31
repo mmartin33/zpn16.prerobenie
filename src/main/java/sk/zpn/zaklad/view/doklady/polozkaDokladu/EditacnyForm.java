@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import sk.zpn.domena.*;
 import sk.zpn.zaklad.model.*;
+import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,7 +26,7 @@ public class EditacnyForm extends VerticalLayout {
     private TextField tMnozstvo;
     private TextField tPoznamka;
 
-
+    Button btnVyberPoberatela;
     protected Button btnUloz;
 
 
@@ -56,6 +57,12 @@ public class EditacnyForm extends VerticalLayout {
         });
         tPoznamka = new TextField("Poznamka");
         tPoznamka.setWidth("400");
+
+
+        btnVyberPoberatela = new Button("Vyber poberateľa", VaadinIcons.USER_CHECK);
+        btnVyberPoberatela.setEnabled(true);
+        btnVyberPoberatela.setVisible(true);
+
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
 
         nastavComponnenty();
@@ -76,6 +83,7 @@ public class EditacnyForm extends VerticalLayout {
 
         HorizontalLayout lBtn=new HorizontalLayout();
         lBtn.addComponent(btnUloz);
+        lBtn.addComponent(btnVyberPoberatela);
 
 
 
@@ -138,13 +146,16 @@ public class EditacnyForm extends VerticalLayout {
         polozkaEditovana.setPoberatel(aktualnyPoberatel);
     }
 
-    private void vybratyPoberatel(Poberatel poberatel) {
+    public void vybratyPoberatel(Poberatel poberatel) {
         if (tPrevadzka.getValue()==null ||tPrevadzka.getValue()=="") {
             Prevadzka prvaPrevadzkaPoberatela=PrevadzkaNastroje.prvaPrevadzkaPoberatela(poberatel);
-            tPrevadzka.setValue(prvaPrevadzkaPoberatela.getNazov());
-            polozkaEditovana.setPrevadzka(prvaPrevadzkaPoberatela);
+            if (prvaPrevadzkaPoberatela!=null) {
+                tPrevadzka.setValue(prvaPrevadzkaPoberatela.getNazov());
+                polozkaEditovana.setPrevadzka(prvaPrevadzkaPoberatela);
+            }
         }
         polozkaEditovana.setPoberatel(poberatel);
+        tPoberatel.setValue(poberatel.getMeno());
         this.aktualnyPoberatel=poberatel;
     }
 
@@ -195,12 +206,24 @@ public class EditacnyForm extends VerticalLayout {
 
     btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
     btnUloz.addClickListener(this::save);
-
-
-
-
+    btnVyberPoberatela.addClickListener(this::vyberPoberatela);
 
 }
+
+
+    private void vyberPoberatela(Button.ClickEvent clickEvent) {
+        PoberateliaView sv = new PoberateliaView(null);
+        sv.setRodicovskyView(polozkyDokladyView.NAME);
+        sv.setZdrojovyView(this.polozkyDokladyView);
+        UI.getCurrent().getNavigator().addView(sv.NAME, sv);
+        UI.getCurrent().getNavigator().navigateTo(sv.NAME);
+
+
+
+
+    }
+
+
 
     private boolean prepocitajBody() {
 
@@ -406,6 +429,7 @@ public class EditacnyForm extends VerticalLayout {
 
     public void rezimVelkoskladu() {
         btnUloz.setVisible(false);
+        btnVyberPoberatela.setVisible(false);
 
     }
 
@@ -413,6 +437,7 @@ public class EditacnyForm extends VerticalLayout {
         this.rezimOdmien=true;
         tPrevadzka.setVisible(false);
         tPoberatel.setEnabled(false);
+        btnVyberPoberatela.setVisible(false);
     }
 
 
@@ -429,6 +454,10 @@ public class EditacnyForm extends VerticalLayout {
         tProdukt.setVisible(false);
         tMnozstvo.setVisible(false);
 
+    }
+
+    public PolozkaDokladu getPolozkaEditovana() {
+        return polozkaEditovana;
     }
 }
 

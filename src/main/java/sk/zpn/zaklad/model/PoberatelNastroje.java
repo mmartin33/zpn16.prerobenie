@@ -197,4 +197,17 @@ public class PoberatelNastroje {
 
 
     }
+    public static List<Poberatel> zoznamPoberatelovVelkoskladu(Firma velkosklad){
+        List<Poberatel> u = null;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
+        TypedQuery<Poberatel> q = em.createNamedQuery("PolozkaDokladu.getPoberateliaVelkoskladu", Poberatel.class);
+        q.setParameter("id", velkosklad.getId());
+        u = q.getResultList();
+
+
+
+        return u;
+    }
+
 }

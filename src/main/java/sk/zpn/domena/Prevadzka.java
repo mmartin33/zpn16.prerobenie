@@ -46,6 +46,9 @@ public class Prevadzka extends Vseobecne {
     }
 
     public String getNazov() {
+        if (this==null)
+            return "";
+
         return nazov;
     }
 

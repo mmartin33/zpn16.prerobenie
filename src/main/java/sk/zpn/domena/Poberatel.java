@@ -17,6 +17,9 @@ import java.util.concurrent.ThreadLocalRandom;
         @NamedQuery(name = "Poberatel.getPodlaMenaLike", query = "SELECT p FROM poberatelia p where upper(p.meno) like upper(:meno) order by p.meno"),
         @NamedQuery(name = "Poberatel.getPodlaKoduAhesla", query = "SELECT p FROM poberatelia p WHERE trim(p.kod) =:kod and trim(p.heslo) =:heslo"),
         @NamedQuery(name = "Poberatel.getPodlaEmailuAhesla", query = "SELECT p FROM poberatelia p WHERE trim(p.email) =:kod and trim(p.heslo) =:heslo"),
+        @NamedQuery(name = "Poberatel.getAllZaVelkosklad", query = "SELECT p FROM poberatelia " +
+                "   " +
+                " p order by p.meno "),
         @NamedQuery(name = "Poberatel.getAll", query = "SELECT p FROM poberatelia p order by p.meno")})
 //e.firstName LIKE 'A%' OR e.firstName NOT LIKE '%._%' ESCAPE '.'
 public class Poberatel extends Vseobecne {

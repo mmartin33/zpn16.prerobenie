@@ -51,6 +51,7 @@ public class StatDodavatelProdukt {
                 "    where " +
                 "    dod.id="+dodavatel.getId()+
                 "    and d.stavdokladu='POTVRDENY' " +
+                "    and (d.typdokladu='DAVKA' or d.typdokladu='INTERNY_DOKLAD" +
                 "    and d.datum>=Date('" + dod + "') and d.datum<=Date('" + ddo + "') " +
                 "    group by f.ico||'*'||prod.kat";
 

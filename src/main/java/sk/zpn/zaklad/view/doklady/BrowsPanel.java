@@ -4,6 +4,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 
+import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
@@ -84,6 +85,12 @@ public class BrowsPanel extends VerticalLayout {
 
 
         grid.setColumnOrder(colCisloDokladu, colStavDokladu,colTypDokladu, colFirmaNazov, colDatum,colDokladuOdmeny,colPoberatel);
+
+
+
+
+
+
 //        grid.setColumnOrder(colCisloDokladu, colTypDokladu, colFirmaNazov, colDatum);
         Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
 
@@ -148,8 +155,10 @@ public class BrowsPanel extends VerticalLayout {
 //            grid.select(dokladyList.get(0));
 //        grid.scrollToStart();
         //List items = grid.getDataCommunicator().fetchItemsWithRange(0, Integer.MAX_VALUE);
-        grid.select(dokladyList.get(dokladyList.size()-1));
-        grid.scrollTo(dokladyList.indexOf(dokladyList.get(dokladyList.size()-1)));
+        if (dokladyList.size()>0) {
+            grid.select(dokladyList.get(dokladyList.size() - 1));
+            grid.scrollTo(dokladyList.indexOf(dokladyList.get(dokladyList.size() - 1)));
+        }
 
     }
 

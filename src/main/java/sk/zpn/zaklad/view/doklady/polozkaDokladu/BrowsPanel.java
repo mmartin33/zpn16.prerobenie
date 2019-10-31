@@ -5,8 +5,6 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
-import com.vaadin.ui.components.grid.MultiSelectionModel;
-import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import org.vaadin.dialogs.ConfirmDialog;
@@ -18,8 +16,8 @@ import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
 import sk.zpn.zaklad.view.produkty.ProduktyView;
+import sk.zpn.zaklad.view.statistiky.StatPohybyBodovPoberatelovView;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 
@@ -42,22 +40,23 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnKatalogOdmien;
     public Button btnTlac;
     private Firma velkosklad;
-    private boolean rezimOdmien=false;
+    private boolean rezimOdmien = false;
 
 
     public BrowsPanel(List<PolozkaDokladu> polozkyDokladuList, PolozkyDokladuView pdv) {
-        this.velkosklad=pdv.getVelkosklad();
-        GridLayout gl =new GridLayout(1,4);
+        this.velkosklad = pdv.getVelkosklad();
+        GridLayout gl = new GridLayout(1, 5);
         gl.setSizeFull();
         gl.setRowExpandRatio(0, 0.02f);
         gl.setRowExpandRatio(1, 0.90f);
         gl.setRowExpandRatio(2, 0.02f);
         gl.setRowExpandRatio(3, 0.02f);
-        infoPanel=new HorizontalLayout();
-        lblInfopanelu= new Label("", ContentMode.HTML);
+        gl.setRowExpandRatio(4, 0.02f);
+        infoPanel = new HorizontalLayout();
+        lblInfopanelu = new Label("", ContentMode.HTML);
         infoPanel.addComponent(lblInfopanelu);
 
-        this.polozkyDokladuView=pdv;
+        this.polozkyDokladuView = pdv;
         this.polozkyDokladuList = polozkyDokladuList;
         grid = new FilterGrid<>();
         grid.setItems(this.polozkyDokladuList);
@@ -66,13 +65,12 @@ public class BrowsPanel extends VerticalLayout {
 //        model.setSelectAllCheckBoxVisibility(MultiSelectionModel.SelectAllCheckBoxVisibility.VISIBLE);
 
 
-
         // definitionn of columns
         FilterGrid.Column<PolozkaDokladu, String> colProduktKod = grid.addColumn(PolozkaDokladu::getProduktKod).setCaption("Kód produktu").setId("kodProduktu");
         FilterGrid.Column<PolozkaDokladu, String> colProduktNazov = grid.addColumn(PolozkaDokladu::getProduktNazov).setCaption("Názov produktu").setId("nazovProduktu");
         FilterGrid.Column<PolozkaDokladu, String> colPrevadzkaNazov = grid.addColumn(PolozkaDokladu::getPrevadzkaNazov).setCaption("Prevádzka").setId("nazovPrevadzky");
         FilterGrid.Column<PolozkaDokladu, String> colPoberatel = grid.addColumn(PolozkaDokladu::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
-        FilterGrid.Column<PolozkaDokladu, BigInteger> colBody = grid.addColumn(PolozkaDokladu::getBodyBigInteger).setCaption("Body za pohyb").setId("body");
+        FilterGrid.Column<PolozkaDokladu, BigInteger> colBody = grid.addColumn(PolozkaDokladu::getBodyUpraveneBigInteger).setCaption("Body za pohyb").setId("body");
         FilterGrid.Column<PolozkaDokladu, String> colBodyZaProdukt = grid.addColumn(PolozkaDokladu::getBodyZaProdukt).setCaption("Body/za MN").setId("bodyNaProdukte");
         FilterGrid.Column<PolozkaDokladu, BigInteger> colMnozstvo = grid.addColumn(PolozkaDokladu::getMnozstvoBigInteger).setCaption("Množstvo").setId("mnozstvo");
         FilterGrid.Column<PolozkaDokladu, String> colPoznamka = grid.addColumn(PolozkaDokladu::getPoznamka).setCaption("Poznámka").setId("poznamka");
@@ -83,37 +81,57 @@ public class BrowsPanel extends VerticalLayout {
         colPrevadzkaNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colPoberatel.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colPoznamka.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-        Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
+        Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
         btnSpat.addClickListener(clickEvent ->
                 UI.getCurrent().getNavigator().navigateTo(DokladyView.NAME)
         );
-        btnKatalogOdmien=new Button("Katalog odmien", VaadinIcons.LIST);
+        btnKatalogOdmien = new Button("Katalog odmien", VaadinIcons.LIST);
 
         btnKatalogOdmien.addClickListener(clickEvent ->
                 spustiKatalog()
         );
-        btnPanelovy=new Button("Zobraz/schovaj detail ", VaadinIcons.ARROWS_CROSS);
 
-        Button btnZmaz=new Button("Zmaž", VaadinIcons.CLOSE_CIRCLE);
+        Button btnDetail = new Button("Detail o poberatelovy", VaadinIcons.INFO_CIRCLE);
+        btnDetail.addClickListener(clickEvent -> {
+            if (polozkyDokladuView.getEditacnyForm().getPolozkaEditovana() != null) {
+                if (polozkyDokladuView.getEditacnyForm().getPolozkaEditovana().getPoberatel() != null) {
+                    StatPohybyBodovPoberatelovView sv = new StatPohybyBodovPoberatelovView();
+                    sv.setRodicovskyView(polozkyDokladuView.NAME);
+                    sv.setPoberatel(polozkyDokladuView.getEditacnyForm().getPolozkaEditovana().getPoberatel());
+
+                    UI.getCurrent().getNavigator().addView(sv.NAME, sv);
+                    UI.getCurrent().getNavigator().navigateTo(sv.NAME);
+                    ;
+                }
+            }else{
+                Notification.show("Nebola vybraná položka!!!", Notification.Type.WARNING_MESSAGE);
+            }
+
+        });
+
+
+        btnPanelovy = new Button("Zobraz/schovaj detail ", VaadinIcons.ARROWS_CROSS);
+
+        Button btnZmaz = new Button("Zmaž", VaadinIcons.CLOSE_CIRCLE);
         btnZmaz.addClickListener(clickEvent ->
                 zmaz()
         );
 
 
-        HorizontalLayout tlacitkovy=new HorizontalLayout();
-        btnNovy=new Button("Novy",VaadinIcons.FILE_O);
-        btnTlac=new Button("Tlač",VaadinIcons.FILE_O);
+        HorizontalLayout tlacitkovy = new HorizontalLayout();
+        HorizontalLayout tlacitkovy2 = new HorizontalLayout();
+        btnNovy = new Button("Novy", VaadinIcons.FILE_O);
+        btnTlac = new Button("Tlač", VaadinIcons.FILE_O);
         btnTlac.addClickListener(clickEvent ->
                 tlac()
         );
 
-        btnNovyKopia=new Button("Novy kópia",VaadinIcons.FILE_O);
-
+        btnNovyKopia = new Button("Novy kópia", VaadinIcons.FILE_O);
 
 
         btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         btnNovy.setClickShortcut(ShortcutAction.KeyCode.N,
-                new int[] { ShortcutAction.ModifierKey.ALT });
+                new int[]{ShortcutAction.ModifierKey.ALT});
 
 
         if (!jeRezimVelkoskladu()) {
@@ -123,23 +141,27 @@ public class BrowsPanel extends VerticalLayout {
             tlacitkovy.addComponent(btnZmaz);
             tlacitkovy.addComponent(btnKatalogOdmien);
         }
+
         tlacitkovy.addComponent(btnSpat);//666
+        tlacitkovy2.addComponent(btnDetail);//666
         tlacitkovy.addComponent(btnPanelovy);//666
 
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String formatovanyDatum =simpleDateFormat.format(polozkyDokladuView.getDoklad().getDatum());
+        String formatovanyDatum = simpleDateFormat.format(polozkyDokladuView.getDoklad().getDatum());
 
 
-        gl.addComponent(new Label("Prehľad položiek dokladu:  "+polozkyDokladuView.getDoklad().getCisloDokladu()+" z dátumu:"+formatovanyDatum));
+        gl.addComponent(new Label("Prehľad položiek dokladu:  " + polozkyDokladuView.getDoklad().getCisloDokladu() + " z dátumu:" + formatovanyDatum));
 
 
         gl.addComponents(grid);
-        gl.setComponentAlignment(grid,Alignment.MIDDLE_LEFT);
+        gl.setComponentAlignment(grid, Alignment.MIDDLE_LEFT);
         gl.addComponent(infoPanel);
         //gl.setComponentAlignment(infoPanel,Alignment.BOTTOM_LEFT);
         gl.addComponent(tlacitkovy);
-        gl.setComponentAlignment(tlacitkovy,Alignment.BOTTOM_LEFT);
+        gl.addComponent(tlacitkovy2);
+        gl.setComponentAlignment(tlacitkovy, Alignment.BOTTOM_LEFT);
+        gl.setComponentAlignment(tlacitkovy2, Alignment.BOTTOM_LEFT);
         gl.setVisible(true);
 //        aktualizujInfoPanle(0);
         grid.setSizeFull();
@@ -147,8 +169,6 @@ public class BrowsPanel extends VerticalLayout {
         this.addComponentsAndExpand(gl);
 
         //grid.scrollToEnd();
-
-
 
 
     }
@@ -169,30 +189,30 @@ public class BrowsPanel extends VerticalLayout {
     }
 
 
-    public void aktualizujInfoPanle(int pocetBodov){
+    public void aktualizujInfoPanle(int pocetBodov) {
 
-        String text="<font size=\"3\" color=\"blue\">Počet všetkých položiek: </font> ";
-        text=text+"<font size=\"3\" color=\"green\">"+ polozkyDokladuList.size()+ "</font> ";
-        text=text+"<font size=\"3\" color=\"blue\">  súčet bodov: ";
-        text=text+"<font size=\"3\" color=\"green\">"+ pocetBodov+ "</font> ";
+        String text = "<font size=\"3\" color=\"blue\">Počet všetkých položiek: </font> ";
+        text = text + "<font size=\"3\" color=\"green\">" + polozkyDokladuList.size() + "</font> ";
+        text = text + "<font size=\"3\" color=\"blue\">  súčet bodov: ";
+        text = text + "<font size=\"3\" color=\"green\">" + pocetBodov + "</font> ";
 
         lblInfopanelu.setValue(text);
     }
 
     private void zmaz() {
-        if (grid.getSelectedItems().size()<=0)
+        if (grid.getSelectedItems().size() <= 0)
             return;
-        String otazka=new String("Naozaj si prajete odstrániť položku");
-        if (grid.getSelectedItems().size()>1)
-            otazka="Naozaj si prajete odstrániť položky";
-        ConfirmDialog.show(UI.getCurrent(), "Odstránenie", otazka+"?",
+        String otazka = new String("Naozaj si prajete odstrániť položku");
+        if (grid.getSelectedItems().size() > 1)
+            otazka = "Naozaj si prajete odstrániť položky";
+        ConfirmDialog.show(UI.getCurrent(), "Odstránenie", otazka + "?",
                 "Áno", "Nie", new ConfirmDialog.Listener() {
 
                     public void onClose(ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             // Confirmed to continue
 
-                            for(Object o : grid.getSelectionModel().getSelectedItems()){
+                            for (Object o : grid.getSelectionModel().getSelectedItems()) {
                                 PolozkaDokladuNastroje.zmazPolozkyDoklady((PolozkaDokladu) o);
                                 polozkyDokladuList.remove(o);
                             }
@@ -217,7 +237,7 @@ public class BrowsPanel extends VerticalLayout {
         grid.asMultiSelect()
                 .addValueChangeListener(e -> {
                     Set<PolozkaDokladu> polozkaDokladuSet = e.getValue();
-                    if (polozkaDokladuSet.size()==1)
+                    if (polozkaDokladuSet.size() == 1)
                         listener.accept(polozkaDokladuSet.iterator().next());
 
                 });
@@ -232,8 +252,8 @@ public class BrowsPanel extends VerticalLayout {
 //    }
 
     void selectFirst() {
-        List<PolozkaDokladu> prvaPolozkaDokladu = grid.getDataCommunicator().fetchItemsWithRange(0,1);
-        if(prvaPolozkaDokladu.size() > 0){
+        List<PolozkaDokladu> prvaPolozkaDokladu = grid.getDataCommunicator().fetchItemsWithRange(0, 1);
+        if (prvaPolozkaDokladu.size() > 0) {
             grid.asMultiSelect().select(prvaPolozkaDokladu.get(0));
         }
     }
@@ -247,18 +267,18 @@ public class BrowsPanel extends VerticalLayout {
         grid.select(p);
 
     }
+
     public boolean jeRezimVelkoskladu() {
-        return this.velkosklad==null?false:true;
+        return this.velkosklad == null ? false : true;
     }
 
     public void rezimOdmien() {
-        this.rezimOdmien=true;
+        this.rezimOdmien = true;
         grid.removeColumn("nazovPrevadzky");
     }
 
-    public void klasickyRezim()
-    {
-        this.rezimOdmien=false;
+    public void klasickyRezim() {
+        this.rezimOdmien = false;
         btnKatalogOdmien.setVisible(false);
         btnTlac.setVisible(false);
 
@@ -273,9 +293,6 @@ public class BrowsPanel extends VerticalLayout {
         grid.removeColumn("nazovProduktu");
         grid.removeColumn("mnozstvo");
         grid.removeColumn("bodyNaProdukte");
-
-
-
 
 
     }

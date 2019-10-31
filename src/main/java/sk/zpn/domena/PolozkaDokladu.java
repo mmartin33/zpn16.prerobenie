@@ -13,6 +13,21 @@ import static javax.persistence.CascadeType.PERSIST;
 @NamedQueries(value = {
         @NamedQuery(name = "PolozkaDokladu.getAll", query = "SELECT d FROM polozkyDokladu d"),
         @NamedQuery(name = "PolozkaDokladu.getPolozkyJednehoDokladu", query = "SELECT d FROM polozkyDokladu d where d.doklad=:doklad"),
+        @NamedQuery(name = "PolozkaDokladu.getPolozkyPoberatela", query = "SELECT p,d,pob,prev,f,kat FROM polozkyDokladu p " +
+                " join p.doklad as d " +
+                " join p.poberatel as pob " +
+                " join d.firma as f " +
+                " left join p.prevadzka as prev " +
+                " left join p.produkt as kat " +
+                " where pob.id=:id " +
+                " order by d.datum "),
+        @NamedQuery(name = "PolozkaDokladu.getPoberateliaVelkoskladu", query = "SELECT pob FROM polozkyDokladu p " +
+                " join p.doklad as d " +
+                " join p.poberatel as pob " +
+                " join d.firma as f " +
+                " where  f.id=:id " +
+                " and d.stavDokladu=sk.zpn.domena.StavDokladu.POTVRDENY "+
+                "group by pob "),
         @NamedQuery(name = "PolozkaDokladu.get", query = "SELECT d FROM polozkyDokladu d WHERE d.id =:id")})
 
 public class PolozkaDokladu extends Vseobecne {
@@ -184,13 +199,21 @@ public class PolozkaDokladu extends Vseobecne {
         this.body = body;
     }
 
-    public BigInteger getBodyBigInteger() {
+    public BigInteger getBodyUpraveneBigInteger() {
         if (this != null) {
-                if (this.getProdukt() != null) {
+            if (this.getProdukt() != null) {
                 if (this.getProdukt().getTypProduktov() == TypProduktov.ODMENA)
                     return body.negate().toBigInteger();
-  //                  return body.toBigInteger();
+                    //                  return body.toBigInteger();
                 else
+                    return body.toBigInteger();
+            }
+        }
+        return body.toBigInteger();
+    }
+public BigInteger getBodyBigInteger() {
+        if (this != null) {
+            if (this.getProdukt() != null) {
                     return body.toBigInteger();
             }
         }
@@ -204,12 +227,13 @@ public class PolozkaDokladu extends Vseobecne {
 
     public BigInteger getMnozstvoBigInteger() {
         if (this != null) {
-            if (this.getProdukt().getTypProduktov() == TypProduktov.ODMENA)
-                return mnozstvo.negate().toBigInteger();
-            else
-                return mnozstvo.toBigInteger();
+            if ((this.getMnozstvo() != null) && (this.getProdukt()!=null)){
+                if (this.getProdukt().getTypProduktov() == TypProduktov.ODMENA)
+                    return mnozstvo.negate().toBigInteger();
+                else
+                    return mnozstvo.toBigInteger();
+            }
         }
-
 
         if (mnozstvo == null)
             return BigInteger.ZERO;

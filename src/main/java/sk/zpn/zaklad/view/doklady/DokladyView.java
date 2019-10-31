@@ -134,6 +134,7 @@ public class DokladyView extends HorizontalLayout implements View {
                 if (this.rezimOdmien) {
                     d.setCisloDokladuOdmeny(DokladyNastroje.noveCisloDokladuOdmien());
                     d.setTypDokladu(TypDokladu.ODMENY);
+                    this.editacnyForm.btnVyberPoberatela.setEnabled(true);;
                 }
                 editacnyForm.edit(d);
             });
@@ -153,7 +154,7 @@ public class DokladyView extends HorizontalLayout implements View {
             this.editacnyForm.rezimVelkoskladu();
         }
 
-        refreshDokladov();
+//        refreshDokladov();
         this.setSizeFull();
 
     }
@@ -161,8 +162,14 @@ public class DokladyView extends HorizontalLayout implements View {
 
     public void setRezimOdmien() {
         this.rezimOdmien = true;
+    }
 
+    public EditacnyForm getEditacnyForm() {
+        return editacnyForm;
+    }
 
+    public void setEditacnyForm(EditacnyForm editacnyForm) {
+        this.editacnyForm = editacnyForm;
     }
 }
 

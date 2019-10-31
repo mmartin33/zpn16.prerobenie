@@ -7,7 +7,7 @@ import sk.zpn.domena.Produkt;
 import sk.zpn.domena.StatistikaBodov;
 import sk.zpn.domena.statistiky.Zaznam;
 import sk.zpn.domena.statistiky.ZoznamBodov;
-import sk.zpn.domena.statistiky.ZoznamPohybov;
+
 import sk.zpn.nastroje.NastrojePoli;
 import sk.zpn.nastroje.XlsStatistikaBodov;
 import sk.zpn.nastroje.XlsStatistikaBodovDodavatelProdukt;
@@ -309,10 +309,5 @@ public class StatPoberatelNastroje {
 
     }
 
-    public static List<ZoznamPohybov> zoznamPohybovZaPoberatela(Long id) {
 
-
-        //todo  dopisa cele telo
-        return null;
-    }
 }
