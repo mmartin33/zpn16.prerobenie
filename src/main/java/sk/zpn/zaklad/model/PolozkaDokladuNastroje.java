@@ -147,4 +147,13 @@ public class PolozkaDokladuNastroje {
 
 
     }
+
+    public static void aktualizujPoberatela(Doklad ulozenyDoklad) {
+        List <PolozkaDokladu> zoznamPoloziek=zoznamPoloziekDokladov(ulozenyDoklad);
+        for (PolozkaDokladu pd : zoznamPoloziek) {
+            pd.setPoberatel(ulozenyDoklad.getPoberatel());
+            PolozkaDokladuNastroje.ulozPolozkuDokladu(pd);
+        }
+
+    }
 }

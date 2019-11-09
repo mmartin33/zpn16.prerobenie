@@ -19,6 +19,8 @@ import static javax.persistence.CascadeType.PERSIST;
                 " where d.typDokladu<>sk.zpn.domena.TypDokladu.ODMENY "),//order by d.kedy DESC
         @NamedQuery(name = "Odmena.getAll", query = "SELECT d FROM doklady d " +
                 " where d.typDokladu=sk.zpn.domena.TypDokladu.ODMENY "),
+        @NamedQuery(name = "Odmena.getZaFirmu", query = "SELECT d FROM doklady d " +
+                " where d.typDokladu=sk.zpn.domena.TypDokladu.ODMENY "),
         @NamedQuery(name = "Doklad.getZaFirmu", query = "SELECT d FROM doklady d join d.firma f where f.id=:id"),//order by d.kedy DESC
         @NamedQuery(name = "Doklad.get", query = "SELECT d FROM doklady d WHERE d.id =:id")})
 

@@ -346,7 +346,7 @@ public class DokladyNastroje {
 
     }
 
-    public static List<Doklad> zoznamDokladovOdmien() {
+    public static List<Doklad> zoznamDokladovOdmien(Firma velkosklad) {
 
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();

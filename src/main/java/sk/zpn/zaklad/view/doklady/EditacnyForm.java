@@ -13,6 +13,7 @@ import sk.zpn.domena.*;
 import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.PoberatelNastroje;
+import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 
 import java.awt.*;
@@ -201,6 +202,9 @@ public class EditacnyForm extends VerticalLayout {
         if (binder.writeBeanIfValid(dokladEditovany)) {
             boolean jeDokladNovy = dokladEditovany.isNew();
             Doklad ulozenyDoklad = DokladyNastroje.ulozDoklad(dokladEditovany);
+            if (ulozenyDoklad.getTypDokladu()==TypDokladu.ODMENY){
+                PolozkaDokladuNastroje.aktualizujPoberatela(ulozenyDoklad);
+            }
             String msg = String.format("Ulozeny .",
                     dokladEditovany.getCisloDokladu());
 

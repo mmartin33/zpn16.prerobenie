@@ -114,7 +114,7 @@ public class DokladyView extends HorizontalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         if (dokladyList == null) {
             if (rezimOdmien)
-                dokladyList = DokladyNastroje.zoznamDokladovOdmien();
+                dokladyList = DokladyNastroje.zoznamDokladovOdmien(getVelkosklad());
             else
                 dokladyList = DokladyNastroje.zoznamDokladov(getVelkosklad());
         }
