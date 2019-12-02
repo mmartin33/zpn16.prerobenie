@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 
 
 @Entity
-
+@Cacheable(false)
 
 public class Zaznam {
 

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity(name = "firma_produkt")
+@Cacheable(false)
 @NamedQueries(value = {
     @NamedQuery(name = "FirmaProdukt.getPodlaNazvuFirmy", query = "SELECT fp FROM firma_produkt fp " +
         "JOIN fp.firma firmy " +

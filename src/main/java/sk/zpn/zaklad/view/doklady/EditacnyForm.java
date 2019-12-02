@@ -42,6 +42,9 @@ public class EditacnyForm extends VerticalLayout {
     protected Button btnZmaz;
     private final Binder<Doklad> binder = new Binder<>();
     private Doklad staryDokladEditovany;
+
+
+
     private Doklad dokladEditovany;
     private DokladyView dokladyView;
     private Poberatel aktualnyPoberatel;
@@ -352,4 +355,7 @@ public class EditacnyForm extends VerticalLayout {
 
     }
 
+    public Doklad getDokladEditovany() {
+        return dokladEditovany;
+    }
 }

@@ -4,6 +4,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 import sk.zpn.domena.Doklad;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.PolozkaDokladu;
@@ -30,7 +31,12 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     private boolean rezimOdmien=false;
     private boolean rezimRegistracia=false;
 
+
+
+    private boolean klasickyRezim=false;
+
     public PolozkyDokladuView(Doklad doklad,Firma velkosklad) {
+        this.doklad=doklad;
         this.velkosklad=velkosklad;
         gr=new GridLayout(2,2);
         gr.setSpacing(false);
@@ -38,71 +44,25 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
         gr.setColumnExpandRatio(0, 0.60f);
         gr.setColumnExpandRatio(1, 0.40f);
 
-        this.doklad=doklad;
-        polozkyDokladuList = PolozkaDokladuNastroje.zoznamPoloziekDokladov(this.doklad);
-        browsPanel=new BrowsPanel(polozkyDokladuList,this);
+
         editacnyForm=new EditacnyForm();
         editacnyForm.setDokladyView(this);
+
         configureComponents();
-        gr.addComponent(browsPanel,0,0,0,1);
-        gr.addComponent(editacnyForm,1,0,1,0);
-        this.addComponent(gr);
-        this.setSizeFull();
     }
 
 //    void deselect() {
 //        browsPanel.deselect();
 //    }
 
+
+
     private void configureComponents() {
 
 
-        browsPanel.btnPanelovy.addClickListener(clickEvent -> {
-            if (editacnyForm.isVisible()) {
-                editacnyForm.setVisible(false);
-                gr.setColumnExpandRatio(0, 0.100f);
-                gr.setColumnExpandRatio(1, 0.00f);
 
-            }
-            else {
-                editacnyForm.setVisible(true);
-                gr.setColumnExpandRatio(0, 0.60f);
-                gr.setColumnExpandRatio(1, 0.40f);
-
-            }
-                    ; });
 
         editacnyForm.setDokladyView(this);
-        browsPanel.btnNovy.addClickListener(clickEvent -> {
-            editacnyForm.setVisible(true);
-            gr.setColumnExpandRatio(0, 0.60f);
-            gr.setColumnExpandRatio(1, 0.40f);
-            PolozkaDokladu novaPolozka=new PolozkaDokladu();
-                if (this.rezimOdmien) {
-                    novaPolozka.setPoberatel(this.doklad.getPoberatel());
-                }
-                if (this.rezimRegistracia) {
-                    novaPolozka.setBody(new BigDecimal(ParametreNastroje.nacitajParametre().getBodyZaRegistraciu()));
-                }
-            editacnyForm.edit(novaPolozka); });
-        browsPanel.btnNovyKopia.addClickListener(clickEvent -> {
-            PolozkaDokladu novaPolozka=new PolozkaDokladu();
-            novaPolozka.setDoklad(povodnaPolozka.getDoklad());
-            novaPolozka.setPrevadzka(povodnaPolozka.getPrevadzka());
-            novaPolozka.setPoberatel(povodnaPolozka.getPoberatel());
-            novaPolozka.setMnozstvo(povodnaPolozka.getMnozstvo());
-            novaPolozka.setBody(povodnaPolozka.getBody());
-
-
-
-            editacnyForm.setVisible(true);
-            gr.setColumnExpandRatio(0, 0.60f);
-            gr.setColumnExpandRatio(1, 0.40f);
-            editacnyForm.edit(novaPolozka); });
-
-        browsPanel.addSelectionListener(editacnyForm::edit);
-
-        refreshPoloziekDokladov();
     }
 
     public void refreshPoloziekDokladov() {
@@ -166,7 +126,68 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        rezimVelkoskladu();
+
+        if (polozkyDokladuList==null)
+            polozkyDokladuList = PolozkaDokladuNastroje.zoznamPoloziekDokladov(this.doklad);
+        if (browsPanel==null) {
+            browsPanel = new BrowsPanel(polozkyDokladuList, this);
+            browsPanel.btnPanelovy.addClickListener(clickEvent -> {
+                if (editacnyForm.isVisible()) {
+                    editacnyForm.setVisible(false);
+                    gr.setColumnExpandRatio(0, 0.100f);
+                    gr.setColumnExpandRatio(1, 0.00f);
+
+                }
+                else {
+                    editacnyForm.setVisible(true);
+                    gr.setColumnExpandRatio(0, 0.60f);
+                    gr.setColumnExpandRatio(1, 0.40f);
+
+                }
+                ; });
+            browsPanel.btnNovy.addClickListener(clickEvent -> {
+                editacnyForm.setVisible(true);
+                gr.setColumnExpandRatio(0, 0.60f);
+                gr.setColumnExpandRatio(1, 0.40f);
+                PolozkaDokladu novaPolozka=new PolozkaDokladu();
+                if (this.rezimOdmien) {
+                    novaPolozka.setPoberatel(this.doklad.getPoberatel());
+                }
+                if (this.rezimRegistracia) {
+                    novaPolozka.setBody(new BigDecimal(ParametreNastroje.nacitajParametre().getBodyZaRegistraciu()));
+                }
+                editacnyForm.edit(novaPolozka); });
+            browsPanel.btnNovyKopia.addClickListener(clickEvent -> {
+                PolozkaDokladu novaPolozka=new PolozkaDokladu();
+                novaPolozka.setDoklad(povodnaPolozka.getDoklad());
+                novaPolozka.setPrevadzka(povodnaPolozka.getPrevadzka());
+                novaPolozka.setPoberatel(povodnaPolozka.getPoberatel());
+                novaPolozka.setMnozstvo(povodnaPolozka.getMnozstvo());
+                novaPolozka.setBody(povodnaPolozka.getBody());
+
+
+
+                editacnyForm.setVisible(true);
+                gr.setColumnExpandRatio(0, 0.60f);
+                gr.setColumnExpandRatio(1, 0.40f);
+                editacnyForm.edit(novaPolozka); });
+
+            browsPanel.addSelectionListener(editacnyForm::edit);
+            gr.addComponent(browsPanel,0,0,0,1);
+            gr.addComponent(editacnyForm,1,0,1,0);
+            this.addComponent(gr);
+            this.setSizeFull();
+
+            refreshPoloziekDokladov();
+
+        }
+        if (this.klasickyRezim)
+            klasickyRezim();
+        else if(this.rezimOdmien)
+            rezimOdmien();
+
+        //if (velkosklad!=null)
+            rezimVelkoskladu();
         if ((doklad.getTypDokladu()== TypDokladu.REGISTRACIA)|| (doklad.getTypDokladu()== TypDokladu.PREVOD)){
             rezimRegistracia();
         }
@@ -199,6 +220,8 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     }
 
     public void klasickyRezim() {
+
+        browsPanel.setKlasickyRezim();
         browsPanel.klasickyRezim();
         editacnyForm.klasickyRezim();
 
@@ -206,6 +229,17 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
 
     public EditacnyForm getEditacnyForm() {
         return editacnyForm;
+    }
+
+    public void setOtvorenyDoklad(Doklad otvorenyDoklad) {
+        this.doklad=doklad;
+    }
+    public void setKlasickyRezim() {
+        this.klasickyRezim = true;
+    }
+
+    public void setRezimOdmien() {
+        this.rezimOdmien=true;
     }
 }
 

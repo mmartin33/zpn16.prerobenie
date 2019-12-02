@@ -30,7 +30,8 @@ public class EditacnyForm extends VerticalLayout {
     protected Button btnUloz;
 
 
-    private final Binder <PolozkaDokladu> binder = new Binder<>();
+    private Binder <PolozkaDokladu> binder = new Binder<>();
+    private Binder.Binding<PolozkaDokladu, String> produktBinding;
     private PolozkaDokladu staraEditovana;
     private PolozkaDokladu polozkaEditovana;
     private PolozkyDokladuView polozkyDokladyView;
@@ -389,6 +390,11 @@ public class EditacnyForm extends VerticalLayout {
                     .bind(polozkaDokladu -> polozkaDokladu.getPrevadzka() == null ? "" : polozkaDokladu.getPrevadzka().getNazov(),
                             (polozkaDokladu, s) -> PrevadzkaNastroje.prvaPrevadzkaPodlaNazvu(tPrevadzka.getValue()).ifPresent(polozkaDokladu::setPrevadzka));
 
+            produktBinding = binder.forField(tProdukt)
+                    .withValidator(nazovProduktu -> ProduktyNastroje.prvyProduktPodlaNazvu(nazovProduktu,TypProduktov.BODOVACI).isPresent(),
+                            "Produkt musi byt existujuci")
+                    .bind(polozkaDokladu -> polozkaDokladu.getProdukt() == null ? "" : polozkaDokladu.getProdukt().getNazov(),
+                            (polozkaDokladu, s) -> ProduktyNastroje.prvyProduktPodlaNazvu(tProdukt.getValue(),TypProduktov.BODOVACI).ifPresent(polozkaDokladu::setProdukt));
 
 
             tProdukt.setVisible(true);

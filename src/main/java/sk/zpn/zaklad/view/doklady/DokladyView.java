@@ -19,7 +19,7 @@ public class DokladyView extends HorizontalLayout implements View {
 
     private EditacnyForm editacnyForm;
     private Firma velkosklad;
-    private BrowsPanel browsPanel;
+    public BrowsPanel browsPanel;
     private GridLayout gr;
     private List<Doklad> dokladyList = null;
     public boolean rezimOdmien = false;
@@ -36,6 +36,7 @@ public class DokladyView extends HorizontalLayout implements View {
 
         editacnyForm = new EditacnyForm();
         editacnyForm.setDokladyView(this);
+        this.setSizeFull();
         configureComponents();
     }
 
@@ -126,6 +127,7 @@ public class DokladyView extends HorizontalLayout implements View {
             }
             this.addComponent(gr);
             browsPanel.btnZmaz.addClickListener(this::delete);
+            browsPanel.btnTest.addClickListener(browsPanel::test);
             browsPanel.btnNovy.addClickListener(clickEvent -> {
                 deselect();
                 Doklad d = new Doklad();
@@ -153,11 +155,12 @@ public class DokladyView extends HorizontalLayout implements View {
         if (velkosklad != null) {
             this.editacnyForm.rezimVelkoskladu();
         }
-
+        this.browsPanel.nadstavNaOznaceny();
 //        refreshDokladov();
-        this.setSizeFull();
+
 
     }
+
 
 
     public void setRezimOdmien() {

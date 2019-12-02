@@ -33,6 +33,8 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
     LocalDate dod;
     LocalDate ddo;
     String rok;
+    private boolean bodovyRezim=false;
+
     public StatDodavatelProduktView() {
 
         HorizontalLayout hornyFilter =new HorizontalLayout();
@@ -99,7 +101,7 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
 
     private void aktivujFilter(Button.ClickEvent clickEvent) {
         Firma firma=FirmaNastroje.prvaFirmaPodlaNazvu(tfFirma.getValue()).get();
-        StatDodavatelProdukt.load(dfOd.getValue(), dfDo.getValue(),Integer.parseInt(txtRok.getValue()),firma);
+        StatDodavatelProdukt.load(bodovyRezim,dfOd.getValue(), dfDo.getValue(),Integer.parseInt(txtRok.getValue()),firma);
         }
 
 
@@ -169,7 +171,8 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
     }
 
 
-
-
+    public void setBodovyRezim() {
+        this.bodovyRezim=true;
+    }
 }
 

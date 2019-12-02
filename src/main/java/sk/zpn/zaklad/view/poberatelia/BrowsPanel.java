@@ -4,9 +4,11 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ItemClickListener;
+import org.apache.commons.codec.binary.StringUtils;
+import org.jsoup.helper.StringUtil;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
-
+import com.vaadin.ui.themes.ValoTheme;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.domena.TypProduktov;
@@ -30,6 +32,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
     public Button btnNovy;
+    public Button btnVyber;
 
 
     public BrowsPanel(List<Poberatel> poberatelList, PoberateliaView poberateliaView) {
@@ -105,39 +108,35 @@ public class BrowsPanel extends VerticalLayout {
 
             public void itemClick(Grid.ItemClick<Poberatel> event) {
                 if (event.getMouseEventDetails().isDoubleClick())
-                    this.vybratyPoberatel(event.getItem());
-
+                    vybratyPoberatel(event.getItem());
             }
 
-            private void vybratyPoberatel(Poberatel item) {
-                if (poberateliaView.getRodicovskyView().equals(DokladyView.NAME)) {
-                    DokladyView dv = (DokladyView) poberateliaView.getZdrojovyView();
-                    dv.getEditacnyForm().vybratyPoberatel(item);
-                    UI.getCurrent().getNavigator().navigateTo(poberateliaView.getRodicovskyView());
-                } else if (poberateliaView.getRodicovskyView().equals(PolozkyDokladuView.NAME)) {
-                    PolozkyDokladuView pdv = (PolozkyDokladuView) poberateliaView.getZdrojovyView();
-                    pdv.getEditacnyForm().vybratyPoberatel(item);
-                    UI.getCurrent().getNavigator().navigateTo(poberateliaView.getRodicovskyView());
-                }
-            }
         });
 
 
         HorizontalLayout tlacitkovy = new HorizontalLayout();
         btnNovy = new Button("Novy", VaadinIcons.FILE_O);
+        btnVyber = new Button("Vyber poberateľa", VaadinIcons.ENTER);
+        btnVyber.setStyleName(ValoTheme.BUTTON_DANGER);
+
+        btnVyber.addClickListener(clickEvent -> {
+            if (!StringUtil.isBlank(poberateliaView.getRodicovskyView())) {
+                if (grid.getSelectedItems().iterator().next()!=null)
+                    vybratyPoberatel(grid.getSelectedItems().iterator().next());
+            }
+        });
+
 
         btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         btnNovy.setClickShortcut(ShortcutAction.KeyCode.N,
                 new int[]
-
                         {
                                 ShortcutAction.ModifierKey.ALT
                         });
-
-
         tlacitkovy.addComponent(btnNovy);
         tlacitkovy.addComponent(btnDetail);
-
+        if (!StringUtil.isBlank(poberateliaView.getRodicovskyView()))
+            tlacitkovy.addComponent(btnVyber);
         tlacitkovy.addComponent(btnSpat);//666
 
 
@@ -169,6 +168,18 @@ public class BrowsPanel extends VerticalLayout {
 
     }
 
+
+    private void vybratyPoberatel(Poberatel item) {
+        if (poberateliaView.getRodicovskyView().equals(DokladyView.NAME)) {
+            DokladyView dv = (DokladyView) poberateliaView.getZdrojovyView();
+            dv.getEditacnyForm().vybratyPoberatel(item);
+            UI.getCurrent().getNavigator().navigateTo(poberateliaView.getRodicovskyView());
+        } else if (poberateliaView.getRodicovskyView().equals(PolozkyDokladuView.NAME)) {
+            PolozkyDokladuView pdv = (PolozkyDokladuView) poberateliaView.getZdrojovyView();
+            pdv.getEditacnyForm().vybratyPoberatel(item);
+            UI.getCurrent().getNavigator().navigateTo(poberateliaView.getRodicovskyView());
+        }
+    }
 
     void refresh() {
         grid.getDataProvider().refreshAll();

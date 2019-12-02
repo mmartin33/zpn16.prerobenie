@@ -125,10 +125,11 @@ public class PrevadzkaNastroje {
         if (firma!=null) {
             //todo tu mozno zobrat prvu prevadzku aj s poberatelom
             prevadzka=zoberPrvuPrevadzku(firma);
-            if (prevadzka.getPoberatel()==null)
-                prevadzka.setPoberatel(PoberatelNastroje.ulozPrvehoPoberatela(prevadzka));
             if (prevadzka==null)
                 prevadzka = ulozPrvuPrevadzku(firma,nazovFirmy);
+            if (prevadzka.getPoberatel()==null) {
+                prevadzka.setPoberatel(PoberatelNastroje.ulozPrvehoPoberatela(prevadzka));
+            }
             return prevadzka;
         }
         if (!zalozitFirmu)

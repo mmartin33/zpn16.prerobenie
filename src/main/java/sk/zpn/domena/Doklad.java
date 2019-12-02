@@ -14,14 +14,18 @@ import java.util.Date;
 import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "doklady")
+@Cacheable(false)
 @NamedQueries(value = {
         @NamedQuery(name = "Doklad.getAll", query = "SELECT d FROM doklady d " +
-                " where d.typDokladu<>sk.zpn.domena.TypDokladu.ODMENY "),//order by d.kedy DESC
+                " where d.typDokladu<>sk.zpn.domena.TypDokladu.ODMENY " +
+                " ORDER BY d.cisloDokladu"),//order by d.kedy DESC
         @NamedQuery(name = "Odmena.getAll", query = "SELECT d FROM doklady d " +
-                " where d.typDokladu=sk.zpn.domena.TypDokladu.ODMENY "),
+                " where d.typDokladu=sk.zpn.domena.TypDokladu.ODMENY " +
+                " ORDER BY d.cisloDokladu"),
         @NamedQuery(name = "Odmena.getZaFirmu", query = "SELECT d FROM doklady d " +
                 " where d.typDokladu=sk.zpn.domena.TypDokladu.ODMENY "),
-        @NamedQuery(name = "Doklad.getZaFirmu", query = "SELECT d FROM doklady d join d.firma f where f.id=:id"),//order by d.kedy DESC
+        @NamedQuery(name = "Doklad.getZaFirmu", query = "SELECT d FROM doklady d join d.firma f where f.id=:id" +
+                " ORDER BY d.cisloDokladu"),
         @NamedQuery(name = "Doklad.get", query = "SELECT d FROM doklady d WHERE d.id =:id")})
 
 public class Doklad extends Vseobecne {

@@ -8,6 +8,8 @@ import java.util.List;
 import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "prevadzky")
+
+@Cacheable(false)
 @NamedQueries(value = {
         @NamedQuery(name = "Prevadzka.getPodlaNazvu", query = "SELECT p FROM prevadzky p WHERE p.nazov =:nazov order by p.nazov"),
         @NamedQuery(name = "Prevadzka.getPodlaNazvuLike", query = "SELECT p FROM prevadzky p where upper(p.nazov) like upper(:nazov) order by p.nazov"),

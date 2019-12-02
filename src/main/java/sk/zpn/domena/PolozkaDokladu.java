@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "polozkyDokladu")
+@Cacheable(false)
 @NamedQueries(value = {
         @NamedQuery(name = "PolozkaDokladu.getAll", query = "SELECT d FROM polozkyDokladu d"),
         @NamedQuery(name = "PolozkaDokladu.getPolozkyJednehoDokladu", query = "SELECT d FROM polozkyDokladu d where d.doklad=:doklad"),

@@ -3,10 +3,7 @@ package sk.zpn.zaklad.model;
 import com.vaadin.server.VaadinSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import sk.zpn.domena.Firma;
-import sk.zpn.domena.FirmaProdukt;
-import sk.zpn.domena.Produkt;
-import sk.zpn.domena.TypProduktov;
+import sk.zpn.domena.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -140,4 +137,7 @@ public class FirmaProduktNastroje {
 
 
     }
+
+
+
 }

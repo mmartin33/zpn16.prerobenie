@@ -3,6 +3,7 @@ package sk.zpn.domena;
 import org.apache.commons.lang.StringUtils;
 import sk.zpn.nastroje.RandomString;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Entity(name = "poberatelia")
+@Cacheable(false)
 @NamedQueries(value = {
         @NamedQuery(name = "Poberatel.getPodlaMena", query = "SELECT p FROM poberatelia p WHERE p.meno =:meno order by p.meno"),
         @NamedQuery(name = "Poberatel.get", query = "SELECT p FROM poberatelia p WHERE p.id =:id order by p.meno"),

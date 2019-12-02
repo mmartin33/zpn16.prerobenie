@@ -41,9 +41,12 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnTlac;
     private Firma velkosklad;
     private boolean rezimOdmien = false;
+    private boolean klasickyRezim=false;
+            ;
 
 
     public BrowsPanel(List<PolozkaDokladu> polozkyDokladuList, PolozkyDokladuView pdv) {
+
         this.velkosklad = pdv.getVelkosklad();
         GridLayout gl = new GridLayout(1, 5);
         gl.setSizeFull();
@@ -82,8 +85,10 @@ public class BrowsPanel extends VerticalLayout {
         colPoberatel.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colPoznamka.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
-        btnSpat.addClickListener(clickEvent ->
-                UI.getCurrent().getNavigator().navigateTo(DokladyView.NAME)
+        btnSpat.addClickListener(clickEvent -> {
+                    UI.getCurrent().getNavigator().navigateTo(DokladyView.NAME);
+
+                }
         );
         btnKatalogOdmien = new Button("Katalog odmien", VaadinIcons.LIST);
 
@@ -295,6 +300,10 @@ public class BrowsPanel extends VerticalLayout {
         grid.removeColumn("bodyNaProdukte");
 
 
+    }
+
+    public void setKlasickyRezim() {
+        this.klasickyRezim=true;
     }
 }
 

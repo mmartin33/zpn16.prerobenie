@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import static javax.persistence.CascadeType.PERSIST;
 
 @Entity(name = "uzivatelia")
+@Cacheable(false)
 @NamedQueries(value = {
         @NamedQuery(name = "Uzivatel.getPodlaMena", query = "SELECT u FROM uzivatelia u WHERE u.meno =:meno"),
         @NamedQuery(name = "Uzivatel.getAll", query = "SELECT u FROM uzivatelia u"),
@@ -29,7 +30,7 @@ public class Uzivatel extends Vseobecne {
     @Column(name = "meno", nullable = false, unique = true)
     private String meno;
     private String heslo;
-
+    private boolean urcujeFirmyNaKtoreSaPridelujuBody;
     @Enumerated(EnumType.STRING)
     private TypUzivatela typUzivatela;
 
@@ -43,6 +44,14 @@ public class Uzivatel extends Vseobecne {
         this.heslo = "";
     }
 
+
+    public boolean getUrcujeFirmyNaKtoreSaPridelujuBody() {
+        return urcujeFirmyNaKtoreSaPridelujuBody;
+    }
+
+    public void setUrcujeFirmyNaKtoreSaPridelujuBody(boolean urcujeFirmyNaKtoreSaPridelujuBody) {
+        this.urcujeFirmyNaKtoreSaPridelujuBody = urcujeFirmyNaKtoreSaPridelujuBody;
+    }
 
     public Uzivatel(String meno, String heslo, TypUzivatela typUzivatela) {
         this.setTypUzivatela(typUzivatela);

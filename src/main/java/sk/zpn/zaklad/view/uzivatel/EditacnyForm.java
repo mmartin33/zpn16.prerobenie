@@ -23,6 +23,7 @@ public class EditacnyForm extends VerticalLayout {
 
     private TextField tMeno;
     private TextField tFirma;
+    private CheckBox chUrcujeFirmy;
     private PasswordField passwordField;
     private ComboBox<String> typUzivatelaComboBox;
     private ComboBox<String> statusUzivatelaComboBox;
@@ -38,6 +39,7 @@ public class EditacnyForm extends VerticalLayout {
         passwordField =  new PasswordField("Heslo");
         typUzivatelaComboBox = new ComboBox<>("Typ konta");
         statusUzivatelaComboBox = new ComboBox<>("Stav konta");
+        chUrcujeFirmy=new CheckBox("Určuje firmy na ktoré sa prideľujú body;");
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
         nastavComponnenty();
@@ -47,6 +49,7 @@ public class EditacnyForm extends VerticalLayout {
         lEdit.addComponent(passwordField);
         lEdit.addComponent(typUzivatelaComboBox);
         lEdit.addComponent(statusUzivatelaComboBox);
+        lEdit.addComponent(chUrcujeFirmy);
 
         HorizontalLayout lBtn=new HorizontalLayout();
         lBtn.addComponent(btnUloz);
@@ -103,6 +106,8 @@ public class EditacnyForm extends VerticalLayout {
             .bind(uzivatel -> uzivatel.getStatusUzivatela().getDisplayValue(),
                     (uzivatel, value) -> uzivatel.setStatusUzivatela(
                             StatusUzivatela.fromDisplayName(statusUzivatelaComboBox.getValue())));
+        Binder.Binding<Uzivatel, Boolean> urcujeFirmy = binder.forField(chUrcujeFirmy)
+                .bind(Uzivatel::getUrcujeFirmyNaKtoreSaPridelujuBody, Uzivatel::setUrcujeFirmyNaKtoreSaPridelujuBody);
 
         tMeno.addValueChangeListener(event -> menoBinding.validate());
 

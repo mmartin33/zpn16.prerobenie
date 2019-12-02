@@ -7,6 +7,7 @@ import com.vaadin.server.ClassResource;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.themes.ValoTheme;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.TypProduktov;
 import sk.zpn.domena.TypUzivatela;
@@ -15,6 +16,7 @@ import sk.zpn.zaklad.view.doklady.DokladyView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 
 
+import sk.zpn.zaklad.view.firmyVelkoskladu.FirmyVelkoskladuView;
 import sk.zpn.zaklad.view.log.LogView;
 import sk.zpn.zaklad.view.mostik.MostikView;
 import sk.zpn.zaklad.view.nacitanieCSV.NacitanieCSVView;
@@ -33,6 +35,7 @@ public class VitajteView extends MojView {
     MenuItem menuSpravcu;
     MenuItem menuAdmin;
     MenuItem menuLogout;
+    MenuItem menuUrcenieFiriem;
     Navigator n;
     public static final String NAME = "vitajteView";
 
@@ -113,8 +116,17 @@ public class VitajteView extends MojView {
                     MostikView mostikView = new MostikView();
                     UI.getCurrent().getNavigator().addView(MostikView.NAME, mostikView);
                     n.navigateTo(MostikView.NAME);
+                } else if (selectedItem.getDescription().equals("urcenieFiriem")) {
+                    FirmyVelkoskladuView firmyVelkoskladuView = new FirmyVelkoskladuView();
+                    UI.getCurrent().getNavigator().addView(FirmyVelkoskladuView.NAME, firmyVelkoskladuView);
+                    n.navigateTo(FirmyVelkoskladuView.NAME);
                 } else if (selectedItem.getDescription().equals("bodyDodavatelovAProduktov")) {
                     StatDodavatelProduktView statDodavatelProduktView = new StatDodavatelProduktView();
+                    UI.getCurrent().getNavigator().addView(StatDodavatelProduktView.NAME, statDodavatelProduktView);
+                    n.navigateTo(statDodavatelProduktView.NAME);
+                } else if (selectedItem.getDescription().equals("bodyDodavatelovAProduktovPodlaBodov")) {
+                    StatDodavatelProduktView statDodavatelProduktView = new StatDodavatelProduktView();
+                    statDodavatelProduktView.setBodovyRezim();
                     UI.getCurrent().getNavigator().addView(StatDodavatelProduktView.NAME, statDodavatelProduktView);
                     n.navigateTo(statDodavatelProduktView.NAME);
                 } else if (selectedItem.getDescription().equals("body")) {
@@ -160,6 +172,12 @@ public class VitajteView extends MojView {
         MenuItem menuOdosli = menuPredajcu.addItem("Odošli", VaadinIcons.UPLOAD, mycommand);
         menuOdosli.setDescription("odosli");
 
+        menuUrcenieFiriem = menuPredajcu.addItem("Definínicia firiem pre zber", VaadinIcons.USER_STAR, mycommand);
+        menuUrcenieFiriem.setDescription("urcenieFiriem");
+
+
+
+
         MenuItem menuDokladyVelkoskladu = menuPredajcu.addItem("Doklady - veľkoskladu prihláseného užívateľa", VaadinIcons.RECORDS, mycommand);
         menuDokladyVelkoskladu.setDescription("dokladyVelkoskladu");
 
@@ -195,8 +213,12 @@ public class VitajteView extends MojView {
         menuBody.setDescription("body");
 
 
-        MenuItem menuBodyDodavatelovProduktov = menuSpravcu.addItem("Stav bodov - dodávateľov a produktov", VaadinIcons.PIGGY_BANK, mycommand);
-        menuBodyDodavatelovProduktov.setDescription("bodyDodavatelovAProduktov");
+//        MenuItem menuBodyDodavatelovProduktov = menuSpravcu.addItem("Stav bodov - dodávateľov a produktov", VaadinIcons.PIGGY_BANK, mycommand);
+//        menuBodyDodavatelovProduktov.setDescription("bodyDodavatelovAProduktov");
+
+        MenuItem menuBodyDodavatelovProduktovPodlaBodov = menuSpravcu.addItem("Stav bodov - dodávateľov a produktov podľa bodov", VaadinIcons.PIGGY_BANK, mycommand);
+        menuBodyDodavatelovProduktovPodlaBodov.setStyleName(ValoTheme.MENUBAR_BORDERLESS);
+        menuBodyDodavatelovProduktovPodlaBodov.setDescription("bodyDodavatelovAProduktovPodlaBodov");
 
         MenuItem menuParametre = menuSpravcu.addItem("Parametre", VaadinIcons.COG_O, mycommand);
         menuParametre.setDescription("parametre");
@@ -233,6 +255,10 @@ public class VitajteView extends MojView {
         if (TypUzivatela.PREDAJCA.equals(UzivatelNastroje.TypUzivatela().get())) {
             menuAdmin.setVisible(false);
             menuSpravcu.setVisible(false);
+            if (UzivatelNastroje.getPrihlasenehoUzivatela().getUrcujeFirmyNaKtoreSaPridelujuBody())
+                menuUrcenieFiriem.setEnabled(true);
+            else
+                menuUrcenieFiriem.setEnabled(false);
             return;
         }
 

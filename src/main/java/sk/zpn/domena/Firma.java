@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity(name = "firmy")
+@Cacheable(false)
 @NamedQueries(value = {
         @NamedQuery(name = "Firma.getPodlaIca", query = "SELECT f FROM firmy f WHERE f.ico =:ico order by f.nazov"),
         @NamedQuery(name = "Firma.getPodlaNazvu", query = "SELECT f FROM firmy f WHERE f.nazov =:nazov order by f.nazov"),
