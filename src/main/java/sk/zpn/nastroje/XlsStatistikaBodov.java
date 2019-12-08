@@ -44,7 +44,12 @@ public class XlsStatistikaBodov {
                                   Map<String, Double> bodyRegistracia,
                                   Map<String, Double> bodyOdmeny,
                                   Map<String, Double> bodyPrevod,
-                                  Map<String, String> icaFiriem) {
+                                  Map<String, String> icaFiriem,
+                                  Map<String, String> prevPopis,
+                                  Map<String, String> poberatelPopis,
+                                  Map<String, String> icaFiriemZPob,
+                                  Map<String, String> prevPopisZPob,
+                                  Map<String, String> poberatelPopisZPob) {
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy ' ' HH:mm:ss z");
@@ -97,7 +102,15 @@ public class XlsStatistikaBodov {
 
         cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
-        cel.setCellValue(("IČO+názov"));
+        cel.setCellValue(("IČO+firma"));
+
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("prevádzka+obec"));
+
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("poberateľ - obec"));
 
         cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
@@ -167,8 +180,32 @@ public class XlsStatistikaBodov {
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
+            String textBunky="";
+            textBunky=(((icaFiriem.get(kluc) == null) ? "": icaFiriem.get(kluc))).toString();
+            textBunky=((textBunky.length()>0)?
+                    textBunky:
+                    (icaFiriemZPob.get(kluc) == null) ? "": icaFiriemZPob.get(kluc).toString());
+            bunka.setCellValue(textBunky);
 
-            bunka.setCellValue((((icaFiriem.get(kluc) == null) ? "": icaFiriem.get(kluc))).toString());
+            bunka = row.createCell(colNum++);
+            bunka.setCellStyle(oramovanieBold());
+
+            textBunky="";
+            textBunky=(((prevPopis.get(kluc) == null) ? "": prevPopis.get(kluc))).toString();
+            textBunky=((textBunky.length()>0)?
+                    textBunky:
+                    (((prevPopisZPob.get(kluc) == null) ? "": prevPopisZPob.get(kluc))).toString());
+            bunka.setCellValue(textBunky);
+
+            bunka = row.createCell(colNum++);
+            bunka.setCellStyle(oramovanieBold());
+            textBunky="";
+            textBunky=(((poberatelPopis.get(kluc) == null) ? "": poberatelPopis.get(kluc))).toString();
+            textBunky=((textBunky.length()>0)?
+                    textBunky:
+                    (((poberatelPopisZPob.get(kluc) == null) ? "": poberatelPopisZPob.get(kluc))).toString());
+
+            bunka.setCellValue(textBunky);
 
 
 

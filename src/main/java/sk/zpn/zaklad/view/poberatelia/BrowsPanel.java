@@ -1,17 +1,21 @@
 package sk.zpn.zaklad.view.poberatelia;
 
+import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ItemClickListener;
 import org.apache.commons.codec.binary.StringUtils;
 import org.jsoup.helper.StringUtil;
+import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import com.vaadin.ui.themes.ValoTheme;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.PolozkaDokladu;
+import sk.zpn.domena.Prevadzka;
 import sk.zpn.domena.TypProduktov;
+import sk.zpn.zaklad.model.PrevadzkaNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.doklady.DokladyView;
 import sk.zpn.zaklad.view.doklady.polozkaDokladu.PolozkyDokladuView;
@@ -22,24 +26,37 @@ import sk.zpn.zaklad.view.statistiky.StatPrePoberatelovView;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class BrowsPanel extends VerticalLayout {
 
 
     private final PoberateliaView poberateliaView;
+    private HorizontalLayout hornyFilter;
+    private TextField tfPrevadzkaZakaznika;
+    private Button btnPrezobraz;
     private FilterGrid<Poberatel> grid;
     private List<Poberatel> poberatelList;
+    private final Binder<Prevadzka> binder = new Binder<>();
 
 
     public Button btnNovy;
     public Button btnVyber;
+    private Prevadzka prevadzkaHF;
 
 
     public BrowsPanel(List<Poberatel> poberatelList, PoberateliaView poberateliaView) {
-        GridLayout gl = new GridLayout(1, 3);
+        hornyFilter = new HorizontalLayout();
+        tfPrevadzkaZakaznika = new TextField("Názov prevádzky");
+        tfPrevadzkaZakaznika.setWidth("400");
+        btnPrezobraz = new Button("Prezobraz");
+
+        GridLayout gl = new GridLayout(1, 4);
         gl.setSizeFull();
-        gl.setRowExpandRatio(0, 0.05f);
-        gl.setRowExpandRatio(1, 0.90f);
+        gl.setRowExpandRatio(0, 0.02f);
+        gl.setRowExpandRatio(1, 0.02f);
+        gl.setRowExpandRatio(2, 0.90f);
+        gl.setRowExpandRatio(3, 0.02f);
 
         this.poberateliaView = poberateliaView;
         this.poberatelList = poberatelList;
@@ -121,7 +138,7 @@ public class BrowsPanel extends VerticalLayout {
 
         btnVyber.addClickListener(clickEvent -> {
             if (!StringUtil.isBlank(poberateliaView.getRodicovskyView())) {
-                if (grid.getSelectedItems().iterator().next()!=null)
+                if (grid.getSelectedItems().iterator().next() != null)
                     vybratyPoberatel(grid.getSelectedItems().iterator().next());
             }
         });
@@ -146,11 +163,33 @@ public class BrowsPanel extends VerticalLayout {
 //                    nadpis=nadpis+" prevadzky:"+this.poberateliaView.getPrevadzka().getNazov();
 
 
+        //binder.readBean(PrevadzkaNastroje.prvaPrevadzkaPodlaNazvu(nazovFirmy).get());
+
+        Binder.Binding<Prevadzka, String> nazovBinding = binder.forField(tfPrevadzkaZakaznika)
+                .bind(Prevadzka::getNazov, Prevadzka::setNazov);
+
+
+        AutocompleteExtension<Prevadzka> autocompleteExtension = new AutocompleteExtension<>(tfPrevadzkaZakaznika);
+        autocompleteExtension.setSuggestionListSize(50);
+        autocompleteExtension.setSuggestionGenerator(
+                this::navrhniPrevadzku,
+                this::transformujPrevadzkuNaNazov,
+                this::transformujPrevádzkuNaNazovSoZvyraznenymQuery);
+        autocompleteExtension.addSuggestionSelectListener(event -> {
+            event.getSelectedItem().ifPresent(this::vybrataPrevadzka);
+            ;
+        });
+
+
+        hornyFilter.addComponent(tfPrevadzkaZakaznika);
+        hornyFilter.addComponent(btnPrezobraz);
+        btnPrezobraz.addClickListener(this::aktivujHF);
         gl.addComponent(new
 
                 Label(nadpis));
 
-
+        gl.addComponent(hornyFilter);
+        gl.setComponentAlignment(hornyFilter, Alignment.TOP_LEFT);
         gl.addComponents(grid);
         gl.setComponentAlignment(grid, Alignment.MIDDLE_LEFT);
 
@@ -166,6 +205,13 @@ public class BrowsPanel extends VerticalLayout {
                 addComponentsAndExpand(gl);
 
 
+    }
+
+    private void vybrataPrevadzka(Prevadzka prevadzka) {
+        if (tfPrevadzkaZakaznika.getValue().length() == 0)
+            this.prevadzkaHF = null;
+        else
+            this.prevadzkaHF = prevadzka;
     }
 
 
@@ -213,6 +259,47 @@ public class BrowsPanel extends VerticalLayout {
     public void rezimVelkoskladu() {
         btnNovy.setVisible(false);
 
+    }
+
+
+    private List<Prevadzka> navrhniPrevadzku(String query, int cap) {
+        if (poberateliaView.getVelkosklad() != null)
+            return PrevadzkaNastroje.zoznamPrevadzokVelkoskladuPodlaMena(query, poberateliaView.getVelkosklad()).stream()
+                    .filter(prevadzka -> prevadzka.getNazov().toLowerCase().contains(query.toLowerCase()))
+                    .limit(30).collect(Collectors.toList());
+        else
+            return PrevadzkaNastroje.zoznamPrevadzokPodlaMena(query).stream()
+                    .filter(prevadzka -> prevadzka.getNazov().toLowerCase().contains(query.toLowerCase()))
+                    .limit(30).collect(Collectors.toList());
+    }
+
+    /**
+     * Co sa zobraziv textfielde, ked sa uz hodnota vyberie
+     */
+    private String transformujPrevadzkuNaNazov(Prevadzka prevadzka) {
+        return prevadzka.getNazov();
+    }
+
+    /**
+     * Co sa zobrazi v dropdowne
+     */
+    private String transformujPrevádzkuNaNazovSoZvyraznenymQuery(Prevadzka prevadzka, String query) {
+        return "<div class='suggestion-container'>"
+                + "<span class='prevadzka'>"
+                + prevadzka.getNazov()
+                .replaceAll("(?i)(" + query + ")", "<b>$1</b>")
+                + "</span>"
+                + "</div>";
+    }
+
+    private void aktivujHF(Button.ClickEvent clickEvent) {
+        poberatelList.clear();
+        if (tfPrevadzkaZakaznika.getValue().length() > 0)
+            poberatelList = poberateliaView.naplnList(poberateliaView.getVelkosklad(), prevadzkaHF);
+        else
+            poberatelList = poberateliaView.naplnList(poberateliaView.getVelkosklad(),null);
+        grid.setItems(poberatelList);
+        grid.getDataProvider().refreshAll();
     }
 
 }

@@ -185,7 +185,7 @@ public class EditacnyForm extends VerticalLayout {
                             // Confirmed to continue
                             ProduktyNastroje.zmazProdukt(produktEditovany);
                             produktyView.odstranProdukt(produktEditovany);
-                            Notification.show("Produkt odstránenz", Notification.Type.TRAY_NOTIFICATION);
+                            Notification.show("Produkt odstránený", Notification.Type.TRAY_NOTIFICATION);
                         }
                     }
                 });

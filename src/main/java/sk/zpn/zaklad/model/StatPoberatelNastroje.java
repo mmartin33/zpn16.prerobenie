@@ -89,6 +89,11 @@ public class StatPoberatelNastroje {
         Map<String, Double> bodyPrevod = Maps.newHashMap();
         Map<String, Double> konecnyStav = Maps.newHashMap();
         Map<String, String> icaFiriem = Maps.newHashMap();
+        Map<String, String> poberatelPopis = Maps.newHashMap();
+        Map<String, String> prevPopis = Maps.newHashMap();
+        Map<String, String> icaFiriemZPob = Maps.newHashMap();
+        Map<String, String> poberatelPopisZPob = Maps.newHashMap();
+        Map<String, String> prevPopisZPob = Maps.newHashMap();
         Map<String, Double> poberateliaVelkoskladu = Maps.newHashMap();
         pociatocnyStav = vratPociatocnyStav(dod, ddo);
         bodyZaPredaj = vratBodyZaPredaj(dod, ddo);
@@ -98,6 +103,11 @@ public class StatPoberatelNastroje {
         bodyPrevod = vratBodyPrevod(dod, ddo);
         konecnyStav = vratKonecnyStav(dod, ddo);
         icaFiriem = vratIcaFiriem(dod, ddo);
+        prevPopis=vratPrevadzkyPopisy(dod, ddo);
+        poberatelPopis=vratPoberatelPopisy(dod, ddo);
+        icaFiriemZPob = vratIcaFiriemZPob();
+        prevPopisZPob=vratPrevadzkyPopisyZPob();
+        poberatelPopisZPob=vratPoberatelPopisyZPob();
         if (velkosklad != null)
             poberateliaVelkoskladu = PoberatelNastroje.vratPoberatelovVelkoskladu(velkosklad);
 
@@ -113,7 +123,13 @@ public class StatPoberatelNastroje {
                                     bodyRegistracia,
                                     bodyOdmeny,
                                     bodyPrevod,
-                                    icaFiriem);
+                                    icaFiriem,
+                                    prevPopis,
+                                    poberatelPopis,
+                                    icaFiriemZPob,
+                                    prevPopisZPob,
+                                    poberatelPopisZPob);
+
 
     }
 
@@ -121,18 +137,112 @@ public class StatPoberatelNastroje {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
 
         EntityManager em1 = emf.createEntityManager();
-        String sql = "select CAST(p.poberatel_id as text) as kluc ,firm.ico ||' '||firm.nazov    as hodnota from polozkydokladu as p " +
+        String sql = "select CAST(p.poberatel_id as text) as kluc ,COALESCE(firm.ico ||' '||firm.nazov,'')    as hodnota from polozkydokladu as p " +
                 " join doklady as d on d.id=p.doklad_id " +
                 " join prevadzky as prev on prev.id=p.prevadzka_id " +
                 " join firmy as firm on firm.id=prev.firma_id " +
                 " where d.datum>=? and d.datum<=? " +
                 " and d.typdokladu='DAVKA' " +
                 " and d.stavdokladu='POTVRDENY' " +
-                " group by CAST(p.poberatel_id as text),firm.ico ||' '||firm.nazov  " ;
+                " group by CAST(p.poberatel_id as text),COALESCE(firm.ico ||' '||firm.nazov,'')  " ;
 
         Query query = em1.createNativeQuery(sql);
         query.setParameter(1, dod);
         query.setParameter(2, ddo);
+
+        List result1 = query.getResultList();
+        Map<String, String> vysledok = NastrojePoli.<String, Double>prerobListNaMapu3(result1);
+        emf.close();
+        return vysledok;
+
+    }
+    private static Map<String, String> vratIcaFiriemZPob() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql = "select CAST(p.id as text) as kluc ,COALESCE(firm.ico ||' '||firm.nazov,'')    as hodnota from poberatelia as p " +
+                " left join prevadzky as prev on prev.poberatel_id=p.id " +
+                " left join firmy as firm on firm.id=prev.firma_id " +
+                " group by CAST(p.id as text),COALESCE(firm.ico ||' '||firm.nazov,'')  " ;
+
+        Query query = em1.createNativeQuery(sql);
+
+        List result1 = query.getResultList();
+        Map<String, String> vysledok = NastrojePoli.<String, Double>prerobListNaMapu3(result1);
+        emf.close();
+        return vysledok;
+
+    }
+    private static Map<String, String> vratPrevadzkyPopisy(LocalDate dod, LocalDate ddo) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql = "select CAST(p.id as text) as kluc ,COALESCE(prev.nazov ||' '||prev.mesto,'')    as hodnota from polozkydokladu as p " +
+                " join doklady as d on d.id=p.doklad_id " +
+                " join prevadzky as prev on prev.id=p.prevadzka_id " +
+                " join firmy as firm on firm.id=prev.firma_id " +
+                " where d.datum>=? and d.datum<=? " +
+                " and d.typdokladu='DAVKA' " +
+                " and d.stavdokladu='POTVRDENY' " +
+                " group by CAST(p.id as text),COALESCE(prev.nazov ||' '||prev.mesto,'')  " ;
+
+        Query query = em1.createNativeQuery(sql);
+        query.setParameter(1, dod);
+        query.setParameter(2, ddo);
+
+        List result1 = query.getResultList();
+        Map<String, String> vysledok = NastrojePoli.<String, Double>prerobListNaMapu3(result1);
+        emf.close();
+        return vysledok;
+
+    }
+    private static Map<String, String> vratPrevadzkyPopisyZPob() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql = "select CAST(p.id as text) as kluc ,COALESCE(prev.nazov ||' '||prev.mesto,'')    as hodnota from poberatelia as p " +
+                " left join prevadzky as prev on prev.poberatel_id=p.id " +
+                " left join firmy as firm on firm.id=prev.firma_id " +
+                " group by CAST(p.id as text),COALESCE(prev.nazov ||' '||prev.mesto,'')  " ;
+
+        Query query = em1.createNativeQuery(sql);
+
+        List result1 = query.getResultList();
+        Map<String, String> vysledok = NastrojePoli.<String, Double>prerobListNaMapu3(result1);
+        emf.close();
+        return vysledok;
+
+    }
+    private static Map<String, String> vratPoberatelPopisy(LocalDate dod, LocalDate ddo) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql = "select CAST(p.poberatel_id as text) as kluc ,COALESCE(pob.mesto,'')    as hodnota from polozkydokladu as p " +
+                " join doklady as d on d.id=p.doklad_id " +
+                " join poberatelia as pob on pob.id=p.poberatel_id " +
+                " where d.datum>=? and d.datum<=? " +
+                " and d.typdokladu='DAVKA' " +
+                " and d.stavdokladu='POTVRDENY' " +
+                " group by CAST(p.poberatel_id as text),COALESCE(pob.mesto,'')  " ;
+
+        Query query = em1.createNativeQuery(sql);
+        query.setParameter(1, dod);
+        query.setParameter(2, ddo);
+
+        List result1 = query.getResultList();
+        Map<String, String> vysledok = NastrojePoli.<String, Double>prerobListNaMapu3(result1);
+        emf.close();
+        return vysledok;
+
+    }
+    private static Map<String, String> vratPoberatelPopisyZPob() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql = "select CAST(p.id as text) as kluc ,COALESCE(p.mesto,'')    as hodnota from poberatelia as p " +
+                " group by CAST(p.id as text),COALESCE(p.mesto,'')  " ;
+
+        Query query = em1.createNativeQuery(sql);
 
         List result1 = query.getResultList();
         Map<String, String> vysledok = NastrojePoli.<String, Double>prerobListNaMapu3(result1);

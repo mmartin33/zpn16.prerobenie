@@ -195,4 +195,16 @@ public class PrevadzkaNastroje {
         return u;
 
     }
+    public static List<Prevadzka> zoznamPrevadzokVelkoskladuPodlaMena(String query,Firma velkosklad) {
+        List<Prevadzka> u = null;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Prevadzka> q = em.createNamedQuery("Prevadzka.getPodlaNazvuLikeZaVelkosklad", Prevadzka.class).
+                setParameter("id_velkoskladu",velkosklad.getId()).
+                setParameter("nazov","%"+query+"%");
+
+        u =  q.getResultList();
+
+        return u;
+
+    }
 }

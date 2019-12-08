@@ -13,6 +13,14 @@ import static javax.persistence.CascadeType.PERSIST;
 @NamedQueries(value = {
         @NamedQuery(name = "Prevadzka.getPodlaNazvu", query = "SELECT p FROM prevadzky p WHERE p.nazov =:nazov order by p.nazov"),
         @NamedQuery(name = "Prevadzka.getPodlaNazvuLike", query = "SELECT p FROM prevadzky p where upper(p.nazov) like upper(:nazov) order by p.nazov"),
+        @NamedQuery(name = "Prevadzka.getPodlaNazvuLikeZaVelkosklad", query = "SELECT p FROM polozkyDokladu pd " +
+                "join pd.doklad d " +
+                "join d.firma f " +
+                "join pd.prevadzka p " +
+                "where upper(p.nazov) like upper(:nazov) " +
+                "and f.id=:id_velkoskladu "+
+                "group by p "+
+                "order by p.nazov"),
         @NamedQuery(name = "Prevadzka.getPodlaICAaNazvu", query = "SELECT p FROM prevadzky p " +
                 "JOIN p.firma f " +
                 "WHERE f.ico =:ico " +

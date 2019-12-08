@@ -190,7 +190,7 @@ public class EditacnyForm extends VerticalLayout {
                             // Confirmed to continue
                             PoberatelNastroje.zmazPoberatela(poberatelEditovany);
                             poberateliaView.odstranPoberatela(poberatelEditovany);
-                            Notification.show("Poberateľ odstránenz", Notification.Type.TRAY_NOTIFICATION);
+                            Notification.show("Poberateľ odstránený", Notification.Type.TRAY_NOTIFICATION);
                         }
                     }
                 });

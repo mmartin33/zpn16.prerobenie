@@ -99,10 +99,7 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        if (this.velkosklad==null)
-            poberatelList = PoberatelNastroje.zoznamPoberatelov();
-        else
-            poberatelList = PoberatelNastroje.zoznamPoberatelovVelkoskladu(velkosklad);
+        poberatelList=naplnList(velkosklad,null);
         browsPanel=new BrowsPanel(poberatelList,this);
         configureComponents();
         gr.addComponent(browsPanel,0,0,0,1);
@@ -116,6 +113,13 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
     }
 
+    public List<Poberatel> naplnList(Firma velkosklad,Prevadzka prevadzkaPoberatela){
+        if (this.velkosklad==null)
+            return PoberatelNastroje.zoznamPoberatelov();
+        else
+            return  PoberatelNastroje.zoznamPoberatelovVelkoskladu(velkosklad,prevadzkaPoberatela);
+
+    }
     public Firma getVelkosklad() {
         return velkosklad;
     }

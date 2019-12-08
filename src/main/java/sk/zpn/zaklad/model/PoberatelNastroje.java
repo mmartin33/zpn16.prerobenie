@@ -197,12 +197,24 @@ public class PoberatelNastroje {
 
 
     }
-    public static List<Poberatel> zoznamPoberatelovVelkoskladu(Firma velkosklad){
+    public static List<Poberatel> zoznamPoberatelovVelkoskladu(Firma velkosklad,Prevadzka prevadzka){
         List<Poberatel> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
-        TypedQuery<Poberatel> q = em.createNamedQuery("PolozkaDokladu.getPoberateliaVelkoskladu", Poberatel.class);
+        //TypedQuery<Poberatel> q = em.createNamedQuery("PolozkaDokladu.getPoberateliaVelkoskladu", Poberatel.class);
+        String sql="SELECT pob FROM polozkyDokladu p " +
+                " join p.doklad as d " +
+                " join p.poberatel as pob " +
+                (prevadzka!=null?" join p.prevadzka as prev ":"") +
+                " join d.firma as f " +
+                " where  f.id=:id " +
+                " and d.stavDokladu=sk.zpn.domena.StavDokladu.POTVRDENY "+
+                (prevadzka!=null?" and prev.id=:id_prevadzky ":" ")+
+                "group by pob ";
+        TypedQuery<Poberatel> q = em.createQuery(sql, Poberatel.class);
         q.setParameter("id", velkosklad.getId());
+        if (prevadzka!=null)
+            q.setParameter("id_prevadzky", prevadzka.getId());
         u = q.getResultList();
 
 
