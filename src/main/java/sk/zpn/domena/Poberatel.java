@@ -38,6 +38,7 @@ public class Poberatel extends Vseobecne {
     private String mobil;
     private String telefon;
     private String email;
+    private String poznamkaVelkoskladu;
     private BigDecimal pociatocnyStav;
 
 
@@ -120,7 +121,13 @@ public class Poberatel extends Vseobecne {
         return this.getId() == null;
     }
 
+    public String getPoznamkaVelkoskladu() {
+        return poznamkaVelkoskladu;
+    }
 
+    public void setPoznamkaVelkoskladu(String poznamkaVelkoskladu) {
+        this.poznamkaVelkoskladu = poznamkaVelkoskladu;
+    }
 }
 
 

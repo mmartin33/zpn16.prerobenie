@@ -15,6 +15,7 @@ import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.domena.Prevadzka;
 import sk.zpn.domena.TypProduktov;
+import sk.zpn.zaklad.model.PoberatelNastroje;
 import sk.zpn.zaklad.model.PrevadzkaNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.doklady.DokladyView;
@@ -35,6 +36,7 @@ public class BrowsPanel extends VerticalLayout {
     private HorizontalLayout hornyFilter;
     private TextField tfPrevadzkaZakaznika;
     private Button btnPrezobraz;
+    private Button btnEditujPoznámku;
     private FilterGrid<Poberatel> grid;
     private List<Poberatel> poberatelList;
     private final Binder<Prevadzka> binder = new Binder<>();
@@ -78,6 +80,7 @@ public class BrowsPanel extends VerticalLayout {
         FilterGrid.Column<Poberatel, String> colTelefon = grid.addColumn(Poberatel::getTelefon).setCaption("Telefon").setId("telefon");
         FilterGrid.Column<Poberatel, String> colEmail = grid.addColumn(Poberatel::getEmail).setCaption("Email").setId("email");
         FilterGrid.Column<Poberatel, String> colKod = grid.addColumn(Poberatel::getKod).setCaption("Kód").setId("kod");
+        FilterGrid.Column<Poberatel, String> colPoznamkaVelkoskladu = grid.addColumn(Poberatel::getPoznamkaVelkoskladu).setCaption("Poznámka").setId("poznamka");
         FilterGrid.Column<Poberatel, BigDecimal> colPociatocnyStav = grid.addColumn(Poberatel::getPociatocnyStav).setCaption("PS bodov").setId("ps_body");
 
         // filters
@@ -90,6 +93,7 @@ public class BrowsPanel extends VerticalLayout {
         colMobil.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colTelefon.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colEmail.setFilter(new TextField(), StringComparator.containsIgnoreCase());
+        colPoznamkaVelkoskladu.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colKod.setFilter(new TextField(), StringComparator.containsIgnoreCase());
 //
 //            grid.setColumnOrder(colMeno,colPriezvisko);
@@ -117,6 +121,22 @@ public class BrowsPanel extends VerticalLayout {
                 UI.getCurrent().getNavigator().navigateTo(sv.NAME);
                 ;
             }
+        });
+
+        btnEditujPoznámku = new Button("Uprav poznámku", VaadinIcons.NOTEBOOK );
+        btnEditujPoznámku.addClickListener(clickEvent -> {
+            WindowWithEditBox w;
+            w = new WindowWithEditBox("Poznámka", ((Poberatel) grid.asSingleSelect().getValue()).getPoznamkaVelkoskladu());
+//            w.addCloseListener(event -> windowClose(w));
+            w.addCloseListener(new Window.CloseListener() {
+
+                @Override
+                public void windowClose(Window.CloseEvent e) {
+                   vykonajPoZatvoreni(w);
+                }
+            });
+
+
         });
 
 
@@ -152,6 +172,7 @@ public class BrowsPanel extends VerticalLayout {
                         });
         tlacitkovy.addComponent(btnNovy);
         tlacitkovy.addComponent(btnDetail);
+        tlacitkovy.addComponent(btnEditujPoznámku);
         if (!StringUtil.isBlank(poberateliaView.getRodicovskyView()))
             tlacitkovy.addComponent(btnVyber);
         tlacitkovy.addComponent(btnSpat);//666
@@ -204,6 +225,17 @@ public class BrowsPanel extends VerticalLayout {
 
                 addComponentsAndExpand(gl);
 
+
+    }
+
+    private void vykonajPoZatvoreni(WindowWithEditBox w) {
+        System.out.println("AAA");
+        if (w.getText()!= null) {
+            Poberatel p= grid.asSingleSelect().getValue();
+            p.setPoznamkaVelkoskladu(w.getText());
+            PoberatelNastroje.ulozPoberatela(p);
+            poberateliaView.refreshPoberatelov();
+        }
 
     }
 

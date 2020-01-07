@@ -22,7 +22,7 @@ public class ProduktyView extends HorizontalLayout implements View {
     private TypProduktov typProduktov;
     private BrowsPanel browsPanel;
     GridLayout  gr;
-    private List<Produkt> produktList;
+    public List<Produkt> produktList;
     private String rodicovskyView;
 
     public ProduktyView() {
@@ -96,14 +96,18 @@ public class ProduktyView extends HorizontalLayout implements View {
         this.typProduktov = typProduktov;
     }
 
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
 
-        produktList = ProduktyNastroje.zoznamProduktovZaRok(null,this.typProduktov);
+        produktList = naplnList(ParametreNastroje.nacitajParametre().getRok());
         browsPanel=new BrowsPanel(produktList);
         browsPanel.setHeight("100%");
         browsPanel.setProduktyView(this);
+        if (typProduktov==TypProduktov.ODMENA)
+            browsPanel.hornyFilter.setVisible(false);
+
         editacnyForm=new EditacnyForm();
         editacnyForm.setProduktyView(this);
         gr.addComponent(browsPanel,0,0,0,1);
@@ -135,5 +139,11 @@ public class ProduktyView extends HorizontalLayout implements View {
     public String getRodicovskyView() {
         return rodicovskyView;
     }
+
+    public List<Produkt> naplnList(String rok){
+        produktList=ProduktyNastroje.zoznamProduktovZaRok(rok,this.typProduktov);
+        return this.produktList;
+    }
+
 }
 
