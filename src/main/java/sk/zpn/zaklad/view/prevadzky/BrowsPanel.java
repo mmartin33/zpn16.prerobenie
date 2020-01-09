@@ -3,9 +3,10 @@ package sk.zpn.zaklad.view.prevadzky;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
-import org.vaadin.addons.filteringgrid.FilterGrid;
+
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import sk.zpn.domena.Prevadzka;
+import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
 import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
@@ -18,7 +19,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
     private final Button btnPoberatelia;
-    private FilterGrid<Prevadzka> grid;
+    private MFilteredGrid<Prevadzka> grid;
     private List<Prevadzka> prevadzkaList;
 
     private PrevadzkyView prevadzkyView;
@@ -36,7 +37,7 @@ public class BrowsPanel extends VerticalLayout {
 
             this.prevadzkyView=prevadzkyView;
             this.prevadzkaList = prevadzkaList;
-            grid = new FilterGrid<>();
+            grid = new MFilteredGrid<>();
             grid.setItems(this.prevadzkaList);
             grid.addStyleName("test");
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
@@ -44,12 +45,12 @@ public class BrowsPanel extends VerticalLayout {
 
 
             // definitionn of columns
-            FilterGrid.Column<Prevadzka, String> colnazov = grid.addColumn(Prevadzka::getNazov).setCaption("Názov").setId("nazov");
-            FilterGrid.Column<Prevadzka, String> colFirmaNazov = grid.addColumn(Prevadzka::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
-            FilterGrid.Column<Prevadzka, String> colUlica = grid.addColumn(Prevadzka::getUlica).setCaption("Ulica").setId("ulica");
-            FilterGrid.Column<Prevadzka, String> colMesto = grid.addColumn(Prevadzka::getMesto).setCaption("Mesto").setId("mesto");
-            FilterGrid.Column<Prevadzka, String> colPsc = grid.addColumn(Prevadzka::getPsc).setCaption("PSČ").setId("psc");
-            FilterGrid.Column<Prevadzka, String> colPoberatelNazov = grid.addColumn(Prevadzka::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
+            MFilteredGrid.Column<Prevadzka, String> colnazov = grid.addColumn(Prevadzka::getNazov).setCaption("Názov").setId("nazov");
+            MFilteredGrid.Column<Prevadzka, String> colFirmaNazov = grid.addColumn(Prevadzka::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
+            MFilteredGrid.Column<Prevadzka, String> colUlica = grid.addColumn(Prevadzka::getUlica).setCaption("Ulica").setId("ulica");
+            MFilteredGrid.Column<Prevadzka, String> colMesto = grid.addColumn(Prevadzka::getMesto).setCaption("Mesto").setId("mesto");
+            MFilteredGrid.Column<Prevadzka, String> colPsc = grid.addColumn(Prevadzka::getPsc).setCaption("PSČ").setId("psc");
+            MFilteredGrid.Column<Prevadzka, String> colPoberatelNazov = grid.addColumn(Prevadzka::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
 
 
 
@@ -65,6 +66,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
             grid.setColumnOrder(colnazov,colFirmaNazov,colPsc,colPoberatelNazov,colUlica, colMesto);
+            grid.registrujZmenuStlpcov("prevadzky");
 
             Button btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
             btnSpat.addClickListener(clickEvent ->

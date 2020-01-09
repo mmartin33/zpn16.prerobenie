@@ -3,21 +3,19 @@ package sk.zpn.zaklad.view.firmy;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
-import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
+import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Firma;
-
-import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class BrowsPanel extends VerticalLayout {
+public class BrowsPanelZaloha extends VerticalLayout {
 
 
-    private MFilteredGrid<Firma> grid;
+    private FilterGrid<Firma> grid;
     private List<Firma> firmaList;
     private PrevadzkyView prevadzkyView;
 
@@ -26,40 +24,38 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnPrevadzky;
 
 
-        public BrowsPanel(List<Firma> firmaList) {
+        public BrowsPanelZaloha(List<Firma> firmaList) {
             GridLayout gl =new GridLayout(1,3);
             gl.setSizeFull();
             gl.setRowExpandRatio(0, 0.05f);
             gl.setRowExpandRatio(1, 0.90f);
 
             this.firmaList = firmaList;
-            grid = new MFilteredGrid<>();
+            grid = new FilterGrid<>();
             grid.setItems(this.firmaList);
 
             grid.setSelectionMode(Grid.SelectionMode.SINGLE);
             grid.setHeightByRows(15);
 
             // definitionn of columns
-            MFilteredGrid.Column<Firma, String> colIco = grid.addColumn(Firma::getIco).setCaption("IČO").setId("ico");
-            MFilteredGrid.Column<Firma, String> colNazov = grid.addColumn(Firma::getNazov).setCaption("Názov").setId("nazov");
-            MFilteredGrid.Column<Firma, String> colUlica = grid.addColumn(Firma::getUlica).setCaption("Ulica").setId("ulica");
-            MFilteredGrid.Column<Firma, String> colMesto = grid.addColumn(Firma::getMesto).setCaption("Mesto").setId("mesto");
-            MFilteredGrid.Column<Firma, String> colDic = grid.addColumn(Firma::getDic).setCaption("DIČ").setId("dic");
-            MFilteredGrid.Column<Firma, String> colIcDPH = grid.addColumn(Firma::getIc_dph).setCaption("IČ DPH").setId("icdph");
-            MFilteredGrid.Column<Firma, String> colPsc = grid.addColumn(Firma::getPsc).setCaption("PSČ").setId("psc");
-            MFilteredGrid.Column<Firma, String> colTelefon = grid.addColumn(Firma::getTelefon).setCaption("Telefón").setId("telefon");
-            MFilteredGrid.Column<Firma, BigDecimal> colPociatovnyStav = grid.addColumn(Firma::getPociatocnyStav).setCaption("PS Bodov").setId("ps_body");
-
-
-            grid.registrujZmenuStlpcov("firmy");
+            FilterGrid.Column<Firma, String> colIco = grid.addColumn(Firma::getIco).setCaption("IČO").setId("ico");
+            FilterGrid.Column<Firma, String> colNazov = grid.addColumn(Firma::getNazov).setCaption("Názov").setId("nazov");
+            FilterGrid.Column<Firma, String> colIcDPH = grid.addColumn(Firma::getIc_dph).setCaption("IČ DPH").setId("icdph");
+            FilterGrid.Column<Firma, String> colDic = grid.addColumn(Firma::getDic).setCaption("DIČ").setId("dic");
+            FilterGrid.Column<Firma, String> colUlica = grid.addColumn(Firma::getUlica).setCaption("Ulica").setId("ulica");
+            FilterGrid.Column<Firma, String> colMesto = grid.addColumn(Firma::getMesto).setCaption("Mesto").setId("mesto");
+            FilterGrid.Column<Firma, String> colPsc = grid.addColumn(Firma::getPsc).setCaption("PSČ").setId("psc");
+            FilterGrid.Column<Firma, String> colTelefon = grid.addColumn(Firma::getTelefon).setCaption("Telefón").setId("telefon");
+            FilterGrid.Column<Firma, BigDecimal> colPociatovnyStav = grid.addColumn(Firma::getPociatocnyStav).setCaption("PS Bodov").setId("ps_body");
 
 
             // filters
             colIco.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-            colNazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+            colNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colIcDPH.setFilter(new TextField(), StringComparator.containsIgnoreCase());
             colDic.setFilter(new TextField(), StringComparator.containsIgnoreCase());
 
+            grid.setColumnOrder(colIco, colNazov,colIcDPH,colDic);
 
             btnSpat=new Button("Späť", VaadinIcons.ARROW_BACKWARD);
 //            btnSpat.addClickListener(clickEvent ->

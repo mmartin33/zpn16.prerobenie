@@ -5,13 +5,14 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
-import org.vaadin.addons.filteringgrid.FilterGrid;
+
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.domena.TypProduktov;
 import sk.zpn.nastroje.XlsTlacProtokolu;
+import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
@@ -29,7 +30,7 @@ import java.util.function.Consumer;
 public class BrowsPanel extends VerticalLayout {
 
 
-    private FilterGrid<PolozkaDokladu> grid;
+    private MFilteredGrid<PolozkaDokladu> grid;
     private HorizontalLayout infoPanel;
     private List<PolozkaDokladu> polozkyDokladuList;
     private Label lblInfopanelu;
@@ -61,7 +62,7 @@ public class BrowsPanel extends VerticalLayout {
 
         this.polozkyDokladuView = pdv;
         this.polozkyDokladuList = polozkyDokladuList;
-        grid = new FilterGrid<>();
+        grid = new MFilteredGrid<>();
         grid.setItems(this.polozkyDokladuList);
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
 //        MultiSelectionModelImpl<?> model = (MultiSelectionModelImpl<?>) grid.getSelectionModel();
@@ -69,15 +70,15 @@ public class BrowsPanel extends VerticalLayout {
 
 
         // definitionn of columns
-        FilterGrid.Column<PolozkaDokladu, String> colProduktKod = grid.addColumn(PolozkaDokladu::getProduktKod).setCaption("Kód produktu").setId("kodProduktu");
-        FilterGrid.Column<PolozkaDokladu, String> colProduktNazov = grid.addColumn(PolozkaDokladu::getProduktNazov).setCaption("Názov produktu").setId("nazovProduktu");
-        FilterGrid.Column<PolozkaDokladu, String> colPrevadzkaNazov = grid.addColumn(PolozkaDokladu::getPrevadzkaNazov).setCaption("Prevádzka").setId("nazovPrevadzky");
-        FilterGrid.Column<PolozkaDokladu, String> colPoberatel = grid.addColumn(PolozkaDokladu::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
-        FilterGrid.Column<PolozkaDokladu, BigInteger> colBody = grid.addColumn(PolozkaDokladu::getBodyUpraveneBigInteger).setCaption("Body za pohyb").setId("body");
-        FilterGrid.Column<PolozkaDokladu, String> colBodyZaProdukt = grid.addColumn(PolozkaDokladu::getBodyZaProdukt).setCaption("Body/za MN").setId("bodyNaProdukte");
-        FilterGrid.Column<PolozkaDokladu, BigInteger> colMnozstvo = grid.addColumn(PolozkaDokladu::getMnozstvoBigInteger).setCaption("Množstvo").setId("mnozstvo");
-        FilterGrid.Column<PolozkaDokladu, String> colPoznamka = grid.addColumn(PolozkaDokladu::getPoznamka).setCaption("Poznámka").setId("poznamka");
-
+        MFilteredGrid.Column<PolozkaDokladu, String> colProduktKod = grid.addColumn(PolozkaDokladu::getProduktKod).setCaption("Kód produktu").setId("kodProduktu");
+        MFilteredGrid.Column<PolozkaDokladu, String> colProduktNazov = grid.addColumn(PolozkaDokladu::getProduktNazov).setCaption("Názov produktu").setId("nazovProduktu");
+        MFilteredGrid.Column<PolozkaDokladu, String> colPrevadzkaNazov = grid.addColumn(PolozkaDokladu::getPrevadzkaNazov).setCaption("Prevádzka").setId("nazovPrevadzky");
+        MFilteredGrid.Column<PolozkaDokladu, String> colPoberatel = grid.addColumn(PolozkaDokladu::getPoberatelMenoAdresa).setCaption("poberatel").setId("menoPoberatela");
+        MFilteredGrid.Column<PolozkaDokladu, BigInteger> colBody = grid.addColumn(PolozkaDokladu::getBodyUpraveneBigInteger).setCaption("Body za pohyb").setId("body");
+        MFilteredGrid.Column<PolozkaDokladu, String> colBodyZaProdukt = grid.addColumn(PolozkaDokladu::getBodyZaProdukt).setCaption("Body/za MN").setId("bodyNaProdukte");
+        MFilteredGrid.Column<PolozkaDokladu, BigInteger> colMnozstvo = grid.addColumn(PolozkaDokladu::getMnozstvoBigInteger).setCaption("Množstvo").setId("mnozstvo");
+        MFilteredGrid.Column<PolozkaDokladu, String> colPoznamka = grid.addColumn(PolozkaDokladu::getPoznamka).setCaption("Poznámka").setId("poznamka");
+        grid.registrujZmenuStlpcov("polozkaFokladu");
         // filters
         colProduktKod.setFilter(new TextField(), StringComparator.containsIgnoreCase());
         colProduktNazov.setFilter(new TextField(), StringComparator.containsIgnoreCase());

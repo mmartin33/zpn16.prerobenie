@@ -7,11 +7,12 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.*;
-import org.vaadin.addons.filteringgrid.FilterGrid;
+
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.Produkt;
 import sk.zpn.domena.TypProduktov;
+import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.firmy.FirmyView;
@@ -24,7 +25,7 @@ import java.util.function.Consumer;
 public class BrowsPanel extends VerticalLayout {
 
 
-    private FilterGrid<Produkt> grid;
+    private MFilteredGrid<Produkt> grid;
     public List<Produkt> produktList;
 
     public HorizontalLayout hornyFilter;
@@ -36,7 +37,7 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnFirmy;
     private FirmyView firmyView;
     private ProduktyView produktView;
-    FilterGrid.Column<Produkt, BigDecimal> colCena;
+    MFilteredGrid.Column<Produkt, BigDecimal> colCena;
     private final Binder<String> binder = new Binder<>();
 
     public BrowsPanel(List<Produkt> produktList) {
@@ -65,7 +66,7 @@ public class BrowsPanel extends VerticalLayout {
         this.produktList = produktList;
         this.setSpacing(false);
 
-        grid = new FilterGrid<>();
+        grid = new MFilteredGrid<>();
         grid.setItems(this.produktList);
 
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
@@ -74,15 +75,15 @@ public class BrowsPanel extends VerticalLayout {
 
         // definitionn of columns
 
-        FilterGrid.Column<Produkt, String> colRok = grid.addColumn(Produkt::getRok).setCaption("Rok").setId("rok");
-        FilterGrid.Column<Produkt, String> colKat = grid.addColumn(Produkt::getKat)
+        MFilteredGrid.Column<Produkt, String> colRok = grid.addColumn(Produkt::getRok).setCaption("Rok").setId("rok");
+        MFilteredGrid.Column<Produkt, String> colKat = grid.addColumn(Produkt::getKat)
                 .setCaption("KAT")
                 .setId("kat")
                 .setDescriptionGenerator(Produkt::getToolTip);
-        FilterGrid.Column<Produkt, String> colNazov = grid.addColumn(Produkt::getNazov).setCaption("Názov").setId("nazov");
-        FilterGrid.Column<Produkt, BigInteger> colKusy = grid.addColumn(Produkt::getKusyBigInteger).setCaption("kusy").setId("kusy");
-        FilterGrid.Column<Produkt, BigInteger> colBody = grid.addColumn(Produkt::getBodyBigInteger).setCaption("Body").setId("body");
-        FilterGrid.Column<Produkt, String> colFirmaNazov = grid.addColumn(Produkt::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
+        MFilteredGrid.Column<Produkt, String> colNazov = grid.addColumn(Produkt::getNazov).setCaption("Názov").setId("nazov");
+        MFilteredGrid.Column<Produkt, BigInteger> colKusy = grid.addColumn(Produkt::getKusyBigInteger).setCaption("kusy").setId("kusy");
+        MFilteredGrid.Column<Produkt, BigInteger> colBody = grid.addColumn(Produkt::getBodyBigInteger).setCaption("Body").setId("body");
+        MFilteredGrid.Column<Produkt, String> colFirmaNazov = grid.addColumn(Produkt::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
         colCena = grid.addColumn(Produkt::getCena).setCaption("Cena").setId("cena");
 
         // filters
@@ -95,7 +96,7 @@ public class BrowsPanel extends VerticalLayout {
 
 //
         grid.setColumnOrder(colKat, colNazov, colKusy, colBody);
-
+        grid.registrujZmenuStlpcov("produkty");
 
         Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
         btnSpat.addClickListener(clickEvent ->

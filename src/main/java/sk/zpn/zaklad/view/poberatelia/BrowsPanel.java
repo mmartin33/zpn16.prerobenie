@@ -5,16 +5,14 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ItemClickListener;
-import org.apache.commons.codec.binary.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
-import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import com.vaadin.ui.themes.ValoTheme;
 import sk.zpn.domena.Poberatel;
-import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.domena.Prevadzka;
-import sk.zpn.domena.TypProduktov;
+import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
+import sk.zpn.zaklad.grafickeNastroje.WindowWithEditBox;
 import sk.zpn.zaklad.model.PoberatelNastroje;
 import sk.zpn.zaklad.model.PrevadzkaNastroje;
 import sk.zpn.zaklad.view.VitajteView;
@@ -22,7 +20,6 @@ import sk.zpn.zaklad.view.doklady.DokladyView;
 import sk.zpn.zaklad.view.doklady.polozkaDokladu.PolozkyDokladuView;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 import sk.zpn.zaklad.view.statistiky.StatPohybyBodovPoberatelovView;
-import sk.zpn.zaklad.view.statistiky.StatPrePoberatelovView;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,7 +34,7 @@ public class BrowsPanel extends VerticalLayout {
     private TextField tfPrevadzkaZakaznika;
     private Button btnPrezobraz;
     private Button btnEditujPoznámku;
-    private FilterGrid<Poberatel> grid;
+    private MFilteredGrid<Poberatel> grid;
     private List<Poberatel> poberatelList;
     private final Binder<Prevadzka> binder = new Binder<>();
 
@@ -63,26 +60,26 @@ public class BrowsPanel extends VerticalLayout {
         this.poberateliaView = poberateliaView;
         this.poberatelList = poberatelList;
         this.setSpacing(false);
-        grid = new FilterGrid<>();
+        grid = new MFilteredGrid<>();
         grid.setItems(this.poberatelList);
 
         grid.addStyleName("test");
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
         // definitionn of columns
-        FilterGrid.Column<Poberatel, String> colMeno = grid.addColumn(Poberatel::getMeno).setCaption("Meno").setId("meno");
-//            FilterGrid.Column<Poberatel, String> colPriezvisko = grid.addColumn(Poberatel::getPriezvisko).setCaption("Priezvisko").setId("prizvisko");
-        FilterGrid.Column<Poberatel, String> colTitul = grid.addColumn(Poberatel::getTitul).setCaption("Titul").setId("titul");
-        FilterGrid.Column<Poberatel, String> colMesto = grid.addColumn(Poberatel::getMesto).setCaption("Mesto").setId("mesto");
-        FilterGrid.Column<Poberatel, String> colUlica = grid.addColumn(Poberatel::getUlica).setCaption("Ulica").setId("ulica");
-        FilterGrid.Column<Poberatel, String> colPsc = grid.addColumn(Poberatel::getPsc).setCaption("Psč").setId("psc");
-        FilterGrid.Column<Poberatel, String> colMobil = grid.addColumn(Poberatel::getMobil).setCaption("Mobil").setId("mobil");
-        FilterGrid.Column<Poberatel, String> colTelefon = grid.addColumn(Poberatel::getTelefon).setCaption("Telefon").setId("telefon");
-        FilterGrid.Column<Poberatel, String> colEmail = grid.addColumn(Poberatel::getEmail).setCaption("Email").setId("email");
-        FilterGrid.Column<Poberatel, String> colKod = grid.addColumn(Poberatel::getKod).setCaption("Kód").setId("kod");
-        FilterGrid.Column<Poberatel, String> colPoznamkaVelkoskladu = grid.addColumn(Poberatel::getPoznamkaVelkoskladu).setCaption("Poznámka").setId("poznamka");
-        FilterGrid.Column<Poberatel, BigDecimal> colPociatocnyStav = grid.addColumn(Poberatel::getPociatocnyStav).setCaption("PS bodov").setId("ps_body");
-
+        MFilteredGrid.Column<Poberatel, String> colMeno = grid.addColumn(Poberatel::getMeno).setCaption("Meno").setId("meno");
+//            MFilteredGrid.Column<Poberatel, String> colPriezvisko = grid.addColumn(Poberatel::getPriezvisko).setCaption("Priezvisko").setId("prizvisko");
+        MFilteredGrid.Column<Poberatel, String> colTitul = grid.addColumn(Poberatel::getTitul).setCaption("Titul").setId("titul");
+        MFilteredGrid.Column<Poberatel, String> colMesto = grid.addColumn(Poberatel::getMesto).setCaption("Mesto").setId("mesto");
+        MFilteredGrid.Column<Poberatel, String> colUlica = grid.addColumn(Poberatel::getUlica).setCaption("Ulica").setId("ulica");
+        MFilteredGrid.Column<Poberatel, String> colPsc = grid.addColumn(Poberatel::getPsc).setCaption("Psč").setId("psc");
+        MFilteredGrid.Column<Poberatel, String> colMobil = grid.addColumn(Poberatel::getMobil).setCaption("Mobil").setId("mobil");
+        MFilteredGrid.Column<Poberatel, String> colTelefon = grid.addColumn(Poberatel::getTelefon).setCaption("Telefon").setId("telefon");
+        MFilteredGrid.Column<Poberatel, String> colEmail = grid.addColumn(Poberatel::getEmail).setCaption("Email").setId("email");
+        MFilteredGrid.Column<Poberatel, String> colKod = grid.addColumn(Poberatel::getKod).setCaption("Kód").setId("kod");
+        MFilteredGrid.Column<Poberatel, String> colPoznamkaVelkoskladu = grid.addColumn(Poberatel::getPoznamkaVelkoskladu).setCaption("Poznámka").setId("poznamka");
+        MFilteredGrid.Column<Poberatel, BigDecimal> colPociatocnyStav = grid.addColumn(Poberatel::getPociatocnyStav).setCaption("PS bodov").setId("ps_body");
+        grid.registrujZmenuStlpcov("poberatelia");
         // filters
         colMeno.setFilter(new TextField(), StringComparator.containsIgnoreCase());
 //            colPriezvisko.setFilter(new TextField(), StringComparator.containsIgnoreCase());

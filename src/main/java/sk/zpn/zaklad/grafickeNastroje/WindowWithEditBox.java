@@ -1,4 +1,4 @@
-package sk.zpn.zaklad.view.poberatelia;
+package sk.zpn.zaklad.grafickeNastroje;
 
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.Registration;

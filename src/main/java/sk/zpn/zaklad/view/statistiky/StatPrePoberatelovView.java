@@ -1,7 +1,5 @@
 package sk.zpn.zaklad.view.statistiky;
 
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -9,23 +7,21 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.HtmlRenderer;
-import com.vaadin.ui.renderers.NumberRenderer;
-import org.vaadin.addons.filteringgrid.FilterGrid;
+
+
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.statistiky.ZoznamBodov;
+import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.model.PoberatelNastroje;
 import sk.zpn.zaklad.model.StatPoberatelNastroje;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class StatPrePoberatelovView extends VerticalLayout implements View {// ContactForm is an example of a custom component class
     public static final String NAME = "StatPrePoberatelovView";
     private  List<ZoznamBodov >statistika;
     private Button btnZmenPrihlasovanie;
-    private FilterGrid<ZoznamBodov> grid;
+    private MFilteredGrid<ZoznamBodov> grid;
     private List<ZoznamBodov> statList =null;
     private GridLayout gl;
     private HorizontalLayout hl;
@@ -51,7 +47,7 @@ public class StatPrePoberatelovView extends VerticalLayout implements View {// C
         gl.setRowExpandRatio(0, 0.10f);
         gl.setRowExpandRatio(1, 0.90f);
 
-        grid = new FilterGrid<>();
+        grid = new MFilteredGrid<>();
         gl.addComponent(hl);
         gl.setComponentAlignment(hl,Alignment.TOP_LEFT);
         gl.addComponent(grid);
@@ -85,15 +81,15 @@ public class StatPrePoberatelovView extends VerticalLayout implements View {// C
         popis.setValue(text);
         //hl.addComponent(btnAktivujFilter);
 
-        FilterGrid.Column<ZoznamBodov, String > colDatum = grid.addColumn(ZoznamBodov::getFormatovanyDatum).setCaption("Dátum").setId("datum");
-        FilterGrid.Column<ZoznamBodov, String> colBody = grid.addColumn(ZoznamBodov::getHtmlBody).setCaption("Body").setId("body");
-        FilterGrid.Column<ZoznamBodov, String> colTypDokladu = grid.addColumn(ZoznamBodov::getTypDokladu).setCaption("Typ dokladu").setId("typDokladu");
-        FilterGrid.Column<ZoznamBodov, String> colPoznamka = grid.addColumn(ZoznamBodov::getPoznamka).setCaption("poznamka").setId("Poznamka");
+        MFilteredGrid.Column<ZoznamBodov, String > colDatum = grid.addColumn(ZoznamBodov::getFormatovanyDatum).setCaption("Dátum").setId("datum");
+        MFilteredGrid.Column<ZoznamBodov, String> colBody = grid.addColumn(ZoznamBodov::getHtmlBody).setCaption("Body").setId("body");
+        MFilteredGrid.Column<ZoznamBodov, String> colTypDokladu = grid.addColumn(ZoznamBodov::getTypDokladu).setCaption("Typ dokladu").setId("typDokladu");
+        MFilteredGrid.Column<ZoznamBodov, String> colPoznamka = grid.addColumn(ZoznamBodov::getPoznamka).setCaption("poznamka").setId("Poznamka");
         colBody.setRenderer(new HtmlRenderer());
 
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setColumnOrder(colDatum,colBody,colTypDokladu,colPoznamka);
-
+        grid.registrujZmenuStlpcov("statPrePoberatelov");
         grid.setItems(this.statistika);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setSizeFull();

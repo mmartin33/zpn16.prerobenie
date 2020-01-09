@@ -2,21 +2,13 @@ package sk.zpn.zaklad.view.doklady;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.shared.ui.grid.ScrollDestination;
 import com.vaadin.ui.*;
-
-import com.vaadin.ui.components.grid.ItemClickListener;
-import com.vaadin.ui.renderers.HtmlRenderer;
-import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.*;
+import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.doklady.polozkaDokladu.PolozkyDokladuView;
-
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -24,7 +16,7 @@ import java.util.function.Consumer;
 public class BrowsPanel extends VerticalLayout {
 
 
-    public FilterGrid<Doklad> grid;
+    public MFilteredGrid<Doklad> grid;
     private List<Doklad> dokladyList;
 
 
@@ -35,14 +27,14 @@ public class BrowsPanel extends VerticalLayout {
     protected Button btnZmaz;
     public Button btnPolozky;
     GridLayout gl;
-    FilterGrid.Column<Doklad, String> colCisloDokladu ;
-    FilterGrid.Column<Doklad, String> colDokladuOdmeny ;
-    FilterGrid.Column<Doklad, String> colTypDokladu ;
-    FilterGrid.Column<Doklad, String> colDatum ;
-    FilterGrid.Column<Doklad, String> colPoberatel ;
-    FilterGrid.Column<Doklad, String> colFirmaNazov ;
-    FilterGrid.Column<Doklad, String> colPoznamka ;
-    FilterGrid.Column<Doklad, String> colStavDokladu ;
+    MFilteredGrid.Column<Doklad, String> colCisloDokladu ;
+    MFilteredGrid.Column<Doklad, String> colDokladuOdmeny ;
+    MFilteredGrid.Column<Doklad, String> colTypDokladu ;
+    MFilteredGrid.Column<Doklad, String> colDatum ;
+    MFilteredGrid.Column<Doklad, String> colPoberatel ;
+    MFilteredGrid.Column<Doklad, String> colFirmaNazov ;
+    MFilteredGrid.Column<Doklad, String> colPoznamka ;
+    MFilteredGrid.Column<Doklad, String> colStavDokladu ;
     private boolean rezimOdmen;
 
 
@@ -55,7 +47,7 @@ public class BrowsPanel extends VerticalLayout {
         gl.setRowExpandRatio(1, 0.90f);
 
         this.dokladyList = dokladyList;
-        grid = new FilterGrid<>();
+        grid = new MFilteredGrid<>();
         grid.setItems(this.dokladyList);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
@@ -86,8 +78,8 @@ public class BrowsPanel extends VerticalLayout {
                 (cValue, fValue) -> fValue == null || fValue.equals(cValue));
 
 
-        grid.setColumnOrder(colCisloDokladu, colStavDokladu,colTypDokladu, colFirmaNazov, colDatum,colDokladuOdmeny,colPoberatel);
-
+        //grid.setColumnOrder(colCisloDokladu, colStavDokladu,colTypDokladu, colFirmaNazov, colDatum,colDokladuOdmeny,colPoberatel);
+        grid.registrujZmenuStlpcov("doklady");
 
 
 

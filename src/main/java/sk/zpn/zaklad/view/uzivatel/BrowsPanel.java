@@ -3,11 +3,12 @@ package sk.zpn.zaklad.view.uzivatel;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.HtmlRenderer;
-import org.vaadin.addons.filteringgrid.FilterGrid;
+
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.StatusUzivatela;
 import sk.zpn.domena.TypUzivatela;
 import sk.zpn.domena.Uzivatel;
+import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.model.UzivatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
@@ -18,7 +19,7 @@ import java.util.function.Consumer;
 public class BrowsPanel extends VerticalLayout {
 
 
-    private FilterGrid<Uzivatel> grid;
+    private MFilteredGrid<Uzivatel> grid;
     private List<Uzivatel> uzivatelList;
 
 
@@ -28,19 +29,20 @@ public class BrowsPanel extends VerticalLayout {
 
     public BrowsPanel(List<Uzivatel> uzivatelList) {
         this.uzivatelList = uzivatelList;
-        grid = new FilterGrid<>();
+        grid = new MFilteredGrid<>();
         grid.setItems(this.uzivatelList);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setWidth(1000, Unit.PIXELS);
         grid.setHeight(700, Unit.PIXELS);
 
         // definitionn of columns
-        FilterGrid.Column<Uzivatel, String> colMeno = grid.addColumn(Uzivatel::getMeno).setCaption("Meno").setId("meno");
-        FilterGrid.Column<Uzivatel, String> colTypUzivatela = grid.addColumn(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue()).setCaption("Typ konta").setId("typ");
-        FilterGrid.Column<Uzivatel, String> colFirmaNazov = grid.addColumn(Uzivatel::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
-        FilterGrid.Column<Uzivatel, String> colStatusUzivatela = grid.addColumn(uzivatel -> uzivatel.getStatusUzivatela().getIconValue()).setCaption("Stav konta").setId("statusUzivatela");
+        MFilteredGrid.Column<Uzivatel, String> colMeno = grid.addColumn(Uzivatel::getMeno).setCaption("Meno").setId("meno");
+        MFilteredGrid.Column<Uzivatel, String> colTypUzivatela = grid.addColumn(uzivatel -> uzivatel.getTypUzivatela().getDisplayValue()).setCaption("Typ konta").setId("typ");
+        MFilteredGrid.Column<Uzivatel, String> colFirmaNazov = grid.addColumn(Uzivatel::getFirmaNazov).setCaption("Firma").setId("nazovFirmy");
+        MFilteredGrid.Column<Uzivatel, String> colStatusUzivatela = grid.addColumn(uzivatel -> uzivatel.getStatusUzivatela().getIconValue()).setCaption("Stav konta").setId("statusUzivatela");
         colStatusUzivatela.setRenderer(new HtmlRenderer());
         colStatusUzivatela.setWidth(150);
+        //grid.registrujZmenuStlpcov("uzivatel");
 
         // filters
 

@@ -2,22 +2,20 @@ package sk.zpn.zaklad.view.mostik;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
-import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.ui.*;
-import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.FirmaProdukt;
+import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
 import sk.zpn.zaklad.view.ViewConstants;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class BrowsPanel extends VerticalLayout {
 
-    private FilterGrid<FirmaProdukt> grid;
+    private MFilteredGrid<FirmaProdukt> grid;
     private List<FirmaProdukt> firmaProduktList;
     public Button btnNovy;
     public Button btnDoplnKitKat;
@@ -39,7 +37,7 @@ public class BrowsPanel extends VerticalLayout {
         this.firmaProduktList = firmaProduktList;
         upperFilterHorizontalLayout.addComponent(cbFilerInvalid);
 
-        grid = new FilterGrid<>();
+        grid = new MFilteredGrid<>();
         grid.setItems(this.firmaProduktList);
 
         grid.addStyleName("test");
@@ -48,7 +46,7 @@ public class BrowsPanel extends VerticalLayout {
 
         Binder<FirmaProdukt> binder = grid.getEditor().getBinder();
         // definitionn of columns
-        FilterGrid.Column<FirmaProdukt, String> colKit = grid.addColumn(FirmaProdukt::getKit)
+        MFilteredGrid.Column<FirmaProdukt, String> colKit = grid.addColumn(FirmaProdukt::getKit)
             .setCaption("Kit")
             .setId("kit")
             .setEditorBinding(binder
@@ -60,19 +58,19 @@ public class BrowsPanel extends VerticalLayout {
                     refresh();
                 }))
             .setEditable(true);
-        FilterGrid.Column<FirmaProdukt, String> colKat = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getKat())
+        MFilteredGrid.Column<FirmaProdukt, String> colKat = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getKat())
             .setCaption("Kat")
             .setId("kat");
-        FilterGrid.Column<FirmaProdukt, String> colNazov = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getNazov())
+        MFilteredGrid.Column<FirmaProdukt, String> colNazov = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getNazov())
             .setCaption("Názov")
             .setId("nazov");
-        FilterGrid.Column<FirmaProdukt, BigDecimal> colKusy = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getKusy())
+        MFilteredGrid.Column<FirmaProdukt, BigDecimal> colKusy = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getKusy())
             .setCaption("Kusy")
             .setId("kusy");
-        FilterGrid.Column<FirmaProdukt, BigDecimal> colBody = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getBody())
+        MFilteredGrid.Column<FirmaProdukt, BigDecimal> colBody = grid.addColumn(firmaProdukt -> firmaProdukt.getProdukt().getBody())
             .setCaption("Body")
             .setId("body");
-        FilterGrid.Column<FirmaProdukt, String> colKoeficient = grid.addColumn(this::getKoeficientDisplayValue);
+        MFilteredGrid.Column<FirmaProdukt, String> colKoeficient = grid.addColumn(this::getKoeficientDisplayValue);
         colKoeficient.setCaption("Koeficient")
             .setId("koeficient")
             .setEditorBinding(binder
@@ -86,7 +84,7 @@ public class BrowsPanel extends VerticalLayout {
                     refresh();
                     }))
             .setEditable(true);
-        FilterGrid.Column<FirmaProdukt, String> colFirma = grid.addColumn(firmaProdukt -> firmaProdukt.getFirma().getNazov())
+        MFilteredGrid.Column<FirmaProdukt, String> colFirma = grid.addColumn(firmaProdukt -> firmaProdukt.getFirma().getNazov())
                 .setCaption("Firma")
                 .setId("firma");
 
@@ -117,7 +115,7 @@ public class BrowsPanel extends VerticalLayout {
         colKoeficientFilter.setWidth(ViewConstants.THIN_COLUMN_FILTER_WIDTH, Unit.PIXELS);
 
         grid.setColumnOrder(colKat, colKit, colNazov, colBody, colKusy, colKoeficient,colFirma);
-
+        grid.registrujZmenuStlpcov("mostik");
 
 
 

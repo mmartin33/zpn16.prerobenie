@@ -5,9 +5,10 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
-import org.vaadin.addons.filteringgrid.FilterGrid;
+
 import sk.zpn.domena.*;
 
+import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 import sk.zpn.zaklad.model.StatPoberatelNastroje;
 
@@ -18,7 +19,7 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
     public static final String NAME = "StatPohybyBodovPoberatelovView";
     private List<Object[]> statistika;
     private Button btnSpat;
-    private FilterGrid<Object[]> grid;
+    private MFilteredGrid<Object[]> grid;
     private Poberatel poberatel;
     private GridLayout gl;
     private HorizontalLayout hl;
@@ -46,7 +47,7 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
         gl.setRowExpandRatio(0, 0.10f);
         gl.setRowExpandRatio(1, 0.90f);
 
-        grid = new FilterGrid<>();
+        grid = new MFilteredGrid<>();
         gl.addComponent(hl);
         gl.setComponentAlignment(hl, Alignment.TOP_LEFT);
         gl.addComponent(grid);
@@ -80,7 +81,7 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
                 return ((Doklad) objects[1]).getCisloDokladu();
             }
         };
-        FilterGrid.Column<Object[], String> colCisloDokladu = grid.addColumn(pCislo).setCaption("Číslo dokladu").setId("cisloDokladu");
+        MFilteredGrid.Column<Object[], String> colCisloDokladu = grid.addColumn(pCislo).setCaption("Číslo dokladu").setId("cisloDokladu");
 
         ValueProvider<Object[], String> pDatum = new ValueProvider<Object[], String>() {
             @Override
@@ -88,7 +89,7 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
                 return ((Doklad) objects[1]).getFormatovanyDatum();
             }
         };
-        FilterGrid.Column<Object[], String> colDatum = grid.addColumn(pDatum).setCaption("Dátum").setId("datum");
+        MFilteredGrid.Column<Object[], String> colDatum = grid.addColumn(pDatum).setCaption("Dátum").setId("datum");
 
         ValueProvider<Object[], BigInteger> pBody = new ValueProvider<Object[], BigInteger>() {
             @Override
@@ -96,7 +97,7 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
                 return ((PolozkaDokladu) objects[0]).getBodyBigInteger();
             }
         };
-        FilterGrid.Column<Object[], BigInteger> colBody = grid.addColumn(pBody).setCaption("Body").setId("body");
+        MFilteredGrid.Column<Object[], BigInteger> colBody = grid.addColumn(pBody).setCaption("Body").setId("body");
 
 
         ValueProvider<Object[], String> pStav = new ValueProvider<Object[], String>() {
@@ -105,7 +106,7 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
                 return ((Doklad) objects[1]).getStavDokladu().getDisplayValue();
             }
         };
-        FilterGrid.Column<Object[], String> colStavDokladu = grid.addColumn(pStav).setCaption("Stav dokladu").setId("Stav dokladu");
+        MFilteredGrid.Column<Object[], String> colStavDokladu = grid.addColumn(pStav).setCaption("Stav dokladu").setId("Stav dokladu");
 
         ValueProvider<Object[], String> pTypDokl = new ValueProvider<Object[], String>() {
             @Override
@@ -113,7 +114,7 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
                 return ((Doklad) objects[1]).getTypDokladu().getDisplayValue();
             }
         };
-        FilterGrid.Column<Object[], String> colTypDokladu = grid.addColumn(pTypDokl).setCaption("Typ dokladu").setId("typDokladu");
+        MFilteredGrid.Column<Object[], String> colTypDokladu = grid.addColumn(pTypDokl).setCaption("Typ dokladu").setId("typDokladu");
 
         ValueProvider<Object[], String> pProdukt = new ValueProvider<Object[], String>() {
             @Override
@@ -136,8 +137,8 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
             }
         };
 
-        FilterGrid.Column<Object[], String> colProduktKAT = grid.addColumn(pProduktKat).setCaption("Produkt KAT").setId("produktKat");
-        FilterGrid.Column<Object[], String> colProduktNazov = grid.addColumn(pProdukt).setCaption("Produkt nazov").setId("produktNazov");
+        MFilteredGrid.Column<Object[], String> colProduktKAT = grid.addColumn(pProduktKat).setCaption("Produkt KAT").setId("produktKat");
+        MFilteredGrid.Column<Object[], String> colProduktNazov = grid.addColumn(pProdukt).setCaption("Produkt nazov").setId("produktNazov");
 
         ValueProvider<Object[], String> pPrevadzka = new ValueProvider<Object[], String>() {
             @Override
@@ -147,7 +148,7 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
                 return ((Prevadzka) objects[3]).getNazov();
             }
         };
-        FilterGrid.Column<Object[], String> colPervadzka = grid.addColumn(pPrevadzka).setCaption("Prevadzka").setId("prevadzka");
+        MFilteredGrid.Column<Object[], String> colPervadzka = grid.addColumn(pPrevadzka).setCaption("Prevadzka").setId("prevadzka");
 
 
         ValueProvider<Object[], String> pFirma = new ValueProvider<Object[], String>() {
@@ -156,7 +157,7 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
                 return ((Firma) objects[4]).getNazov();
             }
         };
-        FilterGrid.Column<Object[], String> colFirma = grid.addColumn(pFirma).setCaption("Firma").setId("firma");
+        MFilteredGrid.Column<Object[], String> colFirma = grid.addColumn(pFirma).setCaption("Firma").setId("firma");
 
 
 
@@ -164,7 +165,7 @@ public class StatPohybyBodovPoberatelovView extends VerticalLayout implements Vi
 
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setColumnOrder(colCisloDokladu, colDatum, colBody, colTypDokladu, colProduktKAT,colProduktNazov, colPervadzka, colFirma);
-
+        grid.registrujZmenuStlpcov("statPohybovPoberatelov");
 
         grid.setItems(this.statistika);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
