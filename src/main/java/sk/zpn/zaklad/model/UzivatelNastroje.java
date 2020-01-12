@@ -149,4 +149,15 @@ public class UzivatelNastroje {
             PoberatelNastroje.ulozPoberatela(p);
         }
     }
+
+    public static Uzivatel getUzivatelVelkoskladu(Firma velkosklad) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Uzivatel> q = em.createNamedQuery("Uzivatel.getPodlaVelkoskladu", Uzivatel.class)
+                .setParameter("id", velkosklad.getId());
+        q.setMaxResults(1);
+
+        List<Uzivatel> results = q.getResultList();
+        return results.get(0);
+
+    }
 }

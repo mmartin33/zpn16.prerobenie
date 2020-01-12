@@ -68,6 +68,24 @@ public class FirmaVelkoskladuNastroje {
 
     }
 
+    public static boolean existujeFirmaVelkoskladuPodlaIcoFirmy(Firma velkosklad,String icoFirmy ) {
+
+
+            EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+            TypedQuery<FirmaVelkoskladu> q = em.createNamedQuery("FirmaVelkoskladu.getFirmuPodlaIco", FirmaVelkoskladu.class)
+                    .setParameter("id", velkosklad.getId())
+                    .setParameter("ico",icoFirmy);
+
+
+            List<FirmaVelkoskladu> results = q.getResultList();
+            if (results.isEmpty()) return false;
+            return true;
+
+
+
+    }
+
+
     public static void zmazFirmuVelkoskladu(Firma oznacenaFirma, Firma velkosklad) {
         FirmaVelkoskladu fb=firmaVelkoskladu(velkosklad,oznacenaFirma);
         if (fb==null)

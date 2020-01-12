@@ -187,8 +187,10 @@ public class UploadCSV extends CustomComponent  {
 
             //this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
             VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(davka,file,parametreImportu,progressBarZPN);
-            nacitanieView.setVysledokImportu(vi);
-            System.out.println(davka.getPolozky().size());
+            if (vi!=null) {
+                nacitanieView.setVysledokImportu(vi);
+                System.out.println(davka.getPolozky().size());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

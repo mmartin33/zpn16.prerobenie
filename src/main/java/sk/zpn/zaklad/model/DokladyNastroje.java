@@ -7,6 +7,7 @@ import org.apache.commons.codec.language.bm.Lang;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.*;
 import sk.zpn.domena.importy.*;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
@@ -185,16 +186,19 @@ public class DokladyNastroje {
     }
 
     public static VysledokImportu zalozDokladovuDavku(Davka davka, String file, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) {
-
+        Uzivatel uzivatelVelkoskladu=null;
         Map<String, ZaznamCsv> zaznam;
         Map<String, Integer> bodyNaIco ;
         Integer mesacnySucetBodov;
         boolean zalozitFirmu;
+        boolean pustitiDoDavky=true;
         zaznam=davka.getPolozky();
         bodyNaIco=davka.getBodyNaIco();
         List<ChybaImportu> chyby = new ArrayList<>();
         Integer bodovaHranicaPreZakladanieNovejFirmy=ParametreNastroje.nacitajParametre().getMesacnaHranicaBodovImportu();
-
+        uzivatelVelkoskladu=UzivatelNastroje.getUzivatelVelkoskladu(parametreImportu.getFirma());
+        if (uzivatelVelkoskladu==null)
+            return null;
         VysledokImportu vysledok = new VysledokImportu();
         progressBarZPN.nadstavNadpis("Zhranie dokladu");
         progressBarZPN.nadstavspustenie(true);
@@ -231,16 +235,30 @@ public class DokladyNastroje {
 
         int i = 0;
         for (Map.Entry<String, ZaznamCsv> entry : zaznam.entrySet()) {
+            pustitiDoDavky=true;
             ZaznamCsv z = entry.getValue();
             i++;
             // progressBarZPN.posun(new BigDecimal(zaznam.size()),new BigDecimal(i));
             progressBarZPN.setProgresBarValue(new BigDecimal(i).divide(new BigDecimal(zaznam.size()), 2, BigDecimal.ROUND_HALF_UP).floatValue());
             if (new BigDecimal(i).remainder(new BigDecimal(100)).compareTo(BigDecimal.ZERO) == 0)
                 System.out.println("Vytvaranie zaznamov" + i);
+            NavratovaHodnota navratovahodnota=null;
 
-            mesacnySucetBodov = bodyNaIco.get(z.getIco());
-            zalozitFirmu = (mesacnySucetBodov >= bodovaHranicaPreZakladanieNovejFirmy ? true : false);
-            NavratovaHodnota navratovahodnota = PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z, hlavickaDokladu,zalozitFirmu);
+
+            if (uzivatelVelkoskladu.getUrcujeFirmyNaKtoreSaPridelujuBody())
+                if (!FirmaVelkoskladuNastroje.existujeFirmaVelkoskladuPodlaIcoFirmy(parametreImportu.getFirma(),z.getIco()))
+                    pustitiDoDavky=false;
+
+
+            if (pustitiDoDavky)
+            {
+                mesacnySucetBodov = bodyNaIco.get(z.getIco());
+                zalozitFirmu = (mesacnySucetBodov >= bodovaHranicaPreZakladanieNovejFirmy ? true : false);
+                navratovahodnota = PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z, hlavickaDokladu, zalozitFirmu);
+            }
+            else{
+                navratovahodnota=new NavratovaHodnota(null,NavratovaHodnota.NEPOVOLENA_FIRMA);
+            }
 
             //PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
             if (navratovahodnota.getPolozkaDokladu() != null)
@@ -259,6 +277,13 @@ public class DokladyNastroje {
                         z.getIco(),
                         z.getKit(),
                         "Nepodarilo sa zalozit polozku dokladu (firma-prazdne ICO)",
+                        z.getMtzDoklad()));
+            else if (navratovahodnota.getChyba() == NavratovaHodnota.NEPOVOLENA_FIRMA)
+                chyby.add(new ChybaImportu(
+                        z.getNazvFirmy(),
+                        z.getIco(),
+                        z.getKit(),
+                        "Nepovolene ICO",
                         z.getMtzDoklad()));
             else if (navratovahodnota.getChyba() == NavratovaHodnota.MALO_BODOV)
                 chyby.add(new ChybaImportu(

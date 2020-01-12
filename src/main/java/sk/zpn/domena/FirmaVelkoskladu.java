@@ -18,6 +18,11 @@ import java.math.BigDecimal;
                 "JOIN fv.velkosklad v " +
                 "JOIN fv.odberatel f " +
                 " WHERE v.id =:id "),
+        @NamedQuery(name = "FirmaVelkoskladu.getFirmuPodlaIco", query = "SELECT f FROM firma_velkoskladu fv " +
+                "JOIN fv.velkosklad v " +
+                "JOIN fv.odberatel f " +
+                " WHERE v.id =:id " +
+                " and f.ico =:ico "),
         @NamedQuery(name = "FirmaVelkoskladu.getId", query = "SELECT fv FROM firma_velkoskladu fv " +
                 "JOIN fv.velkosklad v " +
                 "JOIN fv.odberatel f " +

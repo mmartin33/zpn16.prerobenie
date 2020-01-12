@@ -13,6 +13,9 @@ import static javax.persistence.CascadeType.PERSIST;
 @Cacheable(false)
 @NamedQueries(value = {
         @NamedQuery(name = "Uzivatel.getPodlaMena", query = "SELECT u FROM uzivatelia u WHERE u.meno =:meno"),
+        @NamedQuery(name = "Uzivatel.getPodlaVelkoskladu", query = "SELECT u FROM uzivatelia u " +
+                " join u.firma as f" +
+                " WHERE f.id =:id"),
         @NamedQuery(name = "Uzivatel.getAll", query = "SELECT u FROM uzivatelia u"),
         @NamedQuery(name = "Uzivatel.get", query = "SELECT u FROM uzivatelia u WHERE u.id =:id")})
 
