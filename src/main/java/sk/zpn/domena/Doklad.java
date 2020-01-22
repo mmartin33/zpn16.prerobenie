@@ -69,6 +69,20 @@ public class Doklad extends Vseobecne {
 
     }
 
+    public static String getTextLog(Doklad d) {
+    String text=null;
+        text=d.getId()+"Cd:"+d.getCisloDokladu()+
+                " Velkosklad:"+d.getFirmaNazov()+
+                " Poberatel:"+d.getPoberatelMenoAdresa()+
+                " datum:"+d.getFormatovanyDatum()+
+                " pozn:"+d.getPoznamka()+
+                " "+d.getTypDokladu()+
+                " "+d.getStavDokladu()+
+                " "+d.getCisloDokladuOdmeny();
+    return text;
+
+    }
+
 
 //    public Doklad(String cislo, String heslo, TypDokladu typDokladu) {
 //        this.setTypUzivatela(typUzivatela);

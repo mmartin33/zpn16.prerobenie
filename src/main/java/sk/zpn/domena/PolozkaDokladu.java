@@ -64,6 +64,18 @@ public class PolozkaDokladu extends Vseobecne {
         this.setMnozstvo(new BigDecimal(1));
     }
 
+    public static String getTextLog(PolozkaDokladu d) {
+        String text=null;
+        text=d.getId()+
+                " CD:"+d.doklad.getCisloDokladu()+
+                " Produkt :"+d.getProdukt().getKat()+
+                " "+d.getProdukt().getNazov()+
+                " MN:"+d.getMnozstvo()+
+                " Poberatel:"+d.getPoberatelMenoAdresa();
+
+        return text;
+    }
+
 
     public String getKit() {
         return kit;

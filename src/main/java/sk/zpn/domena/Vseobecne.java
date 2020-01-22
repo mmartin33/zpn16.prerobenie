@@ -56,6 +56,11 @@ public abstract class Vseobecne {
 
         return UzivatelNastroje.getUzivatela(getKto()).get().getMeno();
     }
+    public String getFormatovanyDatum() {
+        String pattern = "dd.MM.yyyy kk:mm";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(getKedy());
+    }
 
 
 }

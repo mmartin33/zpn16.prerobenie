@@ -11,17 +11,15 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 import sk.zpn.domena.Poberatel;
-import sk.zpn.domena.TypUzivatela;
-import sk.zpn.zaklad.model.LogPrihlaseniaNastroje;
+import sk.zpn.domena.log.TypLogovanejHodnoty;
+import sk.zpn.domena.log.TypUkonu;
+import sk.zpn.zaklad.model.LogAplikacieNastroje;
 import sk.zpn.zaklad.model.PoberatelNastroje;
 import sk.zpn.zaklad.model.Pripojenie;
 import sk.zpn.zaklad.model.UzivatelNastroje;
-import sk.zpn.zaklad.view.firmy.FirmyView;
 
 import sk.zpn.zaklad.view.LoginView;
-import sk.zpn.zaklad.view.mostik.MostikView;
 import sk.zpn.zaklad.view.parametre.ParametreView;
-import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 import sk.zpn.zaklad.view.produkty.ProduktyView;
 import sk.zpn.zaklad.view.statistiky.StatPrePoberatelovView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
@@ -83,7 +81,7 @@ public class MyUI extends UI {
 
             if (UzivatelNastroje.overUzivatela(name,pass)) {
                 System.out.println("uzivatel overeny"+VaadinSession.getCurrent().getAttribute("meno")+VaadinSession.getCurrent().getAttribute("id_uzivatela"));
-                new LogPrihlaseniaNastroje().uloz();
+                new LogAplikacieNastroje().uloz(TypLogovanejHodnoty.UZIVATEL, TypUkonu.PRIHLASENIE, null);
                 //if (UzivatelNastroje.prihlasenyUzivatelJePoberatel())
 
                 navigator.navigateTo(VitajteView.NAME);

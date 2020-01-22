@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.*;
 import sk.zpn.domena.importy.*;
+import sk.zpn.domena.log.TypLogovanejHodnoty;
+import sk.zpn.domena.log.TypUkonu;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 
 import javax.persistence.EntityManager;
@@ -33,7 +35,9 @@ public class DokladyNastroje {
 
     public static Doklad ulozDoklad(Doklad d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypUkonu tu=TypUkonu.OPRAVA;
         if (d.isNew()) {
+            tu=TypUkonu.PRIDANIE;
             if (d.getStavDokladu() == null)
                 d.setStavDokladu(StavDokladu.POTVRDENY);
             d.setId(null);
@@ -46,7 +50,7 @@ public class DokladyNastroje {
             em.merge(d);
         }
         em.getTransaction().commit();
-
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.DOKLAD, tu,Doklad.getTextLog(d));
         System.out.println("Ulozeny dokald" + d.getCisloDokladu());
         return d;
 
@@ -62,6 +66,7 @@ public class DokladyNastroje {
 
         if (d == null)
             return ;
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.DOKLAD, TypUkonu.VYMAZ,Doklad.getTextLog(d));
         em.getTransaction().begin();
         Query query = em.createQuery(
                 "delete  FROM  doklady p where COLUMN('id', p) = :id");
@@ -337,17 +342,20 @@ public class DokladyNastroje {
 
     public static Doklad vytvorDoklad(Doklad d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypUkonu tu=TypUkonu.OPRAVA;
         if (d.isNew()) {
+            tu=TypUkonu.PRIDANIE;
             if (d.getStavDokladu() == null)
                 d.setStavDokladu(StavDokladu.POTVRDENY);
             d.setId(null);
             d.setKedy(new Date());
             d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
         }
-        System.out.println("Ulozeny dokald" + d.getCisloDokladu());
+        System.out.println("Ulozeny doklad" + d.getCisloDokladu());
         em.getTransaction().begin();
         em.persist(d);
         em.getTransaction().commit();
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.DOKLAD, tu,Doklad.getTextLog(d));
         return d;
     }
 

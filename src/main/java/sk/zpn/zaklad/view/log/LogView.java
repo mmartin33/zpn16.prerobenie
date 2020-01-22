@@ -3,53 +3,70 @@ package sk.zpn.zaklad.view.log;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
-import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
-import sk.zpn.domena.Doklad;
-import sk.zpn.domena.LogPrihlasenia;
-import sk.zpn.domena.StavDokladu;
-import sk.zpn.zaklad.model.DokladyNastroje;
-import sk.zpn.zaklad.model.LogPrihlaseniaNastroje;
+import sk.zpn.domena.TypDokladu;
+import sk.zpn.domena.log.LogAplikacie;
+import sk.zpn.domena.log.TypLogovanejHodnoty;
+import sk.zpn.domena.log.TypUkonu;
+import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
+import sk.zpn.zaklad.model.LogAplikacieNastroje;
 import sk.zpn.zaklad.view.VitajteView;
-import sk.zpn.zaklad.view.doklady.BrowsPanel;
-import sk.zpn.zaklad.view.doklady.EditacnyForm;
 
 import java.util.List;
 
 public class LogView extends HorizontalLayout implements View {
     // ContactForm is an example of a custom component class
     public static final String NAME = "logView";
-    private FilterGrid<LogPrihlasenia> grid;
+    private MFilteredGrid<LogAplikacie> grid =new MFilteredGrid<>();
     private Button btnSpat;
-    private List<LogPrihlasenia> logList =null;
+    private List<LogAplikacie> logList =null;
+    GridLayout gr =new GridLayout(1,3);;
+    HorizontalLayout lHorny = new HorizontalLayout();
+    HorizontalLayout lTlacitkovy = new HorizontalLayout();
 
     public LogView() {
-        GridLayout gr=new GridLayout(1,3);
+
+
         gr.setSpacing(false);
+        gr.setRowExpandRatio(0, 0.10f);
+        gr.setRowExpandRatio(1, 0.80f);
+        gr.setRowExpandRatio(2, 0.10f);
         gr.setSizeFull();
-        gr.setRowExpandRatio(1,0.05f);
-        gr.setRowExpandRatio(2,0.95f);
-        gr.setRowExpandRatio(3,0.05f);
-        logList = LogPrihlaseniaNastroje.zoznam();
-        grid = new FilterGrid<>();
-        grid.setItems(logList);
+
+
+
+
+    }
+
+
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        grid.setSizeFull();
 
+        logList = LogAplikacieNastroje.zoznam();
+        grid.setItems(logList);
 
-        FilterGrid.Column<LogPrihlasenia, String> colKedy= grid.addColumn(LogPrihlasenia::getKedyFormatovany).setCaption("Kedy").setId("kedy");
-        FilterGrid.Column<LogPrihlasenia, String> colKto= grid.addColumn(LogPrihlasenia::getKtoMeno).setCaption("KTo").setId("kto");
+        MFilteredGrid.Column<LogAplikacie, String> colKedy= grid.addColumn(LogAplikacie::getFormatovanyDatum).setCaption("Kedy").setId("kedy");
+        MFilteredGrid.Column<LogAplikacie, String> colKto= grid.addColumn(LogAplikacie::getUzivatelMneno).setCaption("Kto").setId("kto");
+        MFilteredGrid.Column<LogAplikacie, String> colTyp= grid.addColumn(typ->typ.getTypLogovanejHodnoty().getDisplayValue()).setCaption("Typ").setId("typ");
+        MFilteredGrid.Column<LogAplikacie, String> colTypUkonu= grid.addColumn(typUkonu->typUkonu.getTypUkonu().getDisplayValue()).setCaption("TypUkonu").setId("typ_ukonu");
+        MFilteredGrid.Column<LogAplikacie, String> colPoznamka= grid.addColumn(LogAplikacie::getPoznamka).setCaption("Poznámka").setId("poznamka");
+
 
         // filters
         colKedy.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         colKto.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-
-
-        grid.setColumnOrder(colKedy,colKto);
-
-
-
-
+        colTyp.setFilter(new ComboBox<>("", TypLogovanejHodnoty.getListOfDisplayValues()),
+                (cValue, fValue) -> fValue == null || fValue.equals(cValue));
+        colTypUkonu.setFilter(new ComboBox<>("", TypUkonu.getListOfDisplayValues()),
+                (cValue, fValue) -> fValue == null || fValue.equals(cValue));
+        colPoznamka.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
+        grid.registrujZmenuStlpcov("log");
 
 
 
@@ -60,30 +77,23 @@ public class LogView extends HorizontalLayout implements View {
         btnSpat.addClickListener(clickEvent ->
                 UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
         );
-        HorizontalLayout tlacitkovy = new HorizontalLayout();
+
         btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
-        tlacitkovy.addComponent(btnSpat);//666
+        lTlacitkovy.addComponent(btnSpat);//666
 
-        gr.addComponent(new Label("Prehľad prihlásení"));
-
+        Label nadpis=new Label("Log udalosti");
+        lHorny.addComponent(nadpis);
+        gr.addComponent(lHorny);
         gr.addComponent(grid);
-        gr.setComponentAlignment(grid, Alignment.MIDDLE_LEFT);
-        gr.addComponent(tlacitkovy);
-        gr.setComponentAlignment(tlacitkovy, Alignment.BOTTOM_LEFT);
+        gr.addComponent(lTlacitkovy);
+
+        gr.setComponentAlignment(grid, Alignment.MIDDLE_CENTER);
+        gr.setComponentAlignment(lTlacitkovy, Alignment.MIDDLE_CENTER);
         gr.setVisible(true);
-        configureComponents();
-
-
-
-    }
-
-
-    private void configureComponents() {
+        grid.setSizeFull();
+        this.setSizeFull();
         grid.getDataProvider().refreshAll();
+
     }
-
-
-
-
 }
 

@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 import sk.zpn.domena.*;
 import sk.zpn.domena.importy.NavratovaHodnota;
 import sk.zpn.domena.importy.ZaznamCsv;
+import sk.zpn.domena.log.TypLogovanejHodnoty;
+import sk.zpn.domena.log.TypUkonu;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -28,7 +30,9 @@ public class PolozkaDokladuNastroje {
 
     public static PolozkaDokladu ulozPolozkuDokladu(PolozkaDokladu d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypUkonu tu=TypUkonu.OPRAVA;
         if (d.isNew()) {
+            tu=TypUkonu.PRIDANIE;
             d.setDoklad(em.find(Doklad.class, d.getDoklad().getId()));
 
             d.setId((long) 0);
@@ -42,14 +46,17 @@ public class PolozkaDokladuNastroje {
             em.merge(d);
         }
         em.getTransaction().commit();
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.POLOZKA_DOKLADU, tu,PolozkaDokladu.getTextLog(d));
         return d;
 
 
     }
     public static PolozkaDokladu vytvorPolozkuDokladu(PolozkaDokladu d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypUkonu tu=TypUkonu.OPRAVA;
         if (d.isNew()) {
         d.setId(null);
+            tu=TypUkonu.PRIDANIE;
             d.setKedy(new Date());
             d.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
         }
@@ -57,6 +64,7 @@ public class PolozkaDokladuNastroje {
         em.getTransaction().begin();
         em.persist(d);
         em.getTransaction().commit();
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.POLOZKA_DOKLADU, tu,PolozkaDokladu.getTextLog(d));
         return d;
 
 
@@ -67,7 +75,7 @@ public class PolozkaDokladuNastroje {
 
     public static void zmazPolozkyDoklady(PolozkaDokladu d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.POLOZKA_DOKLADU, TypUkonu.VYMAZ,PolozkaDokladu.getTextLog(d));
         em.getTransaction().begin();
         em.remove(d);
         em.getTransaction().commit();

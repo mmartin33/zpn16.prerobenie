@@ -46,6 +46,7 @@ public class VitajteView extends MojView {
 
     public VitajteView(Navigator n) {
         this.n = n;
+
         MenuBar barmenu = new MenuBar();
         this.addComponent(barmenu);
         HorizontalLayout infoPanel = new HorizontalLayout();
@@ -226,7 +227,7 @@ public class VitajteView extends MojView {
         menuAdmin = barmenu.addItem("Spravca", null, null);
         MenuItem menuUzivatelia = menuAdmin.addItem("Užívatelia", VaadinIcons.USERS, sp_admin);
         menuUzivatelia.setDescription("uzivatelia");
-        MenuItem menuLog = menuAdmin.addItem("Log prihlásení", VaadinIcons.LIST, sp_admin);
+        MenuItem menuLog = menuAdmin.addItem("Log aplikácie", VaadinIcons.LIST, sp_admin);
         menuLog.setDescription("log");
 
 
