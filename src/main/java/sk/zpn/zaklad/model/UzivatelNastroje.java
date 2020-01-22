@@ -14,7 +14,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class UzivatelNastroje {
@@ -139,7 +138,7 @@ public class UzivatelNastroje {
     }
 
     public static void generujNoveMenaAHesla() {
-        List<Poberatel> poberatelia=PoberatelNastroje.zoznamPoberatelov();
+        List<Poberatel> poberatelia=PoberatelNastroje.zoznamPoberatelov(null);
         RandomString gen =new RandomString(8, ThreadLocalRandom.current());
 
         for (Poberatel p : poberatelia) {

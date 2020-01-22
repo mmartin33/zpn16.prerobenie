@@ -3,17 +3,13 @@ package sk.zpn.zaklad.model;
 import com.google.common.collect.Maps;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
-import sk.zpn.domena.Produkt;
 import sk.zpn.domena.StatistikaBodov;
-import sk.zpn.domena.statistiky.Zaznam;
 import sk.zpn.domena.statistiky.ZoznamBodov;
 
 import sk.zpn.nastroje.NastrojePoli;
 import sk.zpn.nastroje.XlsStatistikaBodov;
-import sk.zpn.nastroje.XlsStatistikaBodovDodavatelProdukt;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -111,7 +107,7 @@ public class StatPoberatelNastroje {
         if (velkosklad != null)
             poberateliaVelkoskladu = PoberatelNastroje.vratPoberatelovVelkoskladu(velkosklad);
 
-        List<Poberatel> poberatelia = PoberatelNastroje.zoznamPoberatelov();
+        List<Poberatel> poberatelia = PoberatelNastroje.zoznamPoberatelov(null);
         String nadpis = "Vyhodnotenie poberatelov  od: " + simpleDateFormat.format(Date.valueOf(dod)) + " dp: " + simpleDateFormat.format(Date.valueOf(ddo));
         XlsStatistikaBodov.vytvorXLS2(poberatelia,
                                     pociatocnyStav,

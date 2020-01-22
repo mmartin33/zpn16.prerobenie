@@ -115,7 +115,7 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
     public List<Poberatel> naplnList(Firma velkosklad,Prevadzka prevadzkaPoberatela){
         if (this.velkosklad==null)
-            return PoberatelNastroje.zoznamPoberatelov();
+            return PoberatelNastroje.zoznamPoberatelov(prevadzkaPoberatela);
         else
             return  PoberatelNastroje.zoznamPoberatelovVelkoskladu(velkosklad,prevadzkaPoberatela);
 

@@ -3,7 +3,6 @@ package sk.zpn.zaklad.view.firmy;
 import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.shared.Registration;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
@@ -274,7 +273,7 @@ public class EditacnyForm extends VerticalLayout {
 
     private List<Poberatel> navrhniPoberatela(String query, int cap) {
 
-        return  PoberatelNastroje.zoznamPoberatelov().stream()
+        return  PoberatelNastroje.zoznamPoberatelov(null).stream()
                 .filter(poberatel -> poberatel.getMeno().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
     }

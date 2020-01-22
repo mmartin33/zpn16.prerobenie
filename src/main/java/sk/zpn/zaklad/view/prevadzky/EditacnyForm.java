@@ -245,7 +245,7 @@ public class EditacnyForm extends VerticalLayout {
     }
     private List<Poberatel> navrhniPoberatela(String query, int cap) {
 
-        List<Poberatel> poberiatelia = PoberatelNastroje.zoznamPoberatelov().stream()
+        List<Poberatel> poberiatelia = PoberatelNastroje.zoznamPoberatelov(null).stream()
                 .filter(poberatel -> poberatel.getMeno().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
         poberiatelia.forEach(poberatel -> {
