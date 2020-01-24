@@ -110,10 +110,12 @@ public class ProduktyView extends HorizontalLayout implements View {
 
         editacnyForm=new EditacnyForm();
         editacnyForm.setProduktyView(this);
-        gr.addComponent(browsPanel,0,0,0,1);
-        gr.addComponent(editacnyForm,1,0,1,0);
+        if (gr.getComponentCount()==0) {
+            gr.addComponent(browsPanel, 0, 0, 0, 1);
+            gr.addComponent(editacnyForm, 1, 0, 1, 0);
 
-        this.addComponent(gr);
+            this.addComponent(gr);
+        }
         this.setSizeFull();
 
         browsPanel.btnNovy.addClickListener(clickEvent -> editacnyForm.edit(new Produkt()

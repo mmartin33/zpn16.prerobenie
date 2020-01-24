@@ -35,6 +35,7 @@ public class BrowsPanel extends VerticalLayout {
 
     public Button btnNovy;
     public Button btnFirmy;
+    public Button btnCiaroveKody;
     private FirmyView firmyView;
     private ProduktyView produktView;
     MFilteredGrid.Column<Produkt, BigDecimal> colCena;
@@ -98,6 +99,8 @@ public class BrowsPanel extends VerticalLayout {
         grid.setColumnOrder(colKat, colNazov, colKusy, colBody);
         grid.registrujZmenuStlpcov("produkty");
 
+        Button btnCiaroveKody = new Button("Čiarové kódy", VaadinIcons.BARCODE);
+        btnCiaroveKody.addClickListener(this::zobrazCiaroveKody);
         Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
         btnSpat.addClickListener(clickEvent ->
                 {
@@ -119,6 +122,7 @@ public class BrowsPanel extends VerticalLayout {
 
         tlacitkovy.addComponent(btnNovy);
         tlacitkovy.addComponent(btnFirmy);
+        tlacitkovy.addComponent(btnCiaroveKody);
         tlacitkovy.addComponent(btnSpat);//666
 
         Label l = new Label("Prehľad produktov");
@@ -140,6 +144,16 @@ public class BrowsPanel extends VerticalLayout {
         gl.setVisible(true);
         this.addComponentsAndExpand(gl);
 
+
+    }
+
+    private void zobrazCiaroveKody(Button.ClickEvent clickEvent) {
+        Produkt value = grid.asSingleSelect().getValue();
+        if (value==null)
+            return;
+        CiarovyKodView ciarovyKodView = new CiarovyKodView(value);
+        UI.getCurrent().getNavigator().addView(CiarovyKodView.NAME, ciarovyKodView);
+        UI.getCurrent().getNavigator().navigateTo(CiarovyKodView.NAME);
 
     }
 

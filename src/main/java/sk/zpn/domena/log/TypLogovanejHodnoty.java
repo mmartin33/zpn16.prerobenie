@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 public enum TypLogovanejHodnoty {
     UZIVATEL("uzivatel"),
     POLOZKA_DOKLADU("polozkaDokladu"),
-    DOKLAD("doklad");
+    DOKLAD("doklad"),
+    CIAROVY_KOD("ciarovyKod");
 
 
     private String displayValue;
@@ -25,6 +26,7 @@ public enum TypLogovanejHodnoty {
             case "uzivatel": return UZIVATEL;
             case "polozkaDokladu": return POLOZKA_DOKLADU;
             case "doklad": return DOKLAD;
+            case "ciarovyKod": return CIAROVY_KOD;
             default: throw new IllegalArgumentException(
                     String.format("Typ hodnoty stlpca: %s", displayName));
         }
