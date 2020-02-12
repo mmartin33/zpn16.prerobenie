@@ -2,6 +2,8 @@ package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
 import sk.zpn.domena.Firma;
+import sk.zpn.domena.log.TypLogovanejHodnoty;
+import sk.zpn.domena.log.TypUkonu;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -65,8 +67,9 @@ public class FirmaNastroje {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         System.out.println("Ulozena firma:"+f.getNazov());
         em.getTransaction().begin();
-
+        TypUkonu tu=TypUkonu.OPRAVA;
         if (f.isNew()) {
+            tu=TypUkonu.PRIDANIE;
             f.setId((long) 0);
             f.setKedy(new Date());
             f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
@@ -76,6 +79,7 @@ public class FirmaNastroje {
             em.merge(f);
 
         em.getTransaction().commit();
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.FIRMA, tu,f.getTextLog());
 
         return f;
 

@@ -9,10 +9,12 @@ import org.jsoup.helper.StringUtil;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import com.vaadin.ui.themes.ValoTheme;
+import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
 import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.grafickeNastroje.WindowWithEditBox;
+import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.PoberatelNastroje;
 import sk.zpn.zaklad.model.PrevadzkaNastroje;
 import sk.zpn.zaklad.view.VitajteView;
@@ -33,6 +35,7 @@ public class BrowsPanel extends VerticalLayout {
     private HorizontalLayout hornyFilter;
     private TextField tfPrevadzkaZakaznika;
     private Button btnPrezobraz;
+    private Button btnPremenujPoberatelaPrevadzkyFirmu;
     private Button btnEditujPoznámku;
     private MFilteredGrid<Poberatel> grid;
     private List<Poberatel> poberatelList;
@@ -135,6 +138,20 @@ public class BrowsPanel extends VerticalLayout {
 
 
         });
+        btnPremenujPoberatelaPrevadzkyFirmu = new Button("Premenuj poberateľa-prevaddzku-firmu", VaadinIcons.ALARM );
+        btnPremenujPoberatelaPrevadzkyFirmu.addClickListener(clickEvent -> {
+            WindowWithEditBox w;
+            w = new WindowWithEditBox("Názov poberateľa- prevádzky-firmu", ((Poberatel) grid.asSingleSelect().getValue()).getMeno());
+            w.addCloseListener(new Window.CloseListener() {
+
+                @Override
+                public void windowClose(Window.CloseEvent e) {
+                   premenujPoberatelaPrevadzkuFirmu(w);
+                }
+            });
+
+
+        });
 
 
         grid.addItemClickListener(new ItemClickListener<Poberatel>() {
@@ -170,6 +187,7 @@ public class BrowsPanel extends VerticalLayout {
         tlacitkovy.addComponent(btnNovy);
         tlacitkovy.addComponent(btnDetail);
         tlacitkovy.addComponent(btnEditujPoznámku);
+        tlacitkovy.addComponent(btnPremenujPoberatelaPrevadzkyFirmu);
         if (!StringUtil.isBlank(poberateliaView.getRodicovskyView()))
             tlacitkovy.addComponent(btnVyber);
         tlacitkovy.addComponent(btnSpat);//666
@@ -225,13 +243,24 @@ public class BrowsPanel extends VerticalLayout {
 
     }
 
+    private void premenujPoberatelaPrevadzkuFirmu(WindowWithEditBox w) {
+        if (w.getText()!= null) {
+            Poberatel p= grid.asSingleSelect().getValue();
+            PoberatelNastroje.premenujPoberatelaPrevadzkuPoberatela(p,w.getText());
+
+            grid.getDataProvider().refreshItem(p);
+
+        }
+
+    }
+
     private void vykonajPoZatvoreni(WindowWithEditBox w) {
-        System.out.println("AAA");
+
         if (w.getText()!= null) {
             Poberatel p= grid.asSingleSelect().getValue();
             p.setPoznamkaVelkoskladu(w.getText());
             PoberatelNastroje.ulozPoberatela(p);
-            poberateliaView.refreshPoberatelov();
+            grid.getDataProvider().refreshItem(p);
         }
 
     }

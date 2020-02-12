@@ -128,6 +128,20 @@ public class Poberatel extends Vseobecne {
     public void setPoznamkaVelkoskladu(String poznamkaVelkoskladu) {
         this.poznamkaVelkoskladu = poznamkaVelkoskladu;
     }
+
+    public String getTextLog() {
+        String text=null;
+        text=this.getId()+"kod:"+this.getKod()+
+                " meno:"+this.getMeno()+
+                " poznamka:"+this.getPoznamkaVelkoskladu()+
+                " email:"+this.getEmail()+
+                " mobil:"+this.getMobil()+
+                " telefon:"+this.getTelefon()+
+                " PS:"+(this.getPociatocnyStav()==null?"":this.getPociatocnyStav().toString());
+        return text;
+
+
+    }
 }
 
 

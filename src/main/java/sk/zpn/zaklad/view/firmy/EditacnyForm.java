@@ -62,7 +62,7 @@ public class EditacnyForm extends VerticalLayout {
         tPsc.setWidth("50%");
         tTelefon = new TextField("Telefon");
 
-        tPoberatelNazov = new TextField("Poberatel");
+//        tPoberatelNazov = new TextField("Poberatel");
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
@@ -77,7 +77,7 @@ public class EditacnyForm extends VerticalLayout {
         lEdit.addComponent(tMesto);
         lEdit.addComponent(tPsc);
         lEdit.addComponent(tTelefon);
-        lEdit.addComponent(tPoberatelNazov);
+//        lEdit.addComponent(tPoberatelNazov);
 
 
         HorizontalLayout lBtn = new HorizontalLayout();
@@ -90,11 +90,11 @@ public class EditacnyForm extends VerticalLayout {
         this.addComponent(lBtn);
 
 
-        AutocompleteExtension<Poberatel> poberatelAutocompleteExtension = new AutocompleteExtension<>(tPoberatelNazov);
-        poberatelAutocompleteExtension.setSuggestionGenerator(
-                this::navrhniPoberatela,
-                this::transformujPoberatelaNaMeno,
-                this::transformujPoberatelaNaMenoSoZvyraznenymQuery);
+//        AutocompleteExtension<Poberatel> poberatelAutocompleteExtension = new AutocompleteExtension<>(tPoberatelNazov);
+//        poberatelAutocompleteExtension.setSuggestionGenerator(
+//                this::navrhniPoberatela,
+//                this::transformujPoberatelaNaMeno,
+//                this::transformujPoberatelaNaMenoSoZvyraznenymQuery);
 
 
     }

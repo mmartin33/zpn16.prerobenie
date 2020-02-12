@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
+import sk.zpn.domena.log.TypLogovanejHodnoty;
+import sk.zpn.domena.log.TypUkonu;
 import sk.zpn.nastroje.NastrojePoli;
 import sk.zpn.nastroje.RandomString;
 
@@ -74,7 +76,9 @@ public class PoberatelNastroje {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
         RandomString gen = new RandomString(8, ThreadLocalRandom.current());
+        TypUkonu tu=TypUkonu.OPRAVA;
         if (f.isNew()) {
+            tu=TypUkonu.PRIDANIE;
             f.setId((long) 0);
             f.setKedy(new Date());
             if (StringUtils.isEmpty(f.getKod()))
@@ -86,6 +90,7 @@ public class PoberatelNastroje {
         } else
             em.merge(f);
         em.getTransaction().commit();
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.POBERATEL, tu,f.getTextLog());
 
         return f;
 
@@ -135,6 +140,7 @@ public class PoberatelNastroje {
     public static void zmazPoberatela(Poberatel f) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         System.out.println("Vymazany poberatel:" + f.getMeno());
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.POBERATEL, TypUkonu.VYMAZ,f.getTextLog());
         em.getTransaction().begin();
 
         if (!em.contains(f)) {
@@ -224,6 +230,24 @@ public class PoberatelNastroje {
 
 
         return u;
+    }
+    public static void premenujPoberatelaPrevadzkuPoberatela(Poberatel p, String text){
+
+        if ((p==null) || (text==null) || (text.length()==0))
+            return;
+        p.setMeno(text);
+        PoberatelNastroje.ulozPoberatela(p);
+        Prevadzka prev=PrevadzkaNastroje.prvaPrevadzkaPoberatela(p);
+        if (prev!=null) {
+            prev.setNazov(text);
+            PrevadzkaNastroje.ulozPrevadzka(prev);
+            Firma firma = prev.getFirma();
+            if (firma!=null){
+                firma.setNazov(text);
+                FirmaNastroje.ulozFirmu(firma);
+            }
+        }
+
     }
 
 }

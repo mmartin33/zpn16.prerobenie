@@ -127,9 +127,12 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
-        if (polozkyDokladuList==null)
+        boolean prvyvstup=false;
+        if (polozkyDokladuList==null) {
             polozkyDokladuList = PolozkaDokladuNastroje.zoznamPoloziekDokladov(this.doklad);
+        }
         if (browsPanel==null) {
+            prvyvstup = true;
             browsPanel = new BrowsPanel(polozkyDokladuList, this);
             browsPanel.btnPanelovy.addClickListener(clickEvent -> {
                 if (editacnyForm.isVisible()) {
@@ -183,8 +186,10 @@ public class PolozkyDokladuView extends HorizontalLayout implements View {
         }
         if (this.klasickyRezim)
             klasickyRezim();
+
         else if(this.rezimOdmien)
-            rezimOdmien();
+            if (prvyvstup)
+                rezimOdmien();
 
         //if (velkosklad!=null)
             rezimVelkoskladu();

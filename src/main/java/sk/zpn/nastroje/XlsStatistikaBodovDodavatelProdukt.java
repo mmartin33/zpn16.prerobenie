@@ -9,15 +9,12 @@ import com.vaadin.ui.Window;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.*;
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.Firma;
-import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Produkt;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -246,19 +243,20 @@ public class XlsStatistikaBodovDodavatelProdukt {
         return ;
     }
 
-    public static void vytvorXLSbodovy(
+    public static String vytvorXLSbodovy(
             List<Firma> velkosklady,
             List<Produkt> produkty,
             Map<String, BigDecimal> predaje,
             String nadpis,
-            Firma dodavatel) {
+            Firma dodavatel,
+            boolean zipFile) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy ' ' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
 
 
 
         if ((velkosklady == null) || (produkty == null) || (predaje == null))
-            return ;
+            return null;
         workbook = null;
         FileInputStream excelFile = null;
         try {
@@ -433,11 +431,9 @@ public class XlsStatistikaBodovDodavatelProdukt {
         bunka.setCellStyle(oramovanieBold());
         bunka.setCellValue(sumaCelkomEur.toString());
 
-
-
         try {
 
-            FileOutputStream outputStream = new FileOutputStream(SystemoveParametre.getTmpAdresar() + FILE_NAME);
+            FileOutputStream outputStream = new FileOutputStream(SystemoveParametre.getTmpAdresar() + dodavatel.getNazov()+"-"+FILE_NAME);
             workbook.write(outputStream);
             workbook.close();
             excelFile.close();
@@ -448,8 +444,17 @@ public class XlsStatistikaBodovDodavatelProdukt {
 
             e.printStackTrace();
         }
+        String filePath = SystemoveParametre.getTmpAdresar() + dodavatel.getNazov()+"-"+FILE_NAME;
+        if (!zipFile)
+            stiahniExcelFile(filePath);
 
-        String filePath = SystemoveParametre.getTmpAdresar() + FILE_NAME;
+        return filePath ;
+    }
+
+    private static void stiahniExcelFile(String filePath) {
+
+
+
 
         Window subWindow = new Window("");
         subWindow.setWidth(500, Sizeable.Unit.PIXELS);
@@ -462,7 +467,6 @@ public class XlsStatistikaBodovDodavatelProdukt {
         subWindow.setModal(true);
         UI.getCurrent().addWindow(subWindow);
 
-        return ;
     }
 
     private static HSSFCellStyle nadpisovyformat(){

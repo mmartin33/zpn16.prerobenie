@@ -4,6 +4,8 @@ import com.vaadin.server.VaadinSession;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
+import sk.zpn.domena.log.TypLogovanejHodnoty;
+import sk.zpn.domena.log.TypUkonu;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -46,7 +48,9 @@ public class PrevadzkaNastroje {
 
     public static Prevadzka ulozPrevadzka(Prevadzka p){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypUkonu tu=TypUkonu.OPRAVA;
         if (p.isNew()) {
+            tu=TypUkonu.PRIDANIE;
             p.setId((long) 0);
             p.setKedy(new Date());
             p.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
@@ -55,6 +59,7 @@ public class PrevadzkaNastroje {
         em.getTransaction().begin();
         em.merge(p);
         em.getTransaction().commit();
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.PREVADZKA, tu,p.getTextLog());
         return p;
 
 
@@ -62,8 +67,9 @@ public class PrevadzkaNastroje {
 
     public static Prevadzka zalozPrevadzku(Prevadzka p){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypUkonu tu=TypUkonu.OPRAVA;
         if (p.isNew()) {
-
+            tu=TypUkonu.PRIDANIE;
             p.setId(null);
             p.setKedy(new Date());
             p.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
@@ -72,6 +78,7 @@ public class PrevadzkaNastroje {
         em.getTransaction().begin();
         em.persist(p);
         em.getTransaction().commit();
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.PREVADZKA, tu,p.getTextLog());
         return p;
 
 
@@ -79,6 +86,7 @@ public class PrevadzkaNastroje {
 
     public static void zmazPrevadzku(Prevadzka p){
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.PREVADZKA, TypUkonu.VYMAZ,p.getTextLog());
         System.out.println("Vymazana prevadzka:"+p.getNazov());
         em.getTransaction().begin();
         em.remove(p);

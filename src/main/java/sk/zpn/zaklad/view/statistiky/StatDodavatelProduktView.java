@@ -45,7 +45,7 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
         ddo = LocalDate.of(LocalDate.now().getYear(),12,31);
         dfOd=new DateField("Od:");
         dfDo=new DateField("do:");
-        txtRok=new TextField("Rok:");
+        txtRok=new TextField("Rok produktov:");
         txtRok.setValue(rok);
         dfOd.setValue(dod);
         dfDo.setValue(ddo);
@@ -55,7 +55,7 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
         tfFirma=new TextField("Velkosklad");
         tfFirma.setWidth(450, Sizeable.Unit.PIXELS);
 
-        btnAktivujFilter=new Button("Vytvor XLS");
+        btnAktivujFilter=new Button("Vytvor XLS/ZIP");
 
         Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
         btnSpat.setHeight(100, Unit.PERCENTAGE);
@@ -100,18 +100,20 @@ public class StatDodavatelProduktView extends VerticalLayout implements View {
     }
 
     private void aktivujFilter(Button.ClickEvent clickEvent) {
-        Firma firma=FirmaNastroje.prvaFirmaPodlaNazvu(tfFirma.getValue()).get();
+        Firma firma=null;
+        if(tfFirma.getValue().length()!=0)
+            firma=FirmaNastroje.prvaFirmaPodlaNazvu(tfFirma.getValue()).get();
         StatDodavatelProdukt.load(bodovyRezim,dfOd.getValue(), dfDo.getValue(),Integer.parseInt(txtRok.getValue()),firma);
         }
 
 
     private void init(){
         nazovFirmy=FirmaNastroje.zoznamFiriemIbaDodavatelia().get(0).getNazov();
-        tfFirma.setValue(nazovFirmy);
+        tfFirma.setValue("");
         binderHF.readBean(FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).get());
         Binder.Binding<Firma, String> nazovBinding = binderHF.forField(tfFirma)
-                .withValidator(v -> !tfFirma.getValue().trim().isEmpty(),
-                        "Názov je poviný")
+//                .withValidator(v -> !tfFirma.getValue().trim().isEmpty(),
+//                        "Názov je poviný")
                 .bind(Firma::getNazov, Firma::setNazov);
         AutocompleteExtension<Firma> dokladAutocompleteExtension = new AutocompleteExtension<>(tfFirma);
         dokladAutocompleteExtension.setSuggestionListSize(50);

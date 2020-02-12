@@ -7,13 +7,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 
-
-
-public class ZaznamCsv
-
-{
+public class ZaznamCsv {
     private static final Logger logger = Logger.getLogger(Doklad.class);
     String kit;
+    private String ciarovyKod;
     private String nazov;
     private BigDecimal mnozstvo;
     private String nazvFirmy;
@@ -94,6 +91,14 @@ public class ZaznamCsv
 
     public void setKit(String kit) {
         this.kit = kit;
+    }
+
+    public String getCiarovyKod() {
+        return ciarovyKod;
+    }
+
+    public void setCiarovyKod(String ciarovyKod) {
+        this.ciarovyKod = ciarovyKod;
     }
 
     public Double getFiktivneBody() {

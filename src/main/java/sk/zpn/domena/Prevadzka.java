@@ -159,6 +159,15 @@ public class Prevadzka extends Vseobecne {
     }
 
 
+    public String getTextLog() {
+
+        String text=null;
+        text=this.getId()+"nazov:"+this.getNazov()+
+                " meno:"+this.getFirmaNazov()+
+                " firma nazov:"+this.getFirmaNazov()+
+                " poberatel:"+this.getPoberatelMenoAdresa();
+        return text;
+    }
 }
 
 

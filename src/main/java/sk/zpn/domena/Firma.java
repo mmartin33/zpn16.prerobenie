@@ -113,6 +113,17 @@ public class Firma extends Vseobecne {
     }
 
 
+    public String getTextLog() {
+        String text=null;
+        text=this.getId()+"nazov"+this.getNazov()+
+                " ico:"+this.getIco()+
+                " mesto:"+this.getMesto()+
+                " ulica:"+this.getUlica()+
+                " dis:"+this.getDic();
+
+        return text;
+
+    }
 }
 
 
