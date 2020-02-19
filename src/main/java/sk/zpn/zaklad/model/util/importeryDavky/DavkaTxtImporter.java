@@ -69,7 +69,8 @@ public class DavkaTxtImporter {
                     bodyNaIco.put(zaznam.getIco(), ImporterNastroje.vratBodyZaIcoAKit(zaznam.getIco(),
                             zaznam.getKit(),
                             zaznam.getMnozstvo(),
-                            parametreImportu.getFirma()));
+                            parametreImportu.getFirma(),
+                            null));
 
                 }
             }

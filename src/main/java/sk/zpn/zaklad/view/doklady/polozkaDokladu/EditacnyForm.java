@@ -3,6 +3,7 @@ package sk.zpn.zaklad.view.doklady.polozkaDokladu;
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.event.FieldEvents;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
@@ -65,6 +66,12 @@ public class EditacnyForm extends VerticalLayout {
         btnVyberPoberatela.setVisible(true);
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
+        btnUloz.setClickShortcut(ShortcutAction.KeyCode.U,
+                new int[]{ShortcutAction.ModifierKey.ALT});
+
+
+        btnUloz.setClickShortcut(ShortcutAction.KeyCode.U,
+                new int[]{ShortcutAction.ModifierKey.ALT});
 
         nastavComponnenty();
         HorizontalLayout hl=new HorizontalLayout();

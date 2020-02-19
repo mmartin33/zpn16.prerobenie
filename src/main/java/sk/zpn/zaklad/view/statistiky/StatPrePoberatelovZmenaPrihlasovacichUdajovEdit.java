@@ -2,6 +2,7 @@ package sk.zpn.zaklad.view.statistiky;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -44,6 +45,9 @@ public class StatPrePoberatelovZmenaPrihlasovacichUdajovEdit extends VerticalLay
         tfHeslo.setWidth("200");
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
+        btnUloz.setClickShortcut(ShortcutAction.KeyCode.U,
+                new int[]{ShortcutAction.ModifierKey.ALT});
+
         btnSpat =new Button("Späť",VaadinIcons.EJECT);
 
         nastavComponnenty();

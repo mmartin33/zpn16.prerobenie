@@ -12,12 +12,13 @@ import java.math.BigInteger;
 
 public class ImporterNastroje {
 
-    public static int vratBodyZaIcoAKit(String ico, String kit, BigDecimal mnozstvo, Firma velkosklad) {
+    public static int vratBodyZaIcoAKit(String ico, String kit, BigDecimal mnozstvo, Firma velkosklad,String ciarovyKod) {
         int body=0;
         FirmaProdukt fp = null;
         fp = FirmaProduktNastroje.getFirmaProduktPreImport(velkosklad,
                 ParametreNastroje.nacitajParametre().getRok(),
-                kit);
+                kit,
+                ciarovyKod);
 
         if ((fp != null) && (StringUtils.isNotBlank(ico))){
             //BigDecimal mnozstvoPreBody = zaznam.getMnozstvo().multiply(fp.getKoeficient());

@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.grafickeNastroje;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.*;
@@ -16,6 +17,9 @@ public class WindowWithEditBox extends Window {
         this.setWidth(600, Sizeable.Unit.PIXELS);
         this.setHeight(200, Sizeable.Unit.PIXELS);
         btnOK =new Button("Ulož");
+        btnOK.setClickShortcut(ShortcutAction.KeyCode.U,
+                new int[]{ShortcutAction.ModifierKey.ALT});
+
         btnStorno =new Button("Konec bez uloženia");
         txtField =new TextField("Poznámka");
         if (hodnota!=null)

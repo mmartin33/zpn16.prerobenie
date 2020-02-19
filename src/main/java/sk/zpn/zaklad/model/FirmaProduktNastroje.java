@@ -26,15 +26,35 @@ public class FirmaProduktNastroje {
         return q.getResultList();
     }
 
-    public static FirmaProdukt getFirmaProduktPreImport(Firma firma, String rok, String kit) {
-        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        TypedQuery<FirmaProdukt> q = em.createNamedQuery("FirmaProdukt.getMostikoveUdaje", FirmaProdukt.class)
+    public static FirmaProdukt getFirmaProduktPreImport(Firma firma, String rok, String kit,String ciarovyKod) {
+        EntityManager em=null;
+        List results=null;
+        TypedQuery<FirmaProdukt> q=null;
+        Long p=null;
+
+
+        em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        q = em.createNamedQuery("FirmaProdukt.getMostikoveUdaje", FirmaProdukt.class)
             .setParameter("idFirmy", firma.getId())
             .setParameter("kit",kit)
             .setParameter("rok",rok);
 
-        List results = q.getResultList();
-        if (results.isEmpty()) return null;
+        results = q.getResultList();
+        if (results.isEmpty()) {
+            //problem hovadsky
+            p=CiarovyKodNastroje.productPodlaCiarovehoKodu(ciarovyKod);
+            if (p!=null) {
+                em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+                 q = em.createNamedQuery("FirmaProdukt.getMostikoveUdajePodlaProduktu", FirmaProdukt.class)
+                        .setParameter("idFirmy", firma.getId())
+                        .setParameter("idProduktu", p)
+                        .setParameter("rok", rok);
+
+                results = q.getResultList();
+            }
+
+            return null;
+        }
         return (FirmaProdukt) results.get(0);
 
     }

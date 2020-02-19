@@ -54,7 +54,7 @@ public class StatDodavatelProdukt {
                 XlsStatistikaBodovDodavatelProdukt.vytvorXLS(velkosklady, produkty, predaje, nadpis, dodavatel);
             return;
         }else{
-            String zipFile = SystemoveParametre.getTmpAdresar()+"archive.zip";
+            String zipFile = SystemoveParametre.getTmpAdresar()+"StatistikaBodovVelkoskladAProdukty.zip";
             ZipOutputStream zos=null;
             List <Firma> dodavatelia;
             dodavatelia=FirmaNastroje.zoznamFiriemIbaDodavatelia();

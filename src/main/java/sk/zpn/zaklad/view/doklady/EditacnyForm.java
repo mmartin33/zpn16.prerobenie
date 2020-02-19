@@ -2,6 +2,7 @@ package sk.zpn.zaklad.view.doklady;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.LocalDateToDateConverter;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button;
@@ -65,6 +66,9 @@ public class EditacnyForm extends VerticalLayout {
         stavDokladuComboBox = new ComboBox<>("Stav dokladu");
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
+        btnUloz.setClickShortcut(ShortcutAction.KeyCode.U,
+                new int[]{ShortcutAction.ModifierKey.ALT});
+
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
         btnVyberPoberatela =new Button("Vyber poberateľa",VaadinIcons.USER_CHECK);
         btnVyberPoberatela.setEnabled(false);

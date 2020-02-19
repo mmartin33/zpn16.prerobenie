@@ -268,6 +268,22 @@ public class DokladyNastroje {
             //PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
             if (navratovahodnota.getPolozkaDokladu() != null)
                 polozkyDokladu.add(navratovahodnota.getPolozkaDokladu());
+            else if (navratovahodnota.getChyba() == NavratovaHodnota.NENAJEDENY_KIT)
+
+                chyby.add(new ChybaImportu(
+                        z.getNazvFirmy(),
+                        z.getIco(),
+                        z.getKit(),
+                        "Nenajdeny kit",
+                        z.getMtzDoklad()));
+            else if (navratovahodnota.getChyba() == NavratovaHodnota.NEURCENY_KOEFICIENT)
+
+                chyby.add(new ChybaImportu(
+                        z.getNazvFirmy(),
+                        z.getIco(),
+                        z.getKit(),
+                        "Na kit-e nebol urceny koeficient",
+                        z.getMtzDoklad()));
             else if (navratovahodnota.getChyba() == NavratovaHodnota.NENAJEDENA_FIRMA)
 
                 chyby.add(new ChybaImportu(

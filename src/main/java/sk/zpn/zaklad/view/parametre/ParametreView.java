@@ -32,6 +32,9 @@ public class ParametreView extends MojView {
         lEdit.addComponent(tBodyZaRegistraciu);
         HorizontalLayout lBtn = new HorizontalLayout();
         btnUloz = new Button("Ulož");
+        btnUloz.setClickShortcut(ShortcutAction.KeyCode.U,
+                new int[]{ShortcutAction.ModifierKey.ALT});
+
         btnSpat = new Button("Späť");
         lBtn.addComponent(btnUloz);
         lBtn.addComponent(btnSpat);

@@ -98,13 +98,14 @@ public class PolozkaDokladuNastroje {
         FirmaProdukt fp = new FirmaProdukt();
 
         fp=FirmaProduktNastroje.getFirmaProduktPreImport(doklad.getFirma(),
-                                                                      ParametreNastroje.nacitajParametre().getRok(),
-                                                                               zaznam.getKit());
+                                                            ParametreNastroje.nacitajParametre().getRok(),
+                                                            zaznam.getKit(),
+                                                            zaznam.getCiarovyKod());
 
         if (fp==null)
-            return new NavratovaHodnota(null,NavratovaHodnota.NENAJEDENY_KIT);
+            return new NavratovaHodnota(null,NavratovaHodnota.NENAJEDENY_KIT,zaznam.getKit());
         if (!StringUtils.isNotBlank(zaznam.getIco()))
-            return new NavratovaHodnota(null,NavratovaHodnota.PRAZDNE_ICO);
+            return new NavratovaHodnota(null,NavratovaHodnota.PRAZDNE_ICO,zaznam.getKit());
         pd.setDoklad(doklad);
 
 
@@ -119,7 +120,7 @@ public class PolozkaDokladuNastroje {
                 fp.getProdukt().getKusy(),
                 fp.getProdukt().getBody());
         if (body==0)
-            return new NavratovaHodnota(null,NavratovaHodnota.NENAJEDENY_KIT);
+            return new NavratovaHodnota(null,NavratovaHodnota.NEURCENY_KOEFICIENT);
         pd.setBody(new BigDecimal(body));
 
 

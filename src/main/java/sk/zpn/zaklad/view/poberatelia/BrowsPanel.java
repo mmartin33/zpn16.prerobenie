@@ -53,12 +53,13 @@ public class BrowsPanel extends VerticalLayout {
         tfPrevadzkaZakaznika.setWidth("400");
         btnPrezobraz = new Button("Prezobraz");
 
-        GridLayout gl = new GridLayout(1, 4);
+        GridLayout gl = new GridLayout(1, 5);
         gl.setSizeFull();
         gl.setRowExpandRatio(0, 0.02f);
         gl.setRowExpandRatio(1, 0.02f);
         gl.setRowExpandRatio(2, 0.90f);
         gl.setRowExpandRatio(3, 0.02f);
+        gl.setRowExpandRatio(4, 0.02f);
 
         this.poberateliaView = poberateliaView;
         this.poberatelList = poberatelList;
@@ -166,6 +167,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
         HorizontalLayout tlacitkovy = new HorizontalLayout();
+        HorizontalLayout tlacitkovy2 = new HorizontalLayout();
         btnNovy = new Button("Novy", VaadinIcons.FILE_O);
         btnVyber = new Button("Vyber poberateľa", VaadinIcons.ENTER);
         btnVyber.setStyleName(ValoTheme.BUTTON_DANGER);
@@ -189,7 +191,7 @@ public class BrowsPanel extends VerticalLayout {
         tlacitkovy.addComponent(btnEditujPoznámku);
         tlacitkovy.addComponent(btnPremenujPoberatelaPrevadzkyFirmu);
         if (!StringUtil.isBlank(poberateliaView.getRodicovskyView()))
-            tlacitkovy.addComponent(btnVyber);
+            tlacitkovy2.addComponent(btnVyber);
         tlacitkovy.addComponent(btnSpat);//666
 
 
@@ -230,6 +232,7 @@ public class BrowsPanel extends VerticalLayout {
         gl.setComponentAlignment(grid, Alignment.MIDDLE_LEFT);
 
         gl.addComponent(tlacitkovy);
+        gl.addComponent(tlacitkovy2);
         gl.setComponentAlignment(tlacitkovy, Alignment.BOTTOM_LEFT);
         gl.setVisible(true);
         grid.setSizeFull();

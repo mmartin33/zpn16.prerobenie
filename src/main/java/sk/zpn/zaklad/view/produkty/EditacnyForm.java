@@ -3,6 +3,7 @@ package sk.zpn.zaklad.view.produkty;
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.converter.StringToDoubleConverter;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import org.vaadin.addons.autocomplete.AutocompleteExtension;
@@ -55,6 +56,9 @@ public class EditacnyForm extends VerticalLayout {
         tCena = new TextField("Cena");
         tCena.setWidth("100");
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
+        btnUloz.setClickShortcut(ShortcutAction.KeyCode.U,
+                new int[]{ShortcutAction.ModifierKey.ALT});
+
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
 
         nastavComponnenty();

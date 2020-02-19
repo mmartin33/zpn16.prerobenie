@@ -68,9 +68,10 @@ public class PolozkaDokladu extends Vseobecne {
         String text=null;
         text=d.getId()+
                 " CD:"+d.doklad.getCisloDokladu()+
-                " Produkt :"+d.getProdukt().getKat()+
-                " "+d.getProdukt().getNazov()+
-                " MN:"+d.getMnozstvo()+
+                (d.getProdukt()==null?"":" Produkt :"+d.getProdukt().getKat()+
+                " "+d.getProdukt().getNazov())+
+                " MN:"+d.getMnozstvo().toString()+
+                " Body:"+d.getBody().toString()+
                 " Poberatel:"+d.getPoberatelMenoAdresa();
 
         return text;

@@ -1,6 +1,7 @@
 package sk.zpn.zaklad.view.uzivatel;
 
 import com.vaadin.data.Binder;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -41,6 +42,9 @@ public class EditacnyForm extends VerticalLayout {
         statusUzivatelaComboBox = new ComboBox<>("Stav konta");
         chUrcujeFirmy=new CheckBox("Určuje firmy na ktoré sa prideľujú body;");
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
+        btnUloz.setClickShortcut(ShortcutAction.KeyCode.U,
+                new int[]{ShortcutAction.ModifierKey.ALT});
+
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
         nastavComponnenty();
         FormLayout lEdit=new FormLayout();

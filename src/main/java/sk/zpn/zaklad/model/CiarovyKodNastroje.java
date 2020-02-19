@@ -1,19 +1,15 @@
 package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
-import org.eclipse.persistence.jpa.rs.util.list.SingleResultQuery;
 import sk.zpn.domena.CiarovyKod;
-import sk.zpn.domena.Doklad;
 import sk.zpn.domena.Produkt;
-import sk.zpn.domena.StavDokladu;
 import sk.zpn.domena.log.TypLogovanejHodnoty;
 import sk.zpn.domena.log.TypUkonu;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +32,7 @@ public class CiarovyKodNastroje {
 
     public static void zmazCiarovyKod(CiarovyKod d) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.CIAROVY_KOD, TypUkonu.VYMAZ,d.getTextLog());
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.CIAROVY_KOD, TypUkonu.VYMAZ, d.getTextLog());
         em.getTransaction().begin();
         em.remove(d);
         em.getTransaction().commit();
@@ -49,7 +45,7 @@ public class CiarovyKodNastroje {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
         String sql = "SELECT c FROM ciarovyKod c " +
-                    "  where  c.ciarovyKod=:ciarovy_kod ";
+                "  where  c.ciarovyKod=:ciarovy_kod ";
 
         TypedQuery<CiarovyKod> q = em.createQuery(sql, CiarovyKod.class);
         q.setParameter("ciarovy_kod", ciarovyKOd);
@@ -57,6 +53,28 @@ public class CiarovyKodNastroje {
         if (u.size() == 0)
             return false;
         return true;
+    }
+
+    public static Long productPodlaCiarovehoKodu(String ciarovyKOd) {
+
+        TypedQuery<Produkt> q1 = null;
+        List<Produkt> p1 = null;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        EntityManager em1 = emf.createEntityManager();
+
+        String sql = "SELECT p FROM ciarovyKod c " +
+                "  join c.produkt p " +
+                "  where  c.ciarovyKod=:ciarovy_kod ";
+
+        q1 = em1.createQuery(sql, Produkt.class);
+        q1.setParameter("ciarovy_kod", ciarovyKOd);
+        q1.setMaxResults(1);
+        p1 = q1.getResultList();
+        emf.close();
+        if (p1.size() == 1)
+            return p1.get(1).getId();
+        else
+            return null;
     }
 
     public static CiarovyKod uloz(CiarovyKod c) {

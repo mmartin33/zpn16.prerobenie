@@ -9,7 +9,7 @@ public class SystemoveParametre {
 //    private static String uploadAdresar="/opt/resources/zpn/upload/";
 //    private static String tmpAdresar="/opt/resources/zpn/tmp/";
 //    private static String resourcesAdresar="/opt/resources/zpn/resources/";
-
+//
 
     public static String getUplodAdresar() {
         return uploadAdresar;

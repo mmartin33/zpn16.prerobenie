@@ -34,6 +34,7 @@ public class LogAplikacieNastroje {
         log.setId((long) 0);
         log.setKedy(new Date());
         log.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
+        log.setUzivatel(UzivatelNastroje.getPrihlasenehoUzivatela());
         log.setPoznamka(poznamka);;
         log.setTypLogovanejHodnoty(typLogovanejHodnoty);
         log.setTypUkonu(typUkonu);

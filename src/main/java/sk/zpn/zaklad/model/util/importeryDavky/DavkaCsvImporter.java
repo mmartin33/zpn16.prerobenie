@@ -67,7 +67,8 @@ public class DavkaCsvImporter {
                 bodyNaIco.put(zaznam.getIco(), ImporterNastroje.vratBodyZaIcoAKit(zaznam.getIco(),
                         zaznam.getKit(),
                         zaznam.getMnozstvo(),
-                        parametreImportu.getFirma()));
+                        parametreImportu.getFirma(),
+                        null));
 
 
             }
@@ -130,7 +131,8 @@ public class DavkaCsvImporter {
                         bodyNaIco.put(zaznam.getIco(), ImporterNastroje.vratBodyZaIcoAKit(zaznam.getIco(),
                                 zaznam.getKit(),
                                 zaznam.getMnozstvo(),
-                                parametreImportu.getFirma()));
+                                parametreImportu.getFirma(),
+                                zaznam.getCiarovyKod()));
 
 
                     }

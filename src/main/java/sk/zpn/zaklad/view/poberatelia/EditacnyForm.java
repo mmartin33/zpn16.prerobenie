@@ -65,6 +65,9 @@ public class EditacnyForm extends VerticalLayout {
 
 
         btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
+        btnUloz.setClickShortcut(ShortcutAction.KeyCode.U,
+                new int[]{ShortcutAction.ModifierKey.ALT});
+
         btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
 
         nastavComponnenty();

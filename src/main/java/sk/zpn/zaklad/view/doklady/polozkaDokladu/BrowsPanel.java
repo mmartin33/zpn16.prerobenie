@@ -43,6 +43,7 @@ public class BrowsPanel extends VerticalLayout {
     private Firma velkosklad;
     private boolean rezimOdmien = false;
     private boolean klasickyRezim=false;
+    private boolean rezimRegistracieBolUplatneny=false;
             ;
 
 
@@ -148,8 +149,8 @@ public class BrowsPanel extends VerticalLayout {
             tlacitkovy.addComponent(btnKatalogOdmien);
         }
 
-        tlacitkovy.addComponent(btnSpat);//666
         tlacitkovy2.addComponent(btnDetail);//666
+        tlacitkovy2.addComponent(btnSpat);//666
         tlacitkovy.addComponent(btnPanelovy);//666
 
         String pattern = "dd-MM-yyyy";
@@ -294,12 +295,16 @@ public class BrowsPanel extends VerticalLayout {
         btnKatalogOdmien.setVisible(false);
         btnTlac.setVisible(false);
         btnNovyKopia.setVisible(false);
-        grid.removeColumn("nazovPrevadzky");
-        grid.removeColumn("kodProduktu");
-        grid.removeColumn("nazovProduktu");
-        grid.removeColumn("mnozstvo");
-        grid.removeColumn("bodyNaProdukte");
 
+
+        if (!rezimRegistracieBolUplatneny) {
+            grid.removeColumn("nazovPrevadzky");
+            grid.removeColumn("kodProduktu");
+            grid.removeColumn("nazovProduktu");
+            grid.removeColumn("mnozstvo");
+            grid.removeColumn("bodyNaProdukte");
+        }
+        rezimRegistracieBolUplatneny=true;
 
     }
 
