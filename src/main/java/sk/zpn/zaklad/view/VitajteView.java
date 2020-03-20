@@ -245,7 +245,7 @@ public class VitajteView extends MojView {
     @Override
     protected void init() {
         addStyleName("welcome");
-        setTitle("Vitajte", "Ste prihlásený ako " + VaadinSession.getCurrent().getAttribute("meno") + " >>verzia:200108<<");
+        setTitle("Vitajte", "Ste prihlásený ako " + VaadinSession.getCurrent().getAttribute("meno") + " >>verzia:200320<<");
         if (!UzivatelNastroje.TypUzivatela().isPresent()) {
             menuAdmin.setVisible(false);
             menuSpravcu.setVisible(false);

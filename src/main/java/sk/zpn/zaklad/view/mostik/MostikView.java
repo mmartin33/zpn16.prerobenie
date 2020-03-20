@@ -42,7 +42,7 @@ public class MostikView extends HorizontalLayout implements View {
     private GridLayout mainGridLayout =  new GridLayout(1,4);
     private HorizontalLayout upperLabelHorizontalLayout = new HorizontalLayout();
     private HorizontalLayout tlacitkovyLayout = new HorizontalLayout();
-    private String nazovFirmy = "";
+    public String nazovFirmy = "";
     private String rok = "";
     private Label firmaLabel =  new Label("<b>Firma: </b>", ContentMode.HTML);
     private Label rokLabel =  new Label("<b>Rok: </b>", ContentMode.HTML);

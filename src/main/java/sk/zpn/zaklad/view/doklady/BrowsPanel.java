@@ -7,6 +7,7 @@ import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.*;
 import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
+import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 import sk.zpn.zaklad.view.doklady.polozkaDokladu.PolozkyDokladuView;
 import java.util.List;
@@ -17,7 +18,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
     public MFilteredGrid<Doklad> grid;
-    private List<Doklad> dokladyList;
+    public List<Doklad> dokladyList;
 
 
     PolozkyDokladuView polozkyDokladuView;
@@ -27,6 +28,10 @@ public class BrowsPanel extends VerticalLayout {
     protected Button btnZmaz;
     public Button btnPolozky;
     GridLayout gl;
+    HorizontalLayout hornyFilter;
+    FormLayout hFFormLayout;
+    TextField tfHfRok;
+    Button btnPrezobraz;
     MFilteredGrid.Column<Doklad, String> colCisloDokladu ;
     MFilteredGrid.Column<Doklad, String> colDokladuOdmeny ;
     MFilteredGrid.Column<Doklad, String> colTypDokladu ;
@@ -36,15 +41,30 @@ public class BrowsPanel extends VerticalLayout {
     MFilteredGrid.Column<Doklad, String> colPoznamka ;
     MFilteredGrid.Column<Doklad, String> colStavDokladu ;
     private boolean rezimOdmen;
+    private DokladyView dokladyView;
 
 
     public BrowsPanel(List<Doklad> dokladyList, Firma velkosklad) {
         //polozkyDokladuView = new PolozkyDokladuView(null,velkosklad);
+
+
+        hornyFilter = new HorizontalLayout();
+        hFFormLayout = new FormLayout();
+        hornyFilter.setHeight("60");
+        tfHfRok = new TextField("Rok");
+
+        tfHfRok.setWidth("400");
+        tfHfRok.setValue(ParametreNastroje.nacitajParametre().getRok());
+
+        btnPrezobraz = new Button("Prezobraz");
+
         this.velkosklad=velkosklad;
-        gl = new GridLayout(1, 3);
+        gl = new GridLayout(1, 4);
         gl.setSizeFull();
         gl.setRowExpandRatio(0, 0.05f);
-        gl.setRowExpandRatio(1, 0.90f);
+        gl.setRowExpandRatio(1, 0.05f);
+        gl.setRowExpandRatio(2, 0.85f);
+        gl.setRowExpandRatio(3, 0.05f);
 
         this.dokladyList = dokladyList;
         grid = new MFilteredGrid<>();
@@ -139,9 +159,18 @@ public class BrowsPanel extends VerticalLayout {
         tlacitkovy.addComponent(btnSpat);//666
         //tlacitkovy.addComponent(btnTest);//666
 
+        hFFormLayout.addComponent(tfHfRok);
+        hornyFilter.addComponent(hFFormLayout);
+        hornyFilter.addComponent(btnPrezobraz);
+        hornyFilter.setComponentAlignment(hFFormLayout, Alignment.BOTTOM_LEFT);
+        hornyFilter.setComponentAlignment(btnPrezobraz, Alignment.BOTTOM_RIGHT);
+        btnPrezobraz.addClickListener(this::aktivujHF);
+
+
+
 
         gl.addComponent(new Label("Prehľad Dokladov"));
-
+        gl.addComponent(hornyFilter);
 
         gl.addComponents(grid);
         gl.setComponentAlignment(grid, Alignment.MIDDLE_LEFT);
@@ -160,6 +189,14 @@ public class BrowsPanel extends VerticalLayout {
             grid.select(dokladyList.get(dokladyList.size() - 1));
             grid.scrollTo(dokladyList.indexOf(dokladyList.get(dokladyList.size() - 1)));
         }
+
+    }
+
+    private void aktivujHF(Button.ClickEvent clickEvent) {
+        dokladyList.clear();
+        dokladyView.naplnList(tfHfRok.getValue());
+        grid.setItems(dokladyView.dokladyList);
+        grid.getDataProvider().refreshAll();
 
     }
 
@@ -243,6 +280,10 @@ public class BrowsPanel extends VerticalLayout {
         //grid.select(value);
 
     }
+    public void setProduktyView(DokladyView dokladyView) {
+        this.dokladyView = dokladyView;
+    }
+
 }
 
 

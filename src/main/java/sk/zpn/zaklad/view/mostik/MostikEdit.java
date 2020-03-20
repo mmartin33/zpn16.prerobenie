@@ -12,6 +12,7 @@ import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.domena.Produkt;
 import sk.zpn.domena.TypProduktov;
+import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
 import sk.zpn.zaklad.model.ProduktyNastroje;
 
@@ -142,7 +143,7 @@ public class MostikEdit {
         boolean jeNova=false;
         if (binder.writeBeanIfValid(fpEditovana)) {
             if (fpEditovana.isNew()) {
-                FirmaProduktNastroje.nastavAtributyPriNovej(fpEditovana);
+                FirmaProduktNastroje.nastavAtributyPriNovej(fpEditovana, FirmaNastroje.prvaFirmaPodlaNazvu(mostikView.nazovFirmy).get());
                 jeNova=true;
             }
             FirmaProdukt ulozenyFirmaProdukt = FirmaProduktNastroje.pridajFirmaProdukt(fpEditovana);

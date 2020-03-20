@@ -127,14 +127,8 @@ public class BrowsPanel extends VerticalLayout {
 
         Label l = new Label("Prehľad produktov");
         gl.addComponent(l);
-        hFFormLayout.addComponent(tfHfRok);
-        hornyFilter.addComponent(hFFormLayout);
-        hornyFilter.addComponent(btnPrezobraz);
-        hornyFilter.setComponentAlignment(hFFormLayout, Alignment.BOTTOM_LEFT);
-        hornyFilter.setComponentAlignment(btnPrezobraz, Alignment.BOTTOM_RIGHT);
-        btnPrezobraz.addClickListener(this::aktivujHF);
-        gl.addComponent(hornyFilter);
         gl.setComponentAlignment(l, Alignment.TOP_LEFT);
+        gl.addComponent(hornyFilter);
 
         gl.addComponents(grid);
         gl.setComponentAlignment(grid, Alignment.MIDDLE_LEFT);

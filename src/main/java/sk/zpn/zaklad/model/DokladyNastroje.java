@@ -98,15 +98,26 @@ public class DokladyNastroje {
     }
 
 
-    public static List<Doklad> zoznamDokladov(Firma velkosklad) {
+    public static List<Doklad> zoznamDokladov(Firma velkosklad,String rok) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
         TypedQuery<Doklad> q;
         if (velkosklad != null) {
-            q = em.createNamedQuery("Doklad.getZaFirmu", Doklad.class);
-            q.setParameter("id", velkosklad.getId());
+            if (rok == null || rok.length()==0) {
+                   q = em.createNamedQuery("Doklad.getZaFirmu", Doklad.class);
+                q.setParameter("id", velkosklad.getId());
+            }else {
+                q = em.createNamedQuery("Doklad.getZaFirmuARok", Doklad.class);
+                q.setParameter("id", velkosklad.getId());
+                q.setParameter("rok", rok);
+            }
         } else
+        if (rok == null || rok.length()==0)
             q = em.createNamedQuery("Doklad.getAll", Doklad.class);
+        else {
+            q = em.createNamedQuery("Doklad.getAllZaRok", Doklad.class);
+            q.setParameter("rok", rok);
+        }
         return q.getResultList();
     }
 
@@ -395,14 +406,22 @@ public class DokladyNastroje {
 
     }
 
-    public static List<Doklad> zoznamDokladovOdmien(Firma velkosklad) {
+    public static List<Doklad> zoznamDokladovOdmien(Firma velkosklad,String rok) {
 
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
+        if (rok.length()==0)
+            rok=null;
         TypedQuery<Doklad> q;
-        q = em.createNamedQuery("Odmena.getAll", Doklad.class);
+        if (rok==null)
+            q = em.createNamedQuery("Odmena.getAll", Doklad.class);
+        else{
+            q = em.createNamedQuery("Odmena.getAllZaRok", Doklad.class);
+            q.setParameter("rok",rok);
+        }
         return q.getResultList();
 
 
     }
+
 }

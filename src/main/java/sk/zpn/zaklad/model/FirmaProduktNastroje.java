@@ -52,8 +52,8 @@ public class FirmaProduktNastroje {
 
                 results = q.getResultList();
             }
-
-            return null;
+            else
+                return null;
         }
         return (FirmaProdukt) results.get(0);
 
@@ -124,9 +124,11 @@ public class FirmaProduktNastroje {
             .collect(Collectors.toList());
     }
 
-    public static void nastavAtributyPriNovej(FirmaProdukt fpEditovana) {
+    public static void nastavAtributyPriNovej(FirmaProdukt fpEditovana,Firma firma) {
         fpEditovana.setRok(ParametreNastroje.nacitajParametre().getRok());
         fpEditovana.setFirma(UzivatelNastroje.getPrihlasenehoUzivatela().getFirma());
+        if (firma!=null)
+            fpEditovana.setFirma(firma);
     }
 
     public static FirmaProdukt pridajFirmaProdukt(FirmaProdukt firmaProdukt) {

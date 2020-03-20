@@ -60,7 +60,6 @@ public class DavkaDbfImporter {
             zaznam.setMnozstvo(BigDecimal.valueOf(((Double) dbfZaznam[3]).doubleValue()));
             zaznam.setIco(StringUtils.trim((String) dbfZaznam[4]));
             zaznam.setNazvFirmy(StringUtils.trim((String) dbfZaznam[6]));
-            zaznam.setCiarovyKod(StringUtils.trim((String) dbfZaznam[7]));
             zaznam.setMalopredaj(StringUtils.trim((String) dbfZaznam[2]).contains("A"));
 
             if ((zaznam != null) && (zaznam.getKit() != null)) {

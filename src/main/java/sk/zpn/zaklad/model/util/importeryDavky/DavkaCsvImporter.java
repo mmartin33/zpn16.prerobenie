@@ -54,6 +54,7 @@ public class DavkaCsvImporter {
                     zaznam.setIco(nextLine[6]);
                     zaznam.setMalopredaj(nextLine[7].contains("A"));
                     zaznam.setPcIco(Integer.parseInt(nextLine[8]));
+                    zaznam.setCiarovyKod(nextLine[9]);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();

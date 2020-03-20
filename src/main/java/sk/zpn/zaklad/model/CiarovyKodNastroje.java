@@ -72,7 +72,7 @@ public class CiarovyKodNastroje {
         p1 = q1.getResultList();
         emf.close();
         if (p1.size() == 1)
-            return p1.get(1).getId();
+            return p1.get(0).getId();
         else
             return null;
     }

@@ -10,6 +10,7 @@ import sk.zpn.domena.Firma;
 import sk.zpn.domena.StavDokladu;
 import sk.zpn.domena.TypDokladu;
 import sk.zpn.zaklad.model.DokladyNastroje;
+import sk.zpn.zaklad.model.ParametreNastroje;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class DokladyView extends HorizontalLayout implements View {
     private Firma velkosklad;
     public BrowsPanel browsPanel;
     private GridLayout gr;
-    private List<Doklad> dokladyList = null;
+    public List<Doklad> dokladyList = null;
     public boolean rezimOdmien = false;
 
     public DokladyView(Firma velkosklad) {
@@ -115,9 +116,9 @@ public class DokladyView extends HorizontalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         if (dokladyList == null) {
             if (rezimOdmien)
-                dokladyList = DokladyNastroje.zoznamDokladovOdmien(getVelkosklad());
+                dokladyList = DokladyNastroje.zoznamDokladovOdmien(getVelkosklad(),ParametreNastroje.nacitajParametre().getRok());
             else
-                dokladyList = DokladyNastroje.zoznamDokladov(getVelkosklad());
+                dokladyList = DokladyNastroje.zoznamDokladov(getVelkosklad(), ParametreNastroje.nacitajParametre().getRok());
         }
         if (browsPanel == null) {
             browsPanel = new BrowsPanel(dokladyList, getVelkosklad());
@@ -151,7 +152,7 @@ public class DokladyView extends HorizontalLayout implements View {
 
         }
 
-
+        browsPanel.setProduktyView(this);
         if (velkosklad != null) {
             this.editacnyForm.rezimVelkoskladu();
         }
@@ -161,6 +162,15 @@ public class DokladyView extends HorizontalLayout implements View {
 
     }
 
+    public List<Doklad> naplnList(String rok){
+        if (rezimOdmien)
+            dokladyList=DokladyNastroje.zoznamDokladovOdmien(getVelkosklad(),rok);
+        else
+            dokladyList = DokladyNastroje.zoznamDokladov(getVelkosklad(), rok);
+
+
+        return this.dokladyList;
+    }
 
 
     public void setRezimOdmien() {
