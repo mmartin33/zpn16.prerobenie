@@ -119,7 +119,7 @@ public class MostikView extends HorizontalLayout implements View {
                             // Confirmed to continue
                             FirmaProduktNastroje.prepisKATdoKIT(firmaProduktList);
                             firmaProduktList.clear();
-                            firmaProduktList=FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
+                            firmaProduktList=FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy,ParametreNastroje.nacitajParametre().getRok());
                             browsPanel.setFirmaProduktList(firmaProduktList);
                             browsPanel.refresh();
                             Notification.show("Aktualizované", Notification.Type.TRAY_NOTIFICATION);
@@ -172,7 +172,7 @@ public class MostikView extends HorizontalLayout implements View {
             btnFirma.setEnabled(true);
         }
         FirmaProduktNastroje.generateMissingFirmaProductItems(nazovFirmy);
-        firmaProduktList = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
+        firmaProduktList = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy,rok);
         browsPanel = new BrowsPanel(firmaProduktList, nazovFirmy);
 
 
@@ -225,7 +225,7 @@ public class MostikView extends HorizontalLayout implements View {
             nazovFirmy = txtFirma.getValue();
             browsPanel.refresh(nazovFirmy);
             firmaProduktList.clear();
-            firmaProduktList=FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
+            firmaProduktList=FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy,ParametreNastroje.nacitajParametre().getRok());
             browsPanel.setFirmaProduktList(firmaProduktList);
             browsPanel.refresh();
 

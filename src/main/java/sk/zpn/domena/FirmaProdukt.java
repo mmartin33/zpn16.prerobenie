@@ -16,7 +16,8 @@ import java.util.Date;
     @NamedQuery(name = "FirmaProdukt.getPodlaNazvuFirmy", query = "SELECT fp FROM firma_produkt fp " +
         "JOIN fp.firma firmy " +
         "JOIN fp.produkt produkt " +
-        "WHERE firmy.nazov =:nazov"),
+        "WHERE firmy.nazov =:nazov " +
+            " and fp.rok=:rok"),
     @NamedQuery(name = "FirmaProdukt.getMostikoveUdaje", query = "SELECT fp FROM firma_produkt fp " +
         "JOIN fp.firma firmy " +
         "JOIN fp.produkt produkt " +

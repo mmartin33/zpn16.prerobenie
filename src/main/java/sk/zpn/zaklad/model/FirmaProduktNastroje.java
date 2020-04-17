@@ -3,6 +3,7 @@ package sk.zpn.zaklad.model;
 import com.vaadin.server.VaadinSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.*;
 
 import javax.persistence.EntityManager;
@@ -18,11 +19,12 @@ public class FirmaProduktNastroje {
 
     private static final Logger logger = Logger.getLogger(FirmaProduktNastroje.class);
 
-    public static List<FirmaProdukt> getListFirmaProduktPodlaNazvuFirmy(String nazov) {
+    public static List<FirmaProdukt> getListFirmaProduktPodlaNazvuFirmy(String nazov,String rok) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
         TypedQuery<FirmaProdukt> q = em.createNamedQuery("FirmaProdukt.getPodlaNazvuFirmy", FirmaProdukt.class)
-            .setParameter("nazov", nazov);
+            .setParameter("nazov", nazov)
+            .setParameter("rok", rok);
         return q.getResultList();
     }
 
@@ -81,7 +83,7 @@ public class FirmaProduktNastroje {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         List<Produkt> produkty = ProduktyNastroje.zoznamProduktovZaRok(null, TypProduktov.BODOVACI);
         Optional<Firma> firma = FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy);
-        List<FirmaProdukt> existujuceFirmaProduktZaznamy = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
+        List<FirmaProdukt> existujuceFirmaProduktZaznamy = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy, ParametreNastroje.nacitajParametre().getRok());
         produkty = filterNonYetAssignedProducts(produkty, existujuceFirmaProduktZaznamy);
         if(!firma.isPresent()) {
             logger.error(String.format("Firma s nazvom %s neexistuje", nazovFirmy));

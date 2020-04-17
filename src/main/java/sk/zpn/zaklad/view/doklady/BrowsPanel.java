@@ -61,7 +61,7 @@ public class BrowsPanel extends VerticalLayout {
         this.velkosklad=velkosklad;
         gl = new GridLayout(1, 4);
         gl.setSizeFull();
-        gl.setRowExpandRatio(0, 0.05f);
+        gl.setRowExpandRatio(0, 0.02f);
         gl.setRowExpandRatio(1, 0.05f);
         gl.setRowExpandRatio(2, 0.85f);
         gl.setRowExpandRatio(3, 0.05f);
@@ -161,15 +161,21 @@ public class BrowsPanel extends VerticalLayout {
 
         hFFormLayout.addComponent(tfHfRok);
         hornyFilter.addComponent(hFFormLayout);
+        hornyFilter.setComponentAlignment(hFFormLayout,Alignment.TOP_LEFT);
         hornyFilter.addComponent(btnPrezobraz);
+        hornyFilter.setComponentAlignment(btnPrezobraz,Alignment.TOP_LEFT);
         hornyFilter.setComponentAlignment(hFFormLayout, Alignment.BOTTOM_LEFT);
         hornyFilter.setComponentAlignment(btnPrezobraz, Alignment.BOTTOM_RIGHT);
         btnPrezobraz.addClickListener(this::aktivujHF);
 
 
+        HorizontalLayout nadpisLayout = new HorizontalLayout();
 
 
-        gl.addComponent(new Label("Prehľad Dokladov"));
+        nadpisLayout.addComponent(new Label("Prehľad Dokladov"));
+        nadpisLayout.setHeight("2");
+        gl.addComponent(nadpisLayout);
+        gl.setComponentAlignment(nadpisLayout, Alignment.TOP_LEFT);
         gl.addComponent(hornyFilter);
 
         gl.addComponents(grid);

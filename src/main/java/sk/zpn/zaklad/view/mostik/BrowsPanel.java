@@ -8,6 +8,7 @@ import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
+import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.view.ViewConstants;
 import java.math.BigDecimal;
 import java.util.List;
@@ -195,7 +196,7 @@ public class BrowsPanel extends VerticalLayout {
         if (filterEnabled) {
             firmaProduktList = FirmaProduktNastroje.filterInvalidRecords(firmaProduktList);
         } else {
-            firmaProduktList = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy);
+            firmaProduktList = FirmaProduktNastroje.getListFirmaProduktPodlaNazvuFirmy(nazovFirmy, ParametreNastroje.nacitajParametre().getRok());
         }
         grid.setItems(firmaProduktList);
     }

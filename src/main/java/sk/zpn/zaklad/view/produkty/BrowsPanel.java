@@ -59,7 +59,7 @@ public class BrowsPanel extends VerticalLayout {
 
         GridLayout gl = new GridLayout(1, 4);
         gl.setSizeFull();
-        gl.setRowExpandRatio(0, 0.05f);
+        gl.setRowExpandRatio(0, 0.02f);
         gl.setRowExpandRatio(1, 0.05f);
         gl.setRowExpandRatio(2, 0.85f);
         gl.setRowExpandRatio(3, 0.05f);

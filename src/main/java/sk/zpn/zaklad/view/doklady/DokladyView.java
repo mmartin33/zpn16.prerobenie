@@ -124,7 +124,7 @@ public class DokladyView extends HorizontalLayout implements View {
             browsPanel = new BrowsPanel(dokladyList, getVelkosklad());
             if (gr.getComponentCount() == 0) {
                 gr.addComponent(browsPanel, 0, 0, 0, 1);
-                gr.addComponent(editacnyForm, 1, 0, 1, 0);
+                gr.addComponent(editacnyForm, 1, 0, 1, 1);
             }
             this.addComponent(gr);
             browsPanel.btnZmaz.addClickListener(this::delete);
