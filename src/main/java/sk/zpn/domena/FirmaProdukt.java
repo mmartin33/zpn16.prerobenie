@@ -77,6 +77,10 @@ public class FirmaProdukt extends  Vseobecne{
     public Firma getFirma() {
         return firma;
     }
+    public Firma getFirmaProduktu() {
+        return this.produkt.getFirma();
+    }
+
 
     public void setFirma(Firma firma) {
         this.firma = firma;

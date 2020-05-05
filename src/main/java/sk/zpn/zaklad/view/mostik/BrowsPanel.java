@@ -84,10 +84,16 @@ public class BrowsPanel extends VerticalLayout {
                     }))
             .setEditable(true);
         MFilteredGrid.Column<FirmaProdukt, String> colFirma = grid.addColumn(firmaProdukt -> firmaProdukt.getFirma().getNazov())
-                .setCaption("Firma")
+                .setCaption("Veľkosklad")
                 .setId("firma");
+        MFilteredGrid.Column<FirmaProdukt, String> colFirmaProduktu = grid.addColumn(firmaProdukt -> firmaProdukt.getFirmaProduktu().getNazov())
+                .setCaption("Dodavatel")
+                .setId("dodavatel");
 
         colKit.setWidth(ViewConstants.THIN_COLUMN_WIDTH);
+        colKat.setWidth(ViewConstants.THIN_COLUMN_WIDTH);
+        colFirma.setWidth(ViewConstants.THIN_COLUMN_WIDTH);
+        colFirmaProduktu.setWidth(ViewConstants.THIN_COLUMN_WIDTH);
         colKat.setWidth(ViewConstants.THIN_COLUMN_WIDTH);
         colKusy.setWidth(ViewConstants.THIN_COLUMN_WIDTH);
         colBody.setWidth(ViewConstants.THIN_COLUMN_WIDTH);
@@ -98,6 +104,8 @@ public class BrowsPanel extends VerticalLayout {
         TextField colKusyFilter = new TextField();
         TextField colBodyFilter = new TextField();
         TextField colKoeficientFilter = new TextField();
+        TextField colFirmaFilter = new TextField();
+        TextField colFirmaProduktuFilter = new TextField();
 
         // filters
         colKit.setFilter(colKitFilter, StringComparator.containsIgnoreCase());
@@ -105,6 +113,8 @@ public class BrowsPanel extends VerticalLayout {
         colNazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
         colKusy.setFilter(colKusyFilter, StringComparator.containsIgnoreCase());
         colBody.setFilter(colBodyFilter, StringComparator.containsIgnoreCase());
+        colFirma.setFilter(colFirmaFilter, StringComparator.containsIgnoreCase());
+        colFirmaProduktu.setFilter(colFirmaProduktuFilter, StringComparator.containsIgnoreCase());
         colKoeficient.setFilter(colKoeficientFilter, StringComparator.containsIgnoreCase());
 
         colKitFilter.setWidth(ViewConstants.THIN_COLUMN_FILTER_WIDTH, Unit.PIXELS);

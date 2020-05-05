@@ -1,10 +1,7 @@
 package sk.zpn.zaklad.grafickeNastroje;
 
-import com.vaadin.contextmenu.ContextMenu;
+
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.data.provider.DataProviderWrapper;
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ColumnReorderListener;
@@ -14,7 +11,7 @@ import org.apache.poi.ss.usermodel.BorderStyle;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.prostredie.UlozenyGrid;
-import com.vaadin.contextmenu.GridContextMenu;
+
 import sk.zpn.nastroje.SaveToExcelLink;
 import sk.zpn.zaklad.model.ProstredieUti;
 
@@ -25,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MFilteredGrid<T> extends FilterGrid<T> {
-    GridContextMenu gcm;
+    //GridContextMenu gcm;
     private List<UlozenyGrid> ulozenyGrid;
     private String kluc;
 
@@ -56,20 +53,20 @@ public class MFilteredGrid<T> extends FilterGrid<T> {
 
 
     public void pridajContextMenu(){
-        gcm=new GridContextMenu(this);
+//        gcm=new GridContextMenu(this);
 
 
 // Checkable item
-        final MenuBar.MenuItem item0 = gcm.addItem("Menu");
-        final MenuBar.MenuItem item01 = gcm.addItem("");
-        item0.setEnabled(false);
-        item01.setEnabled(false);
-        final MenuBar.MenuItem item = gcm.addItem("Export udajov s tabuľky do XLS", e -> {
-            ExportDoExcelu eXLS=new ExportDoExcelu();
-            eXLS.exportGrid(this.getColumns(),this.getDataProvider(),this.kluc);
-
-        });
-        item.setIcon(VaadinIcons.FILE_TABLE);
+////        final MenuBar.MenuItem item0 = gcm.addItem("Menu");
+////        final MenuBar.MenuItem item01 = gcm.addItem("");
+//        item0.setEnabled(false);
+//        item01.setEnabled(false);
+//        final MenuBar.MenuItem item = gcm.addItem("Export udajov s tabuľky do XLS", e -> {
+//            ExportDoExcelu eXLS=new ExportDoExcelu();
+//            eXLS.exportGrid(this.getColumns(),this.getDataProvider(),this.kluc);
+//
+//        });
+//        item.setIcon(VaadinIcons.FILE_TABLE);
 
 
 
