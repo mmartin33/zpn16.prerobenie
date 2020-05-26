@@ -9,16 +9,20 @@ import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.Firma;
+import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.domena.TypProduktov;
 import sk.zpn.nastroje.XlsTlacProtokolu;
 import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.model.DokladyNastroje;
+import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 import sk.zpn.zaklad.view.doklady.DokladyView;
+import sk.zpn.zaklad.view.poberatelia.RegisterForm;
 import sk.zpn.zaklad.view.produkty.ProduktyView;
 import sk.zpn.zaklad.view.statistiky.StatPohybyBodovPoberatelovView;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 
@@ -40,6 +44,7 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnPanelovy;
     public Button btnKatalogOdmien;
     public Button btnTlac;
+    private Button btnRegistrujPoberatela;
     private Firma velkosklad;
     private boolean rezimOdmien = false;
     private boolean klasickyRezim=false;
@@ -99,6 +104,38 @@ public class BrowsPanel extends VerticalLayout {
         );
 
         Button btnDetail = new Button("Detail o poberatelovy", VaadinIcons.INFO_CIRCLE);
+
+        btnRegistrujPoberatela = new Button("Registruj poberateľa", VaadinIcons.CONNECT);
+        btnRegistrujPoberatela.addClickListener(clickEvent -> {
+            RegisterForm registrujPoberatelaView = new RegisterForm();
+            registrujPoberatelaView.setRodicovskyView(polozkyDokladuView.NAME);
+            UI.getCurrent().getNavigator().addView(RegisterForm.NAME, registrujPoberatelaView);
+            UI.getCurrent().getNavigator().navigateTo(RegisterForm.NAME);
+            registrujPoberatelaView.addListener(new Listener() {
+                @Override
+                public void componentEvent(Event event) {
+                    Poberatel poberatel = ((RegisterForm) event.getComponent()).poberatel;
+                    if (poberatel != null) {
+                        PolozkaDokladu pd= new PolozkaDokladu();
+                        pd.setPoberatel(poberatel);
+                        pd.setBody(new BigDecimal(ParametreNastroje.nacitajParametre().getBodyZaRegistraciu()));
+                        pd.setDoklad(polozkyDokladuView.getDoklad());
+                        PolozkaDokladuNastroje.ulozPolozkuDokladu(pd);
+                        String msg = String.format("Ulozeny .");
+
+                        Notification.show(msg, Notification.Type.TRAY_NOTIFICATION);
+                        polozkyDokladuView.pridajNovuPolozkuDokladu(pd);
+                        polozkyDokladuView.povodnaPolozka =pd;
+                        polozkyDokladuView.refreshPoloziekDokladov();
+                        polozkyDokladuView.selectPolozkuDokladu(pd);
+                        polozkyDokladuView.aktualizujInfo();
+                    }
+
+                }
+            });
+        });
+
+
         btnDetail.addClickListener(clickEvent -> {
             if (polozkyDokladuView.getEditacnyForm().getPolozkaEditovana() != null) {
                 if (polozkyDokladuView.getEditacnyForm().getPolozkaEditovana().getPoberatel() != null) {
@@ -147,9 +184,12 @@ public class BrowsPanel extends VerticalLayout {
             tlacitkovy.addComponent(btnTlac);
             tlacitkovy.addComponent(btnZmaz);
             tlacitkovy.addComponent(btnKatalogOdmien);
+            tlacitkovy2.addComponent(btnRegistrujPoberatela);
+            btnRegistrujPoberatela.setVisible(false);
         }
 
         tlacitkovy2.addComponent(btnDetail);//666
+
         tlacitkovy2.addComponent(btnSpat);//666
         tlacitkovy.addComponent(btnPanelovy);//666
 
@@ -295,6 +335,7 @@ public class BrowsPanel extends VerticalLayout {
         btnKatalogOdmien.setVisible(false);
         btnTlac.setVisible(false);
         btnNovyKopia.setVisible(false);
+        btnRegistrujPoberatela.setVisible(true);
 
 
         if (!rezimRegistracieBolUplatneny) {

@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 
 public class VypoctyUtil {
     public static int vypocitajBody(BigDecimal mnozstvo, BigDecimal koeficient, BigDecimal kusy, BigDecimal body) {
-        System.out.println( "mnozstvo zadane:"+mnozstvo+" koeficient velkoskladu "+  koeficient+" kusy na produkte"+ kusy+ " body na produkte"+  body);
+        //System.out.println( "mnozstvo zadane:"+mnozstvo+" koeficient velkoskladu "+  koeficient+" kusy na produkte"+ kusy+ " body na produkte"+  body);
         if ((mnozstvo==null)  || (mnozstvo.signum()==0))
             return 0;
         if ((koeficient==null)  || (koeficient.signum()==0))

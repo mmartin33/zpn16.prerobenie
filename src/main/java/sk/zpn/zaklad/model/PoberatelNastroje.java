@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
+import sk.zpn.domena.UdajeRegistra;
 import sk.zpn.domena.log.TypLogovanejHodnoty;
 import sk.zpn.domena.log.TypUkonu;
 import sk.zpn.nastroje.NastrojePoli;
@@ -250,4 +251,46 @@ public class PoberatelNastroje {
 
     }
 
+    public static Poberatel registrujPoberatela(UdajeRegistra ur) {
+        Firma firma=FirmaNastroje.firmaPodlaICO(ur.getICO());
+        if (firma==null)
+            firma=new Firma();
+        Prevadzka prevadzka=new Prevadzka();
+        Poberatel poberatel=new Poberatel();
+        firma.setNazov(ur.getNazovPrevadzky());
+        firma.setMesto(ur.getNazovPrevadzky()) ;
+        firma.setUlica(ur.getUlicaPrevadzky());
+        firma.setPsc(ur.getPscPrevadzky());
+        firma.setIco(ur.getICO());
+        firma.setTelefon(ur.getTelefon());
+
+        prevadzka.setNazov(ur.getNazovPrevadzky());
+        prevadzka.setMesto(ur.getNazovPrevadzky()) ;
+        prevadzka.setUlica(ur.getUlicaPrevadzky());
+        prevadzka.setPsc(ur.getPscPrevadzky());
+        prevadzka.setFirma(firma);
+
+        poberatel.setMeno(ur.getNazovPoberatela());
+        poberatel.setMesto(ur.getNazovPoberatela()) ;
+        poberatel.setUlica(ur.getUlicaPoberatela());
+        poberatel.setPsc(ur.getPscPoberatel());
+        poberatel.setTelefon(ur.getTelefon());
+        poberatel.setEmail(ur.getEmail());
+        prevadzka.setPoberatel(poberatel);
+
+        FirmaNastroje.ulozFirmu(firma);
+        Poberatel novyPoberatel=PoberatelNastroje.ulozPoberatela(poberatel);
+        PrevadzkaNastroje.ulozPrevadzka(prevadzka);
+        return novyPoberatel;
+//
+//
+//        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+////        System.out.println("Vymazany poberatel:" + f.getMeno());
+////        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.FIRMA, TypUkonu.PRIDANIE,firma.getTextLog());
+//        em.getTransaction().begin();
+//
+//
+//        em.getTransaction().commit();
+
+    }
 }

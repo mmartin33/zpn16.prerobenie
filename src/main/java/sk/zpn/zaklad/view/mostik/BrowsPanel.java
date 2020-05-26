@@ -84,8 +84,7 @@ public class BrowsPanel extends VerticalLayout {
                     }))
             .setEditable(true);
         MFilteredGrid.Column<FirmaProdukt, String> colFirma = grid.addColumn(firmaProdukt -> firmaProdukt.getFirma().getNazov())
-                .setCaption("Veľkosklad")
-                .setId("firma");
+                .setCaption("Veľkosklad").setId("firma");
         MFilteredGrid.Column<FirmaProdukt, String> colFirmaProduktu = grid.addColumn(firmaProdukt -> firmaProdukt.getFirmaProduktu().getNazov())
                 .setCaption("Dodavatel")
                 .setId("dodavatel");

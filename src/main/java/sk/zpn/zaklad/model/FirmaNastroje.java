@@ -1,14 +1,21 @@
 package sk.zpn.zaklad.model;
 
+import com.google.common.collect.Maps;
 import com.vaadin.server.VaadinSession;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.log.TypLogovanejHodnoty;
 import sk.zpn.domena.log.TypUkonu;
+import sk.zpn.domena.statistiky.Zaznam;
+import sk.zpn.nastroje.NastrojePoli;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class FirmaNastroje {
@@ -31,6 +38,28 @@ public class FirmaNastroje {
         u =  q.getResultList();
 
         return u;
+    }
+
+
+    public static Map<String, BigDecimal> mapaICOFiriemIbaVelkosklady() {
+        Map<String, BigDecimal> predaje = Maps.newHashMap();
+        List<Zaznam> result1=null;
+        EntityManager em1;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        em1 = emf.createEntityManager();
+        String sql="SELECT distinct f.ico as kluc,0  as hodnota FROM uzivatelia as u " +
+                " left JOIN firmy as f on f.id=u.firma_id" +
+                " where u.typuzivatela='PREDAJCA' or u.typuzivatela='SPRAVCA_ZPN'" ;
+
+
+
+        result1= em1.createNativeQuery(sql,Zaznam.class).getResultList();
+
+        predaje= NastrojePoli.prerobListNaMapu(result1);
+        em1.close();
+        emf.close();
+
+        return predaje;
     }
     public static List<Firma> zoznamFiriemIbaDodavatelia(){
         List<Firma> u = null;

@@ -13,6 +13,7 @@ public class NavratovaHodnota{
     public static int MALO_BODOV=4;
     public static int NEPOVOLENA_FIRMA=5;
     public static int NEURCENY_KOEFICIENT=6;
+    public static int MALY_PREDAJ=7;
     public static int NIC=0;
 
 

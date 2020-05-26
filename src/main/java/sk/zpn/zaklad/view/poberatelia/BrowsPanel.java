@@ -36,6 +36,7 @@ public class BrowsPanel extends VerticalLayout {
     private TextField tfPrevadzkaZakaznika;
     private Button btnPrezobraz;
     private Button btnPremenujPoberatelaPrevadzkyFirmu;
+
     private Button btnEditujPoznámku;
     private MFilteredGrid<Poberatel> grid;
     private List<Poberatel> poberatelList;
@@ -44,6 +45,7 @@ public class BrowsPanel extends VerticalLayout {
 
     public Button btnNovy;
     public Button btnVyber;
+    public Button btnRegistruj;
     private Prevadzka prevadzkaHF;
 
 
@@ -124,7 +126,7 @@ public class BrowsPanel extends VerticalLayout {
             }
         });
 
-        btnEditujPoznámku = new Button("Uprav poznámku", VaadinIcons.NOTEBOOK );
+        btnEditujPoznámku = new Button("Uprav poznámku", VaadinIcons.NOTEBOOK);
         btnEditujPoznámku.addClickListener(clickEvent -> {
             WindowWithEditBox w;
             w = new WindowWithEditBox("Poznámka", ((Poberatel) grid.asSingleSelect().getValue()).getPoznamkaVelkoskladu());
@@ -133,13 +135,13 @@ public class BrowsPanel extends VerticalLayout {
 
                 @Override
                 public void windowClose(Window.CloseEvent e) {
-                   vykonajPoZatvoreni(w);
+                    vykonajPoZatvoreni(w);
                 }
             });
 
 
         });
-        btnPremenujPoberatelaPrevadzkyFirmu = new Button("Premenuj poberateľa-prevaddzku-firmu", VaadinIcons.ALARM );
+        btnPremenujPoberatelaPrevadzkyFirmu = new Button("Premenuj poberateľa-prevaddzku-firmu", VaadinIcons.ALARM);
         btnPremenujPoberatelaPrevadzkyFirmu.addClickListener(clickEvent -> {
             WindowWithEditBox w;
             w = new WindowWithEditBox("Názov poberateľa- prevádzky-firmu", ((Poberatel) grid.asSingleSelect().getValue()).getMeno());
@@ -147,15 +149,14 @@ public class BrowsPanel extends VerticalLayout {
 
                 @Override
                 public void windowClose(Window.CloseEvent e) {
-                   premenujPoberatelaPrevadzkuFirmu(w);
+                    premenujPoberatelaPrevadzkuFirmu(w);
                 }
             });
 
 
         });
 
-
-        grid.addItemClickListener(new ItemClickListener<Poberatel>() {
+            grid.addItemClickListener(new ItemClickListener<Poberatel>() {
             @Override
 
             public void itemClick(Grid.ItemClick<Poberatel> event) {
@@ -174,8 +175,9 @@ public class BrowsPanel extends VerticalLayout {
 
         btnVyber.addClickListener(clickEvent -> {
             if (!StringUtil.isBlank(poberateliaView.getRodicovskyView())) {
-                if (grid.getSelectedItems().iterator().next() != null)
+                if (grid.getSelectedItems().iterator().next() != null) {
                     vybratyPoberatel(grid.getSelectedItems().iterator().next());
+                }
             }
         });
 
@@ -190,6 +192,7 @@ public class BrowsPanel extends VerticalLayout {
         tlacitkovy.addComponent(btnDetail);
         tlacitkovy.addComponent(btnEditujPoznámku);
         tlacitkovy.addComponent(btnPremenujPoberatelaPrevadzkyFirmu);
+
         if (!StringUtil.isBlank(poberateliaView.getRodicovskyView()))
             tlacitkovy2.addComponent(btnVyber);
         tlacitkovy.addComponent(btnSpat);//666
@@ -247,9 +250,9 @@ public class BrowsPanel extends VerticalLayout {
     }
 
     private void premenujPoberatelaPrevadzkuFirmu(WindowWithEditBox w) {
-        if (w.getText()!= null) {
-            Poberatel p= grid.asSingleSelect().getValue();
-            PoberatelNastroje.premenujPoberatelaPrevadzkuPoberatela(p,w.getText());
+        if (w.getText() != null) {
+            Poberatel p = grid.asSingleSelect().getValue();
+            PoberatelNastroje.premenujPoberatelaPrevadzkuPoberatela(p, w.getText());
 
             grid.getDataProvider().refreshItem(p);
 
@@ -259,8 +262,8 @@ public class BrowsPanel extends VerticalLayout {
 
     private void vykonajPoZatvoreni(WindowWithEditBox w) {
 
-        if (w.getText()!= null) {
-            Poberatel p= grid.asSingleSelect().getValue();
+        if (w.getText() != null) {
+            Poberatel p = grid.asSingleSelect().getValue();
             p.setPoznamkaVelkoskladu(w.getText());
             PoberatelNastroje.ulozPoberatela(p);
             grid.getDataProvider().refreshItem(p);
@@ -358,7 +361,7 @@ public class BrowsPanel extends VerticalLayout {
         if (tfPrevadzkaZakaznika.getValue().length() > 0)
             poberatelList = poberateliaView.naplnList(poberateliaView.getVelkosklad(), prevadzkaHF);
         else
-            poberatelList = poberateliaView.naplnList(poberateliaView.getVelkosklad(),null);
+            poberatelList = poberateliaView.naplnList(poberateliaView.getVelkosklad(), null);
         grid.setItems(poberatelList);
         grid.getDataProvider().refreshAll();
     }

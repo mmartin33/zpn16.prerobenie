@@ -211,6 +211,7 @@ public class DokladyNastroje {
         zaznam=davka.getPolozky();
         bodyNaIco=davka.getBodyNaIco();
         List<ChybaImportu> chyby = new ArrayList<>();
+        Map<String, BigDecimal> icaVelkoskladov = FirmaNastroje.mapaICOFiriemIbaVelkosklady();
         Integer bodovaHranicaPreZakladanieNovejFirmy=ParametreNastroje.nacitajParametre().getMesacnaHranicaBodovImportu();
         uzivatelVelkoskladu=UzivatelNastroje.getUzivatelVelkoskladu(parametreImportu.getFirma());
         if (uzivatelVelkoskladu==null)
@@ -264,8 +265,8 @@ public class DokladyNastroje {
             if (uzivatelVelkoskladu.getUrcujeFirmyNaKtoreSaPridelujuBody())
                 if (!FirmaVelkoskladuNastroje.existujeFirmaVelkoskladuPodlaIcoFirmy(parametreImportu.getFirma(),z.getIco()))
                     pustitiDoDavky=false;
-
-
+            if (icaVelkoskladov.get(z.getIco())!=null)
+                    pustitiDoDavky=false;
             if (pustitiDoDavky)
             {
                 mesacnySucetBodov = bodyNaIco.get(z.getIco());
@@ -323,6 +324,13 @@ public class DokladyNastroje {
                         z.getIco(),
                         z.getKit(),
                         "Nepodarilo sa zalozit polozku dokladu (firma-odobrala malo bodov pre registraciu)",
+                        z.getMtzDoklad()));
+            else if (navratovahodnota.getChyba() == NavratovaHodnota.MALY_PREDAJ)
+                chyby.add(new ChybaImportu(
+                        z.getNazvFirmy(),
+                        z.getIco(),
+                        z.getKit(),
+                        "Nepodarilo sa zalozit polozku dokladu (nepostacujuce mnozstvo)",
                         z.getMtzDoklad()));
 
         }

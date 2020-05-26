@@ -114,13 +114,16 @@ public class PolozkaDokladuNastroje {
         //pd.setMnozstvo(zaznam.getMnozstvo());
         pd.setMnozstvoPovodne(zaznam.getMnozstvo());
         pd.setKit(zaznam.getKit());
+        if (fp.getKoeficient().compareTo(BigDecimal.ZERO)==0)
+            return new NavratovaHodnota(null,NavratovaHodnota.NEURCENY_KOEFICIENT);
+
         int body=VypoctyUtil.vypocitajBody(
                 pd.getMnozstvoPovodne(),
                 fp.getKoeficient(),
                 fp.getProdukt().getKusy(),
                 fp.getProdukt().getBody());
         if (body==0)
-            return new NavratovaHodnota(null,NavratovaHodnota.NEURCENY_KOEFICIENT);
+            return new NavratovaHodnota(null,NavratovaHodnota.MALY_PREDAJ);
         pd.setBody(new BigDecimal(body));
 
 
