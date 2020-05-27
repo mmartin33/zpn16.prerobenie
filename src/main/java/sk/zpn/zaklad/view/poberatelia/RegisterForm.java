@@ -44,14 +44,10 @@ public class RegisterForm  extends VerticalLayout implements View {
 
     public RegisterForm() {
         fl =new FormLayout();
-        tfICO =new TextField("IČO");
-        tfICO.setWidth("200");
-        tfTelefon =new TextField("Telefon");
-        tfTelefon.setWidth("300");
-        tfEmail =new TextField("email");
-        tfEmail.setWidth("400");
         tfNazovPrevadzky =new TextField("Prevádzka - názov");
         tfNazovPrevadzky.setWidth("500");
+        tfICO =new TextField("IČO");
+        tfICO.setWidth("200");
         tfUlicaPrevadzky =new TextField("Prevádzka - ulica");
         tfUlicaPrevadzky.setWidth("500");
         tfMestoPrevadzky =new TextField("Prevádzka - mesto");
@@ -66,6 +62,12 @@ public class RegisterForm  extends VerticalLayout implements View {
         tfMestoPoberatela.setWidth("500");
         tfPscPoberatela =new TextField("Poberateľ - PSČ");
         tfPscPoberatela.setWidth("100");
+
+        tfTelefon =new TextField("Telefon");
+        tfTelefon.setWidth("300");
+        tfEmail =new TextField("email");
+        tfEmail.setWidth("400");
+
         tfNazovPrevadzky.addValueChangeListener(new HasValue.ValueChangeListener<String>() {
             @Override
             public void valueChange(HasValue.ValueChangeEvent<String> event) {
@@ -96,17 +98,17 @@ public class RegisterForm  extends VerticalLayout implements View {
             }
         });
 
-        fl.addComponent(tfICO);
-        fl.addComponent(tfTelefon);
-        fl.addComponent(tfEmail);
         fl.addComponent(tfNazovPrevadzky);
+        fl.addComponent(tfICO);
         fl.addComponent(tfUlicaPrevadzky);
         fl.addComponent(tfMestoPoberatela);
-        fl.addComponent(tfNazovPoberatela);
         fl.addComponent(tfPscPrevadzky);
+        fl.addComponent(tfTelefon);
+        fl.addComponent(tfNazovPoberatela);
         fl.addComponent(tfUlicaPoberatela);
         fl.addComponent(tfMestoPoberatela);
         fl.addComponent(tfPscPoberatela);
+        fl.addComponent(tfEmail);
         hl = new HorizontalLayout();
         btnOK=new Button("Založ", VaadinIcons.CHECK_CIRCLE);
         btnKoniec=new Button("Koniec",VaadinIcons.CLOSE_CIRCLE);
