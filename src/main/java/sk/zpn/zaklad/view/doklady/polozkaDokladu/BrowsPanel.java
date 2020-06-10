@@ -8,10 +8,8 @@ import com.vaadin.ui.*;
 
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import org.vaadin.dialogs.ConfirmDialog;
-import sk.zpn.domena.Firma;
-import sk.zpn.domena.Poberatel;
-import sk.zpn.domena.PolozkaDokladu;
-import sk.zpn.domena.TypProduktov;
+import sk.zpn.domena.*;
+import sk.zpn.nastroje.XlsTlacDokladu;
 import sk.zpn.nastroje.XlsTlacProtokolu;
 import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.model.DokladyNastroje;
@@ -232,7 +230,10 @@ public class BrowsPanel extends VerticalLayout {
     }
 
     private void tlac() {
-        XlsTlacProtokolu.tlac(polozkyDokladuView.getDoklad());
+        if (rezimOdmien)
+            XlsTlacProtokolu.tlac(polozkyDokladuView.getDoklad());
+        else
+            XlsTlacDokladu.tlac(polozkyDokladuView.getDoklad());
     }
 
 
@@ -327,13 +328,19 @@ public class BrowsPanel extends VerticalLayout {
     public void klasickyRezim() {
         this.rezimOdmien = false;
         btnKatalogOdmien.setVisible(false);
-        btnTlac.setVisible(false);
+        if (polozkyDokladuView.getDoklad().getTypDokladu()== TypDokladu.PREVOD)
+        btnTlac.setVisible(true);
+        else
+            btnTlac.setVisible(false);
 
     }
 
     public void rezimRegistracia() {
         btnKatalogOdmien.setVisible(false);
-        btnTlac.setVisible(false);
+        if (polozkyDokladuView.getDoklad().getTypDokladu()== TypDokladu.PREVOD)
+            btnTlac.setVisible(true);
+        else
+            btnTlac.setVisible(false);
         btnNovyKopia.setVisible(false);
         btnRegistrujPoberatela.setVisible(true);
 

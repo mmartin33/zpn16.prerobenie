@@ -97,9 +97,9 @@ public class EditacnyForm extends VerticalLayout {
                 .bind(Produkt::getRok, Produkt::setRok);
         Binder.Binding<Produkt, String> kodBinding = binder.forField(tKod)
                 .withValidator(kod -> !tKod.getValue().trim().isEmpty(),
-                "Kod je povinny")
-//                .withValidator(kod -> (!ProduktyNastroje.uzExistujeKat(tKod.getValue())||(!produktEditovany.isNew())),
-//                        "Kod uz existuje")
+                        "Kod je povinny")
+                .withValidator(kod -> (tKod.getValue().getBytes().length <=10),
+                        "Kod je dlhy")
 
                 .bind(Produkt::getKat, Produkt::setKat);
         Binder.Binding<Produkt, String> nazovBinding = binder.forField(tNazov)
