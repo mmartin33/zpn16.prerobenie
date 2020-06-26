@@ -27,6 +27,7 @@ public class DavkaCsvImporter {
         CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(suborCsv), "windows-1250"),';');
 
         String [] nextLine;
+        String [] hlavicka;
 
 
         Davka davka=new Davka();
@@ -38,7 +39,7 @@ public class DavkaCsvImporter {
         progressBarZPN.nadstavNadpis("Načítanie súboru");
         progressBarZPN.nadstavspustenie(true);
 
-        reader.readNext();
+        hlavicka=reader.readNext();
         while ((nextLine = reader.readNext()) != null) {
             ZaznamCsv zaznam=new ZaznamCsv();
             progressBarZPN.posun(new BigDecimal(500),new BigDecimal(250));
@@ -49,16 +50,71 @@ public class DavkaCsvImporter {
                     zaznam.setNazov(nextLine[1]);
                     zaznam.setMnozstvo(new BigDecimal(nextLine[2].replace(",", ".")));
                     zaznam.setNazvFirmy(nextLine[3]);
-                    zaznam.setDatumVydaja(formatter.parse(nextLine[4]));
+                    zaznam.setDatumVydaja(((nextLine[4]!=null && nextLine[4].toString().trim().length()>0)?formatter.parse(nextLine[4]):null));
                     zaznam.setMtzDoklad(nextLine[5]);
                     zaznam.setIco(nextLine[6]);
                     zaznam.setMalopredaj(nextLine[7].contains("A"));
-                    zaznam.setPcIco(Integer.parseInt(nextLine[8]));
-                    zaznam.setCiarovyKod(nextLine[9]);
+                    //zaznam.setPcIco(Integer.parseInt(nextLine[8]));
+                    if (nextLine.length>9)
+                        zaznam.setCiarovyKod(nextLine[9]);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            if ((zaznam !=null) && (zaznam.getKit()!=null)) {
+                ZaznamCsv existujuci = polozky.get(zaznam.getKit() + zaznam.getMtzDoklad());
+                if (existujuci ==null)
+                    polozky.put(zaznam.getKit()+zaznam.getMtzDoklad(),zaznam );
+                else
+                    existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
+                bodyNaIco.put(zaznam.getIco(), ImporterNastroje.vratBodyZaIcoAKit(zaznam.getIco(),
+                        zaznam.getKit(),
+                        zaznam.getMnozstvo(),
+                        parametreImportu.getFirma(),
+                        null));
+
+
+            }
+
+            //zaznam=null;
+        }
+        progressBarZPN.koniec();
+        davka.setPolozky(polozky);
+        davka.setBodyNaIco(bodyNaIco);
+        return davka;
+
+    }
+    public static Davka nacitajCsvDavkuSimo(String suborCsv, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) throws IOException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(suborCsv), "windows-1250"),';');
+
+        String [] nextLine;
+        String [] hlavicka;
+
+
+        Davka davka=new Davka();
+        Map<String, Integer> bodyNaIco = Maps.newHashMap();;
+
+
+        Map<String, ZaznamCsv> polozky = Maps.newHashMap();
+        progressBarZPN.zobraz();
+        progressBarZPN.nadstavNadpis("Načítanie súboru");
+        progressBarZPN.nadstavspustenie(true);
+
+        hlavicka=reader.readNext();
+        while ((nextLine = reader.readNext()) != null) {
+            ZaznamCsv zaznam=new ZaznamCsv();
+            progressBarZPN.posun(new BigDecimal(500),new BigDecimal(250));
+
+                if (!nextLine[0].isEmpty() && nextLine[0]!=null && nextLine!=null) {
+
+                    zaznam.setKit(nextLine[0]);
+                    zaznam.setNazov(nextLine[1]);
+                    zaznam.setMnozstvo(new BigDecimal(nextLine[2].replace(",", ".")));
+                    zaznam.setNazvFirmy(nextLine[3]);
+                    zaznam.setIco(nextLine[4]);
+                    //zaznam.setPcIco(Integer.parseInt(nextLine[8]));
+                }
             if ((zaznam !=null) && (zaznam.getKit()!=null)) {
                 ZaznamCsv existujuci = polozky.get(zaznam.getKit() + zaznam.getMtzDoklad());
                 if (existujuci ==null)

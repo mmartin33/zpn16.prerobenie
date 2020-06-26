@@ -13,6 +13,7 @@ import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -68,10 +69,6 @@ public class XlsTlacDokladu {
         resultCell = (HSSFCell) sheet.getRow(14).getCell(3);
         resultCell.setCellValue(doklad.getCisloDokladu());
 
-        resultCell = (HSSFCell) sheet.getRow(32).getCell(6);
-        resultCell.setCellValue(formatter.format(doklad.getDatum()));
-
-
 
         resultCell = (HSSFCell) sheet.getRow(22).getCell(3);
         resultCell.setCellValue("Poberateľ");
@@ -85,16 +82,24 @@ public class XlsTlacDokladu {
 
 
         int riadok=23;
-
+        BigDecimal bodyCelkom=new BigDecimal(BigInteger.ZERO);
         for (PolozkaDokladu polozka : zoznamPoloziek){
-            resultCell = (HSSFCell) sheet.getRow(riadok).getCell(2);
+
+            resultCell = (HSSFCell) sheet.createRow(riadok).createCell(2);
+            //resultCell = (HSSFCell) sheet.getRow(riadok).getCell(2);
             resultCell.setCellValue(polozka.getPoberatel().getKod());
-            resultCell = (HSSFCell) sheet.getRow(riadok).getCell(3);
+            resultCell = (HSSFCell) sheet.getRow(riadok).createCell(3);
             resultCell.setCellValue(polozka.getPoberatel().getMeno());
-            resultCell = (HSSFCell) sheet.getRow(riadok).getCell(6);
-            resultCell.setCellValue(polozka.getBody().multiply(new BigDecimal(-1)).intValue());
+            resultCell = (HSSFCell) sheet.getRow(riadok).createCell(6);
+            resultCell.setCellValue(polozka.getBody().intValue());
+            bodyCelkom.add(polozka.getBody());
             riadok++;
         }
+        resultCell = (HSSFCell) sheet.createRow(riadok).createCell(2);
+        resultCell = (HSSFCell) sheet.getRow(riadok).createCell(6);
+        resultCell.setCellValue(bodyCelkom.intValue());
+        resultCell = (HSSFCell) sheet.getRow(riadok).createCell(3);
+        resultCell.setCellValue("Súčet");
 
 
         try {

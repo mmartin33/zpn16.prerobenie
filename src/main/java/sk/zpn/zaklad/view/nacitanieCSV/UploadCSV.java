@@ -183,7 +183,11 @@ public class UploadCSV extends CustomComponent  {
                     davka= DavkaTxtImporter.nacitajTxtDavku(file,parametreImportu,progressBarZPN);
 
             else
-                davka= DavkaCsvImporter.nacitajCsvDavku(file,parametreImportu,progressBarZPN);
+                if (parametreImportu.getFirma().getIco().equals("10952799")) //simo format
+                    davka= DavkaCsvImporter.nacitajCsvDavkuSimo(file,parametreImportu,progressBarZPN);
+
+                else
+                    davka= DavkaCsvImporter.nacitajCsvDavku(file,parametreImportu,progressBarZPN);
 
             //this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
             VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(davka,file,parametreImportu,progressBarZPN);

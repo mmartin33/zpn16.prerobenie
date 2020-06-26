@@ -197,7 +197,7 @@ public class MostikView extends HorizontalLayout implements View {
 
 
     private List<Firma> navrhniFirmu(String query, int cap) {
-        return  FirmaNastroje.zoznamFiriem().stream()
+        return  FirmaNastroje.zoznamFiriemIbaVelkosklady().stream()
                 .filter(firma -> firma.getNazov().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
     }

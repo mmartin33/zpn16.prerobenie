@@ -203,6 +203,7 @@ public class DokladyNastroje {
 
     public static VysledokImportu zalozDokladovuDavku(Davka davka, String file, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) {
         Uzivatel uzivatelVelkoskladu=null;
+        String icoUzivatela=null;
         Map<String, ZaznamCsv> zaznam;
         Map<String, Integer> bodyNaIco ;
         Integer mesacnySucetBodov;
@@ -214,8 +215,10 @@ public class DokladyNastroje {
         Map<String, BigDecimal> icaVelkoskladov = FirmaNastroje.mapaICOFiriemIbaVelkosklady();
         Integer bodovaHranicaPreZakladanieNovejFirmy=ParametreNastroje.nacitajParametre().getMesacnaHranicaBodovImportu();
         uzivatelVelkoskladu=UzivatelNastroje.getUzivatelVelkoskladu(parametreImportu.getFirma());
+
         if (uzivatelVelkoskladu==null)
             return null;
+        icoUzivatela=uzivatelVelkoskladu.getFirma().getIco();
         VysledokImportu vysledok = new VysledokImportu();
         progressBarZPN.nadstavNadpis("Zhranie dokladu");
         progressBarZPN.nadstavspustenie(true);
@@ -265,7 +268,7 @@ public class DokladyNastroje {
             if (uzivatelVelkoskladu.getUrcujeFirmyNaKtoreSaPridelujuBody())
                 if (!FirmaVelkoskladuNastroje.existujeFirmaVelkoskladuPodlaIcoFirmy(parametreImportu.getFirma(),z.getIco()))
                     pustitiDoDavky=false;
-            if (icaVelkoskladov.get(z.getIco())!=null)
+            if (icaVelkoskladov.get(z.getIco())!=null && !z.getIco().equals(icoUzivatela))  //nepojdu take co si velkosklady ale vlastne ico velkoskladu pojde
                     pustitiDoDavky=false;
             if (pustitiDoDavky)
             {
