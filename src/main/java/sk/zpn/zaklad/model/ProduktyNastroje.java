@@ -2,14 +2,12 @@ package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
 import org.apache.commons.lang.StringUtils;
-import sk.zpn.domena.Firma;
-import sk.zpn.domena.Poberatel;
-import sk.zpn.domena.Produkt;
-import sk.zpn.domena.TypProduktov;
+import sk.zpn.domena.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -88,13 +86,16 @@ public class ProduktyNastroje {
     public static Produkt ulozProdukt(Produkt f) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
+        em.getTransaction().begin();
         if (f.isNew()) {
             f.setId((long) 0);
             f.setKedy(new Date());
             f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
+            em.persist(f);
         }
-        em.getTransaction().begin();
-        em.merge(f);
+        else
+            em.merge(f);
+
         em.getTransaction().commit();
         return f;
     }
@@ -138,6 +139,45 @@ public class ProduktyNastroje {
         else
             return "000000010";
     }
+    public static boolean existujePohybNaOdmene(Produkt produkt) {
+        List<PolozkaDokladu> pocet = null;
+        if (produkt.getTypProduktov()!=TypProduktov.ODMENA)
+            return false;
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
+        String sql = "SELECT pd FROM polozkyDokladu pd " +
+                " join pd.produkt as p"+
+                " where  p.id=:id_produktu ";
+
+        TypedQuery<PolozkaDokladu> q = em.createQuery(sql, PolozkaDokladu.class).setMaxResults(1);
+        q.setParameter("id_produktu", produkt.getId());
+        pocet = q.getResultList();
 
 
+
+
+
+        if (pocet.size()==0)
+            return false;
+        return true;
+    }
+
+    public static boolean kontrolujZmenuBodov(Produkt produktEditovany, String value) {
+        if (produktEditovany.getId()==null)
+            return true;
+        if (produktEditovany.getBody().compareTo(new BigDecimal(value))==0)
+            return true;
+        if (!existujePohybNaOdmene(produktEditovany))
+            return true;
+        return false;
+    }
+
+    public static boolean kontrolujZmenuKusov(Produkt produktEditovany, String value) {
+        if (produktEditovany.getTypProduktov()==TypProduktov.BODOVACI)
+            return true;
+        if (produktEditovany.getBody().compareTo(new BigDecimal(1))==0  )
+            return true;
+
+        return false;
+    }
 }

@@ -30,8 +30,6 @@ public class EditacnyForm extends VerticalLayout {
     public TextField tCena;
 
 
-
-
     protected Button btnUloz;
     protected Button btnZmaz;
 
@@ -55,11 +53,11 @@ public class EditacnyForm extends VerticalLayout {
         tFirma.setWidth("400");
         tCena = new TextField("Cena");
         tCena.setWidth("100");
-        btnUloz=new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
+        btnUloz = new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
         btnUloz.setClickShortcut(ShortcutAction.KeyCode.U,
                 new int[]{ShortcutAction.ModifierKey.ALT});
 
-        btnZmaz =new Button("Zmaž",VaadinIcons.CLOSE_CIRCLE);
+        btnZmaz = new Button("Zmaž", VaadinIcons.CLOSE_CIRCLE);
 
         nastavComponnenty();
         FormLayout lEdit = new FormLayout();
@@ -78,7 +76,6 @@ public class EditacnyForm extends VerticalLayout {
         lBtn.addComponent(btnZmaz);
 
 
-
         this.addComponent(lEdit);
         this.addComponent(lBtn);
 
@@ -92,13 +89,14 @@ public class EditacnyForm extends VerticalLayout {
 
     private void nastavComponnenty() {
 
+
         tRok.setEnabled(false);
         Binder.Binding<Produkt, String> rokBinding = binder.forField(tRok)
                 .bind(Produkt::getRok, Produkt::setRok);
         Binder.Binding<Produkt, String> kodBinding = binder.forField(tKod)
                 .withValidator(kod -> !tKod.getValue().trim().isEmpty(),
                         "Kod je povinny")
-                .withValidator(kod -> (tKod.getValue().getBytes().length <=10),
+                .withValidator(kod -> (tKod.getValue().getBytes().length <= 10),
                         "Kod je dlhy")
 
                 .bind(Produkt::getKat, Produkt::setKat);
@@ -108,27 +106,36 @@ public class EditacnyForm extends VerticalLayout {
                 .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
                 .withValidator(body -> !tBody.getValue().trim().isEmpty(),
                         "Body su povinne")
+                .withValidator(body -> ProduktyNastroje.kontrolujZmenuBodov(produktEditovany, tBody.getValue()),
+                        "Body nie je možné meniť na použitej odmene")
                 .bind(Produkt::getBody, Produkt::setBody);
         Binder.Binding<Produkt, BigDecimal> kusyBinding = binder.forField(tKusy)
                 .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
                 .withValidator(kusy -> !tKusy.getValue().trim().isEmpty(),
                         "Kusy su povinne")
+                .withValidator(kusy -> ProduktyNastroje.kontrolujZmenuKusov(produktEditovany, tBody.getValue()),
+                        "Na odmene je povolené množstvo 1")
                 .bind(Produkt::getKusy, Produkt::setKusy);
 
 
+
         Binder.Binding<Produkt, String> firmaBinding = binder.forField(tFirma)
-                .withValidator(nazovFirmy -> !tFirma.getValue().trim().isEmpty(),
+                .withValidator(nazovFirmy -> (produktEditovany.getTypProduktov()==TypProduktov.ODMENA?true:!tFirma.getValue().trim().isEmpty()),
                         "Firma je povinna")
-                .withValidator(nazovFirmy -> FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent(),
+                .withValidator(nazovFirmy -> (produktEditovany.getTypProduktov()==TypProduktov.ODMENA?true:FirmaNastroje.prvaFirmaPodlaNazvu(nazovFirmy).isPresent()),
+
                         "Firma musi byt existujuca")
                 .bind(poberatel -> poberatel.getFirma() == null ? "" : poberatel.getFirma().getNazov(),
                         (poberatel, s) -> FirmaNastroje.prvaFirmaPodlaNazvu(tFirma.getValue()).ifPresent(poberatel::setFirma));
+
+
+
+
         Binder.Binding<Produkt, BigDecimal> cenaBinding = binder.forField(tCena)
                 .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
                 .withValidator(body -> !tCena.getValue().trim().isEmpty(),
                         "Body su povinne")
                 .bind(Produkt::getCena, Produkt::setCena);
-
 
 
         tKod.addValueChangeListener(event -> kodBinding.validate());
@@ -151,6 +158,8 @@ public class EditacnyForm extends VerticalLayout {
 
     void edit(Produkt produkt) {
         produktEditovany = produkt;
+
+
         if (produkt != null) {
             System.out.println("Zvoleny " + produktEditovany.getNazov());
             binder.readBean(produkt);
@@ -158,6 +167,14 @@ public class EditacnyForm extends VerticalLayout {
             System.out.println("Zvolený nový");
             binder.readBean(produkt);
         }
+        if (produktEditovany .getTypProduktov() == TypProduktov.ODMENA) {
+            tFirma.setEnabled(false);
+            tKusy.setEnabled(false);
+        } else {
+            tFirma.setEnabled(true);
+            tKusy.setEnabled(true);
+        }
+
 
     }
 
@@ -201,19 +218,21 @@ public class EditacnyForm extends VerticalLayout {
     }
 
     private List<Firma> navrhniFirmu(String query, int cap) {
-        return  FirmaNastroje.zoznamFiriem().stream()
+        return FirmaNastroje.zoznamFiriem().stream()
                 .filter(firma -> firma.getNazov().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
     }
+
     /**
      * Co sa zobraziv textfielde, ked sa uz hodnota vyberie
-     * */
+     */
     private String transformujFirmuNaNazov(Firma firma) {
         return firma.getNazov();
     }
+
     /**
      * Co sa zobrazi v dropdowne
-     * */
+     */
     private String transformujFirmuNaNazovSoZvyraznenymQuery(Firma firma, String query) {
         return "<div class='suggestion-container'>"
                 + "<span class='firma'>"
