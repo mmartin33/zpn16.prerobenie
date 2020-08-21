@@ -206,6 +206,8 @@ public class DokladyNastroje {
         String icoUzivatela=null;
         Map<String, ZaznamCsv> zaznam;
         Map<String, Integer> bodyNaIco ;
+        Map<String, BigDecimal> nespraovaneKity = Maps.newHashMap();;
+        
         Integer mesacnySucetBodov;
         boolean zalozitFirmu;
         boolean pustitiDoDavky=true;
@@ -283,14 +285,14 @@ public class DokladyNastroje {
             //PolozkaDokladu pd=PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z,hlavickaDokladu);
             if (navratovahodnota.getPolozkaDokladu() != null)
                 polozkyDokladu.add(navratovahodnota.getPolozkaDokladu());
-            else if (navratovahodnota.getChyba() == NavratovaHodnota.NENAJEDENY_KIT)
-
+            else if (navratovahodnota.getChyba() == NavratovaHodnota.NENAJEDENY_KIT){
+                nespraovaneKity.put(z.getKit()+" "+z.getNazov(),z.getMnozstvo());
                 chyby.add(new ChybaImportu(
                         z.getNazvFirmy(),
                         z.getIco(),
                         z.getKit(),
                         "Nenajdeny kit",
-                        z.getMtzDoklad()));
+                        z.getMtzDoklad()));}
             else if (navratovahodnota.getChyba() == NavratovaHodnota.NEURCENY_KOEFICIENT)
 
                 chyby.add(new ChybaImportu(
@@ -344,6 +346,7 @@ public class DokladyNastroje {
         vysledok.setDoklad(hlavickaDokladu);
         vysledok.setPolozky(polozkyDokladu);
         vysledok.setChyby(chyby);
+        vysledok.setNespracovaneKity(nespraovaneKity);
         return vysledok;
 
 

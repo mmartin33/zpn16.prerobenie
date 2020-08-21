@@ -27,6 +27,7 @@ import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 import sk.zpn.zaklad.view.produkty.ProduktyView;
 import sk.zpn.zaklad.view.statistiky.StatDodavatelProduktView;
 import sk.zpn.zaklad.view.statistiky.StatPoberatelView;
+import sk.zpn.zaklad.view.statistiky.StatZaObdobieKumulativneView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
 
 
@@ -130,6 +131,10 @@ public class VitajteView extends MojView {
                     statDodavatelProduktView.setBodovyRezim();
                     UI.getCurrent().getNavigator().addView(StatDodavatelProduktView.NAME, statDodavatelProduktView);
                     n.navigateTo(statDodavatelProduktView.NAME);
+                } else if (selectedItem.getDescription().equals("bilanciaBodov")) {
+                    StatZaObdobieKumulativneView statZaObdobieKumulativneView = new StatZaObdobieKumulativneView(null);
+                    UI.getCurrent().getNavigator().addView(StatZaObdobieKumulativneView.NAME, statZaObdobieKumulativneView );
+                    n.navigateTo(statZaObdobieKumulativneView.NAME);
                 } else if (selectedItem.getDescription().equals("body")) {
                     StatPoberatelView statPoberatelView = new StatPoberatelView(null);
                     UI.getCurrent().getNavigator().addView(StatPoberatelView.NAME, statPoberatelView);
@@ -212,6 +217,9 @@ public class VitajteView extends MojView {
 
         MenuItem menuBody = menuSpravcu.addItem("Stav bodov - poberateľov", VaadinIcons.PIGGY_BANK, mycommand);
         menuBody.setDescription("body");
+
+        MenuItem menuBylancia = menuSpravcu.addItem("Kumulatívna bilancia ", VaadinIcons.CHART_3D, mycommand);
+        menuBylancia.setDescription("bilanciaBodov");
 
 
 //        MenuItem menuBodyDodavatelovProduktov = menuSpravcu.addItem("Stav bodov - dodávateľov a produktov", VaadinIcons.PIGGY_BANK, mycommand);

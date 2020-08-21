@@ -1,3 +1,4 @@
+
 package sk.zpn.nastroje;
 
 
@@ -27,11 +28,13 @@ import java.util.Map;
 public class XlsStatistikaBodov {
 
 
-    private static final String FILE_NAME_SABLONY =  SystemoveParametre.getResourcesAdresar()+"statistikapoberatelov.xls";
+    private static final String FILE_NAME_SABLONY = SystemoveParametre.getResourcesAdresar() + "statistikapoberatelov.xls";
     private static String FILE_NAME = "statistikapoberatelovVysledok.xls";
+    private static final String FILE_NAME_SABLONY_BILANCIE = SystemoveParametre.getResourcesAdresar() + "bilancia.xls";
+    private static String FILE_NAME_BILANCIE = "bilancia.xls";
     private static HSSFWorkbook workbook;
     private static HSSFCellStyle cs;
-    private static HSSFFont font ;
+    private static HSSFFont font;
 
 
     public static void vytvorXLS2(List<Poberatel> poberatelia,
@@ -56,9 +59,8 @@ public class XlsStatistikaBodov {
         Date date = new Date(System.currentTimeMillis());
 
 
-
-        if ((poberatelia == null) || (bodyZaPredaj== null) || (pociatocnyStav== null) || (bodyIne == null) || (konecnyStav == null))
-            return ;
+        if ((poberatelia == null) || (bodyZaPredaj == null) || (pociatocnyStav == null) || (bodyIne == null) || (konecnyStav == null))
+            return;
         workbook = null;
         FileInputStream excelFile = null;
         try {
@@ -87,14 +89,14 @@ public class XlsStatistikaBodov {
         cel.setCellValue(nadpis);
 
         int rowNum = 2;
-        HSSFCell  bunka;
+        HSSFCell bunka;
 
         int colNum = 1;
         row = sheet.createRow(rowNum);
-        row.setHeight((short)-1);
-        row.setHeight((short)700);
+        row.setHeight((short) -1);
+        row.setHeight((short) 700);
 
-        colNum=1;
+        colNum = 1;
         cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("Poberateľ"));
@@ -156,13 +158,13 @@ public class XlsStatistikaBodov {
         cel.setCellValue(("Konečný \r\n stav"));
 
 
-        Poberatel poberatel=null;
-        BigDecimal riadkovaHodnota=BigDecimal.ONE;
+        Poberatel poberatel = null;
+        BigDecimal riadkovaHodnota = BigDecimal.ONE;
         for (Poberatel p : poberatelia) {
             colNum = 1;
-            String kluc=p.getId().toString();
+            String kluc = p.getId().toString();
             if (UzivatelNastroje.getPrihlasenehoUzivatela().getTypUzivatela() == TypUzivatela.PREDAJCA)
-                if (poberateliaVelkoskladu.get(kluc)==null)
+                if (poberateliaVelkoskladu.get(kluc) == null)
                     continue;
             //cel.setCellStyle(oramovanieBoldZalomenie());
 
@@ -180,34 +182,32 @@ public class XlsStatistikaBodov {
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
-            String textBunky="";
-            textBunky=(((icaFiriem.get(kluc) == null) ? "": icaFiriem.get(kluc))).toString();
-            textBunky=((textBunky.length()>0)?
-                    textBunky:
-                    (icaFiriemZPob.get(kluc) == null) ? "": icaFiriemZPob.get(kluc).toString());
+            String textBunky = "";
+            textBunky = (((icaFiriem.get(kluc) == null) ? "" : icaFiriem.get(kluc))).toString();
+            textBunky = ((textBunky.length() > 0) ?
+                    textBunky :
+                    (icaFiriemZPob.get(kluc) == null) ? "" : icaFiriemZPob.get(kluc).toString());
             bunka.setCellValue(textBunky);
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
 
-            textBunky="";
-            textBunky=(((prevPopis.get(kluc) == null) ? "": prevPopis.get(kluc))).toString();
-            textBunky=((textBunky.length()>0)?
-                    textBunky:
-                    (((prevPopisZPob.get(kluc) == null) ? "": prevPopisZPob.get(kluc))).toString());
+            textBunky = "";
+            textBunky = (((prevPopis.get(kluc) == null) ? "" : prevPopis.get(kluc))).toString();
+            textBunky = ((textBunky.length() > 0) ?
+                    textBunky :
+                    (((prevPopisZPob.get(kluc) == null) ? "" : prevPopisZPob.get(kluc))).toString());
             bunka.setCellValue(textBunky);
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
-            textBunky="";
-            textBunky=(((poberatelPopis.get(kluc) == null) ? "": poberatelPopis.get(kluc))).toString();
-            textBunky=((textBunky.length()>0)?
-                    textBunky:
-                    (((poberatelPopisZPob.get(kluc) == null) ? "": poberatelPopisZPob.get(kluc))).toString());
+            textBunky = "";
+            textBunky = (((poberatelPopis.get(kluc) == null) ? "" : poberatelPopis.get(kluc))).toString();
+            textBunky = ((textBunky.length() > 0) ?
+                    textBunky :
+                    (((poberatelPopisZPob.get(kluc) == null) ? "" : poberatelPopisZPob.get(kluc))).toString());
 
             bunka.setCellValue(textBunky);
-
-
 
 
             bunka = row.createCell(colNum++);
@@ -222,70 +222,67 @@ public class XlsStatistikaBodov {
             bunka.setCellStyle(oramovanieBold());
             bunka.setCellValue((String) p.getHeslo());
 
-            riadkovaHodnota= BigDecimal.ZERO;
+            riadkovaHodnota = BigDecimal.ZERO;
 
-            Double hodnotaD= Double.valueOf(0);
+            Double hodnotaD = Double.valueOf(0);
 
 
             //PS
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
-            hodnotaD=(((pociatocnyStav.get(kluc) == null) ? Double.valueOf(0): pociatocnyStav.get(kluc)));
+            hodnotaD = (((pociatocnyStav.get(kluc) == null) ? Double.valueOf(0) : pociatocnyStav.get(kluc)));
             bunka.setCellValue(hodnotaD);
-            riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
+            riadkovaHodnota = riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
 
             //predaj
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
-            hodnotaD=(((bodyZaPredaj.get(kluc) == null) ? Double.valueOf(0) : bodyZaPredaj.get(kluc)));
+            hodnotaD = (((bodyZaPredaj.get(kluc) == null) ? Double.valueOf(0) : bodyZaPredaj.get(kluc)));
             bunka.setCellValue(hodnotaD);
-            riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
+            riadkovaHodnota = riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
 
             //ine
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
-            hodnotaD=(((bodyIne.get(kluc) == null) ? Double.valueOf(0) : bodyIne.get(kluc)));
+            hodnotaD = (((bodyIne.get(kluc) == null) ? Double.valueOf(0) : bodyIne.get(kluc)));
             bunka.setCellValue(hodnotaD);
-            riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
+            riadkovaHodnota = riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
 
             //odmeny
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
-            hodnotaD=(((bodyOdmeny.get(kluc) == null) ? Double.valueOf(0) : bodyOdmeny.get(kluc)));
+            hodnotaD = (((bodyOdmeny.get(kluc) == null) ? Double.valueOf(0) : bodyOdmeny.get(kluc)));
             bunka.setCellValue(hodnotaD);
-            riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
+            riadkovaHodnota = riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
 
             //prevod
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
-            hodnotaD=(((bodyPrevod.get(kluc) == null) ? Double.valueOf(0) : bodyPrevod.get(kluc)));
+            hodnotaD = (((bodyPrevod.get(kluc) == null) ? Double.valueOf(0) : bodyPrevod.get(kluc)));
             bunka.setCellValue(hodnotaD);
-            riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
+            riadkovaHodnota = riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
 
             //registracia
 
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
-            hodnotaD=(((bodyRegistracia.get(kluc) == null) ? Double.valueOf(0) : bodyRegistracia.get(kluc)));
+            hodnotaD = (((bodyRegistracia.get(kluc) == null) ? Double.valueOf(0) : bodyRegistracia.get(kluc)));
             bunka.setCellValue(hodnotaD);
-            riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
-
+            riadkovaHodnota = riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
 
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovane());
-            hodnotaD=(((konecnyStav.get(kluc) == null) ? Double.valueOf(0) : konecnyStav.get(kluc)));
+            hodnotaD = (((konecnyStav.get(kluc) == null) ? Double.valueOf(0) : konecnyStav.get(kluc)));
             bunka.setCellValue(hodnotaD);
-            riadkovaHodnota=riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
+            riadkovaHodnota = riadkovaHodnota.add(BigDecimal.valueOf(hodnotaD));
 
 
         }
 
 
-
         rowNum++;
-
 
 
         try {
@@ -315,99 +312,21 @@ public class XlsStatistikaBodov {
         subWindow.setModal(true);
         UI.getCurrent().addWindow(subWindow);
 
-        return ;
+        return;
 
 
     }
 
 
-
-    public static String vytvorXLS(List<StatistikaBodov> zoznam, String nadpis) {
-        SimpleDateFormat formatter= new SimpleDateFormat("dd.MM.yyyy ' ' HH:mm:ss z");
-        Date date = new Date(System.currentTimeMillis());
-
-        if (zoznam == null)
-            return null;
-        XSSFWorkbook workbook = null;
-        FileInputStream excelFile = null;
-        try {
-            excelFile = new FileInputStream(new File(FILE_NAME));
-            //File outFile = new File(new URL("file:"+FILE_NAME).getFile());
-            workbook = new XSSFWorkbook(excelFile);
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        XSSFSheet sheet = workbook.getSheet("zoznam");
-        Row row;
-        Cell cel;
-        row = sheet.createRow(0);
-        cel=row.createCell(0);
-        cel.setCellValue("Vytvorene:"+ formatter.format(date));
-        row = sheet.createRow(1);
-        cel=row.createCell(2);
-        cel.setCellValue(nadpis);
-        int rowNum = 2;
-        Cell cel1;
-        Cell cel2;
-        Cell cel3;
-        Cell cel4;
-
-        for (StatistikaBodov z : zoznam) {
-            row = sheet.createRow(rowNum++);
-            int colNum = 1;
-            cel1 = row.createCell(colNum++);
-            cel1.setCellValue((String) z.getNazov());
-            cel2 = row.createCell(colNum++);
-            cel2.setCellValue((z.getPociatocnyStav()==null)?0:z.getPociatocnyStav().doubleValue());
-            cel3 = row.createCell(colNum++);
-            cel3.setCellValue((z.getBodyZaPredaj()==null)?0:z.getBodyZaPredaj().doubleValue());
-            cel4 = row.createCell(colNum++);
-            cel4.setCellValue((z.getBodyIne()==null)?0:z.getBodyIne().doubleValue());
-            cel4 = row.createCell(colNum++);
-            cel4.setCellValue((z.getKonecnyStav()==null)?0:z.getKonecnyStav().doubleValue());
-        }
-        try {
-
-            FileOutputStream outputStream = new FileOutputStream(SystemoveParametre.getTmpAdresar()+"StatistikaBodovPoberatela.xlsx");
-            workbook.write(outputStream);
-            workbook.close();
-            excelFile.close();
-            outputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-
-        String filePath = SystemoveParametre.getTmpAdresar()+"StatistikaBodovPoberatela.xlsx";
-
-        Window subWindow = new Window("");
-        subWindow.setWidth(500, Sizeable.Unit.PIXELS);
-        subWindow.setHeight(400, Sizeable.Unit.PIXELS);
-
-        SaveToExcelLink s=new SaveToExcelLink(filePath);
-        VerticalLayout vl = new VerticalLayout();
-        vl.addComponentsAndExpand(s);
-        subWindow.setContent(vl);
-        subWindow.setModal(true);
-        UI.getCurrent().addWindow(subWindow);
-
-        return null;
-    }
-
-    private static HSSFCellStyle nadpisovyformat(){
+    private static HSSFCellStyle nadpisovyformat() {
 
         font.setBold(true);
         cs.setBorderRight(BorderStyle.MEDIUM);
         cs.setFont(font);
         return cs;
     }
-    private static HSSFCellStyle oramovanieBold(){
+
+    private static HSSFCellStyle oramovanieBold() {
 
         font.setBold(true);
         cs.setBorderRight(BorderStyle.MEDIUM);
@@ -420,7 +339,7 @@ public class XlsStatistikaBodov {
         return cs;
     }
 
-    private static HSSFCellStyle oramovanieBoldZalomenie(){
+    private static HSSFCellStyle oramovanieBoldZalomenie() {
 
         font.setBold(true);
         cs.setWrapText(true);
@@ -435,7 +354,7 @@ public class XlsStatistikaBodov {
         return cs;
     }
 
-    private static HSSFCellStyle oramovane(){
+    private static HSSFCellStyle oramovane() {
 
 
         cs.setBorderBottom(BorderStyle.THIN);
@@ -446,5 +365,210 @@ public class XlsStatistikaBodov {
     }
 
 
+    public static void vytvorXLSBilancie(List<Poberatel> poberatelia,
+                                         Map<String, Double> pociatocnyStav,
+                                         Map<String, Double> bodyZaPredaj,
+                                         Map<String, Double> bodyIne,
+                                         Map<String, Double> konecnyStav,
+                                         String nadpis,
+                                         Map<String, Double> poberateliaVelkoskladu,
+                                         Map<String, Double> bodyRegistracia,
+                                         Map<String, Double> bodyOdmeny,
+                                         Map<String, Double> bodyPrevod) {
+
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy ' ' HH:mm:ss z");
+        Date date = new Date(System.currentTimeMillis());
+
+
+        if ((poberatelia == null) || (bodyZaPredaj == null) || (pociatocnyStav == null) || (bodyIne == null) || (konecnyStav == null))
+            return;
+        workbook = null;
+        FileInputStream excelFile = null;
+        try {
+            excelFile = new FileInputStream(new File(FILE_NAME_SABLONY_BILANCIE));
+
+            workbook = new HSSFWorkbook(excelFile);
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HSSFSheet sheet = workbook.getSheet("bilancia");
+        cs = workbook.createCellStyle();
+        font = workbook.createFont();
+        HSSFRow row;
+        HSSFCell cel;
+        row = sheet.createRow(0);
+        cel = row.createCell(0);
+        cel.setCellValue("Vytvorené:" + formatter.format(date));
+
+        row = sheet.createRow(1);
+        cel = row.createCell(1);
+        cel.setCellStyle(nadpisovyformat());
+        cel.setCellValue(nadpis);
+
+        int rowNum = 2;
+        HSSFCell bunka;
+
+        int colNum = 1;
+        row = sheet.createRow(rowNum);
+        row.setHeight((short) -1);
+        row.setHeight((short) 700);
+
+        colNum = 1;
+
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("počiatočný \r\n stav"));
+
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("body za \r\n predaj"));
+
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("iné"));
+
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("odpočty \n bodov za \n odmeny"));
+
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("prevody \n bodov"));
+
+
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("body za \n registraciu"));
+
+
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("Konečný \r\n stav"));
+
+
+        Poberatel poberatel = null;
+        BigDecimal sumaPociatocnyStav = BigDecimal.ZERO;
+        BigDecimal sumaKonecnyStav = BigDecimal.ZERO;
+        BigDecimal sumaPrevodu = BigDecimal.ZERO;
+        BigDecimal sumaZaPredaj = BigDecimal.ZERO;
+        BigDecimal sumaZaOdmeny = BigDecimal.ZERO;
+        BigDecimal sumaIna = BigDecimal.ZERO;
+        BigDecimal sumaZaRegistraciu = BigDecimal.ZERO;
+        Double hodnotaD = Double.valueOf(0);
+
+        for (Poberatel p : poberatelia) {
+
+            String kluc = p.getId().toString();
+            if (UzivatelNastroje.getPrihlasenehoUzivatela().getTypUzivatela() == TypUzivatela.PREDAJCA)
+                if (poberateliaVelkoskladu.get(kluc) == null)
+                    continue;
+
+
+            hodnotaD = (((pociatocnyStav.get(kluc) == null) ? Double.valueOf(0) : pociatocnyStav.get(kluc)));
+            sumaPociatocnyStav=sumaPociatocnyStav.add(BigDecimal.valueOf(hodnotaD));
+
+
+            hodnotaD = (((bodyZaPredaj.get(kluc) == null) ? Double.valueOf(0) : bodyZaPredaj.get(kluc)));
+            sumaZaPredaj=sumaZaPredaj.add(BigDecimal.valueOf(hodnotaD));
+
+
+            hodnotaD = (((bodyIne.get(kluc) == null) ? Double.valueOf(0) : bodyIne.get(kluc)));
+            sumaIna=sumaIna.add(BigDecimal.valueOf(hodnotaD));
+
+
+            hodnotaD = (((bodyOdmeny.get(kluc) == null) ? Double.valueOf(0) : bodyOdmeny.get(kluc)));
+            sumaZaOdmeny=sumaZaOdmeny.add(BigDecimal.valueOf(hodnotaD));
+
+            hodnotaD = (((bodyPrevod.get(kluc) == null) ? Double.valueOf(0) : bodyPrevod.get(kluc)));
+            sumaPrevodu=sumaPrevodu.add(BigDecimal.valueOf(hodnotaD));
+
+            hodnotaD = (((bodyRegistracia.get(kluc) == null) ? Double.valueOf(0) : bodyRegistracia.get(kluc)));
+            sumaZaRegistraciu=sumaZaRegistraciu.add(BigDecimal.valueOf(hodnotaD));
+
+            hodnotaD = (((konecnyStav.get(kluc) == null) ? Double.valueOf(0) : konecnyStav.get(kluc)));
+            sumaKonecnyStav=sumaKonecnyStav.add(BigDecimal.valueOf(hodnotaD));
+
+
+        }
+        rowNum = 3;
+        row = sheet.createRow(rowNum);
+        colNum = 1;
+        //PS
+        bunka = row.createCell(colNum++);
+        bunka.setCellStyle(oramovane());
+        bunka.setCellValue(sumaPociatocnyStav.intValue());
+
+        //predaj
+        bunka = row.createCell(colNum++);
+        bunka.setCellStyle(oramovane());
+        bunka.setCellValue(sumaZaPredaj.intValue());
+
+
+        //ine
+        bunka = row.createCell(colNum++);
+        bunka.setCellStyle(oramovane());
+        bunka.setCellValue(sumaIna.intValue());
+
+
+        //odmeny
+        bunka = row.createCell(colNum++);
+        bunka.setCellStyle(oramovane());
+        bunka.setCellValue(sumaZaOdmeny.intValue());
+
+
+        //prevod
+        bunka = row.createCell(colNum++);
+        bunka.setCellStyle(oramovane());
+        bunka.setCellValue(sumaPrevodu.intValue());
+
+
+        //registracia
+        bunka = row.createCell(colNum++);
+        bunka.setCellStyle(oramovane());
+        bunka.setCellValue(sumaZaRegistraciu.intValue());
+
+
+        //konecny stav
+        bunka = row.createCell(colNum++);
+        bunka.setCellStyle(oramovane());
+        bunka.setCellValue(sumaKonecnyStav.intValue());
+
+
+        try {
+
+            FileOutputStream outputStream = new FileOutputStream(SystemoveParametre.getTmpAdresar() + FILE_NAME_BILANCIE);
+            workbook.write(outputStream);
+            workbook.close();
+            excelFile.close();
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+
+        String filePath = SystemoveParametre.getTmpAdresar() + FILE_NAME_BILANCIE;
+
+        Window subWindow = new Window("");
+        subWindow.setWidth(500, Sizeable.Unit.PIXELS);
+        subWindow.setHeight(400, Sizeable.Unit.PIXELS);
+
+        SaveToExcelLink s = new SaveToExcelLink(filePath);
+        VerticalLayout vl = new VerticalLayout();
+        vl.addComponentsAndExpand(s);
+        subWindow.setContent(vl);
+        subWindow.setModal(true);
+        UI.getCurrent().addWindow(subWindow);
+
+        return;
+
+
+    }
 }
 

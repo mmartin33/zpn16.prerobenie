@@ -108,7 +108,7 @@ public class StatPoberatelNastroje {
             poberateliaVelkoskladu = PoberatelNastroje.vratPoberatelovVelkoskladu(velkosklad);
 
         List<Poberatel> poberatelia = PoberatelNastroje.zoznamPoberatelov(null);
-        String nadpis = "Vyhodnotenie poberatelov  od: " + simpleDateFormat.format(Date.valueOf(dod)) + " dp: " + simpleDateFormat.format(Date.valueOf(ddo));
+        String nadpis = "Vyhodnotenie poberatelov  od: " + simpleDateFormat.format(Date.valueOf(dod)) + " do: " + simpleDateFormat.format(Date.valueOf(ddo));
         XlsStatistikaBodov.vytvorXLS2(poberatelia,
                                     pociatocnyStav,
                                     bodyZaPredaj,
@@ -416,4 +416,44 @@ public class StatPoberatelNastroje {
     }
 
 
+    public static void bilanciaZaObdobie(LocalDate dod, LocalDate ddo, Firma velkosklad) {
+        String pattern = "dd.MM.yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+
+        Map<String, Double> pociatocnyStav = Maps.newHashMap();
+        Map<String, Double> bodyZaPredaj = Maps.newHashMap();
+        Map<String, Double> bodyIne = Maps.newHashMap();
+        Map<String, Double> bodyRegistracia = Maps.newHashMap();
+        Map<String, Double> bodyOdmeny = Maps.newHashMap();
+        Map<String, Double> bodyPrevod = Maps.newHashMap();
+        Map<String, Double> konecnyStav = Maps.newHashMap();
+        Map<String, Double> poberateliaVelkoskladu = Maps.newHashMap();
+        pociatocnyStav = vratPociatocnyStav(dod, ddo);
+        bodyZaPredaj = vratBodyZaPredaj(dod, ddo);
+        bodyIne = vratBodyIne(dod, ddo);
+        bodyRegistracia = vratBodyRegistracia(dod, ddo);
+        bodyOdmeny = vratBodyOdmeny(dod, ddo);
+        bodyPrevod = vratBodyPrevod(dod, ddo);
+        konecnyStav = vratKonecnyStav(dod, ddo);
+
+
+        if (velkosklad != null)
+            poberateliaVelkoskladu = PoberatelNastroje.vratPoberatelovVelkoskladu(velkosklad);
+
+        List<Poberatel> poberatelia = PoberatelNastroje.zoznamPoberatelov(null);
+        String nadpis = "Bilancia za datumovy rozsah " + simpleDateFormat.format(Date.valueOf(dod)) + "  " + simpleDateFormat.format(Date.valueOf(ddo));
+        XlsStatistikaBodov.vytvorXLSBilancie(poberatelia,
+                pociatocnyStav,
+                bodyZaPredaj,
+                bodyIne,
+                konecnyStav,
+                nadpis,
+                poberateliaVelkoskladu,
+                bodyRegistracia,
+                bodyOdmeny,
+                bodyPrevod);
+
+
+    }
 }

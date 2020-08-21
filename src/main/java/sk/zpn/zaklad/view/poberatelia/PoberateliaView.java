@@ -4,6 +4,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import javafx.scene.layout.GridPane;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
@@ -36,7 +37,7 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
         this.prevadzka=prevadzka;
         editacnyForm=new EditacnyForm();
-        editacnyForm.setPoberatelView(this);
+                editacnyForm.setPoberatelView(this);
         this.setSizeFull();
 
 
@@ -102,6 +103,7 @@ public class PoberateliaView extends HorizontalLayout implements View {
         poberatelList=naplnList(velkosklad,null);
         browsPanel=new BrowsPanel(poberatelList,this);
         configureComponents();
+
         gr.addComponent(browsPanel,0,0,0,1);
         gr.addComponent(editacnyForm,1,0,1,0);
 

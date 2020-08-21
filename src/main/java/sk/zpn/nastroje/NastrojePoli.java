@@ -6,9 +6,8 @@ import sk.zpn.domena.statistiky.Zaznam;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class NastrojePoli {
     public static Map<String, BigDecimal> prerobListNaMapu(List<Zaznam> list) {
@@ -19,6 +18,9 @@ public abstract class NastrojePoli {
         }
         return map;
     }
+
+
+
     public static Map<String, String> prerobListNaMapu3(List<Object[]> list) {
         Map<String, String> map = Maps.newHashMap();
         String text;

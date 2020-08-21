@@ -5,6 +5,7 @@ import sk.zpn.domena.Doklad;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.domena.importy.ChybaImportu;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ public class VysledokImportu {
     Doklad doklad;
     List<PolozkaDokladu> polozky;
     List<ChybaImportu> chyby;
+    private Map<String, BigDecimal> nespracovaneKity;
 
 
     public VysledokImportu() {
@@ -42,4 +44,11 @@ public class VysledokImportu {
         this.chyby = chyby;
     }
 
+    public void setNespracovaneKity(Map<String, BigDecimal> nespraovaneKity) {
+        this.nespracovaneKity=nespraovaneKity;
+    }
+
+    public Map<String, BigDecimal> getNespracovaneKity() {
+        return nespracovaneKity;
+    }
 }

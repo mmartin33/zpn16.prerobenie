@@ -62,7 +62,7 @@ public class NacitanieCSVView extends VerticalLayout implements View {
         this.addComponent(frmVstupneUdaje);
         this.addComponent(ue);
         browsPanelVysledkov=new BrowsPanelVysledkov();
-        this.addComponent(browsPanelVysledkov);
+        this.addComponentsAndExpand(browsPanelVysledkov);
         browsPanelVysledkov.setVisible(false);
         this.init();
 
@@ -145,6 +145,9 @@ public class NacitanieCSVView extends VerticalLayout implements View {
 
     public void setVysledokImportu(VysledokImportu vysledokImportu) {
         this.vysledokImportu = vysledokImportu;
+        this.removeComponent(frmVstupneUdaje);
+        this.removeComponent(ue);
+
         this.browsPanelVysledkov.setVysledokImportu(vysledokImportu);
 
 

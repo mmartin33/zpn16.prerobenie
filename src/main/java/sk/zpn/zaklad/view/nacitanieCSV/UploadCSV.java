@@ -159,16 +159,16 @@ public class UploadCSV extends CustomComponent  {
         panel.setVisible(false);
         label= new Label("Subor úspešne odoslaný");
         //zhrajDavku();
-        btnSpat= new Button("Späť",VaadinIcons.ARROW_BACKWARD);
-
-        btnSpat.addClickListener(clickEvent ->
-                {
-                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME);}
-        );
+//        btnSpat= new Button("Späť",VaadinIcons.ARROW_BACKWARD);
+//
+//        btnSpat.addClickListener(clickEvent ->
+//                {
+//                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME);}
+//        );
 
 
         layout.addComponentsAndExpand(label);
-        layout.addComponentsAndExpand(btnSpat);
+//        layout.addComponentsAndExpand(btnSpat);
     }
 
     void zhrajDavku(String file){
