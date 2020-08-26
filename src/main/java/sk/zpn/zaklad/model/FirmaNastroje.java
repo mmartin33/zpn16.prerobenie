@@ -8,34 +8,33 @@ import sk.zpn.domena.log.TypUkonu;
 import sk.zpn.domena.statistiky.Zaznam;
 import sk.zpn.nastroje.NastrojePoli;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class FirmaNastroje {
-    public static List<Firma> zoznamFiriem(){
+    public static List<Firma> zoznamFiriem() {
         List<Firma> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
         TypedQuery<Firma> q = em.createNamedQuery("Firma.getAll", Firma.class);
 
-        u =  q.getResultList();
+        u = q.getResultList();
 
         return u;
     }
-    public static List<Firma> zoznamFiriemIbaVelkosklady(){
+
+    public static List<Firma> zoznamFiriemIbaVelkosklady() {
         List<Firma> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
         TypedQuery<Firma> q = em.createNamedQuery("Firma.getVelkosklady", Firma.class);
 
-        u =  q.getResultList();
+        u = q.getResultList();
 
         return u;
     }
@@ -43,36 +42,36 @@ public class FirmaNastroje {
 
     public static Map<String, BigDecimal> mapaICOFiriemIbaVelkosklady() {
         Map<String, BigDecimal> predaje = Maps.newHashMap();
-        List<Zaznam> result1=null;
+        List<Zaznam> result1 = null;
         EntityManager em1;
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
         em1 = emf.createEntityManager();
-        String sql="SELECT distinct f.ico as kluc,0  as hodnota FROM uzivatelia as u " +
+        String sql = "SELECT distinct f.ico as kluc,0  as hodnota FROM uzivatelia as u " +
                 " left JOIN firmy as f on f.id=u.firma_id" +
-                " where u.typuzivatela='PREDAJCA' or u.typuzivatela='SPRAVCA_ZPN'" ;
+                " where u.typuzivatela='PREDAJCA' or u.typuzivatela='SPRAVCA_ZPN'";
 
 
+        result1 = em1.createNativeQuery(sql, Zaznam.class).getResultList();
 
-        result1= em1.createNativeQuery(sql,Zaznam.class).getResultList();
-
-        predaje= NastrojePoli.prerobListNaMapu(result1);
+        predaje = NastrojePoli.prerobListNaMapu(result1);
         em1.close();
         emf.close();
 
         return predaje;
     }
-    public static List<Firma> zoznamFiriemIbaDodavatelia(){
+
+    public static List<Firma> zoznamFiriemIbaDodavatelia() {
         List<Firma> u = null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
         TypedQuery<Firma> q = em.createNamedQuery("Firma.getDodavatelia", Firma.class);
 
-        u =  q.getResultList();
+        u = q.getResultList();
 
         return u;
     }
 
-    public static Optional<Firma> prvaFirmaPodlaNazvu(String nazov){
+    public static Optional<Firma> prvaFirmaPodlaNazvu(String nazov) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Firma> q = em.createNamedQuery("Firma.getPodlaNazvu", Firma.class)
                 .setParameter("nazov", nazov);
@@ -81,8 +80,7 @@ public class FirmaNastroje {
     }
 
 
-
-    public static Optional<Firma> firmaPodlaID(Long id){
+    public static Optional<Firma> firmaPodlaID(Long id) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Firma> q = em.createNamedQuery("Firma.getPodlaID", Firma.class)
                 .setParameter("id", id);
@@ -91,33 +89,32 @@ public class FirmaNastroje {
     }
 
 
-
-    public static Firma ulozFirmu(Firma f){
+    public static Firma ulozFirmu(Firma f) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        System.out.println("Ulozena firma:"+f.getNazov());
+        System.out.println("Ulozena firma:" + f.getNazov());
         em.getTransaction().begin();
-        TypUkonu tu=TypUkonu.OPRAVA;
+        TypUkonu tu = TypUkonu.OPRAVA;
         if (f.isNew()) {
-            tu=TypUkonu.PRIDANIE;
+            tu = TypUkonu.PRIDANIE;
             f.setId((long) 0);
             f.setKedy(new Date());
             f.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
             em.persist(f);
-            }
-        else
+        } else
             em.merge(f);
 
         em.getTransaction().commit();
-        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.FIRMA, tu,f.getTextLog());
+        LogAplikacieNastroje.uloz(TypLogovanejHodnoty.FIRMA, tu, f.getTextLog());
 
         return f;
 
 
     }
-    public static void zmazFirmu(Firma f){
+
+    public static void zmazFirmu(Firma f) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
-        System.out.println("Vymazana firma:"+f.getNazov());
-        if(!em.getTransaction().isActive())
+        System.out.println("Vymazana firma:" + f.getNazov());
+        if (!em.getTransaction().isActive())
             em.getTransaction().begin();
         if (!em.contains(f)) {
             f = em.merge(f);
@@ -133,8 +130,9 @@ public class FirmaNastroje {
                 .setParameter("nazov", nazovFirmy)
                 .setParameter("ico", ico);
         Firma firma = q.getSingleResult();
-        return  firma;
+        return firma;
     }
+
     public static Firma firmaPodlaICO(String ico) {
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypedQuery<Firma> q = em.createNamedQuery("Firma.getPodlaICO", Firma.class)
@@ -143,4 +141,24 @@ public class FirmaNastroje {
         if (results.isEmpty()) return null;
         return (Firma) results.get(0);
     }
+
+
+    public static Map<String, String> vratVelkosklady() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql = "select f.ico,f.nazov from uzivatelia as u " +
+                " join firmy as f on  f.id=u.firma_id " +
+                " where u.typuzivatela='PREDAJCA' " +
+                " group by f.ico,f.nazov";
+
+        Query query = em1.createNativeQuery(sql);
+
+        List result1 = query.getResultList();
+        Map<String, String> vysledok = NastrojePoli.<String, String>prerobListNaMapu3(result1);
+        emf.close();
+        return vysledok;
+    }
+
+
 }

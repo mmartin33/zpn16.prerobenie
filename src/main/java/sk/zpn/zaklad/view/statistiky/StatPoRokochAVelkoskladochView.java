@@ -3,39 +3,40 @@ package sk.zpn.zaklad.view.statistiky;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.*;
 import sk.zpn.domena.Firma;
-import sk.zpn.domena.StatistikaBodov;
 import sk.zpn.zaklad.model.StatPoberatelNastroje;
+import sk.zpn.zaklad.model.StatistikyNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.Year;
+import java.util.Date;
 
-public class StatZaObdobieKumulativneView extends VerticalLayout implements View {
+public class StatPoRokochAVelkoskladochView extends VerticalLayout implements View {
     // ContactForm is an example of a custom component class
-    public static final String NAME = "StatZaObdobieKumulativneView";
+    public static final String NAME = "StatPoRokochAVelkoskladochView";
     private Button btnAktivujFilter;
 
     private Button btnSpat;
 
-    DateField dfOd;
-    DateField dfDo;
-    LocalDate dod;
-    LocalDate ddo;
-    Firma velkosklad;
-    public StatZaObdobieKumulativneView(Firma velkosklad) {
-        this.velkosklad=velkosklad;
+    TextField tfOd;
+    TextField  tfDo;
+    int rokOd= Year.now().getValue();
+    int rokDo= Year.now().getValue();
+
+    public StatPoRokochAVelkoskladochView() {
+
         HorizontalLayout hornyFilter =new HorizontalLayout();
 
 
 
-        dod = LocalDate.of(LocalDate.now().getYear(),1,1);
-        ddo = LocalDate.of(LocalDate.now().getYear(),12,31);
-        dfOd=new DateField("Od:");
-        dfDo=new DateField("do:");
-        dfOd.setValue(dod);
-        dfDo.setValue(ddo);
-        dfOd.setWidth(15, Unit.PERCENTAGE);
-        dfDo.setWidth(15, Unit.PERCENTAGE);
+        rokDo= LocalDate.now().getYear();
+        rokDo=rokOd;
+        tfOd=new TextField("Od:");
+        tfDo=new TextField("do:");
+        tfOd.setValue(String.valueOf(rokOd));
+        tfDo.setValue(String.valueOf(rokDo));
+        tfOd.setWidth(5, Unit.PERCENTAGE);
+        tfDo.setWidth(5, Unit.PERCENTAGE);
         btnAktivujFilter=new Button("Do Excelu");
         btnAktivujFilter.setWidth(10, Unit.PERCENTAGE);
         btnAktivujFilter.setHeight(80, Unit.PERCENTAGE);
@@ -49,8 +50,8 @@ public class StatZaObdobieKumulativneView extends VerticalLayout implements View
         btnSpat.setHeight(80, Unit.PERCENTAGE);
 
         btnAktivujFilter.addClickListener(this::aktivujFilter);
-        hornyFilter.addComponent(dfOd);
-        hornyFilter.addComponent(dfDo);
+        hornyFilter.addComponent(tfOd);
+        hornyFilter.addComponent(tfDo);
         hornyFilter.addComponent(btnAktivujFilter);
         hornyFilter.addComponent(btnSpat);
 
@@ -61,7 +62,7 @@ public class StatZaObdobieKumulativneView extends VerticalLayout implements View
         gl.setColumnExpandRatio(0,1f);
         gl.setRowExpandRatio(0, 1f);
 
-        this.addComponent(new Label("Bilancia kumulatívna "));
+        this.addComponent(new Label("Vyhodnotenie velkoskladov po rokoch"));
         this.addComponent(hornyFilter);
 
 
@@ -76,7 +77,7 @@ public class StatZaObdobieKumulativneView extends VerticalLayout implements View
     }
 
     private void aktivujFilter(Button.ClickEvent clickEvent) {
-        StatPoberatelNastroje.bilanciaZaObdobie(dfOd.getValue(), dfDo.getValue(),velkosklad);
+        StatistikyNastroje.statPoRokochAVelkoskladoch(tfOd.getValue(), tfDo.getValue());
 
         }
 

@@ -26,6 +26,7 @@ import sk.zpn.zaklad.view.poberatelia.PoberateliaView;
 import sk.zpn.zaklad.view.prevadzky.PrevadzkyView;
 import sk.zpn.zaklad.view.produkty.ProduktyView;
 import sk.zpn.zaklad.view.statistiky.StatDodavatelProduktView;
+import sk.zpn.zaklad.view.statistiky.StatPoRokochAVelkoskladochView;
 import sk.zpn.zaklad.view.statistiky.StatPoberatelView;
 import sk.zpn.zaklad.view.statistiky.StatZaObdobieKumulativneView;
 import sk.zpn.zaklad.view.uzivatel.UzivateliaView;
@@ -143,7 +144,10 @@ public class VitajteView extends MojView {
                     Firma velkosklad = UzivatelNastroje.getPrihlasenehoUzivatela().getFirma();
                     StatPoberatelView statPoberatelView = new StatPoberatelView(velkosklad);
                     UI.getCurrent().getNavigator().addView(StatPoberatelView.NAME, statPoberatelView);
-                    n.navigateTo(statPoberatelView.NAME);
+                } else if (selectedItem.getDescription().equals("statPoRokochAVelkoskladochView")) {
+                    StatPoRokochAVelkoskladochView statPoRokochAVelkoskladochView = new StatPoRokochAVelkoskladochView();
+                    UI.getCurrent().getNavigator().addView(StatPoRokochAVelkoskladochView.NAME, statPoRokochAVelkoskladochView);
+                    n.navigateTo(statPoRokochAVelkoskladochView.NAME);
                 }
             }
         };
@@ -218,8 +222,11 @@ public class VitajteView extends MojView {
         MenuItem menuBody = menuSpravcu.addItem("Stav bodov - poberateľov", VaadinIcons.PIGGY_BANK, mycommand);
         menuBody.setDescription("body");
 
-        MenuItem menuBylancia = menuSpravcu.addItem("Kumulatívna bilancia ", VaadinIcons.CHART_3D, mycommand);
+        MenuItem menuBylancia = menuSpravcu.addItem("Kumulatívna bilancia PS,pohybov a KS ", VaadinIcons.CHART_3D, mycommand);
         menuBylancia.setDescription("bilanciaBodov");
+
+        MenuItem menuStatPoRokochAVelkoskladochView = menuSpravcu.addItem("Body veľkoskladov po rokoch  ", VaadinIcons.CHART_3D, mycommand);
+        menuStatPoRokochAVelkoskladochView.setDescription("statPoRokochAVelkoskladochView");
 
 
 //        MenuItem menuBodyDodavatelovProduktov = menuSpravcu.addItem("Stav bodov - dodávateľov a produktov", VaadinIcons.PIGGY_BANK, mycommand);
