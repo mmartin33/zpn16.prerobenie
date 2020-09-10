@@ -10,10 +10,6 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.Firma;
-import sk.zpn.domena.Poberatel;
-import sk.zpn.domena.StatistikaBodovPoRokochAVelkoskladoch;
-import sk.zpn.domena.TypUzivatela;
-import sk.zpn.zaklad.model.UzivatelNastroje;
 
 import java.io.*;
 import java.math.BigDecimal;

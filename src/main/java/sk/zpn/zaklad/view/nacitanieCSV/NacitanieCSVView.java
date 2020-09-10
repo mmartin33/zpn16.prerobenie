@@ -62,6 +62,8 @@ public class NacitanieCSVView extends VerticalLayout implements View {
         this.addComponent(frmVstupneUdaje);
         this.addComponent(ue);
         browsPanelVysledkov=new BrowsPanelVysledkov();
+        browsPanelVysledkov.setFirma(nazovFirmy);
+
         this.addComponentsAndExpand(browsPanelVysledkov);
         browsPanelVysledkov.setVisible(false);
         this.init();
@@ -78,6 +80,7 @@ public class NacitanieCSVView extends VerticalLayout implements View {
     private void pokracujNaVyberSuboru(Button.ClickEvent clickEvent) {
         Firma firma=FirmaNastroje.prvaFirmaPodlaNazvu(tfFirma.getValue()).get();
         if ((firma!=null) && (tfobdobie.getValue().toString()!="")){
+            browsPanelVysledkov.setFirma(nazovFirmy);
             frmVstupneUdaje.setVisible(false);
             ue.setVisible(true);
             ParametreImportu parametreImportu=new ParametreImportu(firma, Date.valueOf(tfobdobie.getValue()));

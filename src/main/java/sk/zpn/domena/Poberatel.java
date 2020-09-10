@@ -3,10 +3,9 @@ package sk.zpn.domena;
 import org.apache.commons.lang.StringUtils;
 import sk.zpn.nastroje.RandomString;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
@@ -38,14 +37,19 @@ public class Poberatel extends Vseobecne {
     private String mobil;
     private String telefon;
     private String email;
+
     private String poznamkaVelkoskladu;
     private BigDecimal pociatocnyStav;
 
+    @NotNull
+    @Column(name = "aktivny", nullable = false)
+    private boolean aktivny;
 
     public Poberatel() {
         RandomString gen =new RandomString(8, ThreadLocalRandom.current());
         this.setKod(gen.nextString());
         this.setHeslo(gen.nextString());
+        this.aktivny=true;
 
     }
 
@@ -127,6 +131,14 @@ public class Poberatel extends Vseobecne {
 
     public void setPoznamkaVelkoskladu(String poznamkaVelkoskladu) {
         this.poznamkaVelkoskladu = poznamkaVelkoskladu;
+    }
+
+    public boolean isAktivny() {
+        return aktivny;
+    }
+
+    public void setAktivny(boolean aktivny) {
+        this.aktivny = aktivny;
     }
 
     public String getTextLog() {

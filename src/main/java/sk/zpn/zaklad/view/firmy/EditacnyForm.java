@@ -6,7 +6,6 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.themes.ValoTheme;
-import org.vaadin.addons.autocomplete.AutocompleteExtension;
 import org.vaadin.addons.filteringgrid.FilterGrid;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter;
 import org.vaadin.dialogs.ConfirmDialog;
@@ -273,7 +272,7 @@ public class EditacnyForm extends VerticalLayout {
 
     private List<Poberatel> navrhniPoberatela(String query, int cap) {
 
-        return  PoberatelNastroje.zoznamPoberatelov(null).stream()
+        return  PoberatelNastroje.zoznamPoberatelov(null, false).stream()
                 .filter(poberatel -> poberatel.getMeno().toLowerCase().contains(query.toLowerCase()))
                 .limit(cap).collect(Collectors.toList());
     }

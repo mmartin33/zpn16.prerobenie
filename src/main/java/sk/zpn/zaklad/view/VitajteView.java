@@ -50,6 +50,7 @@ public class VitajteView extends MojView {
         this.n = n;
 
         MenuBar barmenu = new MenuBar();
+
         this.addComponent(barmenu);
         HorizontalLayout infoPanel = new HorizontalLayout();
         local(this);
@@ -144,6 +145,9 @@ public class VitajteView extends MojView {
                     Firma velkosklad = UzivatelNastroje.getPrihlasenehoUzivatela().getFirma();
                     StatPoberatelView statPoberatelView = new StatPoberatelView(velkosklad);
                     UI.getCurrent().getNavigator().addView(StatPoberatelView.NAME, statPoberatelView);
+                    n.navigateTo(statPoberatelView.NAME);
+
+
                 } else if (selectedItem.getDescription().equals("statPoRokochAVelkoskladochView")) {
                     StatPoRokochAVelkoskladochView statPoRokochAVelkoskladochView = new StatPoRokochAVelkoskladochView();
                     UI.getCurrent().getNavigator().addView(StatPoRokochAVelkoskladochView.NAME, statPoRokochAVelkoskladochView);
@@ -175,8 +179,8 @@ public class VitajteView extends MojView {
             }
         };
 
-        menuLogout = barmenu.addItem("Odhlasenie", null, odhlasenie);
-        menuPredajcu = barmenu.addItem("Pre predajcu", null, null);
+        menuLogout = barmenu.addItem("Odhlasenie", VaadinIcons.EXIT, odhlasenie);
+        menuPredajcu = barmenu.addItem("Pre predajcu", VaadinIcons.ABACUS, null);
         MenuItem menuMostik = menuPredajcu.addItem("Párovaci mostik", VaadinIcons.RESIZE_V, mycommand);
         menuMostik.setDescription("mostik");
         MenuItem menuOdosli = menuPredajcu.addItem("Odošli", VaadinIcons.UPLOAD, mycommand);
@@ -198,7 +202,7 @@ public class VitajteView extends MojView {
         menuPoberateliaVelkoskladu.setDescription("PoberateliaVelkoskladu");
 
 
-        menuSpravcu = barmenu.addItem("Spravca ZPN", null, null);
+        menuSpravcu = barmenu.addItem("Spravca ZPN", VaadinIcons.ACCORDION_MENU, null);
         MenuItem menuFirmy = menuSpravcu.addItem("Firmy", VaadinIcons.BUILDING, mycommand);
         menuFirmy.setDescription("firmy");
 
@@ -210,7 +214,7 @@ public class VitajteView extends MojView {
         MenuItem menuProdukty = menuSpravcu.addItem("Produkty", VaadinIcons.GLASS, mycommand);
         menuProdukty.setDescription("produkty");
 
-        MenuItem menuOdmeny = menuSpravcu.addItem("Odmeny", VaadinIcons.RASTER, mycommand);
+        MenuItem menuOdmeny = menuSpravcu.addItem("Odmeny", VaadinIcons.TROPHY, mycommand);
         menuOdmeny.setDescription("odmeny");
 
         MenuItem menuDoklad = menuSpravcu.addItem("Doklady", VaadinIcons.RECORDS, mycommand);
@@ -225,7 +229,7 @@ public class VitajteView extends MojView {
         MenuItem menuBylancia = menuSpravcu.addItem("Kumulatívna bilancia PS,pohybov a KS ", VaadinIcons.CHART_3D, mycommand);
         menuBylancia.setDescription("bilanciaBodov");
 
-        MenuItem menuStatPoRokochAVelkoskladochView = menuSpravcu.addItem("Body veľkoskladov po rokoch  ", VaadinIcons.CHART_3D, mycommand);
+        MenuItem menuStatPoRokochAVelkoskladochView = menuSpravcu.addItem("Body veľkoskladov po rokoch  ", VaadinIcons.TRENDING_UP, mycommand);
         menuStatPoRokochAVelkoskladochView.setDescription("statPoRokochAVelkoskladochView");
 
 
@@ -239,7 +243,7 @@ public class VitajteView extends MojView {
         MenuItem menuParametre = menuSpravcu.addItem("Parametre", VaadinIcons.COG_O, mycommand);
         menuParametre.setDescription("parametre");
 
-        menuAdmin = barmenu.addItem("Spravca", null, null);
+        menuAdmin = barmenu.addItem("Spravca", VaadinIcons.AUTOMATION, null);
         MenuItem menuUzivatelia = menuAdmin.addItem("Užívatelia", VaadinIcons.USERS, sp_admin);
         menuUzivatelia.setDescription("uzivatelia");
         MenuItem menuLog = menuAdmin.addItem("Log aplikácie", VaadinIcons.LIST, sp_admin);
@@ -260,7 +264,7 @@ public class VitajteView extends MojView {
     @Override
     protected void init() {
         addStyleName("welcome");
-        setTitle("Vitajte", "Ste prihlásený ako " + VaadinSession.getCurrent().getAttribute("meno") + " >>verzia:200725<<");
+        setTitle("Vitajte", "Ste prihlásený ako " + VaadinSession.getCurrent().getAttribute("meno") + " >>verzia:200909<<");
         if (!UzivatelNastroje.TypUzivatela().isPresent()) {
             menuAdmin.setVisible(false);
             menuSpravcu.setVisible(false);

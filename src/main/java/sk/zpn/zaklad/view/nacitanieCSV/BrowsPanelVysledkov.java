@@ -7,16 +7,12 @@ import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import sk.zpn.domena.importy.ChybaImportu;
 import sk.zpn.domena.importy.VysledokImportu;
 import sk.zpn.domena.statistiky.Zaznam;
-import sk.zpn.nastroje.NastrojePoli;
+import sk.zpn.nastroje.XlsTlacChybImportu;
 import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
 import sk.zpn.zaklad.view.VitajteView;
 
-import javax.swing.text.html.parser.Entity;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -27,14 +23,16 @@ public class BrowsPanelVysledkov extends VerticalLayout {
     private MFilteredGrid<Zaznam> gridKitov;
     private VysledokImportu vysledokImportu;
     private TabSheet tabsheet;
-
+    private TabSheet zalozky;
 
     public Button btnNovy;
+    private String nazovFirmy;
 
     public BrowsPanelVysledkov() {
     }
 
     private void init() {
+
         this.setSpacing(false);
         this.setSizeFull();
 
@@ -52,8 +50,8 @@ public class BrowsPanelVysledkov extends VerticalLayout {
                 UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME));
 
         Button btnExport = new Button("Export chýb", VaadinIcons.FILE_TABLE);
-        btnSpat.addClickListener(clickEvent ->
-                UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME));
+        btnExport.addClickListener(clickEvent ->
+                this.exportLogu());
 
         HorizontalLayout tlacitkovy = new HorizontalLayout();
         tlacitkovy.addComponent(btnSpat);
@@ -64,7 +62,7 @@ public class BrowsPanelVysledkov extends VerticalLayout {
         VerticalLayout zalozka2 = new VerticalLayout();
         String nadpis = new String("Prehľad chyb importu");
 
-        TabSheet zalozky = new TabSheet();
+        zalozky = new TabSheet();
         gl.addComponent(new Label(nadpis));
         gl.addComponent(tlacitkovy);
         gl.addComponent(zalozky);
@@ -76,12 +74,21 @@ public class BrowsPanelVysledkov extends VerticalLayout {
         zalozka2.addComponentsAndExpand(gridKitov);
         zalozky.setSizeFull();
         zalozka1.setSizeFull();
+        zalozka1.setId("ALL");
         zalozka2.setSizeFull();
+        zalozka2.setId("KIT");
 
         zalozky.addTab(zalozka1, "Všetky chyby");
         zalozky.addTab(zalozka2, "Nesparovane kity");
         this.addComponent(gl);
 
+    }
+
+    private void exportLogu() {
+        if (zalozky.getSelectedTab().getId().equals("KIT"))
+            XlsTlacChybImportu.tlacChybKitov(vysledokImportu.getNespracovaneKity(),nazovFirmy);
+        else
+            XlsTlacChybImportu.tlacVsetkych(vysledokImportu.getChyby(),nazovFirmy);
     }
 
 
@@ -158,6 +165,10 @@ public class BrowsPanelVysledkov extends VerticalLayout {
         this.setVisible(true);
         this.refresh();
 
+    }
+
+    public void setFirma(String nazovFirmy) {
+        this.nazovFirmy=nazovFirmy;
     }
 }
 

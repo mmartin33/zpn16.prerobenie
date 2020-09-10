@@ -34,6 +34,7 @@ public class BrowsPanel extends VerticalLayout {
     private final PoberateliaView poberateliaView;
     private HorizontalLayout hornyFilter;
     private TextField tfPrevadzkaZakaznika;
+    private CheckBox chkAktivne;
     private Button btnPrezobraz;
     private Button btnPremenujPoberatelaPrevadzkyFirmu;
 
@@ -54,6 +55,8 @@ public class BrowsPanel extends VerticalLayout {
         tfPrevadzkaZakaznika = new TextField("Názov prevádzky");
         tfPrevadzkaZakaznika.setWidth("400");
         btnPrezobraz = new Button("Prezobraz");
+        chkAktivne=new CheckBox("Aktivny poberatelia");
+        chkAktivne.setValue(true);
 
         GridLayout gl = new GridLayout(1, 5);
         gl.setSizeFull();
@@ -223,6 +226,8 @@ public class BrowsPanel extends VerticalLayout {
 
 
         hornyFilter.addComponent(tfPrevadzkaZakaznika);
+        hornyFilter.addComponent(chkAktivne);
+
         hornyFilter.addComponent(btnPrezobraz);
         btnPrezobraz.addClickListener(this::aktivujHF);
         gl.addComponent(new
@@ -359,9 +364,9 @@ public class BrowsPanel extends VerticalLayout {
     private void aktivujHF(Button.ClickEvent clickEvent) {
         poberatelList.clear();
         if (tfPrevadzkaZakaznika.getValue().length() > 0)
-            poberatelList = poberateliaView.naplnList(poberateliaView.getVelkosklad(), prevadzkaHF);
+            poberatelList = poberateliaView.naplnList(poberateliaView.getVelkosklad(), prevadzkaHF,chkAktivne.getValue());
         else
-            poberatelList = poberateliaView.naplnList(poberateliaView.getVelkosklad(), null);
+            poberatelList = poberateliaView.naplnList(poberateliaView.getVelkosklad(), null,chkAktivne.getValue());
         grid.setItems(poberatelList);
         grid.getDataProvider().refreshAll();
     }

@@ -74,7 +74,7 @@ public class MyUI extends UI {
             String pass = "m789";
             UzivatelNastroje.overUzivatela(name,pass);
         }
-        login.addLoginListener(e-> {
+        login.lf.addLoginListener(e-> {
             String name = e.getLoginParameter("username");
             String pass = e.getLoginParameter("password");
 

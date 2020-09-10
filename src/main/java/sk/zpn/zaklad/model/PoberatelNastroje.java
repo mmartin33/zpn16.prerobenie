@@ -23,8 +23,13 @@ public class PoberatelNastroje {
 
     private static final Logger logger = Logger.getLogger(PoberatelNastroje.class);
 
-    public static List<Poberatel> zoznamPoberatelov(Prevadzka prevadzka) {
+    public static List<Poberatel> zoznamPoberatelov(Prevadzka prevadzka, Boolean aktivne) {
         List<Poberatel> u = null;
+        Boolean ibaAktivne=true;
+        if (aktivne==null)
+            ibaAktivne=false;
+        else if (!aktivne)
+            ibaAktivne=false;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
         //TypedQuery<Poberatel> q = em.createNamedQuery("PolozkaDokladu.getPoberateliaVelkoskladu", Poberatel.class);
@@ -34,6 +39,7 @@ public class PoberatelNastroje {
                 (prevadzka != null ? " join p.prevadzka as prev " : "") +
                 " where  d.stavDokladu=sk.zpn.domena.StavDokladu.POTVRDENY " +
                 (prevadzka != null ? " and prev.id=:id_prevadzky " : " ") +
+                (ibaAktivne ? " and pob.aktivne=true " : " ") +
                 "group by pob ";
         TypedQuery<Poberatel> q = em.createQuery(sql, Poberatel.class);
 
@@ -209,8 +215,14 @@ public class PoberatelNastroje {
 
     }
 
-    public static List<Poberatel> zoznamPoberatelovVelkoskladu(Firma velkosklad, Prevadzka prevadzka) {
+    public static List<Poberatel> zoznamPoberatelovVelkoskladu(Firma velkosklad, Prevadzka prevadzka, Boolean aktivne) {
         List<Poberatel> u = null;
+        Boolean ibaAktivne=true;
+        if (aktivne==null)
+            ibaAktivne=false;
+        else if (!aktivne)
+            ibaAktivne=false;
+
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
         //TypedQuery<Poberatel> q = em.createNamedQuery("PolozkaDokladu.getPoberateliaVelkoskladu", Poberatel.class);
@@ -222,6 +234,7 @@ public class PoberatelNastroje {
                 " where  f.id=:id " +
                 " and d.stavDokladu=sk.zpn.domena.StavDokladu.POTVRDENY " +
                 (prevadzka != null ? " and prev.id=:id_prevadzky " : " ") +
+                (ibaAktivne ? " and pob.aktivne=true " : " ") +
                 "group by pob ";
         TypedQuery<Poberatel> q = em.createQuery(sql, Poberatel.class);
         q.setParameter("id", velkosklad.getId());

@@ -4,7 +4,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
-import javafx.scene.layout.GridPane;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.Prevadzka;
@@ -100,7 +99,7 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        poberatelList=naplnList(velkosklad,null);
+        poberatelList=naplnList(velkosklad,null, null);
         browsPanel=new BrowsPanel(poberatelList,this);
         configureComponents();
 
@@ -115,11 +114,11 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
     }
 
-    public List<Poberatel> naplnList(Firma velkosklad,Prevadzka prevadzkaPoberatela){
+    public List<Poberatel> naplnList(Firma velkosklad, Prevadzka prevadzkaPoberatela, Boolean aktivne){
         if (this.velkosklad==null)
-            return PoberatelNastroje.zoznamPoberatelov(prevadzkaPoberatela);
+            return PoberatelNastroje.zoznamPoberatelov(prevadzkaPoberatela,aktivne);
         else
-            return  PoberatelNastroje.zoznamPoberatelovVelkoskladu(velkosklad,prevadzkaPoberatela);
+            return  PoberatelNastroje.zoznamPoberatelovVelkoskladu(velkosklad,prevadzkaPoberatela,aktivne);
 
     }
     public Firma getVelkosklad() {

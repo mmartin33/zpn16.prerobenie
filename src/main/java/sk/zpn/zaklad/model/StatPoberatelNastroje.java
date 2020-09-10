@@ -107,7 +107,7 @@ public class StatPoberatelNastroje {
         if (velkosklad != null)
             poberateliaVelkoskladu = PoberatelNastroje.vratPoberatelovVelkoskladu(velkosklad);
 
-        List<Poberatel> poberatelia = PoberatelNastroje.zoznamPoberatelov(null);
+        List<Poberatel> poberatelia = PoberatelNastroje.zoznamPoberatelov(null, false);
         String nadpis = "Vyhodnotenie poberatelov  od: " + simpleDateFormat.format(Date.valueOf(dod)) + " do: " + simpleDateFormat.format(Date.valueOf(ddo));
         XlsStatistikaBodov.vytvorXLS2(poberatelia,
                                     pociatocnyStav,
@@ -441,7 +441,7 @@ public class StatPoberatelNastroje {
         if (velkosklad != null)
             poberateliaVelkoskladu = PoberatelNastroje.vratPoberatelovVelkoskladu(velkosklad);
 
-        List<Poberatel> poberatelia = PoberatelNastroje.zoznamPoberatelov(null);
+        List<Poberatel> poberatelia = PoberatelNastroje.zoznamPoberatelov(null, null);
         String nadpis = "Bilancia za datumovy rozsah " + simpleDateFormat.format(Date.valueOf(dod)) + "  " + simpleDateFormat.format(Date.valueOf(ddo));
         XlsStatistikaBodov.vytvorXLSBilancie(poberatelia,
                 pociatocnyStav,

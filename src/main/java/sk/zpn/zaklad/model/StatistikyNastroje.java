@@ -2,7 +2,7 @@ package sk.zpn.zaklad.model;
 
 import com.google.common.collect.Maps;
 import sk.zpn.domena.Firma;
-import sk.zpn.domena.StatistikaBodovPoRokochAVelkoskladoch;
+
 import sk.zpn.domena.statistiky.Zaznam;
 import sk.zpn.nastroje.NastrojePoli;
 import sk.zpn.nastroje.XlsStatPoRokochAVelkoskladoch;
@@ -10,7 +10,7 @@ import sk.zpn.nastroje.XlsStatPoRokochAVelkoskladoch;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;

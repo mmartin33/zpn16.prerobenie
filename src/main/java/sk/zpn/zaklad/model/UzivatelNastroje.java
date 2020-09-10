@@ -138,7 +138,7 @@ public class UzivatelNastroje {
     }
 
     public static void generujNoveMenaAHesla() {
-        List<Poberatel> poberatelia=PoberatelNastroje.zoznamPoberatelov(null);
+        List<Poberatel> poberatelia=PoberatelNastroje.zoznamPoberatelov(null, false);
         RandomString gen =new RandomString(8, ThreadLocalRandom.current());
 
         for (Poberatel p : poberatelia) {
