@@ -39,7 +39,7 @@ import java.util.List;
         @NamedQuery(name = "Odmena.getPodlaKodu", query = "SELECT p FROM produkty p " +
                 " WHERE p.kat =:kat" +
                 " and p.typproduktu=sk.zpn.domena.TypProduktov.ODMENA"),
-
+        @NamedQuery(name = "Produkt.getPodlaID", query = "SELECT p FROM produkty p WHERE p.id =:id"),
         @NamedQuery(name = "Produkt.getAll", query = "SELECT p FROM produkty p ")})
 
 @Table(

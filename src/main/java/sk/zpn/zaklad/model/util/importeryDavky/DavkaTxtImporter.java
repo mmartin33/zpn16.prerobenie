@@ -2,10 +2,13 @@ package sk.zpn.zaklad.model.util.importeryDavky;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
+import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.domena.importy.Davka;
 import sk.zpn.domena.importy.ParametreImportu;
 import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
+import sk.zpn.zaklad.model.FirmaProduktNastroje;
+import sk.zpn.zaklad.model.ParametreNastroje;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -14,8 +17,6 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class DavkaTxtImporter {
@@ -38,8 +39,11 @@ public class DavkaTxtImporter {
         progressBarZPN.nadstavspustenie(true);
 
         Davka davka=new Davka();
-        Map<String, Integer> bodyNaIco = Maps.newHashMap();;
+        Map<String, Integer> bodyNaIco = Maps.newHashMap();
 
+        Map<String, FirmaProdukt> katKit = Maps.newHashMap();
+        katKit= FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
+                ParametreNastroje.nacitajParametre().getRok());
 
 
         String strLine;
@@ -70,7 +74,7 @@ public class DavkaTxtImporter {
                             zaznam.getKit(),
                             zaznam.getMnozstvo(),
                             parametreImportu.getFirma(),
-                            null));
+                            null, null));
 
                 }
             }
@@ -78,6 +82,7 @@ public class DavkaTxtImporter {
         br.close();
         ir.close();
         progressBarZPN.koniec();
+        davka.setKatKit(katKit);
         davka.setPolozky(polozky);
         davka.setBodyNaIco(bodyNaIco);
         return davka;

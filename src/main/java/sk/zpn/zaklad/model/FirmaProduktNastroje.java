@@ -5,11 +5,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.*;
+import sk.zpn.nastroje.NastrojePoli;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -163,5 +164,38 @@ public class FirmaProduktNastroje {
     }
 
 
+    public static Map<String, FirmaProdukt> zoznamKatKitovZVelkosklad(Firma velkosklad, String rok) {
+        if ((velkosklad==null) || (rok==null))
+            return null;
 
+
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql = "SELECT fp.kit ||'-'|| fp.rok,fp.koeficient||'-'||prod.id FROM firma_produkt as fp " +
+                " JOIN firmy as f on f.id=fp.firma_id" +
+                " JOIN produkty as prod on prod.id= fp.produkt_id" +
+                " WHERE f.id =?" +
+                " and fp.rok=?";
+
+        Query query = em1.createNativeQuery(sql);
+        query.setParameter(1,velkosklad.getId() );
+        query.setParameter(2, rok);
+
+        List result1 = query.getResultList();
+        Map<String, FirmaProdukt> vysledok = NastrojePoli.<String, String>prerobListNaMapuFrimaProdukt(result1);
+        emf.close();
+        return vysledok;
+
+
+
+
+
+
+    }
+
+    public static Map<String, Integer> zoznamKatEanZVelkosklad(Firma velkkosklad, String rok) {
+        return null;
+    }
 }

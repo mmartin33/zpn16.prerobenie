@@ -5,11 +5,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Map;
 
 
-import com.vaadin.icons.VaadinIcons;
+import com.google.common.collect.Maps;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Upload.ProgressListener;
@@ -23,13 +22,13 @@ import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.importy.Davka;
 import sk.zpn.domena.importy.ParametreImportu;
 import sk.zpn.domena.importy.VysledokImportu;
-import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
+import sk.zpn.zaklad.model.FirmaProduktNastroje;
+import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.model.util.importeryDavky.DavkaCsvImporter;
 import sk.zpn.zaklad.model.util.importeryDavky.DavkaDbfImporter;
 import sk.zpn.zaklad.model.DokladyNastroje;
 import sk.zpn.zaklad.model.util.importeryDavky.DavkaTxtImporter;
-import sk.zpn.zaklad.view.VitajteView;
 
 
 public class UploadCSV extends CustomComponent  {
@@ -158,21 +157,12 @@ public class UploadCSV extends CustomComponent  {
     void zobrazDavku() {
         panel.setVisible(false);
         label= new Label("Subor úspešne odoslaný");
-        //zhrajDavku();
-//        btnSpat= new Button("Späť",VaadinIcons.ARROW_BACKWARD);
-//
-//        btnSpat.addClickListener(clickEvent ->
-//                {
-//                    UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME);}
-//        );
-
-
         layout.addComponentsAndExpand(label);
-//        layout.addComponentsAndExpand(btnSpat);
     }
 
     void zhrajDavku(String file){
-        Davka davka;
+        Davka davka = null;
+
         try {
             if (StringUtils.upperCase(StringUtils.right(file,3)).equals("DBF"))
                 davka= DavkaDbfImporter.nacitajDbfDavku(file,parametreImportu,progressBarZPN);
@@ -186,7 +176,16 @@ public class UploadCSV extends CustomComponent  {
                 if (parametreImportu.getFirma().getIco().equals("17681766")) //becica format
                     davka= DavkaCsvImporter.nacitajCsvDavkuBecica(file,parametreImportu,progressBarZPN);
                 else if (parametreImportu.getFirma().getIco().equals("10952799")) //simo format
-                    davka= DavkaCsvImporter.nacitajCsvDavkuSimo(file,parametreImportu,progressBarZPN);
+                {
+
+                    DavkaCsvImporter dCsv=new DavkaCsvImporter();
+                    //threed//
+
+                    //dCsv.nastavParametre(DavkaCsvImporter.SPUSTIT_DAVKU_SIMO,file,parametreImportu,progressBarZPN,davka);
+                    //dCsv.start();
+                    //povodne//
+                    davka= dCsv.nacitajCsvDavkuSimo(file,parametreImportu,progressBarZPN);
+                }
 
                 else
                     davka= DavkaCsvImporter.nacitajCsvDavku(file,parametreImportu,progressBarZPN);

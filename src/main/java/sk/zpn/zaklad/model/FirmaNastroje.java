@@ -161,4 +161,32 @@ public class FirmaNastroje {
     }
 
 
+    public static Map<String, Integer> mapaICOFiriem() {
+
+        EntityManager em1;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        em1 = emf.createEntityManager();
+        String sql = "SELECT distinct f.ico as kluc,0  as hodnota FROM firmy as f " ;
+        Query query = em1.createNativeQuery(sql);
+        List result1 = query.getResultList();
+        Map<String, Integer> predaje = NastrojePoli.<String, Integer>prerobListNaMapu2(result1);
+        em1.close();
+        emf.close();
+        return predaje;
+
+    }
+
+    public static Map<String, Integer> mapaICOaNazvyFiriem() {
+        EntityManager em1;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+        em1 = emf.createEntityManager();
+        String sql = "SELECT distinct f.ico||f.nazov as kluc,0  as hodnota FROM firmy as f " ;
+        Query query = em1.createNativeQuery(sql);
+        List result1 = query.getResultList();
+        Map<String, Integer> predaje = NastrojePoli.<String, Integer>prerobListNaMapu2(result1);
+        em1.close();
+        emf.close();
+        return predaje;
+
+    }
 }

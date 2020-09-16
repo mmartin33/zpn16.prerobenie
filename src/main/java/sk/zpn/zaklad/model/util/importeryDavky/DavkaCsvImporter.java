@@ -2,10 +2,13 @@ package sk.zpn.zaklad.model.util.importeryDavky;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.Maps;
+import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.domena.importy.Davka;
 import sk.zpn.domena.importy.ParametreImportu;
 import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
+import sk.zpn.zaklad.model.FirmaProduktNastroje;
+import sk.zpn.zaklad.model.ParametreNastroje;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,15 +16,46 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class DavkaCsvImporter {
 
+    private int spustit = 0;
+    public static int SPUSTIT_DAVKU_SIMO = 1;
+    private String file;
+    private ProgressBarZPN progresBarZPN;
+    private ParametreImportu parametreImportu;
+    private Davka davka;
+
     public DavkaCsvImporter() {
 
     }
+
+//    @Override
+//    public void interrupt() {
+//        super.interrupt();
+//    }
+//
+//    @Override
+//    public void run() {
+//        super.run();
+//
+//        try {
+//
+//
+//            if (spustit == SPUSTIT_DAVKU_SIMO) {
+//              davka= this.nacitajCsvDavkuSimo(file, parametreImportu, progresBarZPN);
+//
+//
+//
+//            }
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
 
     public static Davka nacitajCsvDavku(String suborCsv, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN) throws IOException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
@@ -33,7 +67,16 @@ public class DavkaCsvImporter {
 
         Davka davka = new Davka();
         Map<String, Integer> bodyNaIco = Maps.newHashMap();
-        ;
+
+
+        Map<String, FirmaProdukt> katKit = Maps.newHashMap();
+        katKit= FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
+                ParametreNastroje.nacitajParametre().getRok());
+
+
+        Map<String, Integer> katEan = Maps.newHashMap();
+        katEan= FirmaProduktNastroje.zoznamKatEanZVelkosklad(parametreImportu.getFirma(),
+                ParametreNastroje.nacitajParametre().getRok());
 
 
         Map<String, ZaznamCsv> polozky = Maps.newHashMap();
@@ -73,7 +116,7 @@ public class DavkaCsvImporter {
                         zaznam.getKit(),
                         zaznam.getMnozstvo(),
                         parametreImportu.getFirma(),
-                        null));
+                        null,katKit));
 
 
             }
@@ -83,6 +126,7 @@ public class DavkaCsvImporter {
         progressBarZPN.koniec();
         davka.setPolozky(polozky);
         davka.setBodyNaIco(bodyNaIco);
+        davka.setKatKit(katKit);
         return davka;
 
     }
@@ -97,7 +141,11 @@ public class DavkaCsvImporter {
 
         Davka davka = new Davka();
         Map<String, Integer> bodyNaIco = Maps.newHashMap();
-        ;
+
+        Map<String, FirmaProdukt> katKit = Maps.newHashMap();
+        katKit= FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
+                ParametreNastroje.nacitajParametre().getRok());
+
 
 
         Map<String, ZaznamCsv> polozky = Maps.newHashMap();
@@ -129,7 +177,7 @@ public class DavkaCsvImporter {
                         zaznam.getKit(),
                         zaznam.getMnozstvo(),
                         parametreImportu.getFirma(),
-                        null));
+                        null, null));
 
 
             }
@@ -137,6 +185,7 @@ public class DavkaCsvImporter {
             //zaznam=null;
         }
         progressBarZPN.koniec();
+        davka.setKatKit(katKit);
         davka.setPolozky(polozky);
         davka.setBodyNaIco(bodyNaIco);
         return davka;
@@ -153,7 +202,10 @@ public class DavkaCsvImporter {
 
         Davka davka = new Davka();
         Map<String, Integer> bodyNaIco = Maps.newHashMap();
-        ;
+        Map<String, FirmaProdukt> katKit = Maps.newHashMap();
+        katKit= FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
+                ParametreNastroje.nacitajParametre().getRok());
+
 
 
         Map<String, ZaznamCsv> polozky = Maps.newHashMap();
@@ -192,7 +244,7 @@ public class DavkaCsvImporter {
                         zaznam.getKit(),
                         zaznam.getMnozstvo(),
                         parametreImportu.getFirma(),
-                        null));
+                        null, null));
 
 
             }
@@ -200,6 +252,7 @@ public class DavkaCsvImporter {
             //zaznam=null;
         }
         progressBarZPN.koniec();
+        davka.setKatKit(katKit);
         davka.setPolozky(polozky);
         davka.setBodyNaIco(bodyNaIco);
         return davka;
@@ -218,7 +271,10 @@ public class DavkaCsvImporter {
 
         Davka davka = new Davka();
         Map<String, Integer> bodyNaIco = Maps.newHashMap();
-        ;
+        Map<String, FirmaProdukt> katKit = Maps.newHashMap();
+        katKit= FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
+                ParametreNastroje.nacitajParametre().getRok());
+
 
 
         reader.readNext();
@@ -257,7 +313,7 @@ public class DavkaCsvImporter {
                                 zaznam.getKit(),
                                 zaznam.getMnozstvo(),
                                 parametreImportu.getFirma(),
-                                zaznam.getCiarovyKod()));
+                                zaznam.getCiarovyKod(), null));
 
 
                     }
@@ -274,7 +330,16 @@ public class DavkaCsvImporter {
         progressBarZPN.koniec();
         davka.setPolozky(polozky);
         davka.setBodyNaIco(bodyNaIco);
+        davka.setKatKit(katKit);
         return davka;
 
+    }
+
+    public void nastavParametre(int kluc, String file, ParametreImportu parametreImportu, ProgressBarZPN progressBarZPN, Davka davka) {
+        this.spustit = kluc;
+        this.file = file;
+        this.parametreImportu = parametreImportu;
+        this.progresBarZPN = progressBarZPN;
+        this.davka=davka;
     }
 }

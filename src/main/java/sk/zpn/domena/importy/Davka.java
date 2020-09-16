@@ -1,6 +1,7 @@
 package sk.zpn.domena.importy;
 
 import sk.zpn.domena.Doklad;
+import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.domena.PolozkaDokladu;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 public class Davka {
     Map<String, Integer> bodyNaIco;
+    Map<String, FirmaProdukt> katKit;
     Map<String, ZaznamCsv> polozky;
 
     public Davka() {
@@ -30,4 +32,11 @@ public class Davka {
         this.polozky = polozky;
     }
 
+    public Map<String, FirmaProdukt> getKatKit() {
+        return katKit;
+    }
+
+    public void setKatKit(Map<String, FirmaProdukt> katKit) {
+        this.katKit = katKit;
+    }
 }

@@ -20,7 +20,7 @@ public class VypoctyUtil {
                 .multiply(koeficient)
                 .divide(kusy,2,  RoundingMode.HALF_UP)
                 .intValue();
-        System.out.println( "vysledok:"+  upraveneMnozstvo*body.intValue());
+        //System.out.println( "vysledok:"+  upraveneMnozstvo*body.intValue());
         return upraveneMnozstvo*body.intValue();
 
     }

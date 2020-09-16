@@ -8,25 +8,48 @@ import sk.zpn.zaklad.model.ParametreNastroje;
 import sk.zpn.zaklad.model.VypoctyUtil;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.Map;
 
 public class ImporterNastroje {
 
-    public static int vratBodyZaIcoAKit(String ico, String kit, BigDecimal mnozstvo, Firma velkosklad,String ciarovyKod) {
-        int body=0;
+    public static int vratBodyZaIcoAKit(String ico, String kit, BigDecimal mnozstvo, Firma velkosklad, String ciarovyKod, Map<String, FirmaProdukt> katKit) {
+        int body = 0;
         FirmaProdukt fp = null;
-        fp = FirmaProduktNastroje.getFirmaProduktPreImport(velkosklad,
-                ParametreNastroje.nacitajParametre().getRok(),
-                kit,
-                ciarovyKod);
+        BigDecimal koeficientMostikovy = BigDecimal.ONE;
+        BigDecimal kusyProduktove = BigDecimal.ZERO;
+        BigDecimal bodyProduktove = BigDecimal.ZERO;
+        boolean nasloSaNieco=false;
+        if (katKit == null) {
+            fp = FirmaProduktNastroje.getFirmaProduktPreImport(velkosklad,
+                    ParametreNastroje.nacitajParametre().getRok(),
+                    kit,
+                    ciarovyKod);
+            if (fp != null) {
+                nasloSaNieco=true;
+                koeficientMostikovy = fp.getKoeficient();
+                kusyProduktove = fp.getProdukt().getKusy();
+                bodyProduktove = fp.getProdukt().getBody();
 
-        if ((fp != null) && (StringUtils.isNotBlank(ico))){
+            }
+        } else {
+            FirmaProdukt hodnota = katKit.get(kit + "-" + ParametreNastroje.nacitajParametre().getRok());
+            if (hodnota!=null) {
+
+
+                koeficientMostikovy = hodnota.getKoeficient();
+                kusyProduktove = hodnota.getProdukt().getKusy();
+                bodyProduktove = hodnota.getProdukt().getBody();
+                nasloSaNieco=true;
+            }
+
+        }
+        if ((nasloSaNieco)&&(StringUtils.isNotBlank(ico))) {
             //BigDecimal mnozstvoPreBody = zaznam.getMnozstvo().multiply(fp.getKoeficient());
             body = VypoctyUtil.vypocitajBody(
                     mnozstvo,
-                    fp.getKoeficient(),
-                    fp.getProdukt().getKusy(),
-                    fp.getProdukt().getBody());
+                    koeficientMostikovy,
+                    kusyProduktove,
+                    bodyProduktove);
         }
         return body;
     }

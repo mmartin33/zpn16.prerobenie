@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class PolozkaDokladuNastroje {
@@ -93,35 +94,75 @@ public class PolozkaDokladuNastroje {
         return q.getResultList();
     }
 
-    public static NavratovaHodnota vytvorPolozkuZoZaznamuCSV(ZaznamCsv zaznam, Doklad doklad, boolean zalozitFirmu) {
+    public static NavratovaHodnota vytvorPolozkuZoZaznamuCSV(ZaznamCsv zaznam, Doklad doklad, boolean zalozitFirmu, Map<String, FirmaProdukt> katKit) {
         PolozkaDokladu pd = new PolozkaDokladu();
-        FirmaProdukt fp = new FirmaProdukt();
+        boolean nasloSaNieco=false;
+        BigDecimal koeficientMostikovy = BigDecimal.ONE;
+        BigDecimal kusyProduktove = BigDecimal.ZERO;
+        BigDecimal bodyProduktove = BigDecimal.ZERO;
+        Produkt produktNajdeny = null;
 
-        fp=FirmaProduktNastroje.getFirmaProduktPreImport(doklad.getFirma(),
-                                                            ParametreNastroje.nacitajParametre().getRok(),
-                                                            zaznam.getKit(),
-                                                            zaznam.getCiarovyKod());
+        if (katKit == null) {
+            //stary sposob
+            FirmaProdukt fp = new FirmaProdukt();
 
-        if (fp==null)
-            return new NavratovaHodnota(null,NavratovaHodnota.NENAJEDENY_KIT,zaznam.getKit());
+            fp = FirmaProduktNastroje.getFirmaProduktPreImport(doklad.getFirma(),
+                    ParametreNastroje.nacitajParametre().getRok(),
+                    zaznam.getKit(),
+                    zaznam.getCiarovyKod());
+
+            if (fp != null) {
+                nasloSaNieco = true;
+                koeficientMostikovy = fp.getKoeficient();
+                kusyProduktove = fp.getProdukt().getKusy();
+                bodyProduktove = fp.getProdukt().getBody();
+                produktNajdeny=fp.getProdukt();
+
+            }
+
+        }
+        else{
+            //novy sposob
+            FirmaProdukt hodnota = katKit.get(zaznam.getKit() + "-" + ParametreNastroje.nacitajParametre().getRok());
+            if (hodnota!=null) {
+
+                koeficientMostikovy = hodnota.getKoeficient();
+                kusyProduktove = hodnota.getProdukt().getKusy();
+                bodyProduktove = hodnota.getProdukt().getBody();
+                produktNajdeny = hodnota.getProdukt();
+                nasloSaNieco=true;
+            }
+
+
+        }
+
+
+
+        if (!nasloSaNieco)
+            return new NavratovaHodnota(null, NavratovaHodnota.NENAJEDENY_KIT, zaznam.getKit());
+
+
+
+
+
         if (!StringUtils.isNotBlank(zaznam.getIco()))
             return new NavratovaHodnota(null,NavratovaHodnota.PRAZDNE_ICO,zaznam.getKit());
         pd.setDoklad(doklad);
 
 
-        pd.setMnozstvo(zaznam.getMnozstvo().multiply(fp.getKoeficient()));
+        pd.setMnozstvo(zaznam.getMnozstvo().multiply(koeficientMostikovy));
 
         //pd.setMnozstvo(zaznam.getMnozstvo());
         pd.setMnozstvoPovodne(zaznam.getMnozstvo());
         pd.setKit(zaznam.getKit());
-        if (fp.getKoeficient().compareTo(BigDecimal.ZERO)==0)
+        if (koeficientMostikovy.compareTo(BigDecimal.ZERO)==0)
             return new NavratovaHodnota(null,NavratovaHodnota.NEURCENY_KOEFICIENT);
 
         int body=VypoctyUtil.vypocitajBody(
                 pd.getMnozstvoPovodne(),
-                fp.getKoeficient(),
-                fp.getProdukt().getKusy(),
-                fp.getProdukt().getBody());
+                koeficientMostikovy,
+                kusyProduktove,
+                bodyProduktove);
         if (body==0)
             return new NavratovaHodnota(null,NavratovaHodnota.MALY_PREDAJ);
         pd.setBody(new BigDecimal(body));
@@ -140,7 +181,7 @@ public class PolozkaDokladuNastroje {
         pd.setPoberatel(prevadzka.getPoberatel());
 
         pd.setPoznamka(zaznam.getMtzDoklad());
-        pd.setProdukt(fp.getProdukt());
+        pd.setProdukt(produktNajdeny);
         pd.setPoznamka(zaznam.getMtzDoklad());
 
 
@@ -166,6 +207,42 @@ public class PolozkaDokladuNastroje {
             pd.setPoberatel(ulozenyDoklad.getPoberatel());
             PolozkaDokladuNastroje.ulozPolozkuDokladu(pd);
         }
+
+    }
+
+    public static void vytvorPolozkuDokladuDavkovo(List<PolozkaDokladu> polozkyDokladu, Doklad ulozenyDoklad) {
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypUkonu tu = TypUkonu.OPRAVA;
+        int j=0;
+        int i=0;
+
+        for (PolozkaDokladu polozka : polozkyDokladu) {
+            j++;
+            i++;
+            if (polozka.isNew()) {
+                polozka.setId(null);
+                tu = TypUkonu.PRIDANIE;
+                polozka.setKedy(new Date());
+                polozka.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
+            }
+            if (j==1 )
+                em.getTransaction().begin();
+
+
+            em.persist(polozka);
+
+
+            if (j==500 ) {
+                em.getTransaction().commit();
+                j=0;
+                System.out.println("Doklad:"+ulozenyDoklad.getFirmaNazov()+ulozenyDoklad.getCisloDokladu()+" polozky"+i);
+            }
+
+        }
+        if (j!=500)
+            em.getTransaction().commit();
+
+        //LogAplikacieNastroje.uloz(TypLogovanejHodnoty.POLOZKA_DOKLADU, tu,PolozkaDokladu.getTextLog(d));
 
     }
 }

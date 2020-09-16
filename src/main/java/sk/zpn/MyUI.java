@@ -10,13 +10,11 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
+import sk.zpn.domena.GlobalneParametre;
 import sk.zpn.domena.Poberatel;
 import sk.zpn.domena.log.TypLogovanejHodnoty;
 import sk.zpn.domena.log.TypUkonu;
-import sk.zpn.zaklad.model.LogAplikacieNastroje;
-import sk.zpn.zaklad.model.PoberatelNastroje;
-import sk.zpn.zaklad.model.Pripojenie;
-import sk.zpn.zaklad.model.UzivatelNastroje;
+import sk.zpn.zaklad.model.*;
 
 import sk.zpn.zaklad.view.LoginView;
 import sk.zpn.zaklad.view.parametre.ParametreView;
@@ -44,13 +42,14 @@ public class MyUI extends UI {
     UzivateliaView uzivateliaView;
     ProduktyView produktyView;
     Pripojenie p;
+    GlobalneParametre globalneParametre;
     ParametreView parametre;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         p =new Pripojenie();
         navigator = new Navigator(this, this);
-
+        globalneParametre= new GlobalneParametre();
         login = new LoginView();
         vitajteView = new VitajteView(navigator);
         statPrePoberatelovView = new StatPrePoberatelovView(navigator);
@@ -83,7 +82,7 @@ public class MyUI extends UI {
                 System.out.println("uzivatel overeny"+VaadinSession.getCurrent().getAttribute("meno")+VaadinSession.getCurrent().getAttribute("id_uzivatela"));
                 new LogAplikacieNastroje().uloz(TypLogovanejHodnoty.UZIVATEL, TypUkonu.PRIHLASENIE, null);
                 //if (UzivatelNastroje.prihlasenyUzivatelJePoberatel())
-
+                this.globalneParametre.setParametre(ParametreNastroje.nacitajParametre());
                 navigator.navigateTo(VitajteView.NAME);
                 //else
 
@@ -132,6 +131,15 @@ public class MyUI extends UI {
 
         //navigator.navigateTo(LoginView.NAME);
     }
+
+    public GlobalneParametre getGlobalneParametre() {
+        return globalneParametre;
+    }
+
+    public void setGlobalneParametre(GlobalneParametre globalneParametre) {
+        this.globalneParametre = globalneParametre;
+    }
+
     public final static boolean jeUzivatelPrihlaseny() {
         if (VaadinSession.getCurrent().getAttribute("meno")==null)
             System.out.println("Nie je prihlaseny ziadny uzivatel");
@@ -140,6 +148,7 @@ public class MyUI extends UI {
 
     public static MyUI get() {
         UI ui = UI.getCurrent();
+
         if (ui instanceof MyUI) {
             return (MyUI) ui;
         }

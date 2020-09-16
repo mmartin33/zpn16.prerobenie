@@ -206,13 +206,15 @@ public class DokladyNastroje {
         String icoUzivatela=null;
         Map<String, ZaznamCsv> zaznam;
         Map<String, Integer> bodyNaIco ;
+        Map<String, FirmaProdukt> katKit ;
         Map<String, BigDecimal> nespraovaneKity = Maps.newHashMap();;
-        
+
         Integer mesacnySucetBodov;
         boolean zalozitFirmu;
         boolean pustitiDoDavky=true;
         zaznam=davka.getPolozky();
         bodyNaIco=davka.getBodyNaIco();
+        katKit=davka.getKatKit();
         List<ChybaImportu> chyby = new ArrayList<>();
         Map<String, BigDecimal> icaVelkoskladov = FirmaNastroje.mapaICOFiriemIbaVelkosklady();
         Integer bodovaHranicaPreZakladanieNovejFirmy=ParametreNastroje.nacitajParametre().getMesacnaHranicaBodovImportu();
@@ -252,7 +254,7 @@ public class DokladyNastroje {
 
 
         List<PolozkaDokladu> polozkyDokladu = new ArrayList<>();
-        ;
+
 
 
         int i = 0;
@@ -276,7 +278,7 @@ public class DokladyNastroje {
             {
                 mesacnySucetBodov = bodyNaIco.get(z.getIco());
                 zalozitFirmu = (mesacnySucetBodov >= bodovaHranicaPreZakladanieNovejFirmy ? true : false);
-                navratovahodnota = PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z, hlavickaDokladu, zalozitFirmu);
+                navratovahodnota = PolozkaDokladuNastroje.vytvorPolozkuZoZaznamuCSV(z, hlavickaDokladu, zalozitFirmu,katKit);
             }
             else{
                 navratovahodnota=new NavratovaHodnota(null,NavratovaHodnota.NEPOVOLENA_FIRMA);
@@ -342,7 +344,6 @@ public class DokladyNastroje {
         System.out.println("Koniec vytvarania zaznamov" + i);
         progressBarZPN.koniec();
         DokladyNastroje.ulozDokladDavky(hlavickaDokladu, polozkyDokladu, progressBarZPN);
-        DokladyNastroje.vymazPodHranicou(hlavickaDokladu,ParametreNastroje.nacitajParametre().getMesacnaHranicaBodovImportu());
         vysledok.setDoklad(hlavickaDokladu);
         vysledok.setPolozky(polozkyDokladu);
         vysledok.setChyby(chyby);
@@ -366,15 +367,17 @@ public class DokladyNastroje {
         progressBarZPN.zobraz();
         ulozenyDoklad = vytvorDoklad(hlavickaDokladu);
         int i = 0;
-        for (PolozkaDokladu polozka : polozkyDokladu) {
-            i++;
-            if (new BigDecimal(i).remainder(new BigDecimal(100)).compareTo(BigDecimal.ZERO) == 0)
-                System.out.println("ZPN- Vytvaranie poloziek dokladov" + i);
+//        for (PolozkaDokladu polozka : polozkyDokladu) {
+//            i++;
+//            if (new BigDecimal(i).remainder(new BigDecimal(100)).compareTo(BigDecimal.ZERO) == 0)
+//                System.out.println("ZPN- Vytvaranie poloziek dokladov" + i);
+//
+//            progressBarZPN.posun(new BigDecimal(polozkyDokladu.size()), new BigDecimal(i));
+//            polozka.setDoklad(ulozenyDoklad);
+//            PolozkaDokladuNastroje.vytvorPolozkuDokladu(polozka);
+//        }
+            PolozkaDokladuNastroje.vytvorPolozkuDokladuDavkovo(polozkyDokladu,ulozenyDoklad);
 
-            progressBarZPN.posun(new BigDecimal(polozkyDokladu.size()), new BigDecimal(i));
-            polozka.setDoklad(ulozenyDoklad);
-            PolozkaDokladuNastroje.vytvorPolozkuDokladu(polozka);
-        }
 
         System.out.println("ZPN - Koniec vytvaranie dokladov" + i);
 

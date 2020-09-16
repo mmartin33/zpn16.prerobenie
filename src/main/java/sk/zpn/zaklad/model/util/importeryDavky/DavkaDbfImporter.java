@@ -9,14 +9,11 @@ import sk.zpn.domena.importy.ZaznamCsv;
 import sk.zpn.zaklad.grafickeNastroje.ProgressBarZPN;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
 import sk.zpn.zaklad.model.ParametreNastroje;
-import sk.zpn.zaklad.model.VypoctyUtil;
 
 import java.io.*;
 import java.math.BigDecimal;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class DavkaDbfImporter {
@@ -40,6 +37,9 @@ public class DavkaDbfImporter {
         progressBarZPN.nadstavNadpis("Načítanie súboru");
         progressBarZPN.nadstavspustenie(true);
 
+        Map<String, FirmaProdukt> katKit = Maps.newHashMap();
+        katKit= FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
+                ParametreNastroje.nacitajParametre().getRok());
 
         Davka davka=new Davka();
         Map<String, Integer> bodyNaIco =  Maps.newHashMap();
@@ -76,12 +76,13 @@ public class DavkaDbfImporter {
                                                                                     zaznam.getKit(),
                                                                                     zaznam.getMnozstvo(),
                                                                                     parametreImportu.getFirma(),
-                                                                                    null));
+                                                                                    null, null));
 
             }
             //zaznam=null;
         }
         in.close();
+        davka.setKatKit(katKit);
         davka.setPolozky(polozky);
         davka.setBodyNaIco(bodyNaIco);
         return davka;

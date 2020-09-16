@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -179,5 +180,18 @@ public class ProduktyNastroje {
             return true;
 
         return false;
+    }
+
+    public static Produkt getProduktPodlaID(Long id) {
+
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        TypedQuery<Produkt> q = em.createNamedQuery("Produkt.getPodlaID", Produkt.class)
+                .setParameter("id", id);
+        List<Produkt> produkt = q.getResultList();
+        return produkt.size() > 0 ? q.getResultList().get(0) : null;
+
+
+
+
     }
 }
