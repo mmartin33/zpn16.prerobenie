@@ -211,6 +211,7 @@ public class PolozkaDokladuNastroje {
     }
 
     public static void vytvorPolozkuDokladuDavkovo(List<PolozkaDokladu> polozkyDokladu, Doklad ulozenyDoklad) {
+        Long idPrihlasenehoUzivatela=UzivatelNastroje.getPrihlasenehoUzivatela().getId();
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         TypUkonu tu = TypUkonu.OPRAVA;
         int j=0;
@@ -223,7 +224,7 @@ public class PolozkaDokladuNastroje {
                 polozka.setId(null);
                 tu = TypUkonu.PRIDANIE;
                 polozka.setKedy(new Date());
-                polozka.setKto(UzivatelNastroje.getPrihlasenehoUzivatela().getId());
+                polozka.setKto(idPrihlasenehoUzivatela);
             }
             if (j==1 )
                 em.getTransaction().begin();

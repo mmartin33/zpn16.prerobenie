@@ -264,7 +264,7 @@ public class DokladyNastroje {
             i++;
             // progressBarZPN.posun(new BigDecimal(zaznam.size()),new BigDecimal(i));
             progressBarZPN.setProgresBarValue(new BigDecimal(i).divide(new BigDecimal(zaznam.size()), 2, BigDecimal.ROUND_HALF_UP).floatValue());
-            if (new BigDecimal(i).remainder(new BigDecimal(100)).compareTo(BigDecimal.ZERO) == 0)
+            if (new BigDecimal(i).remainder(new BigDecimal(1000)).compareTo(BigDecimal.ZERO) == 0)
                 System.out.println("Vytvaranie zaznamov" + i);
             NavratovaHodnota navratovahodnota=null;
 

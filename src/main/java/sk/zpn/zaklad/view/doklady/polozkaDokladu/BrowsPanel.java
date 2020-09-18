@@ -9,6 +9,7 @@ import com.vaadin.ui.*;
 import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.*;
+import sk.zpn.nastroje.PdfTlacProtokolu;
 import sk.zpn.nastroje.XlsTlacDokladu;
 import sk.zpn.nastroje.XlsTlacProtokolu;
 import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
@@ -231,7 +232,8 @@ public class BrowsPanel extends VerticalLayout {
 
     private void tlac() {
         if (rezimOdmien)
-            XlsTlacProtokolu.tlac(polozkyDokladuView.getDoklad());
+        //    XlsTlacProtokolu.tlac(polozkyDokladuView.getDoklad());
+            PdfTlacProtokolu.tlac(polozkyDokladuView.getDoklad());
         else
             XlsTlacDokladu.tlac(polozkyDokladuView.getDoklad());
     }
