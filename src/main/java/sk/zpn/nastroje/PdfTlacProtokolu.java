@@ -7,6 +7,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.util.ResourceUtils;
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.Doklad;
@@ -20,7 +21,7 @@ import java.util.*;
 public class PdfTlacProtokolu {
     // name and destination of output file e.g. "report.pdf"
     private static String destFileName = SystemoveParametre.getTmpAdresar() + "preberaci_protokol.pdf";
-    private static String FILE_NAME_REPORTU = SystemoveParametre.getResourcesAdresar() + "preberaci_protokol.jrxml";
+    private static String FILE_NAME_REPORTU = SystemoveParametre.getResourcesAdresar() + "preberaci_protokol.jasper";
     private static Doklad doklad;
 
     public static void tlac(Doklad doklad) {
@@ -64,7 +65,9 @@ public class PdfTlacProtokolu {
 
     private static JasperReport getJasperReport() throws FileNotFoundException, JRException {
         File template = ResourceUtils.getFile(FILE_NAME_REPORTU);
-        return JasperCompileManager.compileReport(template.getAbsolutePath());
+
+        JasperReport jasReport = (JasperReport) JRLoader.loadObject(new File(FILE_NAME_REPORTU));
+        return jasReport;
     }
 
     private static Map<String, Object> getParameters() throws FileNotFoundException {
