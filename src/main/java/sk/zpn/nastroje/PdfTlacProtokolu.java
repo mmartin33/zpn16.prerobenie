@@ -65,8 +65,8 @@ public class PdfTlacProtokolu {
 
     private static JasperReport getJasperReport() throws FileNotFoundException, JRException {
         File template = ResourceUtils.getFile(FILE_NAME_REPORTU);
-
-        JasperReport jasReport = (JasperReport) JRLoader.loadObject(new File(FILE_NAME_REPORTU));
+        //JRMxlLoader.load(new FileInputStream(new File(Reprot_Def);
+        JasperReport jasReport = (JasperReport) JRLoader.loadObject(new FileInputStream(template));
         return jasReport;
     }
 
