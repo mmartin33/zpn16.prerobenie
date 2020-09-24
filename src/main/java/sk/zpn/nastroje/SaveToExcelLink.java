@@ -4,6 +4,7 @@ package sk.zpn.nastroje;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Link;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -36,7 +37,10 @@ public class SaveToExcelLink extends Link {
                 return new ByteArrayInputStream(b);
             }
         };
-        StreamResource resource = new StreamResource(source, namefile );
+        //StreamResource resource = new StreamResource(source, namefile );
+        StreamResource resource = new StreamResource(source, FilenameUtils.getBaseName(namefile)
+                + "." + FilenameUtils.getExtension(namefile) );
+
 
         resource.getStream().setParameter("Content-Disposition", "attachment;filename=\"" + namefile + "\"");
         resource.setMIMEType("application/xlsx");

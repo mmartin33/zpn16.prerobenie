@@ -69,6 +69,10 @@ public class XlsTlacDokladu {
         resultCell = (HSSFCell) sheet.getRow(14).getCell(3);
         resultCell.setCellValue(doklad.getCisloDokladu());
 
+        resultCell = (HSSFCell) sheet.getRow(32).getCell(6);
+        resultCell.setCellValue(formatter.format(doklad.getDatum()));
+
+
 
         resultCell = (HSSFCell) sheet.getRow(22).getCell(3);
         resultCell.setCellValue("Poberateľ");
