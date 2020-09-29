@@ -167,12 +167,14 @@ public class EditacnyForm extends VerticalLayout {
             System.out.println("Zvolený nový");
             binder.readBean(produkt);
         }
-        if (produktEditovany .getTypProduktov() == TypProduktov.ODMENA) {
-            tFirma.setEnabled(false);
-            tKusy.setEnabled(false);
-        } else {
-            tFirma.setEnabled(true);
-            tKusy.setEnabled(true);
+        if (produktEditovany!=null) {
+            if (produktEditovany.getTypProduktov() == TypProduktov.ODMENA) {
+                tFirma.setEnabled(false);
+                tKusy.setEnabled(false);
+            } else {
+                tFirma.setEnabled(true);
+                tKusy.setEnabled(true);
+            }
         }
 
 

@@ -2,13 +2,16 @@ package sk.zpn.zaklad.model;
 
 import com.vaadin.server.VaadinSession;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.util.StringUtil;
 import sk.zpn.domena.*;
+import sk.zpn.nastroje.NastrojeCisel;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -164,9 +167,15 @@ public class ProduktyNastroje {
     }
 
     public static boolean kontrolujZmenuBodov(Produkt produktEditovany, String value) {
+        BigDecimal kontrolovanaHodnota= null;
+        try {
+            kontrolovanaHodnota = NastrojeCisel.parse(value,null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (produktEditovany.getId()==null)
             return true;
-        if (produktEditovany.getBody().compareTo(new BigDecimal(value))==0)
+        if (produktEditovany.getBody().compareTo(kontrolovanaHodnota)==0)
             return true;
         if (!existujePohybNaOdmene(produktEditovany))
             return true;
@@ -174,9 +183,16 @@ public class ProduktyNastroje {
     }
 
     public static boolean kontrolujZmenuKusov(Produkt produktEditovany, String value) {
+        BigDecimal kontrolovanaHodnota= null;
+        try {
+            kontrolovanaHodnota = NastrojeCisel.parse(value,null);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         if (produktEditovany.getTypProduktov()==TypProduktov.BODOVACI)
             return true;
-        if (produktEditovany.getBody().compareTo(new BigDecimal(1))==0  )
+        if (produktEditovany.getBody().compareTo(kontrolovanaHodnota)==0  )
             return true;
 
         return false;
