@@ -113,7 +113,7 @@ public class EditacnyForm extends VerticalLayout {
                 .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
                 .withValidator(kusy -> !tKusy.getValue().trim().isEmpty(),
                         "Kusy su povinne")
-                .withValidator(kusy -> ProduktyNastroje.kontrolujZmenuKusov(produktEditovany, tBody.getValue()),
+                .withValidator(kusy -> ProduktyNastroje.kontrolujZmenuKusov(produktEditovany, tKusy.getValue()),
                         "Na odmene je povolené množstvo 1")
                 .bind(Produkt::getKusy, Produkt::setKusy);
 
