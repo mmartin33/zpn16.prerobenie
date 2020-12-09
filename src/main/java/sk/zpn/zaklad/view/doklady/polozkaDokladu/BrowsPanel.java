@@ -10,6 +10,7 @@ import org.vaadin.addons.filteringgrid.filters.InMemoryFilter.StringComparator;
 import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.*;
 import sk.zpn.nastroje.PdfTlacProtokolu;
+import sk.zpn.nastroje.XlsExportDavky;
 import sk.zpn.nastroje.XlsTlacDokladu;
 import sk.zpn.nastroje.XlsTlacProtokolu;
 import sk.zpn.zaklad.grafickeNastroje.MFilteredGrid;
@@ -235,6 +236,9 @@ public class BrowsPanel extends VerticalLayout {
         //    XlsTlacProtokolu.tlac(polozkyDokladuView.getDoklad());
             PdfTlacProtokolu.tlac(polozkyDokladuView.getDoklad());
         else
+            if (polozkyDokladuView.getDoklad().getTypDokladu()==TypDokladu.DAVKA)
+                XlsExportDavky.tlac(polozkyDokladuView.getDoklad());
+                else
             XlsTlacDokladu.tlac(polozkyDokladuView.getDoklad());
     }
 
@@ -330,7 +334,8 @@ public class BrowsPanel extends VerticalLayout {
     public void klasickyRezim() {
         this.rezimOdmien = false;
         btnKatalogOdmien.setVisible(false);
-        if (polozkyDokladuView.getDoklad().getTypDokladu()== TypDokladu.PREVOD)
+        if ((polozkyDokladuView.getDoklad().getTypDokladu()== TypDokladu.PREVOD)
+                || (polozkyDokladuView.getDoklad().getTypDokladu()== TypDokladu.DAVKA))
         btnTlac.setVisible(true);
         else
             btnTlac.setVisible(false);
@@ -339,7 +344,8 @@ public class BrowsPanel extends VerticalLayout {
 
     public void rezimRegistracia() {
         btnKatalogOdmien.setVisible(false);
-        if (polozkyDokladuView.getDoklad().getTypDokladu()== TypDokladu.PREVOD)
+        if ((polozkyDokladuView.getDoklad().getTypDokladu()== TypDokladu.PREVOD)
+                  || (polozkyDokladuView.getDoklad().getTypDokladu()== TypDokladu.DAVKA))
             btnTlac.setVisible(true);
         else
             btnTlac.setVisible(false);

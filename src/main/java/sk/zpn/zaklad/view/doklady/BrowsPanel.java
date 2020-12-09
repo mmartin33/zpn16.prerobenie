@@ -271,8 +271,9 @@ public class BrowsPanel extends VerticalLayout {
     public void nadstavNaOznaceny() {
         Doklad value = grid.asSingleSelect().getValue();
         int index = dokladyList.indexOf(value);
+        if (dokladyList.size()<=index)
+            grid.scrollTo(index);
 
-        grid.scrollTo(index);
     }
 
     public void test(Button.ClickEvent clickEvent) {
