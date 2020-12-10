@@ -49,7 +49,7 @@ public class BrowsPanel extends VerticalLayout {
     private boolean rezimOdmien = false;
     private boolean klasickyRezim=false;
     private boolean rezimRegistracieBolUplatneny=false;
-            ;
+
 
 
     public BrowsPanel(List<PolozkaDokladu> polozkyDokladuList, PolozkyDokladuView pdv) {

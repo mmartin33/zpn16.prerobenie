@@ -192,7 +192,7 @@ public class ProduktyNastroje {
 
         if (produktEditovany.getTypProduktov()==TypProduktov.BODOVACI)
             return true;
-        if (produktEditovany.getBody().compareTo(kontrolovanaHodnota)==0  )
+        if (produktEditovany.getKusy().compareTo(kontrolovanaHodnota)==0  )
             return true;
 
         return false;

@@ -264,8 +264,8 @@ public class EditacnyForm extends VerticalLayout {
                 if (this.rezimOdmien &&this.polozkaEditovana.getId()!=null){
 //                polozkaEditovana.setMnozstvo(polozkaEditovana.getMnozstvo().negate());
 //                polozkaEditovana.setBody(polozkaEditovana.getBody().negate());
-               tMnozstvo.setValue(polozkaEditovana.getMnozstvo().negate().toString());
-               tBody.setValue(polozkaEditovana.getBody().negate().toString());
+               tMnozstvo.setValue(polozkaEditovana.getMnozstvo().negate().toBigInteger().toString());
+               tBody.setValue(polozkaEditovana.getBody().negate().toBigInteger().toString());
             }
 //
 //        }
