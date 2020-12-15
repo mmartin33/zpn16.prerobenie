@@ -265,8 +265,7 @@ public class EditacnyForm extends VerticalLayout {
 //                polozkaEditovana.setMnozstvo(polozkaEditovana.getMnozstvo().negate());
 //                polozkaEditovana.setBody(polozkaEditovana.getBody().negate());
                tMnozstvo.setValue(polozkaEditovana.getMnozstvo().negate().toBigInteger().toString());
-               tBody.setValue(polozkaEditovana.getBody().negate().toBigInteger().toString());
-            }
+               tBody.setValue(polozkaEditovana.getBody().negate().toBigInteger().toString()); }
 //
 //        }
     }

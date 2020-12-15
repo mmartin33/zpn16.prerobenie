@@ -98,7 +98,8 @@ public class XlsExportDavky {
 
 
             cel = row.createCell(colNum++);
-            cel.setCellValue(polozka.getPoznamka().toString());
+            if (polozka.getPoznamka()!=null)
+                cel.setCellValue(polozka.getPoznamka().toString());
 
 
 
