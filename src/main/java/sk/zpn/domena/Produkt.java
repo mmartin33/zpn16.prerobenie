@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Entity(name = "produkty")
+@Cacheable(false)
 @NamedQueries(value = {
         @NamedQuery(name = "Produkt.getZaRok", query = "SELECT p FROM produkty p " +
                 "WHERE p.rok =:rok " +

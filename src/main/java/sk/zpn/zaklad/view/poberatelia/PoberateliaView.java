@@ -99,12 +99,14 @@ public class PoberateliaView extends HorizontalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+
         poberatelList=naplnList(velkosklad,null, null);
         browsPanel=new BrowsPanel(poberatelList,this);
         configureComponents();
-
-        gr.addComponent(browsPanel,0,0,0,1);
-        gr.addComponent(editacnyForm,1,0,1,0);
+        if (gr.getComponentCount()==0) {
+            gr.addComponent(browsPanel, 0, 0, 0, 1);
+            gr.addComponent(editacnyForm, 1, 0, 1, 0);
+        }
 
         this.addComponent(gr);
         if (velkosklad!=null) {

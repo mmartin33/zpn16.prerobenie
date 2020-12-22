@@ -2,7 +2,6 @@ package sk.zpn.zaklad.view.produkty;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
-import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -101,6 +100,8 @@ public class EditacnyForm extends VerticalLayout {
 
                 .bind(Produkt::getKat, Produkt::setKat);
         Binder.Binding<Produkt, String> nazovBinding = binder.forField(tNazov)
+                .withValidator(body -> ProduktyNastroje.jeNazovJedinecny(produktEditovany, tNazov.getValue()),
+                        "Názov musí byť jedinečný")
                 .bind(Produkt::getNazov, Produkt::setNazov);
         Binder.Binding<Produkt, BigDecimal> bodyBinding = binder.forField(tBody)
                 .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
@@ -206,6 +207,7 @@ public class EditacnyForm extends VerticalLayout {
                     public void onClose(ConfirmDialog dialog) {
                         if (dialog.isConfirmed()) {
                             // Confirmed to continue
+
                             ProduktyNastroje.zmazProdukt(produktEditovany);
                             produktyView.odstranProdukt(produktEditovany);
                             Notification.show("Produkt odstránený", Notification.Type.TRAY_NOTIFICATION);

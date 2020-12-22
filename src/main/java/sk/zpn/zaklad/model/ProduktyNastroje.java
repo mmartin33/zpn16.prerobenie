@@ -101,16 +101,23 @@ public class ProduktyNastroje {
             em.merge(f);
 
         em.getTransaction().commit();
+
         return f;
     }
 
     public static void zmazProdukt(Produkt f) {
+        Produkt p=null;
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.getTransaction().begin();
-        em.remove(f);
-        em.getTransaction().commit();
-    }
+        if (!em.contains(f)) {
+            p= em.merge(f);
+        }
 
+        em.remove(p);
+        em.getTransaction().commit();
+
+
+    }
 
     public static String getMaxKIT(TypProduktov typProduktov) {
 
@@ -209,5 +216,37 @@ public class ProduktyNastroje {
 
 
 
+    }
+
+    public static boolean jeNazovJedinecny(Produkt produktEditovany, String nazov) {
+        boolean novy=true;
+        if (produktEditovany!=null)
+            if (produktEditovany.getId() !=null)
+                novy=false;
+
+
+
+        EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
+        em.clear();
+        String podmienka=(novy?"":" and pd.id<>:id_produktu");
+        String sql = "SELECT pd FROM produkty pd " +
+                " where  pd.nazov=:nazov "+
+                podmienka;
+
+        TypedQuery<Produkt> q = em.createQuery(sql, Produkt.class).setMaxResults(1);
+        if (!novy) {
+            q.setParameter("id_produktu", produktEditovany.getId());
+        }
+        q.setParameter("nazov", nazov);
+        List<Produkt> pocet = q.getResultList();
+
+
+
+
+
+        if (pocet.size()==0)
+            return true;
+
+        return false;
     }
 }

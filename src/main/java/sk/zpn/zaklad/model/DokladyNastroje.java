@@ -51,7 +51,7 @@ public class DokladyNastroje {
         }
         em.getTransaction().commit();
         LogAplikacieNastroje.uloz(TypLogovanejHodnoty.DOKLAD, tu,Doklad.getTextLog(d));
-        System.out.println("Ulozeny dokald" + d.getCisloDokladu());
+        System.out.println("Ulozeny doklad" + d.getCisloDokladu());
         return d;
 
 
