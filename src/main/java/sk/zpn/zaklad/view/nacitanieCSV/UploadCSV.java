@@ -191,7 +191,9 @@ public class UploadCSV extends CustomComponent  {
                     davka= DavkaCsvImporter.nacitajCsvDavku(file,parametreImportu,progressBarZPN);
 
             //this.setVysledokSpracovania(DokladyNastroje.zalozDokladovuDavku(zaznam));
+            System.out.println("Start zalozenia dokladovej davky");
             VysledokImportu vi=DokladyNastroje.zalozDokladovuDavku(davka,file,parametreImportu,progressBarZPN);
+            System.out.println("Koniec zalozenia dokladovej davky");
             if (vi!=null) {
                 nacitanieView.setVysledokImportu(vi);
                 System.out.println(davka.getPolozky().size());

@@ -72,7 +72,7 @@ public class StatPoberatelNastroje {
 
     }
 
-    public static void bilanciaPoberatelov(LocalDate dod, LocalDate ddo, Firma velkosklad) {
+    public static void bilanciaPoberatelov(LocalDate dod, LocalDate ddo, Firma velkosklad, String typPoberatela) {
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
@@ -91,6 +91,8 @@ public class StatPoberatelNastroje {
         Map<String, String> poberatelPopisZPob = Maps.newHashMap();
         Map<String, String> prevPopisZPob = Maps.newHashMap();
         Map<String, Double> poberateliaVelkoskladu = Maps.newHashMap();
+        Map<String, String> poberateliaAVelkosklady = Maps.newHashMap();
+        Map<String, Double> poberateliaPodlaPohybov = Maps.newHashMap();
         pociatocnyStav = vratPociatocnyStav(dod, ddo);
         bodyZaPredaj = vratBodyZaPredaj(dod, ddo);
         bodyIne = vratBodyIne(dod, ddo);
@@ -104,6 +106,8 @@ public class StatPoberatelNastroje {
         icaFiriemZPob = vratIcaFiriemZPob();
         prevPopisZPob=vratPrevadzkyPopisyZPob();
         poberatelPopisZPob=vratPoberatelPopisyZPob();
+        poberateliaAVelkosklady=vratPoberatelovAichVelkosklady();
+        poberateliaPodlaPohybov=vratPoberatelovPodlaPohybov(typPoberatela);
         if (velkosklad != null)
             poberateliaVelkoskladu = PoberatelNastroje.vratPoberatelovVelkoskladu(velkosklad);
 
@@ -124,7 +128,61 @@ public class StatPoberatelNastroje {
                                     poberatelPopis,
                                     icaFiriemZPob,
                                     prevPopisZPob,
-                                    poberatelPopisZPob);
+                                    poberatelPopisZPob,
+                                    poberateliaAVelkosklady,
+                                    poberateliaPodlaPohybov,
+                                    typPoberatela);
+
+
+    }
+
+    private static Map<String, Double> vratPoberatelovPodlaPohybov(String typPoberatela) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql = "select cast(p.poberatel_id as text) as kluc,sum(p.body) as hodnota" +
+                " from polozkydokladu as p" +
+                " JOIN doklady as d on d.id=p.doklad_id" +
+                " where d.typdokladu in ('DAVKA','PREVOD')" +
+                " group by p.poberatel_id" +
+                " having sum(p.body)>0" ;
+
+        Query query = em1.createNativeQuery(sql);
+
+        List result1 = query.getResultList();
+        Map<String, Double> vysledok = NastrojePoli.<String, Double>prerobListNaMapu2(result1);
+        emf.close();
+        return vysledok;
+
+    }
+
+    private static Map<String, String> vratPoberatelovAichVelkosklady() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("zpn");
+
+        EntityManager em1 = emf.createEntityManager();
+        String sql = "select cast(p.poberatel_id as text) as kluc," +
+                "(" +
+                "select f.nazov" +
+                " from polozkydokladu as p2" +
+                " JOIN doklady as d2 on d2.id=p2.doklad_id" +
+                " join firmy as f on f.id=d2.firma_id" +
+                " where d2.typdokladu in ('DAVKA','PREVOD')" +
+                " and p2.poberatel_id=p.poberatel_id" +
+                " group by f.nazov" +
+                " order by count(*) desc" +
+                " LIMIT 1" +
+                " ) as hodnota" +
+                " from polozkydokladu as p" +
+                " JOIN doklady as d on d.id=p.doklad_id" +
+                " where d.typdokladu in ('DAVKA','PREVOD')" +
+                " group by p.poberatel_id" ;
+
+        Query query = em1.createNativeQuery(sql);
+
+        List result1 = query.getResultList();
+        Map<String, String> vysledok = NastrojePoli.<String, Double>prerobListNaMapu3(result1);
+        emf.close();
+        return vysledok;
 
 
     }

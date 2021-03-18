@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.doklady;
 
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Button;
@@ -128,6 +129,7 @@ public class DokladyView extends HorizontalLayout implements View {
             }
             this.addComponent(gr);
             browsPanel.btnZmaz.addClickListener(this::delete);
+            browsPanel.btnTlac.addClickListener(this::tlac);
             browsPanel.btnTest.addClickListener(browsPanel::test);
             browsPanel.btnNovy.addClickListener(clickEvent -> {
                 deselect();
@@ -160,6 +162,12 @@ public class DokladyView extends HorizontalLayout implements View {
 //        refreshDokladov();
 
 
+    }
+
+    private void tlac(Button.ClickEvent clickEvent) {
+
+//        ListDataProvider dataProvider=(ListDataProvider)  browsPanel.grid.getDataProvider();
+//        List<Doklad> list = (List<Doklad>) dataProvider.getItems();
     }
 
     public List<Doklad> naplnList(String rok){

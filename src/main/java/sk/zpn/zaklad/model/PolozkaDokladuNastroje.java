@@ -216,7 +216,7 @@ public class PolozkaDokladuNastroje {
         TypUkonu tu = TypUkonu.OPRAVA;
         int j=0;
         int i=0;
-
+        System.out.println("start vytvortPolozkuDokladuDavkovo");
         for (PolozkaDokladu polozka : polozkyDokladu) {
             j++;
             i++;
@@ -236,14 +236,15 @@ public class PolozkaDokladuNastroje {
             if (j==500 ) {
                 em.getTransaction().commit();
                 j=0;
-                System.out.println("Doklad:"+ulozenyDoklad.getFirmaNazov()+ulozenyDoklad.getCisloDokladu()+" polozky"+i);
+                System.out.println("Doklad:"+ulozenyDoklad.getFirmaNazov()+ulozenyDoklad.getCisloDokladu()+" ukladana polozka  "+i);
             }
 
         }
         if (j!=500)
             em.getTransaction().commit();
-
+        System.out.println("koniec vytvortPolozkuDokladuDavkovo");
         //LogAplikacieNastroje.uloz(TypLogovanejHodnoty.POLOZKA_DOKLADU, tu,PolozkaDokladu.getTextLog(d));
 
     }
+
 }

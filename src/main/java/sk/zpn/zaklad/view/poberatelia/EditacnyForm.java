@@ -167,6 +167,8 @@ public class EditacnyForm extends VerticalLayout {
 
 
     public void save(Button.ClickEvent event) {
+        if (binder==null)
+            return;
         if (binder.writeBeanIfValid(poberatelEditovany)) {
             boolean jePoberatelNovy = poberatelEditovany.isNew();
             Poberatel ulozenyPoberatel = PoberatelNastroje.ulozPoberatela(poberatelEditovany);

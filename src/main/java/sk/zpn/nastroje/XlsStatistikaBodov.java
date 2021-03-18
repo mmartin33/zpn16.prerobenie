@@ -52,7 +52,10 @@ public class XlsStatistikaBodov {
                                   Map<String, String> poberatelPopis,
                                   Map<String, String> icaFiriemZPob,
                                   Map<String, String> prevPopisZPob,
-                                  Map<String, String> poberatelPopisZPob) {
+                                  Map<String, String> poberatelPopisZPob,
+                                  Map<String, String> poberateliaAVelkosklady,
+                                  Map<String, Double> poberateliaPodlaPohybov,
+                                  String typPoberatela) {
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy ' ' HH:mm:ss z");
@@ -88,6 +91,12 @@ public class XlsStatistikaBodov {
         cel.setCellStyle(nadpisovyformat());
         cel.setCellValue(nadpis);
 
+
+        cel = row.createCell(3);
+        cel.setCellStyle(nadpisovyformat());
+        cel.setCellValue(typPoberatela);
+
+
         int rowNum = 2;
         HSSFCell bunka;
 
@@ -97,6 +106,11 @@ public class XlsStatistikaBodov {
         row.setHeight((short) 700);
 
         colNum = 1;
+
+        cel = row.createCell(colNum++);
+        cel.setCellStyle(oramovanieBold());
+        cel.setCellValue(("Veľkosklad"));
+
         cel = row.createCell(colNum++);
         cel.setCellStyle(oramovanieBold());
         cel.setCellValue(("Poberateľ"));
@@ -168,11 +182,28 @@ public class XlsStatistikaBodov {
                     continue;
             //cel.setCellStyle(oramovanieBoldZalomenie());
 
+            //overenie ktorych poslat "Všetkých", "Mali pohyb v novom systéme", "Nemali pohyb v novom systéme");
+            if (typPoberatela.equals("Mali pohyb v novom systéme")){
+                if (poberateliaPodlaPohybov.get(kluc) == null)
+                    continue;
+            }
+                else if (typPoberatela.equals("Nemali pohyb v novom systéme")){
+                if (poberateliaPodlaPohybov.get(kluc) != null)
+                    continue;
 
+            }
             if (!riadkovaHodnota.equals(BigDecimal.ZERO))
                 rowNum++;
 
             row = sheet.createRow(rowNum);
+
+
+            String textBunky = "";
+
+            textBunky = (((poberateliaAVelkosklady.get(kluc) == null) ? "" : poberateliaAVelkosklady.get(kluc))).toString();
+            bunka = row.createCell(colNum++);
+            bunka.setCellStyle(oramovanieBold());
+            bunka.setCellValue(textBunky);
 
 
             bunka = row.createCell(colNum++);
@@ -182,7 +213,6 @@ public class XlsStatistikaBodov {
 
             bunka = row.createCell(colNum++);
             bunka.setCellStyle(oramovanieBold());
-            String textBunky = "";
             textBunky = (((icaFiriem.get(kluc) == null) ? "" : icaFiriem.get(kluc))).toString();
             textBunky = ((textBunky.length() > 0) ?
                     textBunky :

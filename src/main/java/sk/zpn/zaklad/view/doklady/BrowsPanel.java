@@ -26,6 +26,7 @@ public class BrowsPanel extends VerticalLayout {
     public Button btnNovy;
     public Button btnTest;
     protected Button btnZmaz;
+    protected Button btnTlac;
     public Button btnPolozky;
     GridLayout gl;
     HorizontalLayout hornyFilter;
@@ -148,6 +149,11 @@ public class BrowsPanel extends VerticalLayout {
         btnZmaz.setClickShortcut(ShortcutAction.KeyCode.Z,
                 new int[]{ShortcutAction.ModifierKey.ALT});
 
+        btnTlac = new Button("Tlač zoznamu",  VaadinIcons.CLOSE_CIRCLE);
+
+        btnTlac.setClickShortcut(ShortcutAction.KeyCode.P,
+                new int[]{ShortcutAction.ModifierKey.ALT});
+
         btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
         if (!jeRezimVelkoskladu()) {
             tlacitkovy.addComponent(btnNovy);
@@ -156,6 +162,7 @@ public class BrowsPanel extends VerticalLayout {
         }
 
         tlacitkovy.addComponent(btnPolozky);
+        tlacitkovy.addComponent(btnTlac);//666
         tlacitkovy.addComponent(btnSpat);//666
         //tlacitkovy.addComponent(btnTest);//666
 

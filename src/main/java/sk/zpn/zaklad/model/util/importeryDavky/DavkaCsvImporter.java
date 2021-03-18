@@ -2,6 +2,7 @@ package sk.zpn.zaklad.model.util.importeryDavky;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.Maps;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.domena.importy.Davka;
 import sk.zpn.domena.importy.ParametreImportu;
@@ -70,12 +71,12 @@ public class DavkaCsvImporter {
 
 
         Map<String, FirmaProdukt> katKit = Maps.newHashMap();
-        katKit= FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
+        katKit = FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
                 ParametreNastroje.nacitajParametre().getRok());
 
 
         Map<String, Integer> katEan = Maps.newHashMap();
-        katEan= FirmaProduktNastroje.zoznamKatEanZVelkosklad(parametreImportu.getFirma(),
+        katEan = FirmaProduktNastroje.zoznamKatEanZVelkosklad(parametreImportu.getFirma(),
                 ParametreNastroje.nacitajParametre().getRok());
 
 
@@ -116,7 +117,7 @@ public class DavkaCsvImporter {
                         zaznam.getKit(),
                         zaznam.getMnozstvo(),
                         parametreImportu.getFirma(),
-                        null,katKit));
+                        null, katKit));
 
 
             }
@@ -143,9 +144,8 @@ public class DavkaCsvImporter {
         Map<String, Integer> bodyNaIco = Maps.newHashMap();
 
         Map<String, FirmaProdukt> katKit = Maps.newHashMap();
-        katKit= FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
+        katKit = FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
                 ParametreNastroje.nacitajParametre().getRok());
-
 
 
         Map<String, ZaznamCsv> polozky = Maps.newHashMap();
@@ -154,7 +154,9 @@ public class DavkaCsvImporter {
         progressBarZPN.nadstavspustenie(true);
 
         hlavicka = reader.readNext();
+        int i = 0;
         while ((nextLine = reader.readNext()) != null) {
+            i++;
             ZaznamCsv zaznam = new ZaznamCsv();
             progressBarZPN.posun(new BigDecimal(500), new BigDecimal(250));
 
@@ -165,25 +167,42 @@ public class DavkaCsvImporter {
                 zaznam.setMnozstvo(new BigDecimal(nextLine[2].replace(",", ".")));
                 zaznam.setNazvFirmy(nextLine[3]);
                 zaznam.setIco(nextLine[4]);
+                zaznam.setMtzDoklad("Riadok"+i);
                 //zaznam.setPcIco(Integer.parseInt(nextLine[8]));
             }
+//            else
+//                System.out.println(nextLine);
+
             if ((zaznam != null) && (zaznam.getKit() != null)) {
+
+
+
                 ZaznamCsv existujuci = polozky.get(zaznam.getKit() + zaznam.getMtzDoklad());
-                if (existujuci == null)
-                    polozky.put(zaznam.getKit() + zaznam.getMtzDoklad(), zaznam);
-                else
-                    existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
+
+
+
+                    if ((existujuci == null)) {
+
+                        polozky.put(zaznam.getKit() + zaznam.getMtzDoklad(), zaznam);
+                    } else {
+                        existujuci.setMnozstvo(existujuci.getMnozstvo().add(zaznam.getMnozstvo()));
+                    }
+
                 bodyNaIco.put(zaznam.getIco(), ImporterNastroje.vratBodyZaIcoAKit(zaznam.getIco(),
                         zaznam.getKit(),
                         zaznam.getMnozstvo(),
                         parametreImportu.getFirma(),
                         null, null));
-
-
             }
+//            else {
+//                System.out.println(nextLine);
+//            }
+
 
             //zaznam=null;
         }
+        System.out.println("ZPN - pociet riadkov " + i);
+
         progressBarZPN.koniec();
         davka.setKatKit(katKit);
         davka.setPolozky(polozky);
@@ -203,9 +222,8 @@ public class DavkaCsvImporter {
         Davka davka = new Davka();
         Map<String, Integer> bodyNaIco = Maps.newHashMap();
         Map<String, FirmaProdukt> katKit = Maps.newHashMap();
-        katKit= FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
+        katKit = FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
                 ParametreNastroje.nacitajParametre().getRok());
-
 
 
         Map<String, ZaznamCsv> polozky = Maps.newHashMap();
@@ -214,7 +232,17 @@ public class DavkaCsvImporter {
         progressBarZPN.nadstavspustenie(true);
 
         hlavicka = reader.readNext();
+        int i=0;
+        int j=0;
         while ((nextLine = reader.readNext()) != null) {
+            i++;
+            j++;
+            if (j==500){
+                j=1;
+                System.out.println("Zaznamy CSV Becica"+i);
+            }
+
+//            System.out.println("zaznam:"+i);
             ZaznamCsv zaznam = new ZaznamCsv();
             progressBarZPN.posun(new BigDecimal(500), new BigDecimal(250));
 
@@ -251,6 +279,7 @@ public class DavkaCsvImporter {
 
             //zaznam=null;
         }
+        System.out.println("Pocet CSV zaznamov"+i);
         progressBarZPN.koniec();
         davka.setKatKit(katKit);
         davka.setPolozky(polozky);
@@ -272,9 +301,8 @@ public class DavkaCsvImporter {
         Davka davka = new Davka();
         Map<String, Integer> bodyNaIco = Maps.newHashMap();
         Map<String, FirmaProdukt> katKit = Maps.newHashMap();
-        katKit= FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
+        katKit = FirmaProduktNastroje.zoznamKatKitovZVelkosklad(parametreImportu.getFirma(),
                 ParametreNastroje.nacitajParametre().getRok());
-
 
 
         reader.readNext();
@@ -340,6 +368,6 @@ public class DavkaCsvImporter {
         this.file = file;
         this.parametreImportu = parametreImportu;
         this.progresBarZPN = progressBarZPN;
-        this.davka=davka;
+        this.davka = davka;
     }
 }

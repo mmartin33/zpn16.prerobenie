@@ -9,6 +9,8 @@ import sk.zpn.zaklad.model.StatPoberatelNastroje;
 import sk.zpn.zaklad.view.VitajteView;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StatPoberatelView extends VerticalLayout implements View {
@@ -18,12 +20,20 @@ public class StatPoberatelView extends VerticalLayout implements View {
 
     private Button btnSpat;
     private List<StatistikaBodov> statList =null;
+
+    ComboBox<String> combTypPoberatela;
+
     DateField dfOd;
     DateField dfDo;
     LocalDate dod;
     LocalDate ddo;
     Firma velkosklad;
     public StatPoberatelView(Firma velkosklad) {
+        combTypPoberatela=new ComboBox<>();
+        combTypPoberatela.setItems("Všetkých", "Mali pohyb v novom systéme", "Nemali pohyb v novom systéme");
+        combTypPoberatela.setValue("Všetkých");
+        combTypPoberatela.setWidth(300,Unit.PIXELS);
+        combTypPoberatela.setCaption("Určenie poberateľov:");
         this.velkosklad=velkosklad;
         HorizontalLayout hornyFilter =new HorizontalLayout();
 
@@ -52,6 +62,8 @@ public class StatPoberatelView extends VerticalLayout implements View {
         btnAktivujFilter.addClickListener(this::aktivujFilter);
         hornyFilter.addComponent(dfOd);
         hornyFilter.addComponent(dfDo);
+        hornyFilter.addComponent(dfDo);
+        hornyFilter.addComponent(combTypPoberatela);
         hornyFilter.addComponent(btnAktivujFilter);
         hornyFilter.addComponent(btnSpat);
 
@@ -77,7 +89,7 @@ public class StatPoberatelView extends VerticalLayout implements View {
     }
 
     private void aktivujFilter(Button.ClickEvent clickEvent) {
-        StatPoberatelNastroje.bilanciaPoberatelov(dfOd.getValue(), dfDo.getValue(),velkosklad);
+        StatPoberatelNastroje.bilanciaPoberatelov(dfOd.getValue(), dfDo.getValue(),velkosklad,combTypPoberatela.getValue());
 
         }
 

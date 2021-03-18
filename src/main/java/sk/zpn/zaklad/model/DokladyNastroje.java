@@ -258,6 +258,7 @@ public class DokladyNastroje {
 
 
         int i = 0;
+        System.out.println("Start ukladanie poloziek");
         for (Map.Entry<String, ZaznamCsv> entry : zaznam.entrySet()) {
             pustitiDoDavky=true;
             ZaznamCsv z = entry.getValue();
@@ -343,7 +344,9 @@ public class DokladyNastroje {
         }
         System.out.println("Koniec vytvarania zaznamov" + i);
         progressBarZPN.koniec();
+        System.out.println("Start ulozenia dokladu");
         DokladyNastroje.ulozDokladDavky(hlavickaDokladu, polozkyDokladu, progressBarZPN);
+        System.out.println("Koniec ulozenia dokladu");
         vysledok.setDoklad(hlavickaDokladu);
         vysledok.setPolozky(polozkyDokladu);
         vysledok.setChyby(chyby);
@@ -363,6 +366,7 @@ public class DokladyNastroje {
             return;
         Doklad ulozenyDoklad;
         progressBarZPN.nadstavNadpis("ZPN - ukladanie položiek dokladu");
+        System.out.println("Star tvorby poloziek dokladu");
         progressBarZPN.nadstavspustenie(true);
         progressBarZPN.zobraz();
         ulozenyDoklad = vytvorDoklad(hlavickaDokladu);
