@@ -14,9 +14,13 @@ import sk.zpn.domena.Doklad;
 import sk.zpn.domena.PolozkaDokladu;
 import sk.zpn.zaklad.model.PolozkaDokladuNastroje;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PdfTlacProtokolu {
     // name and destination of output file e.g. "report.pdf"

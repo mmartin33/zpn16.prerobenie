@@ -340,6 +340,13 @@ public class DokladyNastroje {
                         z.getKit(),
                         "Nepodarilo sa zalozit polozku dokladu (nepostacujuce mnozstvo)",
                         z.getMtzDoklad()));
+            else if (navratovahodnota.getChyba() == NavratovaHodnota.PREKROCENY_MAX_PREDAJ)
+                chyby.add(new ChybaImportu(
+                        z.getNazvFirmy(),
+                        z.getIco(),
+                        z.getKit(),
+                        "Nepodarilo sa zalozit polozku dokladu (prekrocene mnozstvo)",
+                        z.getMtzDoklad()));
 
         }
         System.out.println("Koniec vytvarania zaznamov" + i);

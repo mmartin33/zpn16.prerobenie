@@ -67,6 +67,7 @@ public class Produkt extends Vseobecne {
     private String nazov;
     private BigDecimal body;
     private BigDecimal kusy;
+    private BigDecimal maxpredaj;
     private BigDecimal cena;
     private String rok;
 
@@ -179,6 +180,17 @@ public class Produkt extends Vseobecne {
     public void setCena(BigDecimal cena) {
         this.cena = cena;
     }
+
+    public BigDecimal getMaxPredaj() {
+        return (maxpredaj==null?new BigDecimal(0) :maxpredaj);
+
+    }
+
+    public void setMaxPredaj(BigDecimal maxPredaj) {
+        this.maxpredaj = maxPredaj;
+    }
+
+
 }
 
 

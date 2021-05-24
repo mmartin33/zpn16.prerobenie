@@ -17,6 +17,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 import sk.zpn.domena.Firma;
 import sk.zpn.domena.FirmaProdukt;
 import sk.zpn.domena.Uzivatel;
+import sk.zpn.nastroje.XlsExportMostika;
 import sk.zpn.zaklad.model.FirmaNastroje;
 import sk.zpn.zaklad.model.FirmaProduktNastroje;
 import sk.zpn.zaklad.model.ParametreNastroje;
@@ -54,6 +55,7 @@ public class MostikView extends HorizontalLayout implements View {
     private Button btnZmaz = new Button("Zmaž", VaadinIcons.CLOSE_CIRCLE);;
     private Button btnNova = new Button("Pridaj", VaadinIcons.FILE_O);;
     private Button btnKitTak = new Button("Vyplniť Kat podľa Kit", VaadinIcons.CONTROLLER);;
+    private Button btnExportk = new Button("Export do CSV", VaadinIcons.PRINT);;
     private Button btnSpat = new Button("Späť", VaadinIcons.ARROW_BACKWARD);
 
 
@@ -70,6 +72,7 @@ public class MostikView extends HorizontalLayout implements View {
         tlacitkovyLayout.addComponent(btnNova);
         tlacitkovyLayout.addComponent(btnZmaz);
         tlacitkovyLayout.addComponent(btnKitTak);
+        tlacitkovyLayout.addComponent(btnExportk);
         tlacitkovyLayout.addComponent(btnSpat);
         upperLabelHorizontalLayout.addComponent(firmaLabel);
         upperLabelHorizontalLayout.addComponent(rokLabel);
@@ -95,11 +98,22 @@ public class MostikView extends HorizontalLayout implements View {
 
         btnZmaz.addClickListener(this::delete);
         btnKitTak.addClickListener(this::dajDoKitKat);
+        btnExportk.addClickListener(this::tlac);
         btnNova.addClickListener(this::novy);
         btnSpat.addClickListener(clickEvent ->
             UI.getCurrent().getNavigator().navigateTo(VitajteView.NAME)
         );
         btnSpat.setClickShortcut(ShortcutAction.KeyCode.ESCAPE);
+    }
+
+    private void tlac(Button.ClickEvent clickEvent) {
+        XlsExportMostika.tlac(firmaProduktList);
+
+
+
+
+
+
     }
 
     private void dajDoKitKat(Button.ClickEvent clickEvent) {

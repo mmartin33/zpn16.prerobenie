@@ -228,7 +228,7 @@ public class ProduktyNastroje {
 
         EntityManager em = (EntityManager) VaadinSession.getCurrent().getAttribute("createEntityManager");
         em.clear();
-        String podmienka=(novy?"":" and pd.id<>:id_produktu");
+        String podmienka=(novy?"":" and pd.id<>:id_produktu and pd.rok=:rok");
         String sql = "SELECT pd FROM produkty pd " +
                 " where  pd.nazov=:nazov "+
                 podmienka;
@@ -236,6 +236,7 @@ public class ProduktyNastroje {
         TypedQuery<Produkt> q = em.createQuery(sql, Produkt.class).setMaxResults(1);
         if (!novy) {
             q.setParameter("id_produktu", produktEditovany.getId());
+            q.setParameter("rok", produktEditovany.getRok());
         }
         q.setParameter("nazov", nazov);
         List<Produkt> pocet = q.getResultList();

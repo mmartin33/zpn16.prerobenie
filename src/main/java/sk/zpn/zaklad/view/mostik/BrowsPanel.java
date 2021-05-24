@@ -20,6 +20,7 @@ public class BrowsPanel extends VerticalLayout {
     private List<FirmaProdukt> firmaProduktList;
     public Button btnNovy;
     public Button btnDoplnKitKat;
+    public Button btnExport;
     private FirmaProdukt oznacenyFirmaProdukt;
     private HorizontalLayout upperFilterHorizontalLayout = new HorizontalLayout();
     private CheckBox cbFilerInvalid = new CheckBox("Zobraz len nevalidné zaznamy");

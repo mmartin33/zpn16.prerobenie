@@ -2,6 +2,7 @@ package sk.zpn.zaklad.view.produkty;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
+import com.vaadin.data.converter.StringToBooleanConverter;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -27,6 +28,7 @@ public class EditacnyForm extends VerticalLayout {
     private TextField tBody;
     private TextField tFirma;
     public TextField tCena;
+    public TextField tMaxPredaj;
 
 
     protected Button btnUloz;
@@ -52,6 +54,8 @@ public class EditacnyForm extends VerticalLayout {
         tFirma.setWidth("400");
         tCena = new TextField("Cena");
         tCena.setWidth("100");
+        tMaxPredaj = new TextField("Maximálny predaj");
+        tMaxPredaj.setWidth("100");
         btnUloz = new Button("Ulož", VaadinIcons.CHECK_CIRCLE);
         btnUloz.setClickShortcut(ShortcutAction.KeyCode.U,
                 new int[]{ShortcutAction.ModifierKey.ALT});
@@ -67,8 +71,8 @@ public class EditacnyForm extends VerticalLayout {
         lEdit.addComponent(tBody);
         lEdit.addComponent(tKusy);
         lEdit.addComponent(tFirma);
-        lEdit.addComponent(tFirma);
         lEdit.addComponent(tCena);
+        lEdit.addComponent(tMaxPredaj);
         tCena.setVisible(false);
         HorizontalLayout lBtn = new HorizontalLayout();
         lBtn.addComponent(btnUloz);
@@ -139,11 +143,18 @@ public class EditacnyForm extends VerticalLayout {
                 .bind(Produkt::getCena, Produkt::setCena);
 
 
+
+
+        Binder.Binding<Produkt, BigDecimal> maxPredajBinding= binder.forField(tMaxPredaj)
+                .withConverter(new StringToBigDecimalConverter("Nie je číslo"))
+                .bind(Produkt::getMaxPredaj, Produkt::setMaxPredaj);
+
         tKod.addValueChangeListener(event -> kodBinding.validate());
         tNazov.addValueChangeListener(event -> nazovBinding.validate());
-        tNazov.addValueChangeListener(event -> nazovBinding.validate());
+        tFirma.addValueChangeListener(event -> firmaBinding.validate());
         tBody.addValueChangeListener(event -> bodyBinding.validate());
         tKusy.addValueChangeListener(event -> kusyBinding.validate());
+        tMaxPredaj.addValueChangeListener(event -> maxPredajBinding.validate());
 
 
         //btnUloz.setStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -172,9 +183,11 @@ public class EditacnyForm extends VerticalLayout {
             if (produktEditovany.getTypProduktov() == TypProduktov.ODMENA) {
                 tFirma.setEnabled(false);
                 tKusy.setEnabled(false);
+                tMaxPredaj.setEnabled(false);
             } else {
                 tFirma.setEnabled(true);
                 tKusy.setEnabled(true);
+                tMaxPredaj.setEnabled(true);
             }
         }
 

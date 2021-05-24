@@ -100,6 +100,7 @@ public class PolozkaDokladuNastroje {
         BigDecimal koeficientMostikovy = BigDecimal.ONE;
         BigDecimal kusyProduktove = BigDecimal.ZERO;
         BigDecimal bodyProduktove = BigDecimal.ZERO;
+        BigDecimal maxPredaj = BigDecimal.ZERO;
         Produkt produktNajdeny = null;
 
         if (katKit == null) {
@@ -116,6 +117,7 @@ public class PolozkaDokladuNastroje {
                 koeficientMostikovy = fp.getKoeficient();
                 kusyProduktove = fp.getProdukt().getKusy();
                 bodyProduktove = fp.getProdukt().getBody();
+                maxPredaj=fp.getProdukt().getMaxPredaj();
                 produktNajdeny=fp.getProdukt();
 
             }
@@ -130,6 +132,7 @@ public class PolozkaDokladuNastroje {
                 kusyProduktove = hodnota.getProdukt().getKusy();
                 bodyProduktove = hodnota.getProdukt().getBody();
                 produktNajdeny = hodnota.getProdukt();
+                maxPredaj=hodnota.getProdukt().getMaxPredaj();
                 nasloSaNieco=true;
             }
 
@@ -157,6 +160,8 @@ public class PolozkaDokladuNastroje {
         pd.setKit(zaznam.getKit());
         if (koeficientMostikovy.compareTo(BigDecimal.ZERO)==0)
             return new NavratovaHodnota(null,NavratovaHodnota.NEURCENY_KOEFICIENT);
+        if ((maxPredaj.compareTo(BigDecimal.ZERO)==0)?(false):(pd.getMnozstvo().compareTo(maxPredaj) >0))//max predaj kusov je vacsi ako max, (iba ked je rozdielny od 0)
+            return new NavratovaHodnota(null,NavratovaHodnota.PREKROCENY_MAX_PREDAJ);
 
         int body=VypoctyUtil.vypocitajBody(
                 pd.getMnozstvoPovodne(),
