@@ -183,6 +183,10 @@ public class PolozkaDokladuNastroje {
         }
 
         pd.setPrevadzka(prevadzka);
+        if (prevadzka.getPoberatel()==null) {
+            System.out.println("zpn chyba zhratia dokladu prevadzka  " + prevadzka.getNazov() + " nema poberatela");
+            return new NavratovaHodnota(null, NavratovaHodnota.PREVADZKA_NEMA_POBERATELA);
+        }
         pd.setPoberatel(prevadzka.getPoberatel());
 
         pd.setPoznamka(zaznam.getMtzDoklad());

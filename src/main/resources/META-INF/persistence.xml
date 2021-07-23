@@ -10,6 +10,7 @@
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
+<!--            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://192.168.0.51:5432/zpn" />-->
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/zpn" />
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
             <property name="javax.persistence.jdbc.user" value="postgres" />

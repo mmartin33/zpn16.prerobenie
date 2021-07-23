@@ -166,8 +166,8 @@ public class DavkaCsvImporter {
                 zaznam.setNazov(nextLine[1]);
                 zaznam.setMnozstvo(new BigDecimal(nextLine[2].replace(",", ".")));
                 zaznam.setNazvFirmy(nextLine[3]);
-                zaznam.setIco(nextLine[4]);
-                zaznam.setMtzDoklad("Riadok"+i);
+                zaznam.setIco(nextLine[6]);
+                zaznam.setMtzDoklad(nextLine[5]);
                 //zaznam.setPcIco(Integer.parseInt(nextLine[8]));
             }
 //            else

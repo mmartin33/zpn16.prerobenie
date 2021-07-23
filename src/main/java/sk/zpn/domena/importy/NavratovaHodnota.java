@@ -15,6 +15,7 @@ public class NavratovaHodnota{
     public static int NEURCENY_KOEFICIENT=6;
     public static int MALY_PREDAJ=7;
     public static int PREKROCENY_MAX_PREDAJ = 8;
+    public static int PREVADZKA_NEMA_POBERATELA = 9;
     public static int NIC=0;
 
 

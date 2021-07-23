@@ -51,7 +51,7 @@ public class DavkaTxtImporter {
 
         while ((strLine = br.readLine()) != null)   {
             progressBarZPN.posun(new BigDecimal(500),new BigDecimal(250));
-            if (!StringUtils.isEmpty(strLine)&& StringUtils.left(strLine,1).equals("V")) {
+            if (!StringUtils.isEmpty(strLine)&& StringUtils.left(strLine,2).equals("V ")) {
                 ZaznamCsv zaznam = new ZaznamCsv();
                 zaznam.setKit(StringUtils.trim(StringUtils.substring(strLine,2,18)));
                 zaznam.setNazov(StringUtils.trim(StringUtils.substring(strLine,19,39)));

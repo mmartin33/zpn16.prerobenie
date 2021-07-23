@@ -173,7 +173,7 @@ public class UploadCSV extends CustomComponent  {
                     davka= DavkaTxtImporter.nacitajTxtDavku(file,parametreImportu,progressBarZPN);
 
             else
-                if (parametreImportu.getFirma().getIco().equals("17681766")) //becica format
+                if (parametreImportu.getFirma().getIco().equals("51945436")) //becica format
                     davka= DavkaCsvImporter.nacitajCsvDavkuBecica(file,parametreImportu,progressBarZPN);
                 else if (parametreImportu.getFirma().getIco().equals("10952799")) //simo format
                 {

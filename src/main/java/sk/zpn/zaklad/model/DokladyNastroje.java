@@ -312,6 +312,14 @@ public class DokladyNastroje {
                         z.getKit(),
                         "Nepodarilo sa zalozit polozku dokladu (firma)",
                         z.getMtzDoklad()));
+            else if (navratovahodnota.getChyba() == NavratovaHodnota.PREVADZKA_NEMA_POBERATELA)
+
+                chyby.add(new ChybaImportu(
+                        z.getNazvFirmy(),
+                        z.getIco(),
+                        z.getKit(),
+                        "Prevadzka nema poberatela",
+                        z.getMtzDoklad()));
             else if (navratovahodnota.getChyba() == NavratovaHodnota.PRAZDNE_ICO)
                 chyby.add(new ChybaImportu(
                         z.getNazvFirmy(),
