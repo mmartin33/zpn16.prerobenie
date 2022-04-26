@@ -2,13 +2,18 @@ package sk.zpn.zaklad.grafickeNastroje;
 
 
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.server.Sizeable;
-import com.vaadin.ui.*;
-import com.vaadin.ui.components.grid.ColumnReorderListener;
-import com.vaadin.ui.components.grid.ColumnResizeListener;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.TextFieldVariant;
+
+import com.vaadin.shared.ui.ValueChangeMode;
+import com.vaadin.flow.component.html.Label;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.BorderStyle;
-import org.vaadin.addons.filteringgrid.FilterGrid;
+
 import sk.zpn.SystemoveParametre;
 import sk.zpn.domena.prostredie.UlozenyGrid;
 
@@ -20,8 +25,9 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
-public class MFilteredGrid<T> extends FilterGrid<T> {
+    public class MFilteredGrid<T> extends Grid<T> {
     //GridContextMenu gcm;
     private List<UlozenyGrid> ulozenyGrid;
     private String kluc;
@@ -39,7 +45,8 @@ public class MFilteredGrid<T> extends FilterGrid<T> {
     }
 
     public MFilteredGrid(String caption, Collection<T> items) {
-        super(caption);
+
+        super();
         this.setItems(items);
 //        pridajContextMenu();
         this.addColumnResizeListener(new ColumnResizeListener() {
@@ -51,7 +58,25 @@ public class MFilteredGrid<T> extends FilterGrid<T> {
 
     }
 
+    public static Component createFilterHeader(String labelText,
+                                               Consumer<String> filterChangeConsumer) {
+        Label label = new Label(labelText);
+        label.getStyle().set("padding-top", "var(--lumo-space-m)")
+                .set("font-size", "var(--lumo-font-size-xs)");
+        TextField textField = new TextField();
+//        textField.setValueChangeMode(ValueChangeMode.EAGER);
+        textField.setClearButtonVisible(true);
+        textField.addThemeVariants(TextFieldVariant.LUMO_SMALL);
+        textField.setWidthFull();
+        textField.getStyle().set("max-width", "100%");
+        textField.addValueChangeListener(
+                e -> filterChangeConsumer.accept(e.getValue()));
+        VerticalLayout layout = new VerticalLayout(label, textField);
+        layout.getThemeList().clear();
+        layout.getThemeList().add("spacing-xs");
 
+        return layout;
+    }
     public void pridajContextMenu(){
 //        gcm=new GridContextMenu(this);
 

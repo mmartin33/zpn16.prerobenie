@@ -1,6 +1,6 @@
 package sk.zpn.domena;
 
-import com.vaadin.icons.VaadinIcons;
+//import com.vaadin.icons.VaadinIcons;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,9 +18,9 @@ public enum StavDokladu {
         this.iconColor = displayValue.equals("potvrdený") ? "#156ab3" : "#9fa2a5";
     }
 
-    public String getIconValue() {
-        return String.format("<font color=\"%s\">%s</font>" , this.iconColor, VaadinIcons.CIRCLE.getHtml());
-    }
+//    public String getIconValue() {
+//        return String.format("<font color=\"%s\">%s</font>" , this.iconColor, VaadinIcons.CIRCLE.getHtml());
+//    }
 
     public static StavDokladu fromDisplayName(String displayName) {
         switch (displayName) {
