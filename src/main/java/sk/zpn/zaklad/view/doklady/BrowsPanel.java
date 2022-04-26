@@ -1,5 +1,6 @@
 package sk.zpn.zaklad.view.doklady;
 
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -74,7 +75,7 @@ public class BrowsPanel extends VerticalLayout {
 
 
         // definitionn of columns
-        colCisloDokladu = grid.addColumn(Doklad::getCisloDokladu).setCaption("Doklad").setId("doklad");
+        colCisloDokladu = grid.addColumn(Doklad::getCisloDokladu).setCaption("Doklad").setId("doklad").setSortable(true);
         colDokladuOdmeny = grid.addColumn(Doklad::getCisloDokladuOdmeny).setCaption("Číslo dokladu odmeny").setId("dokladOdmeny");
         colTypDokladu = grid.addColumn(doklad -> doklad.getTypDokladu().getDisplayValue()).setCaption("Typ dokladu").setId("typ");
         colDatum = grid.addColumn(Doklad::getFormatovanyDatum).setCaption("Dátum").setId("datum");
@@ -87,22 +88,24 @@ public class BrowsPanel extends VerticalLayout {
         statusDokladuFilter.setWidth(120, Unit.PIXELS);
 
         // filters
-        colCisloDokladu.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-        colDokladuOdmeny.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-        colDatum.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-        colPoznamka.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-        colTypDokladu.setFilter(new ComboBox<>("", TypDokladu.getListOfDisplayValues()),
-                (cValue, fValue) -> fValue == null || fValue.equals(cValue));
-        colPoberatel.setFilter(new TextField(), StringComparator.containsIgnoreCase());
-        colFirmaNazov.setFilter(new TextField(), InMemoryFilter.StringComparator.containsIgnoreCase());
-        colStavDokladu.setFilter(new ComboBox<>("",StavDokladu.getListOfDisplayValues()),
-                (cValue, fValue) -> fValue == null || fValue.equals(cValue));
+
 
 
         //grid.setColumnOrder(colCisloDokladu, colStavDokladu,colTypDokladu, colFirmaNazov, colDatum,colDokladuOdmeny,colPoberatel);
         grid.registrujZmenuStlpcov("doklady");
 
+        ListDataProvider<Doklad> dataProvider=new ListDataProvider<>(dokladyList);
+        grid.setDataProvider(dataProvider);
+        DokladyFilter dokladyFilter=new DokladyFilter(dataProvider);
+        grid.getHeaderRows().clear();
+        HeaderRow headerRow = grid.appendHeaderRow();
 
+        headerRow.getCell(nameColumn).setComponent(
+                createFilterHeader("Name", personFilter::setFullName));
+        headerRow.getCell(emailColumn).setComponent(
+                createFilterHeader("Email", personFilter::setEmail));
+        headerRow.getCell(professionColumn).setComponent(
+                createFilterHeader("Profession", personFilter::setProfession));
 
 
 
@@ -237,6 +240,7 @@ public class BrowsPanel extends VerticalLayout {
         List<Doklad> prvyDokladList = grid.getDataCommunicator().fetchItemsWithRange(0, 1);
         if (prvyDokladList.size() > 0) {
             grid.asSingleSelect().select(prvyDokladList.get(0));
+
         }
     }
 
