@@ -4,6 +4,9 @@ package sk.zpn.zaklad.grafickeNastroje;
 import com.vaadin.data.provider.DataProvider;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.grid.ColumnReorderEvent;
+import com.vaadin.flow.component.grid.ColumnResizeEvent;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -40,20 +43,22 @@ import java.util.function.Consumer;
         super(beanType);
     }
 
-    public MFilteredGrid(String caption) {
-        super(caption);
-    }
+//    public MFilteredGrid(String caption) {
+//        super(caption);
+//    }
 
     public MFilteredGrid(String caption, Collection<T> items) {
 
         super();
         this.setItems(items);
 //        pridajContextMenu();
-        this.addColumnResizeListener(new ColumnResizeListener() {
+        this.addColumnResizeListener(new ComponentEventListener<ColumnResizeEvent<T>>() {
             @Override
-            public void columnResize(ColumnResizeEvent event) {
-                System.out.println(event.getColumn().getCaption());
+            public void onComponentEvent(ColumnResizeEvent<T> tColumnResizeEvent) {
+                System.out.println(tColumnResizeEvent.getResizedColumn().getKey());
             }
+
+
         });
 
     }
@@ -105,24 +110,24 @@ import java.util.function.Consumer;
         if (kluc==null)
             return;
         this.setColumnReorderingAllowed(true);
-        this.addColumnReorderListener(new ColumnReorderListener() {
+        this.addColumnReorderListener(new ComponentEventListener<ColumnReorderEvent<T>>() {
             @Override
-            public void columnReorder(ColumnReorderEvent event) {
-                if (event.isUserOriginated())
-                    ProstredieUti.setPoradieStlpcovGridu((Grid) event.getSource(),kluc);
+            public void onComponentEvent(ColumnReorderEvent<T> tColumnReorderEvent) {
+
+//                ProstredieUti.setPoradieStlpcovGridu((Grid) this, kluc);
             }
-        });
+        } );
 
 
 
-        this.addColumnResizeListener(new ColumnResizeListener() {
-            @Override
-            public void columnResize(ColumnResizeEvent event) {
-                ProstredieUti.setSirkyStlpcovGridu(kluc,event.getColumn().getId(),event.getColumn().getWidth());
-                System.out.print(event.getColumn().getId()+event.getColumn().getWidth());
+        this.addColumnResizeListener(
 
-            }
-        });
+
+
+
+//                ProstredieUti.setSirkyStlpcovGridu(kluc,event.getColumn().getId(),event.getColumn().getWidth());
+//                System.out.print(event.getColumn().getId()+event.getColumn().getWidth());
+
 
         //vratenie siriek slpcov
         ulozenyGrid= ProstredieUti.getUlozeneSirkyStlpcovGridu(kluc);
